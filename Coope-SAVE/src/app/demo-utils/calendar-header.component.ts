@@ -1,7 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  // tslint:disable-next-line:component-selector
   selector: 'mwl-demo-utils-calendar-header',
   template: `
       <div class="row text-center">
@@ -41,19 +40,19 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
               class="btn btn-primary"
               (click)="viewChange.emit('month')"
               [class.active]="view === 'month'">
-              Month
+              Mes
             </div>
             <div
               class="btn btn-primary"
               (click)="viewChange.emit('week')"
               [class.active]="view === 'week'">
-              Week
+              Semana
             </div>
             <div
               class="btn btn-primary"
               (click)="viewChange.emit('day')"
               [class.active]="view === 'day'">
-              Day
+              Día
             </div>
           </div>
         </div>
@@ -66,8 +65,7 @@ export class CalendarHeaderComponent {
 
   @Input() viewDate: Date;
 
-  // tslint:disable-next-line:no-inferrable-types
-  @Input() locale: string = 'en';
+  @Input() locale= 'en';
 
   @Output() viewChange: EventEmitter<string> = new EventEmitter();
 

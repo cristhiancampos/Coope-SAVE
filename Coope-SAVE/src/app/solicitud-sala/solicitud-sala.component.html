@@ -28,20 +28,20 @@
           mwlCalendarPreviousView
           [view]="view"
           [(viewDate)]="viewDate">
-          Previous
+          Anterior
         </div>
         <div
           class="btn btn-outline-secondary"
           mwlCalendarToday
           [(viewDate)]="viewDate">
-          Today
+          Hoy
         </div>
         <div
           class="btn btn-primary"
           mwlCalendarNextView
           [view]="view"
           [(viewDate)]="viewDate">
-          Next
+          Siguiente
         </div>
       </div>
     </div>
@@ -54,19 +54,19 @@
           class="btn btn-primary"
           (click)="view = 'month'"
           [class.active]="view === 'month'">
-          Month
+          Mes
         </div>
         <div
           class="btn btn-primary"
           (click)="view = 'week'"
           [class.active]="view === 'week'">
-          Week
+          Semana
         </div>
         <div
           class="btn btn-primary"
           (click)="view = 'day'"
           [class.active]="view === 'day'">
-          Day
+          Día
         </div>
       </div>
     </div>
@@ -104,11 +104,11 @@
   <br><br><br>
   
   <h3>
-    Edit events
+    Editar eventos
     <button
       class="btn btn-primary pull-right"
       (click)="addEvent()">
-      Add new
+       nuevo
     </button>
     <div class="clearfix"></div>
   </h3>
@@ -117,12 +117,12 @@
   
     <thead>
       <tr>
-        <th>Title</th>
-        <th>Primary color</th>
-        <th>Secondary color</th>
-        <th>Starts at</th>
-        <th>Ends at</th>
-        <th>Remove</th>
+        <th>Titulo</th>
+        <th>Color Primario</th>
+        <th>Color Secondario</th>
+        <th>Inicia</th>
+        <th>Termina</th>
+        <th>Eliminar</th>
       </tr>
     </thead>
   
@@ -165,7 +165,7 @@
           <button
             class="btn btn-danger"
             (click)="events.splice(index, 1); refresh.next()">
-            Delete
+            Eliminar
           </button>
         </td>
       </tr>
