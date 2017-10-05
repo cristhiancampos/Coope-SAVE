@@ -1,0 +1,37 @@
+
+
+.carousel-item {
+    height: 100vh;
+    min-height: 300px;
+    background: no-repeat center center scroll;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+.intro-divider {
+  width: 400px;
+  border-top: 1px solid #f8f8f8;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+.btnIndex {
+	color : #ffcf01;
+	width: 10em;
+	background-color: #0082c8;
+	border: 0;
+}
+
+.btnIndex:hover {
+	color: #fff;
+	
+}
+
+.logoMenu {
+  margin-left: 2px;
+}
+
+/* @media only screen and (max-width: 992px) and (min-width: 621px) {  
+  .navbar-expand-lg .navbar-collapse {
+    display: block;
+  }
+}   */
