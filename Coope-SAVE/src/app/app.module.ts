@@ -6,7 +6,7 @@ import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
-import { MaterializeModule } from 'angular2-materialize';
+// import { MaterializeModule } from 'angular2-materialize';
 import { SolicitudSalaComponent } from './solicitud-sala/solicitud-sala.component';
 
 
@@ -19,18 +19,20 @@ import {CalendarHeaderComponent} from './demo-utils/calendar-header.component';
 import {DateTimePickerComponent} from './demo-utils/data-time-picker.component';
 
 import * as moment from 'moment';
+import { RegistoUsuarioComponent } from './registo-usuario/registo-usuario.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SolicitudSalaComponent,
     CalendarHeaderComponent,
-    DateTimePickerComponent
+    DateTimePickerComponent,
+    RegistoUsuarioComponent
 
   ],
   imports: [
     BrowserModule,
-    MaterializeModule,
+    // MaterializeModule,
     routing,
     HttpModule,
     FormsModule,
