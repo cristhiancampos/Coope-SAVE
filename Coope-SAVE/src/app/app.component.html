@@ -1,3 +1,32 @@
+<nav class="navbar navbar-inverse  navbar-expand-lg navbar-dark fixed-top" id="mainNav" style="background: aliceblue;border-bottom: solid 0.1px">
+  <div class="container">
+    <a routerLink="/" class="left"><img src="assets/img/logo.png" style="margin-top: 4%;" (click)=" principal()"></a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      Menu
+      <i class="fa fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link js-scroll-trigger" href="#services">Services</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link js-scroll-trigger" href="#portfolio">Portfolio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link js-scroll-trigger" href="#about">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link js-scroll-trigger" href="#team">Team</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link js-scroll-trigger" href="#contact">Contact</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
 <!-- <div class="navbar-fixed">
   <nav style="background: #FFF;">
     <div class="nav-wrapper">
@@ -47,8 +76,10 @@
   
     <div style="padding: 5em">
     <!-- <app-solicitud-sala *ngIf='!isSolicitudSala'></app-solicitud-sala> -->
+  </div>
+
+  <div>
     <app-registo-usuario></app-registo-usuario>
-  
   </div>
 
 
