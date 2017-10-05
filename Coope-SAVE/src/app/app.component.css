@@ -1,0 +1,27 @@
+body{
+    min-width: 30%;
+}
+
+.intro-divider {
+    width: 400px;
+    border-top: 1px solid #f8f8f8;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  }
+  .btnIndex {
+      color : #ffcf01;
+      background-color: #0082c8;
+      width: 24%;
+      transition: all 0.8s;
+      
+  }
+  
+  .btnIndex:hover {
+      color:#0082c8;
+      background-color: #ffcf01;
+      
+  }
+  
+  .logoMenu {
+    margin-left: 2px;
+  }
+  

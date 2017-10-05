@@ -1,0 +1,58 @@
+<div class="navbar-fixed">
+  <nav style="background: #FFF;">
+    <div class="nav-wrapper">
+      <a routerLink="/" class="left"><img src="assets/img/logo.png" style="margin-top: 4%;" (click)=" principal()"></a>
+      <ul class="right ">
+        <li class="nav-item">
+          <a class="nav-link " href="/" style="color: #000;font-family: 'Roboto', sans-serif;font-size: 1.3rem;"><i class="large material-icons" style="float: left">account_circle</i> <span >&nbsp;&nbsp;Esteban Solis Oviedo</span></a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</div>
+<!--
+  <div id="main">
+    <div id="mainSlider" class="carousel carousel-slider center" data-indicators="true" >
+      <a class="carousel-item" href="/"><img src="assets/img/image03.jpg" ></a>
+      <a class="carousel-item" href="/" ><img src="assets/img/image02.jpg"></a>
+      <a class="carousel-item" href="/"><img src="assets/img/image04.jpg"></a>
+      <a class="carousel-item" href="/"><img src="assets/img/image05.jpg"></a>
+    </div>
+  </div>
+
+  <div class="row">
+      <div class="col s12">
+          <div  class="intro-message " style="top:30%;background-color: transparent;position: absolute;z-index: 333; left: 20%;text-align:center" *ngIf='!isSolicitudSala'>
+              <h1 style="color: #fff">SAVE</h1>
+              <h3 style="color: #fff;">Sistema de Control de Salas y Vehiculos</h3>
+              <hr class="intro-divider" style="background-color: #fff"> <br>
+              <div class="carousel-fixed-item center">
+                <a routerLink="/solicitudSala" class="waves-effect waves-light btn btnIndex" (click)="solicitarSala(true)"><i class="material-icons right">location_city</i>Salas</a>
+                <a class="waves-effect waves-light btn btnIndex"><i class="material-icons right">directions_car</i>Vehiculos</a>
+              </div>
+            </div>
+      </div>
+  </div> -->
+    <!-- SE PUEDE ELIMINAR
+      <div  class="intro-message " style="top:30%;background-color: transparent;position: absolute;z-index: 333; left: 20%;text-align:center" *ngIf='!isSolicitudSala'>
+      <h1 style="color: #fff">SAVE</h1>
+      <h3 style="color: #fff;">Sistema de Control de Salas y Vehiculos</h3>
+      <hr class="intro-divider" style="background-color: #fff"> <br>
+      <div class="carousel-fixed-item center">
+        <a routerLink="/solicitudSala" class="waves-effect waves-light btn btnIndex" (click)="solicitarSala(true)"><i class="material-icons right">location_city</i>Salas</a>
+        <a class="waves-effect waves-light btn btnIndex"><i class="material-icons right">directions_car</i>Vehiculos</a>
+      </div>
+    </div>-->
+
+  
+    <div style="padding: 5em">
+    <app-solicitud-sala *ngIf='!isSolicitudSala'></app-solicitud-sala>
+  </div>
+
+<!--<footer class="page-footer" style="background: #FFF;">
+  <div class="footer-copyright" style="background: #FFF;color: #000;text-align: center">
+    <div class="container" style="text-align: center">
+      © 2017 Coopesparta R.L.
+    </div>
+  </div>
+</footer>-->
