@@ -20,6 +20,7 @@ import {DateTimePickerComponent} from './demo-utils/data-time-picker.component';
 
 import * as moment from 'moment';
 import { RegistoUsuarioComponent } from './registo-usuario/registo-usuario.component';
+import { CarouselComponent } from './carousel/carousel.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { RegistoUsuarioComponent } from './registo-usuario/registo-usuario.compo
     SolicitudSalaComponent,
     CalendarHeaderComponent,
     DateTimePickerComponent,
-    RegistoUsuarioComponent
+    RegistoUsuarioComponent,
+    CarouselComponent
 
   ],
   imports: [

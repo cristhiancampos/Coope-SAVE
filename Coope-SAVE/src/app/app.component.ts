@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {OnDestroy, Component, Input, ElementRef, HostBinding, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
-declare var jQuery: any;
-declare var $: any;
+declare var $: any,jQuery: any;
 
 
 @Component({
@@ -10,20 +9,41 @@ declare var $: any;
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements   OnDestroy {
 
   title = 'Coope-SAVE';
   public isSolicitudSala;
   interval: any;
-  slides = [
-    { src: 'assets/img/image02.jpg' },
-    { src: 'assets/img/image03.jpg' },
-    { src: 'assets/img/image04.jpg' },
-    { src: 'assets/img/image05.jpg' }
-  ];
-  constructor(private _router: Router) {
+  @HostBinding('class.owl-carousel') owlClass = true;
+  $owl: any;
+  @Input() options: any = {};
+  // slides = [
+  //   { src: 'assets/img/image02.jpg' },
+  //   { src: 'assets/img/image03.jpg' },
+  //   { src: 'assets/img/image04.jpg' },
+  //   { src: 'assets/img/image05.jpg' }
+  // ];
+
+  constructor(private _router: Router,private el: ElementRef) {
     this.isSolicitudSala = false;
+    $ = $ || jQuery;
+    
   }
+  ngAfterViewInit() {
+    // if($) {
+    //   $('#carrusell').carousel();
+    //     this.$owl = $(this.el.nativeElement).owlCarousel(this.options);
+    // }
+}
+trigger(action: string, options?: any[]) {
+ // this.$owl.trigger(action, options)
+}
+
+ngOnDestroy() {
+  // this.$owl.trigger('destroy.owl.carousel').removeClass('owl-loaded');
+  // delete this.$owl;
+}
+
 
   principal() {
     // if ($('#mainSlider').hasClass('carousel')) {
@@ -43,6 +63,7 @@ export class AppComponent implements OnInit {
   // método que realiza una acción después de haberse cargado el componente
   ngOnInit() {
     this.isSolicitudSala = false;
+   // $('#carrusel').carousel();
     // this.carouselInit('1');
   }
 
