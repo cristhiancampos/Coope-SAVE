@@ -20,8 +20,34 @@ import {DateTimePickerComponent} from './demo-utils/data-time-picker.component';
 
 import * as moment from 'moment';
 import { RegistoUsuarioComponent } from './registo-usuario/registo-usuario.component';
-import { CarouselComponent } from './carousel/carousel.component';
+import { PrincipalComponent } from './principal/principal.component';
 
+
+import { RouterModule, Routes } from '@angular/router';
+
+const appRoutes: Routes = [
+  // { path: 'crisis-center', component: CrisisListComponent },
+  // { path: 'hero/:id',      component: HeroDetailComponent },
+  {
+    path: 'principal',
+    component: PrincipalComponent,
+    data: { title: 'Heroes List' }
+  },
+  {
+    path: 'registrousuario',
+    component: RegistoUsuarioComponent,
+    data: { title: 'Heroes List' }
+  },
+  { path: '**',
+  redirectTo: '/registrousuario',
+  pathMatch: 'full'
+},
+  { path: '',
+    redirectTo: '/principal',
+    pathMatch: 'full'
+  },
+  { path: '**', component: RegistoUsuarioComponent }
+];
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,7 +55,7 @@ import { CarouselComponent } from './carousel/carousel.component';
     CalendarHeaderComponent,
     DateTimePickerComponent,
     RegistoUsuarioComponent,
-    CarouselComponent
+    PrincipalComponent,
 
   ],
   imports: [
@@ -41,9 +67,15 @@ import { CarouselComponent } from './carousel/carousel.component';
     BrowserAnimationsModule,
     CalendarModule.forRoot(),
     NgbModule.forRoot(),
+    RouterModule.forRoot(
+      appRoutes,
+      { enableTracing: true } // <-- debugging purposes only
+    )
     //DateTimePickerComponent
   ],
   providers: [],
   bootstrap: [AppComponent, appRoutingProviders]
 })
-export class AppModule { }
+export class AppModule { 
+ //jquery;
+}

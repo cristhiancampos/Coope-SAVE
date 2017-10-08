@@ -1,0 +1,23 @@
+.inner-bg[_ngcontent-c1] {
+    padding: 0;
+}
+
+h1[_ngcontent-c1], h2[_ngcontent-c1] {
+    margin-top: 3px;
+    font-size: 2rem;
+    font-weight: 100;
+    color: #555;
+    line-height: 50px;
+}
+.form-box[_ngcontent-c1] {
+    margin-top: -22px;
+}
+dialog {
+    visibility: hidden;
+    transform: scale(0.1);
+    transition: transform 200ms;
+}
+dialog.dialog-scale {
+    visibility: visible;
+    transform: scale(1);
+}
