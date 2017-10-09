@@ -1,0 +1,15 @@
+/* tr:hover{
+    background:#4CB0E5;
+    color: #ffffff;
+} */
+.th-color{
+color:#0082c8;
+}
+
+.btn-accion{
+    height: 2rem;
+    text-align: center;
+    font-size: 1rem;
+    margin-bottom: 2px;
+    margin-left: 10px;
+}
