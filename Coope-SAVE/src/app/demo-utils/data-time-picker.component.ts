@@ -19,7 +19,9 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 export const DATE_TIME_PICKER_CONTROL_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => DateTimePickerComponent),
-    multi: true
+    multi: true,
+    
+
 };
 
 @Component({

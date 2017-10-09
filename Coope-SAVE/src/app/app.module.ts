@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { appRoutingProviders, routing } from './app.routing';
+//import { appRoutingProviders, routing } from './app.routing';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 
@@ -19,6 +19,8 @@ import {CalendarHeaderComponent} from './demo-utils/calendar-header.component';
 import {DateTimePickerComponent} from './demo-utils/data-time-picker.component';
 
 import * as moment from 'moment';
+import 'moment/locale/es';
+moment.locale('es');
 import { RegistoUsuarioComponent } from './registo-usuario/registo-usuario.component';
 import { PrincipalComponent } from './principal/principal.component';
 
@@ -26,27 +28,21 @@ import { PrincipalComponent } from './principal/principal.component';
 import { RouterModule, Routes } from '@angular/router';
 
 const appRoutes: Routes = [
-  // { path: 'crisis-center', component: CrisisListComponent },
-  // { path: 'hero/:id',      component: HeroDetailComponent },
   {
     path: 'principal',
     component: PrincipalComponent,
     data: { title: 'Heroes List' }
   },
-  {
-    path: 'registrousuario',
-    component: RegistoUsuarioComponent,
-    data: { title: 'Heroes List' }
-  },
-  { path: '**',
-  redirectTo: '/registrousuario',
-  pathMatch: 'full'
-},
   { path: '',
     redirectTo: '/principal',
     pathMatch: 'full'
   },
-  { path: '**', component: RegistoUsuarioComponent }
+  { path: '',
+    redirectTo: '/solicitudSala',
+    pathMatch: 'full'
+  },
+  { path: '**', component: SolicitudSalaComponent }
+  
 ];
 @NgModule({
   declarations: [
@@ -61,7 +57,7 @@ const appRoutes: Routes = [
   imports: [
     BrowserModule,
     // MaterializeModule,
-    routing,
+    //routing,
     HttpModule,
     FormsModule,
     BrowserAnimationsModule,
@@ -74,8 +70,9 @@ const appRoutes: Routes = [
     //DateTimePickerComponent
   ],
   providers: [],
-  bootstrap: [AppComponent, appRoutingProviders]
+bootstrap: [AppComponent/*, appRoutingProviders*/]
 })
 export class AppModule { 
+  
  //jquery;
 }

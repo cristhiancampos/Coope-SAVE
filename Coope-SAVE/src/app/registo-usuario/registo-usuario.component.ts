@@ -18,7 +18,7 @@ export class RegistoUsuarioComponent implements OnInit {
       this.identity = localStorage.getItem('identity');
       this.mostrar = true;}
   ngOnInit() {
-    
+    //$('#exampleModal').hide();
   //   $('body').append('<div class="modal-backdrop fade show"></div>');
   //   $('body').addClass('modal-open');
   //   $('#exampleModal').addClass('show');

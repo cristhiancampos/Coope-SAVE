@@ -30,10 +30,9 @@ const colors: any = {
 
 export class SolicitudSalaComponent {
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
-
   view = 'month';
 
-  viewDate: Date = new Date();
+   viewDate: Date = new Date();
 
   modalData: {
     action: string;
@@ -44,17 +43,18 @@ export class SolicitudSalaComponent {
     {
       label: '<i class="fa fa-fw fa-pencil"></i>',
       onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.handleEvent('Edited', event);
+        this.handleEvent('Editar', event);
       }
     },
     {
       label: '<i class="fa fa-fw fa-times"></i>',
       onClick: ({ event }: { event: CalendarEvent }): void => {
         this.events = this.events.filter(iEvent => iEvent !== event);
-        this.handleEvent('Deleted', event);
+        this.handleEvent('Eliminar', event);
       }
     }
   ];
+
 
   refresh: Subject<any> = new Subject();
 
@@ -91,10 +91,12 @@ export class SolicitudSalaComponent {
       draggable: true
     }
   ];
-
+  locale: string = 'es';
   activeDayIsOpen = true;
 
-  constructor(private modal: NgbModal) {}
+  constructor(private modal: NgbModal) {
+
+  }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
@@ -128,7 +130,7 @@ export class SolicitudSalaComponent {
 
   addEvent(): void {
     this.events.push({
-      title: 'New event',
+      title: 'Nuevo Evento',
       start: startOfDay(new Date()),
       end: endOfDay(new Date()),
       color: colors.red,

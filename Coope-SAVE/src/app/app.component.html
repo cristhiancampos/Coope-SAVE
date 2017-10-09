@@ -1,39 +1,27 @@
 
+<!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" style="font-size: 1.2rem;" *ngIf='!identity'>
-    <div class="container-fluid">
-      <a routerLink="/principal" routerLinkActive="actived" class="left navbar-brand"><img src="assets/img/logo.png"  (click)=" principal()"></a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive"
-        aria-expanded="false" aria-label="Toggle navigation">
+  <div class="container-fluid">
+    <a routerLink="/principal" routerLinkActive="actived" class="left navbar-brand"><img src="assets/img/logo.png"  (click)=" principal()"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive"
+      aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#"> <i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;&nbsp;Cristhian Campos Segura 
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#"> <i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;&nbsp;Cristhian Campos Segura 
               <span class="sr-only">(current)</span>
             </a>
-          </li>
-        </ul>
-      </div>
+        </li>
+      </ul>
     </div>
-  </nav>
-<!--<div  class="container"  *ngIf='isSolicitudSala && !isRegister' style="padding-top:5em;">
-<app-solicitud-sala ></app-solicitud-sala>
-</div>-->
-<!-- <app-registo-usuario *ngIf='isRegister' ></app-registo-usuario> -->
-    <!--  <div  class="container" style="padding: 5em">
- <app-solicitud-sala *ngIf='!isSolicitudSala'></app-solicitud-sala>
-     <app-registo-usuario></app-registo-usuario>  
-  
   </div>
-
- <div>
-    <app-registo-usuario></app-registo-usuario>
-  </div>-->
-      <router-outlet></router-outlet>
-    <!-- Footer -->
-    <footer class="py-5 bg-dark">
-      <div class="container">
-        <p class="m-0 text-center text-white">&copy; Coopesparta R.L.</p>
-      </div>
-    </footer>
+</nav>
+<router-outlet></router-outlet>
+<!-- Footer -->
+<footer class="py-5 bg-dark">
+  <div class="container">
+    <p class="m-0 text-center text-white">&copy; Coopesparta R.L.</p>
+  </div>
+</footer>

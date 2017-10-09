@@ -28,6 +28,14 @@
     font-size: 5rem;
   }
 
+  #app-title:hover{
+    color: #ffcf01;
+  }
+  .btn:hover{
+    cursor: pointer;
+  
+  }
+
   @media only screen and (max-width: 980px) and (min-width: 821px) {  
     
   }  

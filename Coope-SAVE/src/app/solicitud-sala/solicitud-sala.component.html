@@ -7,11 +7,11 @@
     </div>
     <div class="modal-body">
       <div>
-        Action:
+        Acción:
         <pre>{{ modalData?.action }}</pre>
       </div>
       <div>
-        Event:
+        Evento:
         <pre>{{ modalData?.event | json }}</pre>
       </div>
     </div>
@@ -20,7 +20,8 @@
     </div>
   </ng-template>
   
-  <div class="row text-center" style="margin-top: 67px">
+  <div class="row text-center" style="margin-top: 67px"  >
+    
     <div class="col-md-4">
       <div class="btn-group">
         <div
@@ -46,7 +47,7 @@
       </div>
     </div>
     <div class="col-md-4">
-      <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+      <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'es' }}</h3>
     </div>
     <div class="col-md-4">
       <div class="btn-group">
@@ -72,11 +73,13 @@
     </div>
   </div>
   <br>
+ <!-- [locale]="locale"  para que tome el idioma definido en el componente, la var locale-->
   <div [ngSwitch]="view" class="contaniner-fluid" style="margin-left: 30px;margin-right: 30px;margin-bottom: 10px">
     <mwl-calendar-month-view
       *ngSwitchCase="'month'"
       [viewDate]="viewDate"
       [events]="events"
+      [locale]="locale" 
       [refresh]="refresh"
       [activeDayIsOpen]="activeDayIsOpen"
       (dayClicked)="dayClicked($event.day)"
@@ -87,6 +90,7 @@
       *ngSwitchCase="'week'"
       [viewDate]="viewDate"
       [events]="events"
+      [locale]="locale"
       [refresh]="refresh"
       (eventClicked)="handleEvent('Clicked', $event.event)"
       (eventTimesChanged)="eventTimesChanged($event)">
@@ -95,20 +99,19 @@
       *ngSwitchCase="'day'"
       [viewDate]="viewDate"
       [events]="events"
+      [locale]="locale"
       [refresh]="refresh"
       (eventClicked)="handleEvent('Clicked', $event.event)"
       (eventTimesChanged)="eventTimesChanged($event)">
     </mwl-calendar-day-view>
   </div>
   
-  <br><br><br>
-  
   <h3>
     Editar eventos
     <button
       class="btn btn-primary pull-right"
-      (click)="addEvent()">
-       nuevo
+      (click)="addEvent()" style="margin-right: 2%">
+      <i class="fa fa-calendar-plus-o" aria-hidden="true"></i>&nbsp;Nuevo
     </button>
     <div class="clearfix"></div>
   </h3>
@@ -151,6 +154,7 @@
           <mwl-demo-utils-date-time-picker
             [(ngModel)]="event.start"
             (ngModelChange)="refresh.next()"
+            locale="locale"
             placeholder="Not set">
           </mwl-demo-utils-date-time-picker>
         </td>

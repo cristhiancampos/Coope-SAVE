@@ -2,6 +2,9 @@ import {OnDestroy, Component, Input, ElementRef, HostBinding, OnInit } from '@an
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import * as $ from 'jquery';
 
+import * as moment from 'moment';
+import 'moment/locale/es';
+moment.locale('es');
 
 @Component({
   selector: 'app-root',
@@ -39,6 +42,7 @@ export class AppComponent implements   OnInit {
   }
   // método que realiza una acción después de haberse cargado el componente
   ngOnInit() {  
+    
   }
 
 }

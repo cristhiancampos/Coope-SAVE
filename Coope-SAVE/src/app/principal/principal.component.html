@@ -1,36 +1,109 @@
- <header >
-    <base href="https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/">
-    <div id="captioned-gallery" *ngIf='!isSolicitudSala && !isRegister'>
-      <figure class="slider">
-        <figure style="height: 100vh; background: transparent">
-          <img src="assets/img/image02.jpg"  alt>
-          <!-- <figcaption>Hobbiton, New Zealand</figcaption> -->
-        </figure>
-        <figure>
-          <img src="assets/img/image03.jpg" alt>
-        </figure>
-        <figure>
-          <img src="assets/img/image04.jpg" alt>
-        </figure>
-        <figure>
-          <img src="assets/img/image05.jpg" alt>
-        </figure>
-        <figure>
-          <img src="assets/img/image02.jpg" alt>
-        </figure>
+<header>
+  <base href="https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/">
+  <div id="captioned-gallery" *ngIf='!isSolicitudSala && !isRegister'>
+    <figure class="slider">
+      <figure style="height: 100vh; background: transparent">
+        <img src="assets/img/image02.jpg" alt>
+        <!-- <figcaption>Hobbiton, New Zealand</figcaption> -->
       </figure>
-    </div>
-  <header>
-  <div class="container-fluid intro-message" *ngIf='!isSolicitudSala && !isRegister'>
-    <h1 id="app-title">SAVE</h1>
-    <h3 id="app-subtitle" style="color: #fff;">Sistema de Control de Salas y Vehiculos</h3>
-    <hr class="intro-divider" style="background-color: #fff">
-    <div class="carousel-fixed-item center">
-      <div class="row-fluid">
-        <div class="col-md-12">
-          <a routerLink="/solicitudSala" routerLinkActive="actived" class=" btn btnIndex" (click)="solicitarSala(true)"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;Salas</a>
-          <a routerLink="/solicitudSala" class=" btn btnIndex"> <i class="fa fa-car" aria-hidden="true"></i>&nbsp;Vehiculos</a>
+      <figure>
+        <img src="assets/img/image03.jpg" alt>
+      </figure>
+      <figure>
+        <img src="assets/img/image04.jpg" alt>
+      </figure>
+      <figure>
+        <img src="assets/img/image05.jpg" alt>
+      </figure>
+      <figure>
+        <img src="assets/img/image02.jpg" alt>
+      </figure>
+    </figure>
+  </div>
+</header>
+    <div class="container-fluid intro-message" *ngIf='!isSolicitudSala && !isRegister &&mmostrar'>
+      <h1 id="app-title">SAVE</h1>
+      <h3 id="app-subtitle" style="color: #fff;">Sistema de Control de Salas y Vehiculos</h3>
+      <hr class="intro-divider" style="background-color: #fff">
+      <div class="carousel-fixed-item center">
+        <div class="row-fluid">
+          <div class="col-md-12">
+            <a routerLink="/solicitudSala" routerLinkActive="actived" class=" btn btnIndex" (click)="solicitarSala(true)"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;Salas</a>
+            <a routerLink="/solicitudSala" class=" btn btnIndex"> <i class="fa fa-car" aria-hidden="true"></i>&nbsp;Vehiculos</a>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+
+    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Open modal for @getbootstrap</button> -->
+    <!-- Modal  Register-->
+    <div class="modal fade bd-example-modal-sm " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog bd-example-modal-sm " role="document">
+        <div class="modal-content">
+          <div class="modal-header" style="background: #0069d9;color:#fff">
+            <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-user-circle-o"></i>&nbsp;&nbsp;Registro de Usuarios</h5>
+            <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="salir()"> 
+            <span aria-hidden="true">&times;</span>
+          </button>-->
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-12">
+                <ol class="breadcrumb">
+                  <li>
+                    <a><img src="assets/img/logo.png" ></a>
+                  </li>
+                </ol>
+              </div>
+            </div>
+            <!-- END BREADCRUMB-->
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-12">
+                  <form name="registerUser" id="registerForm" novalidate>
+                    <div class="control-group form-group">
+                      <div class="controls">
+                        <label for="nombre" class="form-control-label" style="font-size: 1.25rem;">Nombre:</label>
+                        <input type="text" class="form-control" id="nombre" required data-validation-required-message="Favor ingrese su nombre.">
+                        <p class="help-block"></p>
+                      </div>
+                    </div>
+                    <div class="control-group form-group">
+                      <div class="controls">
+                        <label for="apellidos" class="form-control-label" style="font-size: 1.25rem;">Apellidos:</label>
+                        <input type="text" class="form-control" id="apellidos" required data-validation-required-message="Favor ingrese sus apellidos.">
+                        <p class="help-block"></p>
+                      </div>
+                    </div>
+                    <div class="control-group form-group">
+                      <div class="controls">
+                        <label for="correo" class="form-control-label" style="font-size: 1.25rem;">Correo electrónico:</label>
+                        <input type="email" class="form-control" id="correo" required data-validation-required-message="Favor ingrese sus correo">
+                        <p class="help-block"></p>
+                      </div>
+                    </div>
+                    <div class="control-group form-group">
+                      <div class="controls">
+                        <label for="departamento" class="form-control-label" style="font-size: 1.25rem;">Departamento:</label>
+                        <select id="departamento" class="selectpicker" style="width: 100%;padding: .5rem .75rem;">
+                                          <option>Recursos Humanos</option>
+                                          <option>Administración</option>
+                                          <option>Tenologías de la Información</option>
+                                        </select>
+                        <p class="help-block"></p>
+                      </div>
+                    </div>
+                    <div id="success"></div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" (click)="mostrar()">Continuar</button>
+            <!-- <button type="button" class="btn btn-secondary"  style="background: #f00a0a;" (click)="salir()">Salir</button>         -->
+          </div>
+        </div>
+      </div>
+    </div>
