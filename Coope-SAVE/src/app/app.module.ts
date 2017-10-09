@@ -26,6 +26,7 @@ import { PrincipalComponent } from './principal/principal.component';
 
 
 import { RouterModule, Routes } from '@angular/router';
+import { ModificarUsuarioComponent } from './modificar-usuario/modificar-usuario.component';
 
 const appRoutes: Routes = [
   {
@@ -52,6 +53,7 @@ const appRoutes: Routes = [
     DateTimePickerComponent,
     RegistoUsuarioComponent,
     PrincipalComponent,
+    ModificarUsuarioComponent,
 
   ],
   imports: [
