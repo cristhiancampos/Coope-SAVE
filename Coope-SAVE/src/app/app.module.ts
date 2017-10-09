@@ -27,6 +27,13 @@ import { PrincipalComponent } from './principal/principal.component';
 
 import { RouterModule, Routes } from '@angular/router';
 import { ModificarUsuarioComponent } from './modificar-usuario/modificar-usuario.component';
+import { AdministradorComponent } from './administrador/administrador.component';
+import { AdminSalaComponent } from './admin-sala/admin-sala.component';
+import { AdminVehiculoComponent } from './admin-vehiculo/admin-vehiculo.component';
+import { AdminDepartamentoComponent } from './admin-departamento/admin-departamento.component';
+import { AdminUsuarioComponent } from './admin-usuario/admin-usuario.component';
+import { AdminRecursoComponent } from './admin-recurso/admin-recurso.component';
+import { AdminSolicitudComponent } from './admin-solicitud/admin-solicitud.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +44,13 @@ import { ModificarUsuarioComponent } from './modificar-usuario/modificar-usuario
     RegistoUsuarioComponent,
     PrincipalComponent,
     ModificarUsuarioComponent,
+    AdministradorComponent,
+    AdminSalaComponent,
+    AdminVehiculoComponent,
+    AdminDepartamentoComponent,
+    AdminUsuarioComponent,
+    AdminRecursoComponent,
+    AdminSolicitudComponent,
 
   ],
   imports: [

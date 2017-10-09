@@ -4,6 +4,14 @@ import {SolicitudSalaComponent} from './solicitud-sala/solicitud-sala.component'
 import {RegistoUsuarioComponent} from './registo-usuario/registo-usuario.component';
 import {PrincipalComponent} from './principal/principal.component';
 import {ModificarUsuarioComponent} from './modificar-usuario/modificar-usuario.component';
+//admin modules
+import {AdministradorComponent} from './administrador/administrador.component';
+import {AdminSalaComponent} from './admin-sala/admin-sala.component';
+import {AdminVehiculoComponent} from './admin-vehiculo/admin-vehiculo.component';
+import {AdminDepartamentoComponent} from './admin-departamento/admin-departamento.component';
+import {AdminUsuarioComponent} from './admin-usuario/admin-usuario.component';
+import {AdminRecursoComponent} from './admin-recurso/admin-recurso.component';
+import {AdminSolicitudComponent} from './admin-solicitud/admin-solicitud.component';
 
 
 const appRoutes: Routes = [
@@ -11,7 +19,15 @@ const appRoutes: Routes = [
    { path: '', component: PrincipalComponent},
     { path: 'principal', component: PrincipalComponent},
     { path: 'modificar', component: ModificarUsuarioComponent},
+    { path: 'administrador', component: AdministradorComponent },
+    { path: 'admSala', component: AdminSalaComponent },
+    { path: 'admVehiculo', component: AdminVehiculoComponent },
+    { path: 'admDepartamento', component: AdminDepartamentoComponent },
+    { path: 'admUsuario', component: AdminUsuarioComponent },
+    { path: 'admRecurso', component: AdminRecursoComponent },
+    { path: 'admSolicitud', component: AdminSolicitudComponent },
     {path: '**', component: PrincipalComponent}
+
 ];
 
 
