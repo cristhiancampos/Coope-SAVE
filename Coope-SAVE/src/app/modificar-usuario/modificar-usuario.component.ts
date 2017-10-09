@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 
 @Component({
   selector: 'app-modificar-usuario',
@@ -6,10 +7,32 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./modificar-usuario.component.css']
 })
 export class ModificarUsuarioComponent implements OnInit {
-
-  constructor() { }
+  mmostrar = false;
+  constructor(private _router: Router) { }
 
   ngOnInit() {
+    $('body').append('<div class="modal-backdrop fade show" ></div>');
+    $('body').addClass('modal-open');
+    $('#exampleModal').addClass('show');
+    $('#exampleModal').css('display', 'block');
+  }
+
+  mostrar() {
+    // $('.modal-backdrop').remove();
+    // $('body').removeClass('modal-open');
+    // $('#exampleModal').removeClass('show');
+    // $('#exampleModal').css('display', 'none');
+    // this.mmostrar = true;
+  }
+  salir() {
+    $('.modal-backdrop').remove();
+    $('body').removeClass('modal-open');
+    $('#exampleModal').removeClass('show');
+    $('#exampleModal').css('display', 'none');
+    this._router.navigate(['/principal']);
+  }
+  guadarCambios(){
+    this._router.navigate(['/principal']);
   }
 
 }

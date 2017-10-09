@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-//import { appRoutingProviders, routing } from './app.routing';
+import { appRoutingProviders, routing } from './app.routing';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 
@@ -28,23 +28,6 @@ import { PrincipalComponent } from './principal/principal.component';
 import { RouterModule, Routes } from '@angular/router';
 import { ModificarUsuarioComponent } from './modificar-usuario/modificar-usuario.component';
 
-const appRoutes: Routes = [
-  {
-    path: 'principal',
-    component: PrincipalComponent,
-    data: { title: 'Heroes List' }
-  },
-  { path: '',
-    redirectTo: '/principal',
-    pathMatch: 'full'
-  },
-  { path: '',
-    redirectTo: '/solicitudSala',
-    pathMatch: 'full'
-  },
-  { path: '**', component: SolicitudSalaComponent }
-  
-];
 @NgModule({
   declarations: [
     AppComponent,
@@ -59,22 +42,19 @@ const appRoutes: Routes = [
   imports: [
     BrowserModule,
     // MaterializeModule,
-    //routing,
+    routing,
     HttpModule,
     FormsModule,
     BrowserAnimationsModule,
     CalendarModule.forRoot(),
     NgbModule.forRoot(),
-    RouterModule.forRoot(
-      appRoutes,
-      { enableTracing: true } // <-- debugging purposes only
-    )
+    // RouterModule.forRoot(
+    //   appRoutes,
+    //   { enableTracing: true } // <-- debugging purposes only
+    // )
     //DateTimePickerComponent
   ],
-  providers: [],
-bootstrap: [AppComponent/*, appRoutingProviders*/]
+  providers: [appRoutingProviders],
+bootstrap: [AppComponent]
 })
-export class AppModule { 
-  
- //jquery;
-}
+export class AppModule { }

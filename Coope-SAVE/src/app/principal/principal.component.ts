@@ -30,7 +30,7 @@ export class PrincipalComponent implements OnInit {
     $('#exampleModal').css('display', 'block');
 
     // $("head").append($("<link rel='stylesheet' href='./principal.Component.css' type='text/css' media='screen' />"))
-    //this.identity = localStorage.getItem('identity');
+    // this.identity = localStorage.getItem('identity');
     // alert('principal'+this.identity);
 
   }
