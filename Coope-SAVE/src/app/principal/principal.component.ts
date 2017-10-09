@@ -24,16 +24,19 @@ export class PrincipalComponent implements OnInit {
     $('#exampleModal').css('display', 'none');*/
   }
   ngOnInit() {
-    $('body').append('<div class="modal-backdrop fade show" ></div>');
-    $('body').addClass('modal-open');
-    $('#exampleModal').addClass('show');
-    $('#exampleModal').css('display', 'block');
+    this.mmostrar = true;
+    // $('body').append('<div class="modal-backdrop fade show" ></div>');
+    // $('body').addClass('modal-open');
+    // $('#exampleModal').addClass('show');
+    // $('#exampleModal').css('display', 'block');
 
     // $("head").append($("<link rel='stylesheet' href='./principal.Component.css' type='text/css' media='screen' />"))
     // this.identity = localStorage.getItem('identity');
     // alert('principal'+this.identity);
 
   }
+
+  
 
 
 }
