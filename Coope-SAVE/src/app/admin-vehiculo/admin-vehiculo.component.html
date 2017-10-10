@@ -125,95 +125,98 @@
 
 </div>
 
-<!-- Seccion del Modal: Agregar Nuevo Vehiculi -->
-
+<!-- Seccion del Modal: Agregar nueva Sala -->
 <div class="modal fade bd-example-modal-sm " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog bd-example-modal-sm " role="document">
-    <div class="modal-content">
-      <div class="modal-header" style="background: #0069d9;color:#fff">
-        <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Modificar Sala</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="salir()"> 
-      <span aria-hidden="true">&times;</span>
-    </button>
+aria-hidden="true">
+<div class="modal-dialog bd-example-modal-sm " role="document">
+  <div class="modal-content">
+    <div class="modal-header" style="background: #0069d9;color:#fff">
+      <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Agregar Vehiculo</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="salir()"> 
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12">
+          <ol class="breadcrumb">
+            <li>
+              <a><img src="assets/img/logo.png" ></a>
+            </li>
+          </ol>
+        </div>
       </div>
-      <div class="modal-body">
+      <!-- END BREADCRUMB-->
+      <div class="col-md-12">
         <div class="row">
           <div class="col-md-12">
-            <ol class="breadcrumb">
-              <li>
-                <a><img src="assets/img/logo.png" ></a>
-              </li>
-            </ol>
-          </div>
-        </div>
-        <!-- END BREADCRUMB-->
-        <div class="col-md-12">
-          <div class="row">
-            <div class="col-md-12">
-              <form name="registerUser" id="registerForm" novalidate>
-                <div class="control-group form-group">
-                  <div class="controls">
-                    <label for="tipo" class="form-control-label" style="font-size: 1.25rem;">Tipo:</label>
-                    <input type="text" class="form-control" id="tipo" required data-validation-required-message="Favor ingrese su nombre.">
-                    <p class="help-block"></p>
-                  </div>
+            <form name="registerUser" id="registerForm" novalidate>
+              <div class="control-group form-group">
+                <div class="controls">
+                  <input type="text" class="form-control" placeholder="Tipo de Vehiculo" id="nombre" required data-validation-required-message="Favor ingrese el tipo de vehiculo.">
+                  <p class="help-block"></p>
+                </div>
+              </div>
+              <div class="control-group form-group">
+                <div class="controls">
+                  <input type="text" class="form-control" placeholder="Marca del Vehiculo" id="marca" required data-validation-required-message="Favor ingrese Marca.">
+                  <p class="help-block"></p>
                 </div>
                 <div class="control-group form-group">
                   <div class="controls">
-                    <label for="marca" class="form-control-label" style="font-size: 1.25rem;">Marca:</label>
-                    <input type="text" class="form-control" id="marca" required data-validation-required-message="Favor ingrese sus apellidos.">
+                    <input type="text" class="form-control" placeholder="Placa de Vehiculo" id="placa" required data-validation-required-message="Favor ingrese placa.">
                     <p class="help-block"></p>
                   </div>
                 </div>
-                <div class="control-group form-group">
+              </div>
+              <div class="control-group form-group">
+                <div class="controls">
+                  <textarea class="form-control" id="descripcion" placeholder="Descripción" rows="3"></textarea>
+                  <p class="help-block"></p>
+                </div>
+              </div>
+              <div class="control-group form-group">
+                <div class="controls">
+                  <input type="text" class="form-control" placeholder="Kilometraje" id="kilometraje" required data-validation-required-message="Favor ingrese kilometraje.">
+                  <p class="help-block"></p>
+                </div>
+              </div>
+              <div class="control-group form-group">
+                <div class="controls">
+                  <ul>
+                    <li style="margin-left: -37px;"> <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider round"></span>
+                      </label>
+                    </li>
+                    <li>
+                      <label style="float: left;margin-top: -2.3em;">Habilitado</label>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="control-group form-group">
+                <div class="controls">
                   <div class="controls">
-                    <label for="placa" class="form-control-label" style="font-size: 1.25rem;">Placa:</label>
-                    <input type="text" class="form-control" id="placa" required data-validation-required-message="Favor ingrese sus correo">
+                    <textarea class="form-control" id="mensaje" placeholder="Reporte algún problema de la sala" rows="3"></textarea>
                     <p class="help-block"></p>
                   </div>
                 </div>
-                <div class="control-group form-group">
-                  <div class="controls">
-                    <label for="estado" class="form-control-label" style="font-size: 1.25rem;">Descripción:</label>
-                    <input type="text" class="form-control" id="descripcion" required data-validation-required-message="Favor ingrese sus correo">
-                    <p class="help-block"></p>
-                  </div>
-                </div>
-                <div class="control-group form-group">
-                  <div class="controls">
-                    <label for="kilometraje" class="form-control-label" style="font-size: 1.25rem;">Kilometraje:</label>
-                    <input type="number" class="form-control" id="msjEstado" required data-validation-required-message="Favor ingrese sus correo">
-                    <p class="help-block"></p>
-                  </div>
-                </div>
-                <div class="control-group form-group">
-                  <div class="controls">
-                    <label for="estado" class="form-control-label" style="font-size: 1.25rem;">Estado:</label>
-                    <input type="text" class="form-control" id="estado" required data-validation-required-message="Favor ingrese sus correo">
-                    <p class="help-block"></p>
-                  </div>
-                </div>
-                <div class="control-group form-group">
-                  <div class="controls">
-                    <label for="problema" class="form-control-label" style="font-size: 1.25rem;">Problema:</label>
-                    <input type="text" class="form-control" id="problemas" required data-validation-required-message="Favor ingrese sus correo">
-                    <p class="help-block"></p>
-                  </div>
-                </div>
-                <div id="success"></div>
-              </form>
-            </div>
+              </div>
+              <div id="success"></div>
+            </form>
           </div>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="mostrar()">Confirmar</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" style="background: #f00a0a;" (click)="salir()">Salir</button>
-      </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" (click)="salir()">Salir</button>          
+      <button type="button" class="btn btn-default btn-modal-suc" (click)="mostrar()">Confirmar</button>
     </div>
   </div>
 </div>
+</div>
+
 
 <!-- Modal  eliminar vehiculo-->
 <div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
