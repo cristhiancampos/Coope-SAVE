@@ -5,10 +5,8 @@ var bcrypt = require('bcrypt-nodejs');
 var User = require('../modelos/usuario');
 var jwt =require('../servicios/jwt');
 
-function pruebas(req, res){
-  
-
-  res.status(200).send({message:'Probando accion de controlador de usuarios'+process.env["USERPROFILE"]});
+function getUsuario(req, res){
+  res.status(200).send({user:process.env["USERPROFILE"]});
 }
 // function saveUser(req, res)
 // {
@@ -169,7 +167,7 @@ function pruebas(req, res){
 // }
 
 module.exports = {
-  pruebas
+  getUsuario
   // saveUser,
   // loginUser,
   // updateUser,

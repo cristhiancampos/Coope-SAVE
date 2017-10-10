@@ -1,11 +1,11 @@
 import {Injectable } from '@angular/core';
-import {Http, Response,Headers } from '@angular/http';
+import {Http, Response,Headers,RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 import {Observable } from 'rxjs/Observable';
 import {GLOBAL} from './global';
 
 @Injectable()//permite la injeccion de dependencias
-export class UserService{
+export class ServicioUsuario{
     public url: string;//url de la api rest
     public identity: string;
     public token: string;
@@ -15,6 +15,16 @@ export class UserService{
         this.url = GLOBAL.url;
     }
 
+    getUser()
+    {
+        let headers = new Headers({
+            'Content-Type':'application/json'//,
+            //'Authorization':token
+        });
+        let options = new RequestOptions({headers:headers});
+        return this._http.get(this.url+'user')
+         .map(res=>res.json());
+    }
     signup(user_to_login, gethash=null){
 
       /*  if(gethash!=null){
