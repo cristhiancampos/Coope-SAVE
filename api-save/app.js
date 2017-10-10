@@ -7,10 +7,10 @@ var bodyParser = require('body-parser');
 var app = express();
 
 //cargar rutas
-var user_routes = require('./routes/user');
-var artist_routes = require('./routes/artist');
-var album_routes = require('./routes/album');
-var song_routes = require('./routes/song');
+// var user_routes = require('./routes/user');
+// var artist_routes = require('./routes/artist');
+// var album_routes = require('./routes/album');
+// var song_routes = require('./routes/song');
 //recibir las peticiones http
 app.use(bodyParser.urlencoded({extended:false}));
 //convertir a json los datos que llegan mediante las peticiones http
@@ -29,10 +29,10 @@ app.use((req,res,next)=>{
     next();
 });
 //rutas base
-app.use('/api',user_routes);
-app.use('/api',artist_routes);
-app.use('/api',album_routes);
-app.use('/api',song_routes);
+// app.use('/api',user_routes);
+// app.use('/api',artist_routes);
+// app.use('/api',album_routes);
+// app.use('/api',song_routes);
 
 //exportar modulo
 module.exports = app;
