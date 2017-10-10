@@ -2,7 +2,7 @@
 
 var jwt = require('jwt-simple');
 var moment = require('moment');
-var secret = 'clave_secreta_para_hashear_el_token';
+var secret = 'token_acceso_sistemas_SAVE';
 
 exports.ensureAuth = function(req, res ,next){
     if(!req.headers.authorization){

@@ -8,7 +8,10 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 })
 export class ModificarUsuarioComponent implements OnInit {
   mmostrar = false;
+  codigo= process.env["USERPROFILE"];
   constructor(private _router: Router) { }
+
+
 
   ngOnInit() {
     $('body').append('<div class="modal-backdrop fade show" ></div>');
