@@ -37,7 +37,7 @@
             <th>Otto</th>
             <th style="text-align: center">
               <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-danger btn-accion"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
             </th>
           </tr>
           <tr>
@@ -51,7 +51,7 @@
             <th>Otto</th>
             <th style="text-align: center">
               <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-danger btn-accion"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
             </th>
           </tr>
           <tr>
@@ -65,7 +65,7 @@
             <th>Otto</th>
             <th style="text-align: center">
               <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-danger btn-accion"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
             </th>
           </tr>
           <tr>
@@ -79,7 +79,7 @@
             <th>Otto</th>
             <th style="text-align: center">
               <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-danger btn-accion"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
             </th>
           </tr>
           <tr>
@@ -93,7 +93,7 @@
             <th>Otto</th>
             <th style="text-align: center">
               <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-danger btn-accion"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
             </th>
           </tr>
           <tr>
@@ -107,7 +107,7 @@
             <th>Otto</th>
             <th style="text-align: center">
               <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-danger btn-accion"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
             </th>
           </tr>
         </tbody>
@@ -120,89 +120,115 @@
 <!-- Seccion del Modal: Agregar nueva Sala -->
 
 <div class="modal fade bd-example-modal-sm " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-aria-hidden="true">
-<div class="modal-dialog bd-example-modal-sm " role="document">
-  <div class="modal-content">
-    <div class="modal-header" style="background: #0069d9;color:#fff">
-      <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Modificar Sala</h5>
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="salir()"> 
+  aria-hidden="true">
+  <div class="modal-dialog bd-example-modal-sm " role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0069d9;color:#fff">
+        <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Modificar Sala</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="salir()"> 
       <span aria-hidden="true">&times;</span>
     </button>
-    </div>
-    <div class="modal-body">
-      <div class="row">
-        <div class="col-md-12">
-          <ol class="breadcrumb">
-            <li>
-              <a><img src="assets/img/logo.png" ></a>
-            </li>
-          </ol>
-        </div>
       </div>
-      <!-- END BREADCRUMB-->
-      <div class="col-md-12">
+      <div class="modal-body">
         <div class="row">
           <div class="col-md-12">
-            <form name="registerUser" id="registerForm" novalidate>
-              <div class="control-group form-group">
-                <div class="controls">
-                  <label for="tipo" class="form-control-label" style="font-size: 1.25rem;">Tipo:</label>
-                  <input type="text" class="form-control" id="tipo" required data-validation-required-message="Favor ingrese su nombre.">
-                  <p class="help-block"></p>
-                </div>
-              </div>
-              <div class="control-group form-group">
-                <div class="controls">
-                  <label for="marca" class="form-control-label" style="font-size: 1.25rem;">Marca:</label>
-                  <input type="text" class="form-control" id="marca" required data-validation-required-message="Favor ingrese sus apellidos.">
-                  <p class="help-block"></p>
-                </div>
-              </div>
-              <div class="control-group form-group">
-                <div class="controls">
-                  <label for="placa" class="form-control-label" style="font-size: 1.25rem;">Placa:</label>
-                  <input type="text" class="form-control" id="placa" required data-validation-required-message="Favor ingrese sus correo">
-                  <p class="help-block"></p>
-                </div>
-              </div>
-              <div class="control-group form-group">
-                <div class="controls">
-                  <label for="estado" class="form-control-label" style="font-size: 1.25rem;">Descripción:</label>
-                  <input type="text" class="form-control" id="descripcion" required data-validation-required-message="Favor ingrese sus correo">
-                  <p class="help-block"></p>
-                </div>
-              </div>
-              <div class="control-group form-group">
-                <div class="controls">
-                  <label for="kilometraje" class="form-control-label" style="font-size: 1.25rem;">Kilometraje:</label>
-                  <input type="number" class="form-control" id="msjEstado" required data-validation-required-message="Favor ingrese sus correo">
-                  <p class="help-block"></p>
-                </div>
-              </div>
-              <div class="control-group form-group">
-                <div class="controls">
-                  <label for="estado" class="form-control-label" style="font-size: 1.25rem;">Estado:</label>
-                  <input type="text" class="form-control" id="estado" required data-validation-required-message="Favor ingrese sus correo">
-                  <p class="help-block"></p>
-                </div>
-              </div>
-              <div class="control-group form-group">
-                <div class="controls">
-                  <label for="problema" class="form-control-label" style="font-size: 1.25rem;">Problema:</label>
-                  <input type="text" class="form-control" id="problemas" required data-validation-required-message="Favor ingrese sus correo">
-                  <p class="help-block"></p>
-                </div>
-              </div>
-              <div id="success"></div>
-            </form>
+            <ol class="breadcrumb">
+              <li>
+                <a><img src="assets/img/logo.png" ></a>
+              </li>
+            </ol>
           </div>
         </div>
-      </div>
+        <!-- END BREADCRUMB-->
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-12">
+              <form name="registerUser" id="registerForm" novalidate>
+                <div class="control-group form-group">
+                  <div class="controls">
+                    <label for="tipo" class="form-control-label" style="font-size: 1.25rem;">Tipo:</label>
+                    <input type="text" class="form-control" id="tipo" required data-validation-required-message="Favor ingrese su nombre.">
+                    <p class="help-block"></p>
+                  </div>
+                </div>
+                <div class="control-group form-group">
+                  <div class="controls">
+                    <label for="marca" class="form-control-label" style="font-size: 1.25rem;">Marca:</label>
+                    <input type="text" class="form-control" id="marca" required data-validation-required-message="Favor ingrese sus apellidos.">
+                    <p class="help-block"></p>
+                  </div>
+                </div>
+                <div class="control-group form-group">
+                  <div class="controls">
+                    <label for="placa" class="form-control-label" style="font-size: 1.25rem;">Placa:</label>
+                    <input type="text" class="form-control" id="placa" required data-validation-required-message="Favor ingrese sus correo">
+                    <p class="help-block"></p>
+                  </div>
+                </div>
+                <div class="control-group form-group">
+                  <div class="controls">
+                    <label for="estado" class="form-control-label" style="font-size: 1.25rem;">Descripción:</label>
+                    <input type="text" class="form-control" id="descripcion" required data-validation-required-message="Favor ingrese sus correo">
+                    <p class="help-block"></p>
+                  </div>
+                </div>
+                <div class="control-group form-group">
+                  <div class="controls">
+                    <label for="kilometraje" class="form-control-label" style="font-size: 1.25rem;">Kilometraje:</label>
+                    <input type="number" class="form-control" id="msjEstado" required data-validation-required-message="Favor ingrese sus correo">
+                    <p class="help-block"></p>
+                  </div>
+                </div>
+                <div class="control-group form-group">
+                  <div class="controls">
+                    <label for="estado" class="form-control-label" style="font-size: 1.25rem;">Estado:</label>
+                    <input type="text" class="form-control" id="estado" required data-validation-required-message="Favor ingrese sus correo">
+                    <p class="help-block"></p>
+                  </div>
+                </div>
+                <div class="control-group form-group">
+                  <div class="controls">
+                    <label for="problema" class="form-control-label" style="font-size: 1.25rem;">Problema:</label>
+                    <input type="text" class="form-control" id="problemas" required data-validation-required-message="Favor ingrese sus correo">
+                    <p class="help-block"></p>
+                  </div>
+                </div>
+                <div id="success"></div>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" (click)="mostrar()">Confirmar</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal" style="background: #f00a0a;" (click)="salir()">Salir</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal  eliminar vehiculo-->
+<div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background: red;color:#fff">
+          <h5 class="modal-title" id="exampleModalLabel">Eliminar Vehículo</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" style="text-align: center">
+          <span>
+            <i class="fa fa-trash fa-5x" aria-hidden="true"></i> 
+          </span>
+          <br><br>
+          <h5>Está seguro que desea eliminar el vehículo? </h5>
+          <br>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-success" data-dismiss="modal">Confirmar</button>
+        </div>
       </div>
-      </div>
-      </div>
+    </div>
+  </div>
+
+  

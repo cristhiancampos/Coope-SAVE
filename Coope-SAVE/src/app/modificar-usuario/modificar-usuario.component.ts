@@ -32,6 +32,10 @@ export class ModificarUsuarioComponent implements OnInit {
     this._router.navigate(['/principal']);
   }
   guadarCambios(){
+    $('.modal-backdrop').remove();
+    $('body').removeClass('modal-open');
+    $('#exampleModal').removeClass('show');
+    $('#exampleModal').css('display', 'none');
     this._router.navigate(['/principal']);
   }
 

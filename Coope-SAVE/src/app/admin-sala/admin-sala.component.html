@@ -1,181 +1,206 @@
 <div class="container-fluid" style="margin-top: 8%; padding: 0 10% 0 10%">
-      
-      <div class="row" style="text-align: center">
-        <div class="col-md-12">
-          <h2> Admistración Salas de Conferencias</h2>
-          <hr>
-          <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="float: left;margin-bottom: 6px"> <i class="fa fa-plus" aria-hidden="true"></i></button>
-        </div>
-        
-      </div>
-    
-      <div class="col-md-12">
-        <div class="row" style="text-align: center ;margin-bottom: 10%">
-          <table class="table">
-            <thead class="thead-default">
-              <tr>
-                <th class="th-color">#</th>
-                <th class="th-color">Nombre</th>
-                <th class="th-color">Cupo</th>
-                <th class="th-color">Descripción</th>
-                <th class="th-color">Estado</th>
-                <th class="th-color">Mensaje de Estado</th>
-                <th class="th-color" style="text-align: center">Acciones</th>
-              </tr>
-            </thead>
-            <tbody style="font-family: 'Times New Roman', Times, serif">
-              <tr>
-                <th scope="row">1</th>
-                <th>Mark</th>
-                <th>Otto</th>
-                <th>@mdo</th>
-                <th>Otto</th>
-                <th>Otto</th>
-                <th style="text-align: center">
-                  <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-                  <button class="btn btn-danger btn-accion"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
-                </th>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <th>Jacob</th>
-                <th>Thornton</th>
-                <th>@fat</th>
-                <th>Thornton</th>
-                <th>Otto</th>
-                <th style="text-align: center">
-                  <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-                  <button class="btn btn-danger btn-accion"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
-                </th>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <th>Jacob</th>
-                <th>Thornton</th>
-                <th>@fat</th>
-                <th>Thornton</th>
-                <th>Otto</th>
-                <th style="text-align: center">
-                  <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-                  <button class="btn btn-danger btn-accion"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
-                </th>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <th>Jacob</th>
-                <th>Thornton</th>
-                <th>@fat</th>
-                <th>Thornton</th>
-                <th>Otto</th>
-                <th style="text-align: center">
-                  <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-                  <button class="btn btn-danger btn-accion"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
-                </th>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <th>Jacob</th>
-                <th>Thornton</th>
-                <th>@fat</th>
-                <th>Thornton</th>
-                <th>Otto</th>
-                <th style="text-align: center">
-                  <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-                  <button class="btn btn-danger btn-accion"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
-                </th>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <th>Jacob</th>
-                <th>Thornton</th>
-                <th>@fat</th>
-                <th>Thornton</th>
-                <th>Otto</th>
-                <th style="text-align: center">
-                  <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-                  <button class="btn btn-danger btn-accion"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
-                </th>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    
+
+  <div class="row" style="text-align: center">
+    <div class="col-md-12">
+      <h2> Admistración Salas de Conferencias</h2>
+      <hr>
+      <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="float: left;margin-bottom: 6px"> <i class="fa fa-plus" aria-hidden="true"></i></button>
     </div>
 
+  </div>
 
-    <!-- Seccion del Modal: Agregar nueva Sala -->
+  <div class="col-md-12">
+    <div class="row" style="text-align: center ;margin-bottom: 10%">
+      <table class="table">
+        <thead class="thead-default">
+          <tr>
+            <th class="th-color">#</th>
+            <th class="th-color">Nombre</th>
+            <th class="th-color">Cupo</th>
+            <th class="th-color">Descripción</th>
+            <th class="th-color">Estado</th>
+            <th class="th-color">Mensaje de Estado</th>
+            <th class="th-color" style="text-align: center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody style="font-family: 'Times New Roman', Times, serif">
+          <tr>
+            <th scope="row">1</th>
+            <th>Mark</th>
+            <th>Otto</th>
+            <th>@mdo</th>
+            <th>Otto</th>
+            <th>Otto</th>
+            <th style="text-align: center">
+              <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
+              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+            </th>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <th>Jacob</th>
+            <th>Thornton</th>
+            <th>@fat</th>
+            <th>Thornton</th>
+            <th>Otto</th>
+            <th style="text-align: center">
+              <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
+              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+            </th>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <th>Jacob</th>
+            <th>Thornton</th>
+            <th>@fat</th>
+            <th>Thornton</th>
+            <th>Otto</th>
+            <th style="text-align: center">
+              <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
+              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+            </th>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <th>Jacob</th>
+            <th>Thornton</th>
+            <th>@fat</th>
+            <th>Thornton</th>
+            <th>Otto</th>
+            <th style="text-align: center">
+              <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
+              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+            </th>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <th>Jacob</th>
+            <th>Thornton</th>
+            <th>@fat</th>
+            <th>Thornton</th>
+            <th>Otto</th>
+            <th style="text-align: center">
+              <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
+              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+            </th>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <th>Jacob</th>
+            <th>Thornton</th>
+            <th>@fat</th>
+            <th>Thornton</th>
+            <th>Otto</th>
+            <th style="text-align: center">
+              <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
+              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-  <div class="modal fade bd-example-modal-sm " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog bd-example-modal-sm " role="document">
-      <div class="modal-content">
-        <div class="modal-header" style="background: #0069d9;color:#fff">
-          <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Modificar Sala</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="salir()"> 
+</div>
+
+
+<!-- Seccion del Modal: Agregar nueva Sala -->
+
+<div class="modal fade bd-example-modal-sm " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog bd-example-modal-sm " role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0069d9;color:#fff">
+        <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Modificar Sala</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="salir()"> 
           <span aria-hidden="true">&times;</span>
         </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-12">
+            <ol class="breadcrumb">
+              <li>
+                <a><img src="assets/img/logo.png" ></a>
+              </li>
+            </ol>
+          </div>
         </div>
-        <div class="modal-body">
+        <!-- END BREADCRUMB-->
+        <div class="col-md-12">
           <div class="row">
             <div class="col-md-12">
-              <ol class="breadcrumb">
-                <li>
-                  <a><img src="assets/img/logo.png" ></a>
-                </li>
-              </ol>
-            </div>
-          </div>
-          <!-- END BREADCRUMB-->
-          <div class="col-md-12">
-            <div class="row">
-              <div class="col-md-12">
-                <form name="registerUser" id="registerForm" novalidate>
-                  <div class="control-group form-group">
-                    <div class="controls">
-                      <label for="nombre" class="form-control-label" style="font-size: 1.25rem;">Nombre:</label>
-                      <input type="text" class="form-control" id="nombre" required data-validation-required-message="Favor ingrese su nombre.">
-                      <p class="help-block"></p>
-                    </div>
+              <form name="registerUser" id="registerForm" novalidate>
+                <div class="control-group form-group">
+                  <div class="controls">
+                    <label for="nombre" class="form-control-label" style="font-size: 1.25rem;">Nombre:</label>
+                    <input type="text" class="form-control" id="nombre" required data-validation-required-message="Favor ingrese su nombre.">
+                    <p class="help-block"></p>
                   </div>
-                  <div class="control-group form-group">
-                    <div class="controls">
-                      <label for="cupos" class="form-control-label" style="font-size: 1.25rem;">Cupo:</label>
-                      <input type="text" class="form-control" id="cupos" required data-validation-required-message="Favor ingrese sus apellidos.">
-                      <p class="help-block"></p>
-                    </div>
+                </div>
+                <div class="control-group form-group">
+                  <div class="controls">
+                    <label for="cupos" class="form-control-label" style="font-size: 1.25rem;">Cupo:</label>
+                    <input type="text" class="form-control" id="cupos" required data-validation-required-message="Favor ingrese sus apellidos.">
+                    <p class="help-block"></p>
                   </div>
-                  <div class="control-group form-group">
-                    <div class="controls">
-                      <label for="descripcion" class="form-control-label" style="font-size: 1.25rem;">Descripción:</label>
-                      <input type="email" class="form-control" id="descripcion" required data-validation-required-message="Favor ingrese sus correo">
-                      <p class="help-block"></p>
-                    </div>
+                </div>
+                <div class="control-group form-group">
+                  <div class="controls">
+                    <label for="descripcion" class="form-control-label" style="font-size: 1.25rem;">Descripción:</label>
+                    <input type="email" class="form-control" id="descripcion" required data-validation-required-message="Favor ingrese sus correo">
+                    <p class="help-block"></p>
                   </div>
-                  <div class="control-group form-group">
-                      <div class="controls">
-                        <label for="estado" class="form-control-label" style="font-size: 1.25rem;">Estado:</label>
-                        <input type="text" class="form-control" id="estado" required data-validation-required-message="Favor ingrese sus correo">
-                        <p class="help-block"></p>
-                      </div>
-                    </div>
-                    <div class="control-group form-group">
-                        <div class="controls">
-                          <label for="msjEstado" class="form-control-label" style="font-size: 1.25rem;">Mensaje de Estado:</label>
-                          <input type="email" class="form-control" id="msjEstado" required data-validation-required-message="Favor ingrese sus correo">
-                          <p class="help-block"></p>
-                        </div>
-                      </div>
-                  <div id="success"></div>
-                </form>
-              </div>
+                </div>
+                <div class="control-group form-group">
+                  <div class="controls">
+                    <label for="estado" class="form-control-label" style="font-size: 1.25rem;">Estado:</label>
+                    <input type="text" class="form-control" id="estado" required data-validation-required-message="Favor ingrese sus correo">
+                    <p class="help-block"></p>
+                  </div>
+                </div>
+                <div class="control-group form-group">
+                  <div class="controls">
+                    <label for="msjEstado" class="form-control-label" style="font-size: 1.25rem;">Mensaje de Estado:</label>
+                    <input type="email" class="form-control" id="msjEstado" required data-validation-required-message="Favor ingrese sus correo">
+                    <p class="help-block"></p>
+                  </div>
+                </div>
+                <div id="success"></div>
+              </form>
             </div>
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" (click)="mostrar()">Confirmar</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal" style="background: #f00a0a;" (click)="salir()">Salir</button>        
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="mostrar()">Confirmar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" style="background: #f00a0a;" (click)="salir()">Salir</button>
       </div>
     </div>
   </div>
+</div>
+
+<!-- Modal eliminar Sala-->
+
+<div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: red;color:#fff">
+        <h5 class="modal-title" id="exampleModalLabel">Eliminar Sala</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-body" style="text-align: center">
+        <span>
+          <i class="fa fa-trash fa-5x" aria-hidden="true"></i> 
+        </span>
+        <br><br>
+        <h5>Está seguro que desea eliminar la sala? </h5>
+        <br>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>

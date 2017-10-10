@@ -35,6 +35,10 @@
     cursor: pointer;
   
   }
+  img {
+    opacity: 0.6;
+    filter: alpha(opacity=50); /* For IE8 and earlier */
+}
 
   @media only screen and (max-width: 980px) and (min-width: 821px) {  
     

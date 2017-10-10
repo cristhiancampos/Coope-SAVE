@@ -24,48 +24,71 @@
               <tr>
                 <th scope="row">1</th>
                 <th>Recursos Humanos</th>
-                <th> <hr style="background:green;height: 1.5em;width: 50%;"></th>
+                <th> <hr style="background:green;height: 1.5em;width: 80%;;margin-top: 3%"></th>
                 <th>Habilitado</th>
                 <th style="text-align: center">
                   <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-                  <button class="btn btn-danger btn-accion"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+                  <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
                 </th>
               </tr>
               <tr>
                 <th scope="row">2</th>
                 <th>Admistración</th>
-                <th> <hr style="background:orangered;height: 1.5em;width: 50%;"></th>
+                <th> <hr style="background:orangered;height: 1.5em;width: 80%;;margin-top: 3%"></th>
                 <th>Habilitado</th>
                 <th style="text-align: center">
                   <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-                  <button class="btn btn-danger btn-accion"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+                  <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
                 </th>
               </tr>
               <tr>
                 <th scope="row">3</th>
                 <th>Tecnologias de la Información</th>
-                <th> <hr style="background:blue;height: 1.5em;width: 50%;"></th>
+                <th> <hr style="background:blue;height: 1.5em;width: 80%;margin-top: 3%"></th>
                 <th>Habilitado</th>
                 <th style="text-align: center">
                   <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-                  <button class="btn btn-danger btn-accion"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+                  <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
                 </th>
               </tr>
               <tr>
                 <th scope="row">4</th>
                 <th>Cobros</th>
                 <th>
-                  <hr style="background: rebeccapurple;height: 1.5em;width: 50%;">
+                  <hr style="background: rebeccapurple;height: 1.5em;width: 80%;;margin-top: 3%">
                 </th>
                 <th>Habilitado</th>
                 <th style="text-align: center">
                   <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-                  <button class="btn btn-danger btn-accion"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+                  <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
                 </th>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
-    
     </div>
+
+    <!-- Modal  eliminar recurso-->
+<div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background: red;color:#fff">
+          <h5 class="modal-title" id="exampleModalLabel">Eliminar departamento</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" style="text-align: center">
+          <span>
+            <i class="fa fa-trash fa-5x" aria-hidden="true"></i> 
+          </span>
+          <br><br>
+          <h5>Está seguro que desea eliminar el Departamento? </h5>
+          <br>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-success" data-dismiss="modal">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  </div>
