@@ -14,7 +14,11 @@ color:#0082c8;
     margin-left: 10px;
 }
 
-.btn-modal-suc{color: #0082c8}
+.btn-modal-suc{
+  color: #0082c8;
+  margin-bottom: 1em;
+  
+}
 .btn-modal-suc:hover{
     background: #218838;
     color: #ffffff;
@@ -22,7 +26,9 @@ color:#0082c8;
 }
 
 .btn-modal-can{
-    color: #0082c8
+    color: #0082c8;
+    margin-bottom: 1em;
+    
 }
 .btn-modal-can:hover{
     background: orangered;
