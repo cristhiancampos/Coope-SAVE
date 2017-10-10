@@ -16,5 +16,5 @@ var md_auth = require('../middlewares/authenticated');
 // api.post('/upload-image-user/:id',[md_auth.ensureAuth,md_upload],UserController.uploadImage);
 // api.get('/get-image-user/:imageFile',UserController.getImageFile);
 
-api.get('/pruebas',controladorUsuario.pruebas);
+api.get('/user',controladorUsuario.getUsuario);
 module.exports = api;
