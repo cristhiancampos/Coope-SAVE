@@ -13,3 +13,19 @@ color:#0082c8;
     margin-bottom: 2px;
     margin-left: 10px;
 }
+
+.btn-modal-suc{color: #0082c8}
+.btn-modal-suc:hover{
+    background: #218838;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.btn-modal-can{
+    color: #0082c8
+}
+.btn-modal-can:hover{
+    background: orangered;
+    color: #ffffff;
+    cursor: pointer;
+}
