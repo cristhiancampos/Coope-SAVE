@@ -10,7 +10,7 @@
   </div>
 
   <div class="col-md-12">
-    <div class="row" style="text-align: center ;margin-bottom: 10%">
+    <div class="row" style="text-align: center">
       <table class="table">
         <thead class="thead-default">
           <tr>
@@ -73,33 +73,43 @@
             </th>
           </tr>
           <tr>
-            <th scope="row">2</th>
-            <th>Jacob</th>
-            <th>Thornton</th>
-            <th>@fat</th>
-            <th>Thornton</th>
-            <th>Otto</th>
-            <th style="text-align: center">
-              <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
-            </th>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <th>Jacob</th>
-            <th>Thornton</th>
-            <th>@fat</th>
-            <th>Thornton</th>
-            <th>Otto</th>
-            <th style="text-align: center">
-              <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
-            </th>
-          </tr>
+              <th scope="row">2</th>
+              <th>Jacob</th>
+              <th>Thornton</th>
+              <th>@fat</th>
+              <th>Thornton</th>
+              <th>Otto</th>
+              <th style="text-align: center">
+                <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
+                <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+              </th>
+            </tr>
         </tbody>
       </table>
     </div>
   </div>
+
+
+<!-- paginador-->
+  <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item">
+          <a class="page-link" href="#" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Previous</span>
+          </a>
+        </li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item">
+          <a class="page-link" href="#" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
 
 </div>
 
@@ -180,27 +190,28 @@
   </div>
 </div>
 
-<!-- Modal eliminar Sala-->
 
+
+<!-- Modal eliminar Sala-->
 <div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header" style="background: red;color:#fff">
-        <h5 class="modal-title" id="exampleModalLabel">Eliminar Sala</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-      </div>
-      <div class="modal-body" style="text-align: center">
-        <span>
-          <i class="fa fa-trash fa-5x" aria-hidden="true"></i> 
-        </span>
-        <br><br>
-        <h5>Está seguro que desea eliminar la sala? </h5>
-        <br>
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-success" data-dismiss="modal">Confirmar</button>
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="color: #FFF;background: #0069d9">
+          <h5 class="modal-title" id="exampleModalLabel">Eliminar Sala</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" style="text-align: center">
+          <span >
+            <i class="fa fa-trash fa-5x" aria-hidden="true" style="color:red"></i> 
+          </span>
+          <br><br>
+          <h5>Está seguro que desea eliminar la sala? </h5>
+          <br>
+          <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-default btn-modal-suc" data-dismiss="modal">Confirmar</button>
+        </div>
       </div>
     </div>
   </div>
-</div>

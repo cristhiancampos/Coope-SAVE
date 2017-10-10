@@ -1,144 +1,146 @@
-
 <div class="container-fluid" style="margin-top: 8%; padding: 0 10% 0 10%">
-    
-      <div class="row" style="text-align: center">
-        <div class="col-md-12">
-          <h2> Admistración de Usuarios</h2>
-          <hr>
-          <button class="btn btn-primary" style="float: left;margin-bottom: 6px"> <i class="fa fa-plus" aria-hidden="true"></i></button>      
-        </div>
-      </div>
-    
-      <div class="col-lg-12">
-        <div class="row" style="text-align: center ;margin-bottom: 10%">
-          <table class="table">
-            <thead class="thead-default">
-              <tr>
-                <th class="th-color">#</th>
-                <th class="th-color">Código de Usuario</th>
-                <th class="th-color">Nombre</th>
-                <th class="th-color">Apellidos</th>
-                <th class="th-color">Departamento</th>
-                <th class="th-color">Tipo de Usuario</th>
-                <th class="th-color">Correo</th>
-                <th class="th-color">Estado</th>
-                <th class="th-color" style="text-align: center">Acciones</th>
-              </tr>
-            </thead>
-            <tbody style="font-family: 'Times New Roman', Times, serif">
-              <tr>
-                <th scope="row">1</th>
-                <th>COOPESPARTA/esolis</th>
-                <th>Esteban</th>
-                <th>Solis O</th>
-                <th>TI</th>
-                <th>Admin</th>
-                <th>@fff</th>
-                <th>Activo</th>
-                <th style="text-align: center">
-                  <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-                  <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
-                </th>
-              </tr>
-              <tr>
-                  <th scope="row">2</th>
-                  <th>COOPESPARTA/esolis</th>
-                  <th>Esteban</th>
-                  <th>Solis O</th>
-                  <th>TI</th>
-                  <th>Admin</th>
-                  <th>@fff</th>
-                  <th>Activo</th>
-                <th style="text-align: center">
-                  <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-                  <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
-                </th>
-              </tr>
-              <tr>
-                  <th scope="row">3</th>
-                  <th>COOPESPARTA/esolis</th>
-                  <th>Esteban</th>
-                  <th>Solis O</th>
-                  <th>TI</th>
-                  <th>Admin</th>
-                  <th>@fff</th>
-                  <th>Activo</th>
-                <th style="text-align: center">
-                  <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-                  <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
-                </th>
-              </tr>
-              <tr>
-                  <th scope="row">4</th>
-                  <th>COOPESPARTA/esolis</th>
-                  <th>Esteban</th>
-                  <th>Solis O</th>
-                  <th>TI</th>
-                  <th>Admin</th>
-                  <th>@fff</th>
-                  <th>Activo</th>
-                <th style="text-align: center">
-                  <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-                  <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
-                </th>
-              </tr>
-              <tr>
-                  <th scope="row">5</th>
-                  <th>COOPESPARTA/esolis</th>
-                  <th>Esteban</th>
-                  <th>Solis O</th>
-                  <th>TI</th>
-                  <th>Admin</th>
-                  <th>@fff</th>
-                  <th>Activo</th>
-                <th style="text-align: center">
-                  <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-                  <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
-                </th>
-              </tr>
-              <tr>
-                  <th scope="row">6</th>
-                  <th>COOPESPARTA/esolis</th>
-                  <th>Esteban</th>
-                  <th>Solis O</th>
-                  <th>TI</th>
-                  <th>Admin</th>
-                  <th>@fff</th>
-                  <th>Activo</th>
-                <th style="text-align: center">
-                  <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-                  <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
-                </th>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    <!-- Modal  eliminar usuario-->
-<div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header" style="background: red;color:#fff">
-          <h5 class="modal-title" id="exampleModalLabel">Eliminar Usuario</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body" style="text-align: center">
-          <span>
-            <i class="fa fa-trash fa-5x" aria-hidden="true"></i> 
-          </span>
-          <br><br>
-          <h5>Está seguro que desea eliminar el usuario? </h5>
-          <br>
-          <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-success" data-dismiss="modal">Confirmar</button>
-        </div>
-      </div>
+
+  <div class="row" style="text-align: center">
+    <div class="col-md-12">
+      <h2> Admistración de Usuarios</h2>
+      <hr>
+      <button class="btn btn-primary" style="float: left;margin-bottom: 6px"> <i class="fa fa-plus" aria-hidden="true"></i></button>
     </div>
   </div>
 
- 
+  <div class="col-lg-12">
+    <div class="row" style="text-align: center">
+      <table class="table">
+        <thead class="thead-default">
+          <tr>
+            <th class="th-color">#</th>
+            <th class="th-color">Código de Usuario</th>
+            <th class="th-color">Nombre</th>
+            <th class="th-color">Apellidos</th>
+            <th class="th-color">Departamento</th>
+            <th class="th-color">Tipo de Usuario</th>
+            <th class="th-color">Correo</th>
+            <th class="th-color">Estado</th>
+            <th class="th-color" style="text-align: center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody style="font-family: 'Times New Roman', Times, serif">
+          <tr>
+            <th scope="row">1</th>
+            <th>COOPESPARTA/esolis</th>
+            <th>Esteban</th>
+            <th>Solis O</th>
+            <th>TI</th>
+            <th>Admin</th>
+            <th>@fff</th>
+            <th>Activo</th>
+            <th style="text-align: center">
+              <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
+              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+            </th>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <th>COOPESPARTA/esolis</th>
+            <th>Esteban</th>
+            <th>Solis O</th>
+            <th>TI</th>
+            <th>Admin</th>
+            <th>@fff</th>
+            <th>Activo</th>
+            <th style="text-align: center">
+              <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
+              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+            </th>
+          </tr>
+          <tr>
+            <th scope="row">3</th>
+            <th>COOPESPARTA/esolis</th>
+            <th>Esteban</th>
+            <th>Solis O</th>
+            <th>TI</th>
+            <th>Admin</th>
+            <th>@fff</th>
+            <th>Activo</th>
+            <th style="text-align: center">
+              <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
+              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+            </th>
+          </tr>
+          <tr>
+            <th scope="row">4</th>
+            <th>COOPESPARTA/esolis</th>
+            <th>Esteban</th>
+            <th>Solis O</th>
+            <th>TI</th>
+            <th>Admin</th>
+            <th>@fff</th>
+            <th>Activo</th>
+            <th style="text-align: center">
+              <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
+              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+            </th>
+          </tr>
+          <tr>
+            <th scope="row">5</th>
+            <th>COOPESPARTA/esolis</th>
+            <th>Esteban</th>
+            <th>Solis O</th>
+            <th>TI</th>
+            <th>Admin</th>
+            <th>@fff</th>
+            <th>Activo</th>
+            <th style="text-align: center">
+              <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
+              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-    
+  <!-- paginador-->
+  <nav aria-label="Page navigation example">
+    <ul class="pagination">
+      <li class="page-item">
+        <a class="page-link" href="#" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Previous</span>
+          </a>
+      </li>
+      <li class="page-item"><a class="page-link" href="#">1</a></li>
+      <li class="page-item"><a class="page-link" href="#">2</a></li>
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+      <li class="page-item">
+        <a class="page-link" href="#" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+          </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+<!-- Modal  eliminar usuario-->
+<div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="color: #FFF;background: #0069d9">
+        <h5 class="modal-title" id="exampleModalLabel">Eliminar Usuario</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+      </div>
+      <div class="modal-body" style="text-align: center">
+        <span>
+                <i class="fa fa-trash fa-5x" aria-hidden="true" style="color:red"></i> 
+              </span>
+        <br><br>
+        <h5>Está seguro que desea eliminar el usuario? </h5>
+        <br>
+        <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-default btn-modal-suc" data-dismiss="modal">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
