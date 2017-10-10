@@ -4,7 +4,7 @@
     <div class="col-md-12">
       <h2> Admistración de Recursos</h2>
       <hr>
-      <button class="btn btn-primary" style="float: left;margin-bottom: 6px"> <i class="fa fa-plus" aria-hidden="true"></i></button>      
+      <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="float: left;margin-bottom: 6px"> <i class="fa fa-plus" aria-hidden="true"></i></button>      
     </div>
   </div>
 
@@ -124,7 +124,8 @@
               <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <div class="modal-body" style="text-align: center">
+        <div class="moda
+        l-body" style="text-align: center">
           <span >
             <i class="fa fa-trash fa-5x" aria-hidden="true" style="color:red"></i> 
           </span>
@@ -137,3 +138,84 @@
       </div>
     </div>
   </div>
+
+  <!-- Seccion del Modal: Agregar nuevo Recurso-->
+<div class="modal fade bd-example-modal-sm " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog bd-example-modal-sm " role="document">
+  <div class="modal-content">
+    <div class="modal-header" style="background: #0069d9;color:#fff">
+      <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Agregar Recurso</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="salir()"> 
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12">
+          <ol class="breadcrumb">
+            <li>
+              <a><img src="assets/img/logo.png" ></a>
+            </li>
+          </ol>
+        </div>
+      </div>
+      <!-- END BREADCRUMB-->
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-12">
+            <form name="registerUser" id="registerForm" novalidate>
+              <div class="control-group form-group">
+                <div class="controls">
+                  <input type="text" class="form-control" placeholder="Nombre" id="nombre" required data-validation-required-message="Favor ingrese su nombre.">
+                  <p class="help-block"></p>
+                </div>
+              </div>
+              <div class="control-group form-group">
+                <div class="controls">
+                  <input type="text" class="form-control" placeholder="Código de Activo" id="codigoActivo" required data-validation-required-message="Favor ingrese Código de Activo.">
+                  <p class="help-block"></p>
+                </div>
+              </div>
+              <div class="control-group form-group">
+                <div class="controls">
+                  <textarea class="form-control" id="descripcion" placeholder="Descripción" rows="3"></textarea>
+                  <p class="help-block"></p>
+                </div>
+              </div>
+              <div class="control-group form-group">
+                <div class="controls">
+                  <ul>
+                    <li style="margin-left: -37px;"> <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider round"></span>
+                      </label>
+                    </li>
+                    <li>
+                      <label style="float: left;margin-top: -2.3em;">Habilitado</label>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="control-group form-group">
+                <div class="controls">
+                  <div class="controls">
+                    <textarea class="form-control" id="mensaje" placeholder="Reporte algún problema del activo" rows="3"></textarea>
+                    <p class="help-block"></p>
+                  </div>
+                </div>
+              </div>
+              <div id="success"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" (click)="salir()">Salir</button>          
+      <button type="button" class="btn btn-default btn-modal-suc" (click)="mostrar()">Confirmar</button>
+    </div>
+  </div>
+</div>
+</div>
+
