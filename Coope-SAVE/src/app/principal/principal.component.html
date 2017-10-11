@@ -65,28 +65,28 @@
               <form #registreUser="ngForm" (ngSubmit)="registrarUsuario()">
                   <div class="control-group form-group">
                       <div class="controls">
-                        <input type="email" class="form-control" #correo="ngModel" [(ngModel)]="usuario.correo" placeholder="Correo Electrónico" autofocus (focusout)="validarCorreo()">
+                        <input type="email" class="form-control" #correo="ngModel" [(ngModel)]="usuario.correo" placeholder="Correo Electrónico" autofocus (focusout)="validarCorreo()" required>
                         <span *ngIf="!correo.valid && correo.touched" > Campo <strong>Correo</strong> obligatorio</span>
                         
                       </div>
                     </div>
                 <div class="control-group form-group">
                   <div class="controls">                    
-                    <input type="text" class="form-control" #nombre="ngModel" name= "nombre" [(ngModel)]="usuario.nombre" placeholder="Nombre" >
+                    <input type="text" class="form-control" #nombre="ngModel" name= "nombre" [(ngModel)]="usuario.nombre" placeholder="Nombre" required >
                     <span *ngIf="!nombre.valid && nombre.touched" > Campo <strong>Nombre</strong> obligatorio</span>
                   </div>
                 </div>
                 <div class="control-group form-group">
                   <div class="controls">
                     
-                    <input type="text" class="form-control" #apellidos="ngModel" name= "a[ellidos" [(ngModel)]="usuario.apellidos" placeholder="Apellidos">
+                    <input type="text" class="form-control" #apellidos="ngModel" name= "apellidos" [(ngModel)]="usuario.apellidos" placeholder="Apellidos" required>
                     <span *ngIf="!apellidos.valid && apellidos.touched" > Campo <strong>Apellidos</strong> obligatorio</span>
                   </div>
                 </div>               
                 <div class="control-group form-group">
                   <div class="controls">
                       <span *ngIf="!departamento.valid && departamento.touched" > Campo <strong>Departamento</strong> obligatorio</span>
-                    <select #departamento="ngModel" name= "departamento" [(ngModel)]="usuario.departamento" class="selectpicker" style="width: 100%;padding: .5rem .75rem;">
+                    <select #departamento="ngModel" name= "departamento" [(ngModel)]="usuario.departamento" class="selectpicker" style="width: 100%;padding: .5rem .75rem;" required>
                             <!-- <option> <p style="color: #868eb1">Departamento</p> </option> -->
                             <option>Recursos Humanos</option>
                             <option>Administración</option>
@@ -96,16 +96,16 @@
                 </div>
                 <div class="control-group form-group">
                     <div class="controls">
-                      <input type="password" class="form-control" #contrasena="ngModel" name= "contrasena" [(ngModel)]="usuario.contrasena" placeholder="Contraseña"  (focusout)="validarContrasena()">
+                      <input type="password" class="form-control" #contrasena="ngModel" name= "contrasena" [(ngModel)]="usuario.contrasena" placeholder="Contraseña"  (focusout)="validarContrasena()" required>
                       <span *ngIf="!contrasena.valid && contrasena.touched" > Campo <strong>Contraseña</strong> obligatorio</span>
                     </div>
                   </div>
-                  <!-- <div class="control-group form-group">
+                   <div class="control-group form-group">
                       <div class="controls">
-                        <input type="password" class="form-control" #confirmar="ngModel" name= "confirmar" placeholder="Confirmar Contraseña" >
+                        <input type="password" class="form-control" #confirmar="ngModel"  name= "confirmar"  [(ngModel)] ="confirmaContra" placeholder="Confirmar Contraseña" required >
                         <span *ngIf="!confirmar.valid && confirmar.touched" > Campo <strong>Confirmar Contraseña</strong> obligatorio</span>
                       </div>
-                    </div> -->
+                    </div> 
                     <div class="form-check">
                         <label class="form-check-label">
                           <input type="checkbox" class="form-check-input">
@@ -113,7 +113,7 @@
                         </label>
                       </div>
                 
-                <button type="submit  " class="btn btn-defaul btn-modal-suc">Continuar</button>
+                <button type="submit" [disabled]="!registreUser.form.valid" class="btn btn-defaul btn-modal-suc">Continuar</button>
               </form>
             </div>
           </div>
