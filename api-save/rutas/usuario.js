@@ -1,7 +1,7 @@
 'use strict'
 
 var express = require('express');
-var controladorUsuario = require('../controladores/usuario');
+var ControladorUsuario = require('../controladores/usuario');
 
 var api = express.Router();
 var md_auth = require('../middlewares/authenticated');
@@ -16,5 +16,6 @@ var md_auth = require('../middlewares/authenticated');
 // api.post('/upload-image-user/:id',[md_auth.ensureAuth,md_upload],UserController.uploadImage);
 // api.get('/get-image-user/:imageFile',UserController.getImageFile);
 
-api.get('/user',controladorUsuario.getUsuario);
+api.get('/user',ControladorUsuario.getUsuario);
+api.post('/registrar',ControladorUsuario.agregarUsuario);
 module.exports = api;

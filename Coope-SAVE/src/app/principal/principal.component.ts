@@ -1,22 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery';
-import {Usuario} from '../modelos/usuario';
-import {NgModel} from '@angular/forms';
+import { Usuario } from '../modelos/usuario';
+import { NgModel } from '@angular/forms';
+
+import { ServicioUsuario } from '../servicios/usuario';
 @Component({
   selector: 'app-principal',
   templateUrl: './principal.component.html',
-  styleUrls: ['./principal.Component.css']
+  styleUrls: ['./principal.Component.css'],
+  providers: [ServicioUsuario]
 })
 export class PrincipalComponent implements OnInit {
   identity = true;
   mmostrar = false;
   public usuario: Usuario;
+  public usuarioRegistrado: Usuario;
   public confirmaContra;
+  public mensajeAlerta;
 
-  constructor() {
-    this.usuario = new Usuario('','','','','Usuario','','');
+  constructor(private _servUsuario: ServicioUsuario) {
+    this.usuario = new Usuario('', '', '', '', '', '', '');
+    this.usuarioRegistrado = new Usuario('', '', '', '', '', '', '');
     this.confirmaContra = '';
-   }
+  }
+
+
   mostrar() {
     $(".modal-backdrop").remove();
     $('body').removeClass('modal-open');
@@ -43,24 +51,40 @@ export class PrincipalComponent implements OnInit {
 
   }
 
-  validarCorreo(){  
-   // alert('El correo ya existe');
+  validarCorreo() {
+    // alert('El correo ya existe');
   }
-  validarContrasena(){
+  validarContrasena() {
     //alert('Contase;a invalida');
   }
-  validarConfirmacionContrasena(){
+  validarConfirmacionContrasena() {
     //alert('Contase;a invalida');
   }
 
-  registrarUsuario(){
+  registrarUsuario() {
     //alert('Registrar usuario');
     console.log(this.usuario);
-    this.salir();
-    this.mmostrar= true;
+    this._servUsuario.registrarUsuario(this.usuario).subscribe(
+      response => {
+        let user = response.usuario;
+        this.usuarioRegistrado = user;
+        if (!user._id) {
+          this.mensajeAlerta = "error al registarse";
+        } else {
+          this.mensajeAlerta = "Usuario registrado  exitosamente";//, Identificate con  "+this.user_register.email;
+          this.usuarioRegistrado = new Usuario('', '', '', '', '', '', '');
+        }
+      }, error => {
+        var alertMessage = <any>error;
+        if (alertMessage != null) {
+          var body = JSON.parse(error._body);
+          this.mensajeAlerta = body.message;
+          console.log(error);
+        }
+      }
+    );
   }
 
-  
 
 
 }

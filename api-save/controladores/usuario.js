@@ -8,52 +8,55 @@ var jwt =require('../servicios/jwt');
 function getUsuario(req, res){
   res.status(200).send({user:process.env["USERPROFILE"]});
 }
-// function saveUser(req, res)
-// {
-//   var user = new User();//creamos un nuevo objeto usuario
-//   var params = req.body;//obtenemos los datos de la peticion
-//  // console.log(params);
-//   //llenamos el nuevo objeto usuario a agregar con los datos del request
-//   user.name = params.name;
-//   user.surname = params.surname;
-//   user.email = params.email;
-//   user.role = 'ROLE_USER';
-//   user.image = 'null';
-//   user.password = params.password;
+function agregarUsuario(req, res)
+{
+  var user = new modeloUsuario();//creamos un nuevo objeto usuario
+  var params = req.body;//obtenemos los datos de la peticion
+  res.status(500).send({usuario:'salvar usuario'});
+ // console.log(params);
+  //llenamos el nuevo objeto usuario a agregar con los datos del request
+  // user.name = params.name;
+  // user.surname = params.surname;
+  // user.email = params.email;
+  // user.role = 'USUARIO';
+  // user.image = 'null';
+  // user.password = params.password;
 
-//   if(params.password && user.password !=null)
-//     {
-//       //encriptar password
-//       bcrypt.hash(params.password,null,null,function(err,hash){
-//         user.password = hash;
+  //if(params.password && user.password !=null)
+   // {
+
+
+      //encriptar password
+    //   bcrypt.hash(params.password,null,null,function(err,hash){
+    //     user.password = hash;
         
-//         if(user.name !=null && user.surname !=null && user.email !=null)
-//           {   
-//             //guardar usuario
-//             user.save((err,userStored) =>{
-//               if(err)
-//                 {
-//                     res.status(500).send({message:'Error al registrar usuario '});
-//                 }else{
-//                     if(!userStored)//verificar que se almaceno correctamente
-//                       {
-//                         res.status(404).send({message:'No se ha registrado el usuario '});
-//                       }else{//todo correcto
-//                         //res.status(200).send({message:'Usuario registrado correctamente '});
-//                         res.status(200).send({user: userStored});
-//                       }
-//                 }
-//             });
-//           }else{
-//             res.status(200).send({message:'Debe rellenar todos los campos '});
-//           }
-//       });
-//     }else
-//     {
-//       res.status(200).send({message:'Debe Digitar un contraseña'+'   params..... '+params});
-//     }
+    //     if(user.name !=null && user.surname !=null && user.email !=null)
+    //       {   
+    //         //guardar usuario
+    //         user.save((err,userStored) =>{
+    //           if(err)
+    //             {
+    //                 res.status(500).send({message:'Error al registrar usuario '});
+    //             }else{
+    //                 if(!userStored)//verificar que se almaceno correctamente
+    //                   {
+    //                     res.status(404).send({message:'No se ha registrado el usuario '});
+    //                   }else{//todo correcto
+    //                     //res.status(200).send({message:'Usuario registrado correctamente '});
+    //                     res.status(200).send({user: userStored});
+    //                   }
+    //             }
+    //         });
+    //       }else{
+    //         res.status(200).send({message:'Debe rellenar todos los campos '});
+    //       }
+    //   });
+    // }else
+    // {
+    //   res.status(200).send({message:'Debe Digitar un contraseña'+'   params..... '+params});
+    // }
 
-// }
+}
 
 // function loginUser(req, res)//REVISAR METODO FIND
 // {
@@ -167,7 +170,8 @@ function getUsuario(req, res){
 // }
 
 module.exports = {
-  getUsuario
+  getUsuario,
+  agregarUsuario
   // saveUser,
   // loginUser,
   // updateUser,

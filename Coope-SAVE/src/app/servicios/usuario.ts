@@ -5,7 +5,7 @@ import {Observable } from 'rxjs/Observable';
 import {GLOBAL} from './global';
 
 @Injectable()//permite la injeccion de dependencias
-export class ServicioUsuario{
+ export class ServicioUsuario{
     public url: string;//url de la api rest
     public identity: string;
     public token: string;
@@ -14,6 +14,20 @@ export class ServicioUsuario{
     {
         this.url = GLOBAL.url;
     }
+
+    registrarUsuario(usuario){
+        let json = JSON.stringify(usuario);
+        let params = json; 
+        let headers = new Headers({'Content-Type':'application/json'});
+
+        return this._http.post(this.url+'registrar',params,{headers:headers})
+        .map(res=>res.json());
+
+    }
+
+
+
+    
 
    /* getSong(token,id:string)
     {
@@ -53,16 +67,7 @@ export class ServicioUsuario{
 
     }
 
-    register(user_to_register){
-        /*let json = JSON.stringify(user_to_register);
-        let params = json; 
 
-        let headers = new Headers({'Content-Type':'application/json'});
-
-        return this._http.post(this.url+'register',params,{headers:headers})
-        .map(res=>res.json());*/
-
-    }
     updateUser(user_to_update)
     {
        /* let json = JSON.stringify(user_to_update);
