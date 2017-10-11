@@ -4,13 +4,14 @@ var mongoose = require('mongoose');//Este se necesita para trabajar con la base 
 var Schema = mongoose.Schema;
 
 var modeloUsuario = Schema({
-  codigoUsuario: String,
+ // codigoUsuario: String,
   nombre: String,
   apellidos: String,
   correo: String,
+  contrasena:String,
   rol: String,
   departamento: String,
   estado: String
 });
 
-module.exports = mongoose.model('usuario',modeloUsuario);
+module.exports = mongoose.model('Usuario',modeloUsuario);

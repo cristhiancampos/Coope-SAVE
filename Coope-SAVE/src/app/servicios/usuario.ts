@@ -16,18 +16,31 @@ import {GLOBAL} from './global';
     }
 
     registrarUsuario(usuario){
+        alert('entro a servicio');
+        console.log('--------------------');
+        console.log(usuario);
         let json = JSON.stringify(usuario);
         let params = json; 
         let headers = new Headers({'Content-Type':'application/json'});
 
         return this._http.post(this.url+'registrar',params,{headers:headers})
         .map(res=>res.json());
+    }
 
+    getCorreo(usuario)
+    {
+        alert(usuario.correo);
+
+        let json = JSON.stringify(usuario);
+        let params = json; 
+        let headers = new Headers({'Content-Type':'application/json'});
+        return this._http.post(this.url+'getCorreo',params,{headers:headers})
+        .map(res=>res.json());
     }
 
 
 
-    
+
 
    /* getSong(token,id:string)
     {

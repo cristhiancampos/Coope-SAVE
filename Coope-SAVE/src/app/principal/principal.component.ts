@@ -17,11 +17,14 @@ export class PrincipalComponent implements OnInit {
   public usuarioRegistrado: Usuario;
   public confirmaContra;
   public mensajeAlerta;
+  public correo;
+  public userExist:boolean;
 
   constructor(private _servUsuario: ServicioUsuario) {
     this.usuario = new Usuario('', '', '', '', '', '', '');
     this.usuarioRegistrado = new Usuario('', '', '', '', '', '', '');
     this.confirmaContra = '';
+    this.userExist = false;
   }
 
 
@@ -61,28 +64,57 @@ export class PrincipalComponent implements OnInit {
     //alert('Contase;a invalida');
   }
 
-  registrarUsuario() {
-    //alert('Registrar usuario');
-    console.log(this.usuario);
-    this._servUsuario.registrarUsuario(this.usuario).subscribe(
+  obtenerCorreo() {
+    this._servUsuario.getCorreo(this.usuario).subscribe(
       response => {
-        let user = response.usuario;
-        this.usuarioRegistrado = user;
-        if (!user._id) {
-          this.mensajeAlerta = "error al registarse";
+        if (!response.message) {
         } else {
-          this.mensajeAlerta = "Usuario registrado  exitosamente";//, Identificate con  "+this.user_register.email;
-          this.usuarioRegistrado = new Usuario('', '', '', '', '', '', '');
+          this.correo = response;
         }
+        this.userExist = true;
+        //console.log('?????????????????????????????????????????????????????????');
+       // console.log(response);
+
       }, error => {
-        var alertMessage = <any>error;
-        if (alertMessage != null) {
+        var errorMensaje = <any>error;
+
+        if (errorMensaje != null) {
           var body = JSON.parse(error._body);
-          this.mensajeAlerta = body.message;
           console.log(error);
         }
       }
     );
+    return this.userExist;
+  }
+
+  registrarUsuario() {
+    
+    this.obtenerCorreo();
+    // alert('Registrar usuario');
+    // console.log(this.usuario);
+    // alert('entro con respust');
+    // this._servUsuario.registrarUsuario(this.usuario).subscribe(
+    //   response => {
+    //     console.log('reeeeeeeeeeeeeeeeeeeeeeeeeeeee');
+    //     console.log(response);
+
+    //     let user = response.usuario;
+    //     this.usuarioRegistrado = user;
+    //     if (!user._id) {
+    //       this.mensajeAlerta = "error al registarse";
+    //     } else {
+    //       this.mensajeAlerta = "Usuario registrado  exitosamente";//, Identificate con  "+this.user_register.email;
+    //       this.usuarioRegistrado = new Usuario('', '', '', '', '', '', '');
+    //     }
+    //   }, error => {
+    //     var alertMessage = <any>error;
+    //     if (alertMessage != null) {
+    //       var body = JSON.parse(error._body);
+    //       this.mensajeAlerta = body.message;
+    //       console.log(error);
+    //     }
+    //   }
+    // );
   }
 
 

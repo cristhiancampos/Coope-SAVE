@@ -6,6 +6,7 @@ export class Usuario{
         public correo :string,
         public contrasena :string,
         public rol :string,
-        public departamento :String
+        public departamento :String,
+       // public estado:String
     ){}
 }

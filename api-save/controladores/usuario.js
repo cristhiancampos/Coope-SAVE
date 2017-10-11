@@ -2,66 +2,82 @@
 var fs = require('fs');
 var path = require('path');
 var bcrypt = require('bcrypt-nodejs');
-var User = require('../modelos/usuario');
-var jwt =require('../servicios/jwt');
+var Usuario = require('../modelos/usuario');
+var jwt = require('../servicios/jwt');
 
-function getUsuario(req, res){
-  res.status(200).send({user:process.env["USERPROFILE"]});
+function getUsuario(req, res) {
+  res.status(200).send({ user: process.env["USERPROFILE"] });
 }
-function agregarUsuario(req, res)
-{
-  var user = new modeloUsuario();//creamos un nuevo objeto usuario
+
+function agregarUsuario(req, res) {
+
+  var user = new Usuario();//creamos un nuevo objeto usuario  
   var params = req.body;//obtenemos los datos de la peticion
-  res.status(500).send({usuario:'salvar usuario'});
- // console.log(params);
   //llenamos el nuevo objeto usuario a agregar con los datos del request
-  // user.name = params.name;
-  // user.surname = params.surname;
-  // user.email = params.email;
-  // user.role = 'USUARIO';
-  // user.image = 'null';
-  // user.password = params.password;
+  user.nombre = params.nombre;
+  user.apellidos = params.apellidos;
+  user.correo = params.correo;
+  user.rol = 'USUARIO';
+  user.estado = 'Hablilitado';
+  user.departamento = params.departamento;
+  user.contrasena = params.contrasena;
 
-  //if(params.password && user.password !=null)
-   // {
+  if (params.contrasena && user.contrasena != null) {
+    //encriptar password
+    bcrypt.hash(params.contrasena, null, null, function (err, hash) {
+      user.contrasena = hash;
 
+      if (
+        user.nombre != null && user.apellidos != null && user.correo != null
+        && user.rol != null && user.estado != null && user.departamento != null
+      ) {
+        //guardar usuario
+        user.save((err, userStored) => {
+          if (err) {
+            res.status(500).send({ message: 'Error al registrar usuario ' });
+          } else {
+            if (!userStored)//verificar que se almaceno correctamente
+            {
+              res.status(404).send({ message: 'No se ha registrado el usuario ' });
+            } else {//todo correcto
+              //res.status(200).send({message:'Usuario registrado correctamente '});
+              res.status(200).send({ user: userStored });
+            }
+          }
+        });
+      } else {
+        res.status(200).send({ message: 'Debe rellenar todos los campos ' });
+      }
+    });
+  } else {
+    res.status(200).send({ message: 'Debe Digitar un contraseña' + '   params..... ' + params });
+  }
 
-      //encriptar password
-    //   bcrypt.hash(params.password,null,null,function(err,hash){
-    //     user.password = hash;
-        
-    //     if(user.name !=null && user.surname !=null && user.email !=null)
-    //       {   
-    //         //guardar usuario
-    //         user.save((err,userStored) =>{
-    //           if(err)
-    //             {
-    //                 res.status(500).send({message:'Error al registrar usuario '});
-    //             }else{
-    //                 if(!userStored)//verificar que se almaceno correctamente
-    //                   {
-    //                     res.status(404).send({message:'No se ha registrado el usuario '});
-    //                   }else{//todo correcto
-    //                     //res.status(200).send({message:'Usuario registrado correctamente '});
-    //                     res.status(200).send({user: userStored});
-    //                   }
-    //             }
-    //         });
-    //       }else{
-    //         res.status(200).send({message:'Debe rellenar todos los campos '});
-    //       }
-    //   });
-    // }else
-    // {
-    //   res.status(200).send({message:'Debe Digitar un contraseña'+'   params..... '+params});
-    // }
+}
 
+function getCorreo(req, res)
+{
+  var params = req.body;
+  var email = params.correo;
+
+  Usuario.findOne({ correo: email }, (err, user) => {
+    if (err) {
+      res.status(500).send({ message: 'Error en la petición' });
+    } else {
+      if (!user) {
+        res.status(404).send({ message: user });
+      }
+      else {
+        res.status(200).send({ message: user });
+      }
+    }
+  });
 }
 
 // function loginUser(req, res)//REVISAR METODO FIND
 // {
 
-      
+
 //    var params = req.body;
 // //console.log(req.body);
 //    var email = params.email;
@@ -171,7 +187,8 @@ function agregarUsuario(req, res)
 
 module.exports = {
   getUsuario,
-  agregarUsuario
+  agregarUsuario,
+  getCorreo
   // saveUser,
   // loginUser,
   // updateUser,
