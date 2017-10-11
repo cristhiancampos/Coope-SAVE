@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import {Departamento} from '../modelos/departamento';
+
 @Component({
   selector: 'app-admin-departamento',
   templateUrl: './admin-departamento.component.html',
@@ -7,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminDepartamentoComponent implements OnInit {
 
-  constructor() { }
+  public departamento: Departamento;
+  constructor() {
+    this.departamento= new Departamento('','','','');
+   }
 
   ngOnInit() {
+  }
+
+  agregarDepartamento(){
+    console.log(this.departamento);
   }
 
 }

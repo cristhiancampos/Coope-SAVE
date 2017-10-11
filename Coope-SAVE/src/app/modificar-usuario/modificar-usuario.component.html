@@ -22,32 +22,31 @@ aria-hidden="true">
       <div class="col-md-12">
         <div class="row">
           <div class="col-md-12">
-            <form name="registerUser" id="registerForm" novalidate>
+            <form #modificarUsuario="ngForm" (ngSubmit)="modificarUusario()">
+                <div class="control-group form-group">
+                    <div class="controls">
+                      <input type="email" class="form-control"  #correo="ngModel" name= "correo" [(ngModel)]="usuario.correo" placeholder="Correo" required>
+                      <span *ngIf="correo.invalid && (correo.dirty || correo.touched)" > Campo <strong>Correo</strong> obligatorio</span> 
+                      <p class="help-block"></p>
+                    </div>
+                  </div>
               <div class="control-group form-group">
                 <div class="controls">
-                  <label for="nombre" class="form-control-label" style="font-size: 1.25rem;">Nombre:</label>
-                  <input type="text" class="form-control" id="nombre" required data-validation-required-message="Favor ingrese su nombre.">
+                  <input type="text" class="form-control"  #nombre="ngModel" name= "nombre" [(ngModel)]="usuario.nombre" placeholder="Nombre" required>
+                  <span *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" > Campo <strong>Nombre</strong> obligatorio</span>
                   <p class="help-block"></p>
                 </div>
               </div>
               <div class="control-group form-group">
                 <div class="controls">
-                  <label for="apellidos" class="form-control-label" style="font-size: 1.25rem;">Apellidos:</label>
-                  <input type="text" class="form-control" id="apellidos" required data-validation-required-message="Favor ingrese sus apellidos.">
+                  <input type="text" class="form-control"  #apellidos="ngModel" name= "apellidos" [(ngModel)]="usuario.apellidos" placeholder="Apellidos" required>
+                  <span *ngIf="!apellidos.valid && apellidos.touched" > Campo <strong>Apellidos</strong> obligatorio</span>
                   <p class="help-block"></p>
                 </div>
-              </div>
+              </div>              
               <div class="control-group form-group">
                 <div class="controls">
-                  <label for="correo" class="form-control-label" style="font-size: 1.25rem;">Correo electrónico:</label>
-                  <input type="email" class="form-control" id="correo" required data-validation-required-message="Favor ingrese sus correo">
-                  <p class="help-block"></p>
-                </div>
-              </div>
-              <div class="control-group form-group">
-                <div class="controls">
-                  <label for="departamento" class="form-control-label" style="font-size: 1.25rem;">Departamento:</label>
-                  <select id="departamento" class="selectpicker" style="width: 100%;padding: .5rem .75rem;">
+                  <select  #departamento="ngModel" name= "departamento" [(ngModel)]="usuario.departamento" class="selectpicker" style="width: 100%;padding: .5rem .75rem;">
                                     <option>Recursos Humanos</option>
                                     <option>Administración</option>
                                     <option>Tenologías de la Información</option>
@@ -55,16 +54,30 @@ aria-hidden="true">
                   <p class="help-block"></p>
                 </div>
               </div>
+              <div class="control-group form-group">
+                  <div class="controls">
+                    <input type="password" class="form-control" #contrasena="ngModel" name= "contrasena" [(ngModel)]="usuario.contrasena" placeholder="Contraseña"  (focusout)="validarContrasena()" required>
+                    <span *ngIf="!contrasena.valid && contrasena.touched" > Campo <strong>Contraseña</strong> obligatorio</span>
+                  </div>
+                </div>
+
+                  <div class="control-group form-group">
+                    <div class="controls">
+                      <input type="password" class="form-control"  #confirmar="ngModel" name= "confirmar" [(ngModel)]="confirmaContra"  required placeholder="Confirmar Contraseña">
+                      <span *ngIf="!confirmar.valid && confirmar.touched" > Campo <strong>Confirmar Contraseña</strong> obligatorio</span>
+                    </div>
+                  </div> 
               <div id="success"></div>
+              <div class="modal-footer" style="float: right">
+                  <button type="submit" [disabled]="!modificarUsuario.form.valid"class="btn btn-primary">Guardar Campos</button>
+                   <button type="button" class="btn btn-secondary"  style="background: #f00a0a;" >Salir</button>   
+                </div>
             </form>
           </div>
         </div>
       </div>
     </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-primary" (click)="guadarCambios()">Guardar Campos</button>
-       <button type="button" class="btn btn-secondary"  style="background: #f00a0a;" (click)="salir()">Salir</button>   
-    </div>
+    
   </div>
 </div>
 </div>

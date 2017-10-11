@@ -150,34 +150,39 @@ aria-hidden="true">
       <div class="col-md-12">
         <div class="row">
           <div class="col-md-12">
-            <form name="registerUser" id="registerForm" novalidate>
+            <form #adminVehiculo="ngForm" (ngSubmit)="agregarVehiculo()">
               <div class="control-group form-group">
                 <div class="controls">
-                  <input type="text" class="form-control" placeholder="Tipo de Vehiculo" id="nombre" required data-validation-required-message="Favor ingrese el tipo de vehiculo.">
+                  <input type="text" class="form-control" #tipo="ngModel" name= "tipo" [(ngModel)]="vehiculo.tipo" placeholder="Tipo de Vehiculo" required >
+                  <span *ngIf="tipo.invalid && (tipo.dirty || tipo.touched)" > Campo <strong>Tipo</strong> obligatorio</span> 
                   <p class="help-block"></p>
                 </div>
               </div>
               <div class="control-group form-group">
                 <div class="controls">
-                  <input type="text" class="form-control" placeholder="Marca del Vehiculo" id="marca" required data-validation-required-message="Favor ingrese Marca.">
+                  <input type="text" class="form-control"  #marca="ngModel" name= "marca" [(ngModel)]="vehiculo.marca"placeholder="Marca del Vehiculo" required>
+                  <span *ngIf="marca.invalid && (marca.dirty || marca.touched)" > Campo <strong>Marca</strong> obligatorio</span> 
                   <p class="help-block"></p>
                 </div>
                 <div class="control-group form-group">
                   <div class="controls">
-                    <input type="text" class="form-control" placeholder="Placa de Vehiculo" id="placa" required data-validation-required-message="Favor ingrese placa.">
+                    <input type="text" class="form-control"  #placa="ngModel" name= "placa" [(ngModel)]="vehiculo.placa"placeholder="Placa de Vehiculo"  required >
+                    <span *ngIf="placa.invalid && (placa.dirty || placa.touched)" > Campo <strong>Placa</strong> obligatorio</span> 
                     <p class="help-block"></p>
                   </div>
                 </div>
               </div>
               <div class="control-group form-group">
                 <div class="controls">
-                  <textarea class="form-control" id="descripcion" placeholder="Descripción" rows="3"></textarea>
+                  <textarea class="form-control" #descripcion="ngModel" name= "descripcion" [(ngModel)]="vehiculo.descripcion" placeholder="Descripción" rows="3" required></textarea>
+                  <span *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)" > Campo <strong>Descripción</strong> obligatorio</span> 
                   <p class="help-block"></p>
                 </div>
               </div>
               <div class="control-group form-group">
                 <div class="controls">
-                  <input type="text" class="form-control" placeholder="Kilometraje" id="kilometraje" required data-validation-required-message="Favor ingrese kilometraje.">
+                  <input type="text" class="form-control" #kilometraje="ngModel" name= "kilometraje" [(ngModel)]="vehiculo.kilometraje" placeholder="Kilometraje" required>
+                  <span *ngIf="kilometraje.invalid && (kilometraje.dirty || kilometraje.touched)" > Campo <strong>Kilometraje</strong> obligatorio</span> 
                   <p class="help-block"></p>
                 </div>
               </div>
@@ -198,20 +203,23 @@ aria-hidden="true">
               <div class="control-group form-group">
                 <div class="controls">
                   <div class="controls">
-                    <textarea class="form-control" id="mensaje" placeholder="Reporte algún problema de la sala" rows="3"></textarea>
+                    <textarea class="form-control" #reporte="ngModel" name= "reporte" [(ngModel)]="vehiculo.reporte" placeholder="Reporte algún problema de la sala" rows="3"></textarea>
                     <p class="help-block"></p>
                   </div>
                 </div>
               </div>
               <div id="success"></div>
+              <div style="float: right">
+                  <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" (click)="salir()">Salir</button>   
+                  <button type="submit" [disabled]="!adminVehiculo.form.valid" class="btn btn-default btn-modal-suc" >Confirmar</button>
+                </div>
             </form>
           </div>
         </div>
       </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" (click)="salir()">Salir</button>          
-      <button type="button" class="btn btn-default btn-modal-suc" (click)="mostrar()">Confirmar</button>
+       
     </div>
   </div>
 </div>

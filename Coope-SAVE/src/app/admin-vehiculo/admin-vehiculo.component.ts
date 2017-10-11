@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import {Vehiculo} from '../modelos/vehiculo';
+
 @Component({
   selector: 'app-admin-vehiculo',
   templateUrl: './admin-vehiculo.component.html',
@@ -7,9 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminVehiculoComponent implements OnInit {
 
-  constructor() { }
+  public vehiculo: Vehiculo;
+
+  constructor() { 
+    this.vehiculo= new Vehiculo('','','','','','','','');
+  }
 
   ngOnInit() {
+  }
+
+  agregarVehiculo(){
+    console.log(this.vehiculo);
   }
 
 }
