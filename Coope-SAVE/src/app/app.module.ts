@@ -35,6 +35,7 @@ import { AdminUsuarioComponent } from './admin-usuario/admin-usuario.component';
 import { AdminRecursoComponent } from './admin-recurso/admin-recurso.component';
 import { AdminSolicitudComponent } from './admin-solicitud/admin-solicitud.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
