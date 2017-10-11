@@ -8,11 +8,9 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 })
 export class ModificarUsuarioComponent implements OnInit {
   mmostrar = false;
-<<<<<<< HEAD
-  //codigo= process.env["USERPROFILE"];
-=======
+
   codigo=''; //process.env["USERPROFILE"];
->>>>>>> master
+
   constructor(private _router: Router) { }
 
 
