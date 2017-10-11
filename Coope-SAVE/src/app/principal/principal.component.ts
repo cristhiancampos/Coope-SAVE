@@ -10,17 +10,19 @@ import {NgModel} from '@angular/forms';
 export class PrincipalComponent implements OnInit {
   identity = true;
   mmostrar = false;
-  usuario: Usuario;
+  public usuario: Usuario;
+  public confirmaContra;
 
-  constructor() { }
+  constructor() {
+    this.usuario = new Usuario('','','','','Usuario','','');
+    this.confirmaContra = '';
+   }
   mostrar() {
     $(".modal-backdrop").remove();
     $('body').removeClass('modal-open');
     $('#exampleModal').removeClass('show');
     $('#exampleModal').css('display', 'none');
     this.mmostrar = true;
-    this.usuario= new Usuario('','','','','','','');
- 
   }
   salir() {
     $(".modal-backdrop").remove();
@@ -52,7 +54,8 @@ export class PrincipalComponent implements OnInit {
   }
 
   registrarUsuario(){
-    alert('Registrar usuario');
+    //alert('Registrar usuario');
+    console.log(this.usuario);
   }
 
   
