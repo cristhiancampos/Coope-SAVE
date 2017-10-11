@@ -15,28 +15,41 @@ export class ServicioUsuario{
         this.url = GLOBAL.url;
     }
 
+   /* getSong(token,id:string)
+    {
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            'Authorization':token
+        });
+        let options = new RequestOptions({headers:headers});
+        return this._http.get(this.url+'song/'+id,options)
+         .map(res=>res.json());
+    }*/
+
     getUser()
     {
         let headers = new Headers({
-            'Content-Type':'application/json'//,
-            //'Authorization':token
-        });
+            'Content-Type':'application/json'
+        });/*,
+        'Authorization':this.token*/
+
         let options = new RequestOptions({headers:headers});
-        return this._http.get(this.url+'user')
+        return this._http.get(this.url+'user',options)
          .map(res=>res.json());
     }
     signup(user_to_login, gethash=null){
 
-      /*  if(gethash!=null){
+         if(gethash!=null){
             user_to_login.gethash = gethash;
-        }
+         }
+
         let json = JSON.stringify(user_to_login);
         let params = json; 
 
         let headers = new Headers({'Content-Type':'application/json'});
 
         return this._http.post(this.url+'login',params,{headers:headers})
-        .map(res=>res.json());*/
+        .map(res=>res.json());
 
     }
 
@@ -78,13 +91,13 @@ export class ServicioUsuario{
     }
       getToken()
     {
-      /*  let token= localStorage.getItem('token');
+       let token= localStorage.getItem('token');
         if(token !="undefined"){
             this.token = token;
         }else{
             this.token = null;
         }
-        return this.token;*/
+        return this.token;
     }
 
     
