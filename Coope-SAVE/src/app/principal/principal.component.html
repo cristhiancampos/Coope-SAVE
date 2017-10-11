@@ -43,7 +43,7 @@
   <div class="modal-dialog bd-example-modal-sm " role="document">
     <div class="modal-content">
       <div class="modal-header" style="background: #0069d9;color:#fff">
-        <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-user-circle-o"></i>&nbsp;&nbsp;Registro de Usuarios</h5>
+        <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-user-circle-o"></i>&nbsp;&nbsp;Registrarse</h5>
         <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="salir()"> 
             <span aria-hidden="true">&times;</span>
           </button>-->
@@ -62,47 +62,65 @@
         <div class="col-md-12">
           <div class="row">
             <div class="col-md-12">
-              <form name="registerUser" id="registerForm" novalidate>
+              <form #registreUser="ngForm" (ngSubmit)="registrarUsuario()">
+                  <div class="control-group form-group">
+                      <div class="controls">
+                        <input type="email" class="form-control" #correo="ngModel" [(ngModel)]="usuario.correo" placeholder="Correo Electrónico" autofocus (focusout)="validarCorreo()">
+                        <span *ngIf="!correo.valid && correo.touched" > Campo <strong>Correo</strong> obligatorio</span>
+                        
+                      </div>
+                    </div>
                 <div class="control-group form-group">
-                  <div class="controls">
-                    <label for="nombre" class="form-control-label" style="font-size: 1.25rem;">Nombre:</label>
-                    <input type="text" class="form-control" id="nombre" required data-validation-required-message="Favor ingrese su nombre.">
-                    <p class="help-block"></p>
+                  <div class="controls">                    
+                    <input type="text" class="form-control" #nombre="ngModel" name= "nombre" [(ngModel)]="usuario.nombre" placeholder="Nombre" >
+                    <span *ngIf="!nombre.valid && nombre.touched" > Campo <strong>Nombre</strong> obligatorio</span>
                   </div>
                 </div>
                 <div class="control-group form-group">
                   <div class="controls">
-                    <label for="apellidos" class="form-control-label" style="font-size: 1.25rem;">Apellidos:</label>
-                    <input type="text" class="form-control" id="apellidos" required data-validation-required-message="Favor ingrese sus apellidos.">
-                    <p class="help-block"></p>
+                    
+                    <input type="text" class="form-control" #apellidos="ngModel" name= "a[ellidos" [(ngModel)]="usuario.apellidos" placeholder="Apellidos">
+                    <span *ngIf="!apellidos.valid && apellidos.touched" > Campo <strong>Apellidos</strong> obligatorio</span>
                   </div>
-                </div>
+                </div>               
                 <div class="control-group form-group">
                   <div class="controls">
-                    <label for="correo" class="form-control-label" style="font-size: 1.25rem;">Correo electrónico:</label>
-                    <input type="email" class="form-control" id="correo" required data-validation-required-message="Favor ingrese sus correo">
-                    <p class="help-block"></p>
-                  </div>
-                </div>
-                <div class="control-group form-group">
-                  <div class="controls">
-                    <label for="departamento" class="form-control-label" style="font-size: 1.25rem;">Departamento:</label>
-                    <select id="departamento" class="selectpicker" style="width: 100%;padding: .5rem .75rem;">
+                      <span *ngIf="!departamento.valid && departamento.touched" > Campo <strong>Departamento</strong> obligatorio</span>
+                    <select #departamento="ngModel" name= "departamento" [(ngModel)]="usuario.departamento" class="selectpicker" style="width: 100%;padding: .5rem .75rem;">
+                            <!-- <option> <p style="color: #868eb1">Departamento</p> </option> -->
                             <option>Recursos Humanos</option>
                             <option>Administración</option>
                             <option>Tenologías de la Información</option>
                           </select>
-                    <p class="help-block"></p>
-                  </div>
+                  </div>  
                 </div>
-                <div id="success"></div>
+                <div class="control-group form-group">
+                    <div class="controls">
+                      <input type="password" class="form-control" #contrasena="ngModel" name= "contrasena" [(ngModel)]="usuario.contrasena" placeholder="Contraseña"  (focusout)="validarContrasena()">
+                      <span *ngIf="!contrasena.valid && contrasena.touched" > Campo <strong>Contraseña</strong> obligatorio</span>
+                    </div>
+                  </div>
+                  <!-- <div class="control-group form-group">
+                      <div class="controls">
+                        <input type="password" class="form-control" #confirmar="ngModel" name= "confirmar" placeholder="Confirmar Contraseña" >
+                        <span *ngIf="!confirmar.valid && confirmar.touched" > Campo <strong>Confirmar Contraseña</strong> obligatorio</span>
+                      </div>
+                    </div> -->
+                    <div class="form-check">
+                        <label class="form-check-label">
+                          <input type="checkbox" class="form-check-input">
+                          Recordarme
+                        </label>
+                      </div>
+                
+                <button type="submit  " class="btn btn-defaul btn-modal-suc">Continuar</button>
               </form>
             </div>
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="mostrar()">Continuar</button>
+       
         <!-- <button type="button" class="btn btn-secondary"  style="background: #f00a0a;" (click)="salir()">Salir</button>         -->
       </div>
     </div>
