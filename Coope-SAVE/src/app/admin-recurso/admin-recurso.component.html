@@ -165,22 +165,25 @@ aria-hidden="true">
       <div class="col-md-12">
         <div class="row">
           <div class="col-md-12">
-            <form name="registerUser" id="registerForm" novalidate>
+            <form #adminRecurso="ngForm" (ngSubmit)="agregarRecurso()">
               <div class="control-group form-group">
                 <div class="controls">
-                  <input type="text" class="form-control" placeholder="Nombre" id="nombre" required data-validation-required-message="Favor ingrese su nombre.">
+                  <input type="text" class="form-control" #nombre="ngModel" name= "nombre" [(ngModel)]="recursos.nombre" placeholder="Nombre" required >
+                  <span *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" > Campo <strong>Nombre</strong> obligatorio</span>
                   <p class="help-block"></p>
                 </div>
               </div>
               <div class="control-group form-group">
                 <div class="controls">
-                  <input type="text" class="form-control" placeholder="Código de Activo" id="codigoActivo" required data-validation-required-message="Favor ingrese Código de Activo.">
+                  <input type="text" class="form-control" #codigoActivo="ngModel" name= "codigoActivo" [(ngModel)]="recursos.codigoActico"placeholder="Código de Activo" required >
+                  <span *ngIf="codigoActivo.invalid && (codigoActivo.dirty || codigoActivo.touched)" > Campo <strong>Codigo de Activo</strong> obligatorio</span>
                   <p class="help-block"></p>
                 </div>
               </div>
               <div class="control-group form-group">
                 <div class="controls">
-                  <textarea class="form-control" id="descripcion" placeholder="Descripción" rows="3"></textarea>
+                  <textarea class="form-control"#descripcion="ngModel" name= "descripcion" [(ngModel)]="recursos.descripcion"placeholder="Descripción" rows="3" required></textarea>
+                  <span *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)" > Campo <strong>Descripción</strong> obligatorio</span>
                   <p class="help-block"></p>
                 </div>
               </div>
@@ -201,20 +204,23 @@ aria-hidden="true">
               <div class="control-group form-group">
                 <div class="controls">
                   <div class="controls">
-                    <textarea class="form-control" id="mensaje" placeholder="Reporte algún problema del activo" rows="3"></textarea>
+                    <textarea class="form-control" #report="ngModel" name= "report" [(ngModel)]="recursos.reporte" placeholder="Reporte algún problema del activo" rows="3"></textarea>
                     <p class="help-block"></p>
                   </div>
                 </div>
               </div>
               <div id="success"></div>
+              <div style="float: right">
+                  <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" (click)="salir()">Salir</button>   
+                  <button type="submit" [disabled]="!adminRecurso.form.valid" class="btn btn-default btn-modal-suc" >Confirmar</button>
+                </div>
             </form>
           </div>
         </div>
       </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" (click)="salir()">Salir</button>          
-      <button type="button" class="btn btn-default btn-modal-suc" (click)="mostrar()">Confirmar</button>
+      
     </div>
   </div>
 </div>

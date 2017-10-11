@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+import {Recurso} from '../modelos/recursos';
 @Component({
   selector: 'app-admin-recurso',
   templateUrl: './admin-recurso.component.html',
@@ -7,9 +8,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminRecursoComponent implements OnInit {
 
-  constructor() { }
+  public recursos: Recurso;
+  constructor() {
+
+    this.recursos= new Recurso('','','','','','');
+   }
 
   ngOnInit() {
+  }
+
+  agregarRecurso(){
+    console.log(this.recursos);
   }
 
 }

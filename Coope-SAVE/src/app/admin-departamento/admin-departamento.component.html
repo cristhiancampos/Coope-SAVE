@@ -147,10 +147,12 @@
         <div class="col-md-12">
           <div class="row">
             <div class="col-md-12">
-              <form name="register-dep" id="registerdepForm" novalidate>
+              <form #adminDepartamento="ngForm" (ngSubmit)="agregarDepartamento()">
                 <div class="control-group form-group">
                   <div class="controls">
-                    <input type="text" class="form-control" placeholder="Nombre" id="nombre" required data-validation-required-message="Favor ingrese su nombre.">
+                    <input type="text" class="form-control"  #nombre="ngModel" name= "nombre" [(ngModel)]="departamento.nombre" placeholder="Nombre" required >
+                    <span *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" > Campo <strong>Nombre</strong> obligatorio</span> 
+                    <p class="help-block"></p>
                     <p class="help-block"></p>
                   </div>
                 </div>
@@ -162,7 +164,9 @@
                       <label> Color</label>
                     </div>
                     <div class="col-md-10">
-                      <input type="color" class="form-control" placeholder="Nombre" id="color" style="padding: 0px">
+                      <input type="color" class="form-control"  #color="ngModel" name= "color" [(ngModel)]="departamento.color" style="padding: 0px" required>
+                      <span *ngIf="color.invalid && (color.dirty || color.touched)" > Campo <strong>Color</strong> obligatorio</span> 
+                      <p class="help-block"></p>
                     </div>
                   </div>
                 </div>
@@ -182,14 +186,17 @@
                   </div>
                 </div>
                 <div id="success"></div>
+                <div style="float: right">
+                    <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" (click)="salir()">Salir</button>   
+                    <button type="submit" [disabled]="!adminDepartamento.form.valid" class="btn btn-default btn-modal-suc" >Confirmar</button>
+                  </div>
               </form>
             </div>
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" (click)="salir()">Salir</button>
-        <button type="button" class="btn btn-default btn-modal-suc" (click)="mostrar()">Confirmar</button>
+       
       </div>
     </div>
   </div>

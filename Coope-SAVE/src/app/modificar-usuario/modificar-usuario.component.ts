@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
+import {Usuario} from '../modelos/usuario';
+
 @Component({
   selector: 'app-modificar-usuario',
   templateUrl: './modificar-usuario.component.html',
@@ -8,10 +10,13 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 })
 export class ModificarUsuarioComponent implements OnInit {
   mmostrar = false;
+  public usuario: Usuario;
 
   codigo=''; //process.env["USERPROFILE"];
 
-  constructor(private _router: Router) { }
+  constructor(private _router: Router) {
+    this.usuario= new Usuario('','','','','','','');
+   }
 
 
 
@@ -42,6 +47,10 @@ export class ModificarUsuarioComponent implements OnInit {
     $('#exampleModal').removeClass('show');
     $('#exampleModal').css('display', 'none');
     this._router.navigate(['/principal']);
+  }
+
+  modificarUusario(){
+    console.log(this.usuario);
   }
 
 }
