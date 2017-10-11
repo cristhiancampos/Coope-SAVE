@@ -56,6 +56,8 @@ export class PrincipalComponent implements OnInit {
   registrarUsuario(){
     //alert('Registrar usuario');
     console.log(this.usuario);
+    this.salir();
+    this.mmostrar= true;
   }
 
   
