@@ -10,7 +10,7 @@ moment.locale('es');
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  styleUrls: ['./app.component.css'], 
   providers: [ServicioUsuario]
 })
 export class AppComponent implements OnInit {
@@ -30,7 +30,8 @@ export class AppComponent implements OnInit {
     private _route: ActivatedRoute,
     private el: ElementRef,
     private _servUsuario: ServicioUsuario,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute
+  ) {
     this.isSolicitudSala = false;
     this.isRegister = true;
     this.isSolicitudSala = false;
@@ -132,6 +133,7 @@ export class AppComponent implements OnInit {
   // método que realiza una acción después de haberse cargado el componente
   ngOnInit() {
 
+   
     console.log('---------------------------------------------');
  
     
