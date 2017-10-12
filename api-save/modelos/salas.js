@@ -12,4 +12,4 @@ var modeloSala = Schema({
   reporte: String
 });
 
-module.exports = mongoose.model('sala',modeloSala);
+module.exports = mongoose.model('Sala',modeloSala);

@@ -25,12 +25,13 @@ export class PrincipalComponent implements OnInit {
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
-    private _servUsuario: ServicioUsuario) {
-    this.usuario = new Usuario('', '', '', '', '', '', '');
-    this.usuarioRegistrado = new Usuario('', '', '', '', '', '', '');
-    this.confirmaContra = '';
-    this.userExist = false;
-  }
+    private _servUsuario: ServicioUsuario)
+      {
+      this.usuario = new Usuario('', '', '', '', '', '', '');
+      this.usuarioRegistrado = new Usuario('', '', '', '', '', '', '');
+      this.confirmaContra = '';
+      this.userExist = false;
+      }
 
 
   mostrar() {
@@ -50,7 +51,7 @@ export class PrincipalComponent implements OnInit {
    // localStorage.clear();
     let identity =localStorage.getItem('identity');
     let user =JSON.parse(identity);
-    //console.log(user.correo);
+    console.log(user);
     if(user!=null)
       {
         this.mmostrar = true;
@@ -105,6 +106,7 @@ export class PrincipalComponent implements OnInit {
           alert('Error al registrar el usario');
         } else {
           alert('Usuario registrado exitosamente');
+          console.log(user);
           this.mensajeAlerta = "Usuario registrado  exitosamente";
           this.usuarioRegistrado = new Usuario('', '', '', '', '', '', '');
           localStorage.setItem('identity',JSON.stringify(user));
