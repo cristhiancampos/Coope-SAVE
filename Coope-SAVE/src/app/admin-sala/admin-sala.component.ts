@@ -28,8 +28,8 @@ mostrarModal: boolean;
   ngOnInit() {
   }
 
-validarnombre() {
-    this._servSala.validarSala(this.sala).subscribe(
+validarSala() {
+    this._servSala.validarSala(this.sala.nombre).subscribe(
       response => {
         if (response.message) {
           console.log(response.message);

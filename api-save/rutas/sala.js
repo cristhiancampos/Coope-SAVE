@@ -7,6 +7,6 @@ var api = express.Router();
 var md_auth = require('../middlewares/authenticated');
 
 api.post('/registrarSala',ControladorSala.agregarSala);
-api.post('/registrarSala',ControladorSala.validarSala);
+api.post('/validarSala',ControladorSala.validarSala);
 
 module.exports = api;
