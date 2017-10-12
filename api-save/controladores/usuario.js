@@ -78,7 +78,7 @@ function loginUsuario(req, res)
   var params = req.body;
   //console.log(req.body);
   var email = params.correo;
-  //console.log(params.email+'.....'+params.password);
+  console.log(params.correo+'.....'+params.contrasena);
   var password = params.contrasena;
 
   Usuario.findOne({ correo: email.toLowerCase() }, (err, user) => {
@@ -89,8 +89,9 @@ function loginUsuario(req, res)
         res.status(404).send({ message: 'Credenciales incorrectas' });
       } else {
         //Comprobar la contraseña
-        bcrypt.compare(password, user.password, function (err, check) {
+        bcrypt.compare(password, user.contrasena, function (err, check) {
           if (check) {
+            console.log();
             //devolver datos de usuario logueado
             if (params.gethash)//verificar token
             {

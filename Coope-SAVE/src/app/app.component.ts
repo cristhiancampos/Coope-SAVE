@@ -137,7 +137,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
 
     //localStorage.clear();
-    console.log('---------------------------------------------');
+    /*console.log('---------------------------------------------');
     let identity =localStorage.getItem('identity');
     let user =JSON.parse(identity);
     this.SESSION =user;
@@ -148,7 +148,7 @@ export class AppComponent implements OnInit {
       }else{
         this.mmostrar = false;
        
-      }
+      }*/
     
     // var wsh = new ActiveXObject('WScript.Shell');
     // var usuario = wsh.ExpandEnvironmentStrings('%USERNAME%');

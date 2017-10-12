@@ -31,7 +31,7 @@ export class ServicioUsuario {
     }
 
 
-    loginUser(usuario, gethash = null) {
+    loginUsuario(usuario, gethash = null) {
         if (gethash != null) {
             usuario.gethash = gethash;
         }

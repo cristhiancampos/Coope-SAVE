@@ -38,7 +38,7 @@
 
 <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Open modal for @getbootstrap</button> -->
 <!-- Modal  Register-->
-<div class="modal fade bd-example-modal-sm " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade bd-example-modal-sm " id="registroUsuarioModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
   <div class="modal-dialog bd-example-modal-sm " role="document">
     <div class="modal-content">
@@ -127,15 +127,16 @@
                   </div>
                 </div>
 
-                <div class="form-check">
+               <!-- <div class="form-check">
                   <label class="form-check-label">
                   <input type="checkbox" class="form-check-input">
                       Recordarme
                     </label>
-                </div>
-
-                <button type="submit" [disabled]="!correo.valid || !nombre.valid || !apellidos.valid  ||  !departamento.valid || !contrasena.valid  || !confirmar.valid || userExist" class="btn btn-defaul btn-modal-suc">Continuar</button>
+                </div>-->
+                <button type="button"  style="float:left" class="btn btn-defaul btn-modal-suc"  (click)="loginBack()">Ya poseo una cuenta</button>                
+                <button type="submit" style="float:right" [disabled]="!correo.valid || !nombre.valid || !apellidos.valid  ||  !departamento.valid || !contrasena.valid  || !confirmar.valid || userExist" class="btn btn-defaul btn-modal-suc">Continuar</button>
               </form>
+              
             </div>
           </div>
         </div>
@@ -146,4 +147,77 @@
       </div>
     </div>
   </div>
+</div>
+
+
+
+<!-- Modal  Login-->
+<div  class="modal fade bd-example-modal-sm " id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog bd-example-modal-sm " role="document">
+  <div class="modal-content">
+    <div class="modal-header" style="background: #0069d9;color:#fff">
+      <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-lock"></i>&nbsp;&nbsp;Indentificate</h5>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12">
+          <ol class="breadcrumb">
+            <li>
+              <a><img src="assets/img/logo.png" ></a>
+            </li>
+          </ol>
+        </div>
+      </div>
+      <!-- END BREADCRUMB-->
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-12">
+
+            <form #loginForm="ngForm" (ngSubmit)="login()"> <!--(focusout)="validarCorreo()" -->
+              <div class="control-group form-group">
+                <div class="controls">
+                  <input type="email" #correo="ngModel" name="correo" class="form-control" [(ngModel)]="usuario.correo" placeholder="ejemplo@dominio.com"
+                    autofocus  (focus)="onfocusCorreo()" required  [email]="true">
+                  <small *ngIf="correo.touched && correo.value==''"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El correo es obligatorio. </small>
+                   <small *ngIf="!correo.valid && correo.value!null"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Formato de correo inválido.</small>                     
+                </div>
+              </div>
+
+              <div class="control-group form-group">
+                <div class="controls">
+                  <input type="password" class="form-control" #contrasena="ngModel" name="contrasena" [(ngModel)]="usuario.contrasena" placeholder="Contraseña"
+                    required (focus)="onfocusCorreo()" >
+                    <small [hidden]="contrasena.valid || (contrasena.pristine && !loginForm.submitted)">
+                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Contraseña requerida
+                    </small>
+                </div>
+              </div>
+              <div class="form-check">
+                <label class="form-check-label">
+                <input type="checkbox" class="form-check-input"  #recordar="ngModel" name="recordar" [ngModel]="recordarme" (change)="rememberChangeValue()" >
+                    Recordarme
+                  </label>
+              </div>
+              <small *ngIf="verError">
+                  <i class="fa fa-ban" aria-hidden="true"></i>  {{mensajeError}}
+              </small>
+              <br>
+              <button style="width: 100%" type="submit" [disabled]="!correo.valid   ||  !contrasena.valid " class="btn btn-defaul btn-modal-suc">Ingresar</button>
+              <br> <br> 
+              
+            </form>
+            <div class="col-md-12" style="text-align:center">
+                <a   routerLink="/principal" routerLinkActive="actived" (click)="mostrarRegistrarse()"><i class="fa fa-key" aria-hidden="true"></i> Crear un cuenta</a>                  
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="modal-footer" style="text-align:center">
+        <p>&copy; Coopesparta R.L.</p>
+       <button type="button" class="btn btn-secondary"  style="background: #f00a0a;" (click)="salir()">Salir</button>         
+    </div> -->
+  </div>
+</div>
 </div>
