@@ -55,8 +55,7 @@ function agregarUsuario(req, res) {
 
 }
 
-function getCorreo(req, res)
-{
+function getCorreo(req, res) {
   var params = req.body;
   var email = params.correo;
 
@@ -74,47 +73,42 @@ function getCorreo(req, res)
   });
 }
 
-// function loginUser(req, res)//REVISAR METODO FIND
-// {
+function loginUsuario(req, res)
+{
+  var params = req.body;
+  //console.log(req.body);
+  var email = params.correo;
+  //console.log(params.email+'.....'+params.password);
+  var password = params.contrasena;
 
-
-//    var params = req.body;
-// //console.log(req.body);
-//    var email = params.email;
-//    //console.log(params.email+'.....'+params.password);
-//    var password = params.password;
-
-//    User.findOne({email: email.toLowerCase()}, (err, user) => {
-//      if(err)
-//       {
-//         res.status(500).send({ message: 'Error en la petición'});
-//       }else{
-//         if(!user)
-//           {
-//             res.status(404).send({ message: 'Credenciales incorrectas'});
-//           }else{
-//             //Comprobar la contraseña
-//               bcrypt.compare(password,user.password,function(err,check){
-//                 if(check)
-//                   {
-//                     //devolver datos de usuario logueado
-//                     if(params.gethash)//verificar token
-//                       {
-//                           //devolver un token de jwt
-//                           res.status(200).send({token:jwt.createToken(user)});
-//                       }else{
-//                           //devolver usuario
-//                           res.status(200).send({user});
-//                       }
-//                    // res.status(200).send({ message: 'El usuario no existe'});
-//                   }else{
-//                       res.status(404).send({ message: 'Credenciales incorrectas'});
-//                   }
-//             });
-//           }
-//       }
-//    });
-// }
+  Usuario.findOne({ correo: email.toLowerCase() }, (err, user) => {
+    if (err) {
+      res.status(500).send({ message: 'Error en la petición' });
+    } else {
+      if (!user) {
+        res.status(404).send({ message: 'Credenciales incorrectas' });
+      } else {
+        //Comprobar la contraseña
+        bcrypt.compare(password, user.password, function (err, check) {
+          if (check) {
+            //devolver datos de usuario logueado
+            if (params.gethash)//verificar token
+            {
+              //devolver un token de jwt
+              res.status(200).send({ token: jwt.createToken(user) });
+            } else {
+              //devolver usuario
+              res.status(200).send({ user });
+            }
+            // res.status(200).send({ message: 'El usuario no existe'});
+          } else {
+            res.status(404).send({ message: 'Credenciales incorrectas' });
+          }
+        });
+      }
+    }
+  });
+}
 
 // function updateUser(req, res){
 
@@ -188,7 +182,8 @@ function getCorreo(req, res)
 module.exports = {
   getUsuario,
   agregarUsuario,
-  getCorreo
+  getCorreo,
+  loginUsuario
   // saveUser,
   // loginUser,
   // updateUser,

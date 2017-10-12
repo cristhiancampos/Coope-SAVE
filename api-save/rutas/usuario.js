@@ -19,4 +19,5 @@ var md_auth = require('../middlewares/authenticated');
 api.get('/user',ControladorUsuario.getUsuario);
 api.post('/registrar',ControladorUsuario.agregarUsuario);
 api.post('/getCorreo',ControladorUsuario.getCorreo);
+api.post('/login',ControladorUsuario.loginUsuario);
 module.exports = api;
