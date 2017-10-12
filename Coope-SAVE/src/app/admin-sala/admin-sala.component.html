@@ -143,6 +143,7 @@
                   <div class="controls">
                     <input type="text" class="form-control" #nombre="ngModel" name= "nombre" [(ngModel)]="sala.nombre" placeholder="Nombre" required (focusout)="validarSala()">
                     <span *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" > Campo <strong>Nombre</strong> obligatorio</span>
+                    <small *ngIf="nombreExist"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe una Sala con ese nombre</small> 
                     <p class="help-block"></p>
                   </div>
                 </div>
