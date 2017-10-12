@@ -29,7 +29,7 @@ mostrarModal: boolean;
   }
 
 validarSala() {
-    this._servSala.validarSala(this.sala.nombre).subscribe(
+    this._servSala.validarSala(this.sala).subscribe(
       response => {
         if (response.message) {
           console.log(response.message);
