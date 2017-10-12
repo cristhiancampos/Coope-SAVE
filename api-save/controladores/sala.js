@@ -44,7 +44,7 @@ function validarSala(req, res)
   var params = req.body;
   var nombre = params.nombre;
   console.log(nombre);
-  Usuario.findOne({ nombre: nombre }, (err, sala) => {
+  Sala.findOne({ nombre: nombre }, (err, sala) => {
     if (err) {
       res.status(200).send({ message: null });
     } else {
