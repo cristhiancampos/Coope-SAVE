@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery';
 import { Usuario } from '../modelos/usuario';
 import { NgModel } from '@angular/forms';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { ServicioUsuario } from '../servicios/usuario';
 @Component({
@@ -17,10 +18,14 @@ export class PrincipalComponent implements OnInit {
   public usuarioRegistrado: Usuario;
   public confirmaContra;
   public mensajeAlerta;
-  public correo;
-  public userExist:boolean;
+  public correo = "";
+  public userExist: boolean;
+  public matchPass = false;
 
-  constructor(private _servUsuario: ServicioUsuario) {
+  constructor(
+    private _route: ActivatedRoute,
+    private _router: Router,
+    private _servUsuario: ServicioUsuario) {
     this.usuario = new Usuario('', '', '', '', '', '', '');
     this.usuarioRegistrado = new Usuario('', '', '', '', '', '', '');
     this.confirmaContra = '';
@@ -42,81 +47,82 @@ export class PrincipalComponent implements OnInit {
     $('#exampleModal').css('display', 'none');
   }
   ngOnInit() {
-    this.mmostrar = false;
-    $('body').append('<div class="modal-backdrop fade show" ></div>');
-    $('body').addClass('modal-open');
-    $('#exampleModal').addClass('show');
-    $('#exampleModal').css('display', 'block');
-
-    // $("head").append($("<link rel='stylesheet' href='./principal.Component.css' type='text/css' media='screen' />"))
-    // this.identity = localStorage.getItem('identity');
-    // alert('principal'+this.identity);
-
+    let identity =localStorage.getItem('identity');
+    let user =JSON.parse(identity);
+    console.log(user.correo);
+    if(user.correo!='')
+      {
+        this.mmostrar = true;
+      }else{
+        this.mmostrar = false;
+        $('body').append('<div class="modal-backdrop fade show" ></div>');
+        $('body').addClass('modal-open');
+        $('#exampleModal').addClass('show');
+        $('#exampleModal').css('display', 'block');
+      }
   }
 
+  //olcultar mensaje de existencia de usuario
+  onfocusCorreo() {
+    this.userExist = false;
+  }
+
+  // validar la existencia de correo de un usuario
   validarCorreo() {
-    // alert('El correo ya existe');
-  }
-  validarContrasena() {
-    //alert('Contase;a invalida');
-  }
-  validarConfirmacionContrasena() {
-    //alert('Contase;a invalida');
-  }
-
-  obtenerCorreo() {
     this._servUsuario.getCorreo(this.usuario).subscribe(
       response => {
-        if (!response.message) {
+        if (response.message) {
+          console.log(response.message.correo);
+          let co = response.message.correo;;
+          this.correo = co;
+          this.userExist = true;
         } else {
-          this.correo = response;
+          console.log('no existe');
+          console.log(response.message);
+          this.correo = null;
+          this.userExist = false;
         }
-        this.userExist = true;
-        //console.log('?????????????????????????????????????????????????????????');
-       // console.log(response);
-
       }, error => {
         var errorMensaje = <any>error;
 
         if (errorMensaje != null) {
           var body = JSON.parse(error._body);
-          console.log(error);
         }
       }
     );
-    return this.userExist;
   }
 
+  //registrar usuarios en el sistemas
   registrarUsuario() {
-    
-    this.obtenerCorreo();
-    // alert('Registrar usuario');
-    // console.log(this.usuario);
-    // alert('entro con respust');
-    // this._servUsuario.registrarUsuario(this.usuario).subscribe(
-    //   response => {
-    //     console.log('reeeeeeeeeeeeeeeeeeeeeeeeeeeee');
-    //     console.log(response);
-
-    //     let user = response.usuario;
-    //     this.usuarioRegistrado = user;
-    //     if (!user._id) {
-    //       this.mensajeAlerta = "error al registarse";
-    //     } else {
-    //       this.mensajeAlerta = "Usuario registrado  exitosamente";//, Identificate con  "+this.user_register.email;
-    //       this.usuarioRegistrado = new Usuario('', '', '', '', '', '', '');
-    //     }
-    //   }, error => {
-    //     var alertMessage = <any>error;
-    //     if (alertMessage != null) {
-    //       var body = JSON.parse(error._body);
-    //       this.mensajeAlerta = body.message;
-    //       console.log(error);
-    //     }
-    //   }
-    // );
+    this._servUsuario.registrarUsuario(this.usuario).subscribe(
+      response => {
+        //  console.log(response.user._id);
+        let user = response.user;
+        this.usuarioRegistrado = user;
+        if (!response.user._id) {
+          this.mensajeAlerta = "error al registarse";
+          alert('Error al registrar el usario');
+        } else {
+          alert('Usuario registrado exitosamente');
+          this.mensajeAlerta = "Usuario registrado  exitosamente";
+          this.usuarioRegistrado = new Usuario('', '', '', '', '', '', '');
+          localStorage.setItem('identity',JSON.stringify(user));
+          this.mostrar();
+        }
+      }, error => {
+        var alertMessage = <any>error;
+        if (alertMessage != null) {
+          var body = JSON.parse(error._body);
+          this.mensajeAlerta = body.message;
+          alert('Usuario no registrado');
+          //console.log(error);
+        }
+      }
+    );
   }
-
-
+   // localStorage.setItem('token',token);
+  // localStorage.removeItem('identity');//remover item del localStorage
+  // localStorage.removeItem('token');
+  // localStorage.clear();
 
 }

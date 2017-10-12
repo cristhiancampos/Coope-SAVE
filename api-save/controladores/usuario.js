@@ -62,10 +62,10 @@ function getCorreo(req, res)
 
   Usuario.findOne({ correo: email }, (err, user) => {
     if (err) {
-      res.status(500).send({ message: 'Error en la petición' });
+      res.status(200).send({ message: null });
     } else {
       if (!user) {
-        res.status(404).send({ message: user });
+        res.status(200).send({ message: null });
       }
       else {
         res.status(200).send({ message: user });

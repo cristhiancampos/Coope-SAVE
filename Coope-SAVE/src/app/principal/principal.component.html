@@ -62,65 +62,86 @@
         <div class="col-md-12">
           <div class="row">
             <div class="col-md-12">
-              <form #registreUser="ngForm" (ngSubmit)="registrarUsuario()">
-                  <div class="control-group form-group">
-                      <div class="controls">
-                        <input type="email" class="form-control" #correo="ngModel" [(ngModel)]="usuario.correo" placeholder="Correo Electrónico" autofocus (focusout)="validarCorreo()" required>
-                        <span *ngIf="!correo.valid && correo.touched" > Campo <strong>Correo</strong> obligatorio</span>
-                        
-                      </div>
-                    </div>
+
+              <form #registerForm="ngForm" (ngSubmit)="registrarUsuario()">
                 <div class="control-group form-group">
-                  <div class="controls">                    
-                    <input type="text" class="form-control" #nombre="ngModel" name= "nombre" [(ngModel)]="usuario.nombre" placeholder="Nombre" required >
-                    <span *ngIf="!nombre.valid && nombre.touched" > Campo <strong>Nombre</strong> obligatorio</span>
+                  <div class="controls">
+                    <input type="email" #correo="ngModel" name="correo" class="form-control" [(ngModel)]="usuario.correo" placeholder="ejemplo@dominio.com"
+                      autofocus (focusout)="validarCorreo()" (focus)="onfocusCorreo()" required  [email]="true">
+                    <small *ngIf="correo.touched && correo.value==''"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El correo es obligatorio. </small>
+                     <small *ngIf="!correo.valid && correo.value!null"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Formato de correo inválido.</small>                     
+                    <small *ngIf="userExist"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe una cuenta con ese correo</small>  
                   </div>
                 </div>
                 <div class="control-group form-group">
                   <div class="controls">
-                    
-                    <input type="text" class="form-control" #apellidos="ngModel" name= "apellidos" [(ngModel)]="usuario.apellidos" placeholder="Apellidos" required>
-                    <span *ngIf="!apellidos.valid && apellidos.touched" > Campo <strong>Apellidos</strong> obligatorio</span>
+                    <input type="text" class="form-control" #nombre="ngModel" name="nombre" [(ngModel)]="usuario.nombre" placeholder="Nombre"
+                      required>
+                      <small [hidden]="nombre.valid || (nombre.pristine && !registerForm.submitted)">
+                          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El nombre es obligatorio
+                      </small>
                   </div>
-                </div>               
+                </div>
+
                 <div class="control-group form-group">
                   <div class="controls">
-                      <span *ngIf="!departamento.valid && departamento.touched" > Campo <strong>Departamento</strong> obligatorio</span>
-                    <select #departamento="ngModel" name= "departamento" [(ngModel)]="usuario.departamento" class="selectpicker" style="width: 100%;padding: .5rem .75rem;" required>
-                            <!-- <option> <p style="color: #868eb1">Departamento</p> </option> -->
-                            <option>Recursos Humanos</option>
-                            <option>Administración</option>
-                            <option>Tenologías de la Información</option>
-                          </select>
-                  </div>  
+
+                    <input type="text" class="form-control" #apellidos="ngModel" name="apellidos" [(ngModel)]="usuario.apellidos" placeholder="Apellidos"
+                      required maxlength="60">
+                      <small [hidden]="apellidos.valid || (apellidos.pristine && !registerForm.submitted)">
+                          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Los apellidos son obligatorios
+                      </small>
+                  </div>
+                </div>
+
+                <div class="control-group form-group">
+                  <div class="controls">
+                    <select #departamento="ngModel" name="departamento" [(ngModel)]="usuario.departamento" class="selectpicker" style="width: 100%;padding: .5rem .75rem;"
+                      required>  
+                          <option>Recursos Humanos</option>
+                          <option>Administración</option>
+                          <option>Tenologías de la Información</option>
+                        </select>
+                        <small [hidden]="departamento.valid || (departamento.pristine && !registerForm.submitted)">
+                            <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El departamento es  obligatorio
+                        </small>
+                  </div>
                 </div>
                 <div class="control-group form-group">
-                    <div class="controls">
-                      <input type="password" class="form-control" #contrasena="ngModel" name= "contrasena" [(ngModel)]="usuario.contrasena" placeholder="Contraseña"  (focusout)="validarContrasena()" required>
-                      <span *ngIf="!contrasena.valid && contrasena.touched" > Campo <strong>Contraseña</strong> obligatorio</span>
-                    </div>
+                  <div class="controls">
+                    <input type="password" class="form-control" #contrasena="ngModel" name="contrasena" [(ngModel)]="usuario.contrasena" placeholder="Contraseña - min 6 caracteres"
+                      required minlength="6">
+                      <small [hidden]="contrasena.valid || (contrasena.pristine && !registerForm.submitted)">
+                          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Contraseña obligatoria , mínimo 6 caracteres
+                      </small>
                   </div>
-                   <div class="control-group form-group">
-                      <div class="controls">
-                        <input type="password" class="form-control" #confirmar="ngModel"  name= "confirmar"  [(ngModel)] ="confirmaContra" placeholder="Confirmar Contraseña" required >
-                        <span *ngIf="!confirmar.valid && confirmar.touched" > Campo <strong>Confirmar Contraseña</strong> obligatorio</span>
-                      </div>
-                    </div> 
-                    <div class="form-check">
-                        <label class="form-check-label">
-                          <input type="checkbox" class="form-check-input">
-                          Recordarme
-                        </label>
-                      </div>
-                
-                <button type="submit" [disabled]="!registreUser.form.valid" class="btn btn-defaul btn-modal-suc">Continuar</button>
+                </div>
+
+                <div class="control-group form-group">
+                  <div class="controls">
+                    <input type="password" class="form-control" #confirmar="ngModel" name="confirmar" [(ngModel)]="confirmaContra" placeholder="Confirmar Contraseña"
+                      required minlength="6" validateEqual="contrasena">                  
+                    <small [hidden]="confirmar.valid || (confirmar.pristine && !registerForm.submitted) ">
+                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Las contraseñas no coinciden
+                    </small>
+                  </div>
+                </div>
+
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input type="checkbox" class="form-check-input">
+                      Recordarme
+                    </label>
+                </div>
+
+                <button type="submit" [disabled]="!correo.valid || !nombre.valid || !apellidos.valid  ||  !departamento.valid || !contrasena.valid  || !confirmar.valid || userExist" class="btn btn-defaul btn-modal-suc">Continuar</button>
               </form>
             </div>
           </div>
         </div>
       </div>
       <div class="modal-footer">
-       
+
         <!-- <button type="button" class="btn btn-secondary"  style="background: #f00a0a;" (click)="salir()">Salir</button>         -->
       </div>
     </div>

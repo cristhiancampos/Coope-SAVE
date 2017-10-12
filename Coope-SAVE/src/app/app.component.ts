@@ -23,6 +23,7 @@ export class AppComponent implements OnInit {
   public SESSION;
   public errorMessage;
   public user: Usuario;
+  public mmostrar;
 
 
   constructor(
@@ -36,6 +37,8 @@ export class AppComponent implements OnInit {
     this.isRegister = true;
     this.isSolicitudSala = false;
     this.identity = false;
+
+    this.mmostrar = false;
 
     this.token = this._servUsuario.getToken();
     this.SESSION = this._servUsuario.getIndentity();
@@ -135,7 +138,17 @@ export class AppComponent implements OnInit {
 
    
     console.log('---------------------------------------------');
- 
+    let identity =localStorage.getItem('identity');
+    let user =JSON.parse(identity);
+    this.SESSION =user;
+    //console.log(user.correo);
+    if(user.correo!='')
+      {
+        this.mmostrar = true;
+      }else{
+        this.mmostrar = false;
+       
+      }
     
     // var wsh = new ActiveXObject('WScript.Shell');
     // var usuario = wsh.ExpandEnvironmentStrings('%USERNAME%');
