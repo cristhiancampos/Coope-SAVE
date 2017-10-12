@@ -42,7 +42,7 @@ function agregarSala(req, res) {
 function validarSala(req, res)
 {
   var params = req.body;
-  var nombre = params;
+  var nombre = params.nombre;
   console.log(nombre);
   Usuario.findOne({ nombre: nombre }, (err, sala) => {
     if (err) {
