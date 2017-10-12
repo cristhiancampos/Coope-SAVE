@@ -47,7 +47,7 @@ export class PrincipalComponent implements OnInit {
     $('#exampleModal').css('display', 'none');
   }
   ngOnInit() {
-    localStorage.clear();
+   // localStorage.clear();
     let identity =localStorage.getItem('identity');
     let user =JSON.parse(identity);
     //console.log(user.correo);

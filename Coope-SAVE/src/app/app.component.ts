@@ -136,7 +136,7 @@ export class AppComponent implements OnInit {
   // método que realiza una acción después de haberse cargado el componente
   ngOnInit() {
 
-   
+   // localStorage.clear();
     console.log('---------------------------------------------');
     let identity =localStorage.getItem('identity');
     let user =JSON.parse(identity);
