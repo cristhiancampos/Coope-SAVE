@@ -13,7 +13,8 @@ import {Sala} from '../modelos/salas';
 export class AdminSalaComponent implements OnInit {
 
 public sala: Sala;
-
+nombre= '';
+nombreExist: boolean;
 mostrarModal: boolean;
   constructor(
     private _route: ActivatedRoute,
@@ -25,6 +26,30 @@ mostrarModal: boolean;
   }
 
   ngOnInit() {
+  }
+
+validarnombre() {
+    this._servSala.validarSala(this.sala).subscribe(
+      response => {
+        if (response.message) {
+          console.log(response.message);
+          let co = response.message;
+          this.nombre = co;
+          this.nombreExist = true;
+        } else {
+          console.log('no existe sala');
+          console.log(response.message);
+          this.nombre = null;
+          this.nombreExist = false;
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+        }
+      }
+    );
   }
 
 
@@ -54,6 +79,8 @@ agregarSala(){
     }
   );  
 }
+
+
 
 mostrar(opcion:boolean) {
   if(!opcion){

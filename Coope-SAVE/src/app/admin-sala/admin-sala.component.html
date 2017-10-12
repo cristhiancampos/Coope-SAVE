@@ -141,7 +141,7 @@
               <form #adminSala="ngForm" (ngSubmit)="agregarSala()">
                 <div class="contrrol-group form-group">
                   <div class="controls">
-                    <input type="text" class="form-control" #nombre="ngModel" name= "nombre" [(ngModel)]="sala.nombre" placeholder="Nombre" required>
+                    <input type="text" class="form-control" #nombre="ngModel" name= "nombre" [(ngModel)]="sala.nombre" placeholder="Nombre" required (focusout)="validarSala()">
                     <span *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" > Campo <strong>Nombre</strong> obligatorio</span>
                     <p class="help-block"></p>
                   </div>
