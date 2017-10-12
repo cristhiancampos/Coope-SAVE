@@ -47,10 +47,11 @@ export class PrincipalComponent implements OnInit {
     $('#exampleModal').css('display', 'none');
   }
   ngOnInit() {
+    localStorage.clear();
     let identity =localStorage.getItem('identity');
     let user =JSON.parse(identity);
-    console.log(user.correo);
-    if(user.correo!='')
+    //console.log(user.correo);
+    if(user!=null)
       {
         this.mmostrar = true;
       }else{

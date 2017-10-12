@@ -141,8 +141,8 @@ export class AppComponent implements OnInit {
     let identity =localStorage.getItem('identity');
     let user =JSON.parse(identity);
     this.SESSION =user;
-    //console.log(user.correo);
-    if(user.correo!='')
+    console.log(user);
+    if(user!=null)
       {
         this.mmostrar = true;
       }else{
