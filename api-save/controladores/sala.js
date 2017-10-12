@@ -37,8 +37,30 @@ function agregarSala(req, res) {
           }
     }
 
+
+
+function validarSala(req, res)
+{
+  var params = req.body;
+  var nombre = params.correo;
+
+  Usuario.findOne({ nombre: nombre }, (err, sala) => {
+    if (err) {
+      res.status(200).send({ message: null });
+    } else {
+      if (!sala) {
+        res.status(200).send({ message: null });
+      }
+      else {
+        res.status(200).send({ message: sala });
+      }
+    }
+  });
+}
+
     module.exports = {
         
-        agregarSala
+        agregarSala,
+        validarSala
        
       };
