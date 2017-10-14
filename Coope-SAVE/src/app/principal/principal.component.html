@@ -66,10 +66,17 @@
               <form #registerForm="ngForm" (ngSubmit)="registrarUsuario()">
                 <div class="control-group form-group">
                   <div class="controls">
-                    <input type="email" #correo="ngModel" name="correo" class="form-control" [(ngModel)]="usuario.correo" placeholder="ejemplo@dominio.com"
-                      autofocus (focusout)="validarCorreo()" (focus)="onfocusCorreo()" required  [email]="true">
+                    <div class="row" style="margin-left:0em;margin-right:0em">
+                    <input type="text" #correo="ngModel" name="correo" class="form-control col-md-4  " (input)="change($event)" [(ngModel)]="usuario.correo" 
+                    placeholder="usuario" autofocus (focusout)="validarCorreo()" (focus)="onfocusCorreo()" 
+                    required >
+                    <input type="text" #correoLabel="ngModel" name="correoLabel" class="form-control col-md-8  " [(ngModel)]="dominio" 
+                    placeholder="" disabled 
+                    required  [email]="true">
+                      <!-- <label class="col-md-6" > @coopesparta.fi.cr</label> [email]="true"-->
+                    </div>
                     <small *ngIf="correo.touched && correo.value==''"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El correo es obligatorio. </small>
-                     <small *ngIf="!correo.valid && correo.value!null"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Formato de correo inválido.</small>                     
+                     <!-- <small *ngIf="!correo.valid && correo.value!null"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Formato de correo inválido.</small>                      -->
                     <small *ngIf="userExist"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe una cuenta con ese correo</small>  
                   </div>
                 </div>
@@ -97,7 +104,8 @@
                 <div class="control-group form-group">
                   <div class="controls">
                     <select #departamento="ngModel" name="departamento" [(ngModel)]="usuario.departamento" class="selectpicker" style="width: 100%;padding: .5rem .75rem;"
-                      required>  
+                      required >  
+                      <option value="" selected disabled >Departamento</option>
                           <option>Recursos Humanos</option>
                           <option>Administración</option>
                           <option>Tenologías de la Información</option>
@@ -105,36 +113,40 @@
                         <small [hidden]="departamento.valid || (departamento.pristine && !registerForm.submitted)">
                             <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El departamento es  obligatorio
                         </small>
+
                   </div>
                 </div>
                 <div class="control-group form-group">
                   <div class="controls">
-                    <input type="password" class="form-control" #contrasena="ngModel" name="contrasena" [(ngModel)]="usuario.contrasena" placeholder="Contraseña - min 6 caracteres"
-                      required minlength="6">
+                    <input type="password" class="form-control" #contrasena="ngModel" name="contrasena"
+                     [(ngModel)]="usuario.contrasena" placeholder="Contraseña - min 8 caracteres"
+                      required minlength="8" (input)="validarcontra($event)">
                       <small [hidden]="contrasena.valid || (contrasena.pristine && !registerForm.submitted)">
-                          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Contraseña obligatoria , mínimo 6 caracteres
+                          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> 
+                          Contraseña obligatoria
                       </small>
+                      <!-- <small [hidden]="7==9">
+                          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> 
+                          Debe contener Mayusculas . <br>
+                          Debe contener Minusculas . <br>
+                          Debe contener numeros y caracteres especiales.
+                      </small> -->
                   </div>
                 </div>
 
                 <div class="control-group form-group">
                   <div class="controls">
                     <input type="password" class="form-control" #confirmar="ngModel" name="confirmar" [(ngModel)]="confirmaContra" placeholder="Confirmar Contraseña"
-                      required minlength="6" validateEqual="contrasena">                  
+                      required minlength="8" validateEqual="contrasena">                  
                     <small [hidden]="confirmar.valid || (confirmar.pristine && !registerForm.submitted) ">
                         <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Las contraseñas no coinciden
                     </small>
                   </div>
                 </div>
-
-               <!-- <div class="form-check">
-                  <label class="form-check-label">
-                  <input type="checkbox" class="form-check-input">
-                      Recordarme
-                    </label>
-                </div>-->
                 <button type="button"  style="float:left" class="btn btn-defaul btn-modal-suc"  (click)="loginBack()">Ya poseo una cuenta</button>                
-                <button type="submit" style="float:right" [disabled]="!correo.valid || !nombre.valid || !apellidos.valid  ||  !departamento.valid || !contrasena.valid  || !confirmar.valid || userExist" class="btn btn-defaul btn-modal-suc">Continuar</button>
+                <button id="btnRegister" type="submit" style="float:right"
+                 [disabled]="!correo.valid || !nombre.valid || !apellidos.valid  ||  !departamento.valid || !contrasena.valid  || !confirmar.valid || userExist"
+                  class="btn btn-success">Continuar</button>
               </form>
               
             </div>
@@ -148,8 +160,6 @@
     </div>
   </div>
 </div>
-
-
 
 <!-- Modal  Login-->
 <div  class="modal fade bd-example-modal-sm " id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -174,21 +184,24 @@ aria-hidden="true">
         <div class="row">
           <div class="col-md-12">
 
-            <form #loginForm="ngForm" (ngSubmit)="login()"> <!--(focusout)="validarCorreo()" -->
+            <form #loginForm="ngForm" (ngSubmit)="login()"> <!--(focusout)="validarCorreo()"  autofocus  (focus)="onfocusCorreo()"-->
               <div class="control-group form-group">
                 <div class="controls">
-                  <input type="email" #correo="ngModel" name="correo" class="form-control" [(ngModel)]="usuario.correo" placeholder="ejemplo@dominio.com"
-                    autofocus  (focus)="onfocusCorreo()" required  [email]="true">
-                  <small *ngIf="correo.touched && correo.value==''"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El correo es obligatorio. </small>
-                   <small *ngIf="!correo.valid && correo.value!null"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Formato de correo inválido.</small>                     
+                  <input type="email" #correoLogin="ngModel" name="correoLogin" class="form-control"
+                   [(ngModel)]="usuario.correo" placeholder="usuario@coopesparta.fi.cr" required >
+                     <small [hidden]="correoLogin.valid || (correoLogin.pristine && !loginForm.submitted)">
+                      <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Correo requerida
+                  </small>
+                  <!-- <small *ngIf="correo.touched && correo.value==''"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El correo es obligatorio. </small>
+                   <small *ngIf="!correo.valid && correo.value!null"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Formato de correo inválido.</small>                      -->
                 </div>
               </div>
 
               <div class="control-group form-group">
                 <div class="controls">
-                  <input type="password" class="form-control" #contrasena="ngModel" name="contrasena" [(ngModel)]="usuario.contrasena" placeholder="Contraseña"
+                  <input type="password" class="form-control" #contrasenaLogin="ngModel" name="contrasenaLogin" [(ngModel)]="usuario.contrasena" placeholder="Contraseña"
                     required (focus)="onfocusCorreo()" >
-                    <small [hidden]="contrasena.valid || (contrasena.pristine && !loginForm.submitted)">
+                    <small [hidden]="contrasenaLogin.valid || (contrasenaLogin.pristine && !loginForm.submitted)">
                         <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Contraseña requerida
                     </small>
                 </div>
@@ -200,15 +213,15 @@ aria-hidden="true">
                   </label>
               </div>
               <small *ngIf="verError">
-                  <i class="fa fa-ban" aria-hidden="true"></i>  {{mensajeError}}
+                  <i class="fa fa-ban" aria-hidden="true"></i>  {{mensajeError}} <br>
               </small>
               <br>
-              <button style="width: 100%" type="submit" [disabled]="!correo.valid   ||  !contrasena.valid " class="btn btn-defaul btn-modal-suc">Ingresar</button>
+              <button  id="btnLogin" style="width: 100%" type="submit" [disabled]="!loginForm.valid " class="btn btn-success">Ingresar</button>
               <br> <br> 
               
             </form>
             <div class="col-md-12" style="text-align:center">
-                <a   routerLink="/principal" routerLinkActive="actived" (click)="mostrarRegistrarse()"><i class="fa fa-key" aria-hidden="true"></i> Crear un cuenta</a>                  
+                <a  id="linkRegister" routerLinkActive="actived" (click)="mostrarRegistrarse()"><i class="fa fa-key" aria-hidden="true"></i> Crear un cuenta</a>                  
             </div>
           </div>
         </div>

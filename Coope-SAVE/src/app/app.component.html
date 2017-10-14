@@ -16,11 +16,16 @@
               <span class="sr-only">(current)</span>
             </a>
         </li>
-        <li class="nav-item active">
-          <a routerLink="/administrador" routerLinkActive="actived"  data-toggle="tooltip" title="Opciones De Aministrador" class="nav-link" href="#"> <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;Admin
+        <li class="nav-item" > <!-- *ngIf="adminEnable"-->
+          <a routerLink="/administrador" routerLinkActive="actived"  data-toggle="tooltip" title="Opciones De Aministrador" class="nav-link" href="#"> <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;
               <span class="sr-only">(current)</span>
             </a>
         </li>
+        <li class="nav-item active" >
+            <a routerLink="/" routerLinkActive="actived"  (click)="logout()" data-toggle="tooltip" title="Cerrar Sesión" class="nav-link" > <i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;&nbsp;
+                <span class="sr-only">(current)</span>
+              </a>
+          </li>
       </ul>
     </div>
   </div>

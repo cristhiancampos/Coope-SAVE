@@ -242,3 +242,21 @@ figure.slider[_ngcontent-c1] img[_ngcontent-c1] {
 small{
   color: #a94442;
 }
+#btnLogin[disabled]{
+  background: #888;
+  cursor:not-allowed;
+}
+#btnRegister[disabled]{
+  background: #888;
+  cursor:not-allowed;
+}
+#linkRegister{
+  color:#0056b3;
+  cursor: pointer;
+}
+/*input.ng-invalid {
+  background-color: pink;
+}
+input.ng-valid {
+  background-color: lightgreen;
+}*/

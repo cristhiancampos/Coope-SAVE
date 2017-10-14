@@ -6,7 +6,7 @@ var app = require('./app');
 var port = process.env.PORT || 3977;
 //mongoose.Promise = global.Promise; 
 
-mongoose.connect('mongodb://172.30.23.152:27017/save-db',(err,res) =>{//172.30.23.152
+mongoose.connect('mongodb://localhost:27017/save-db',(err,res) =>{//172.30.23.152
   if(err)
   {
     throw err;

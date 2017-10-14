@@ -30,7 +30,6 @@ export class ServicioUsuario {
             .map(res => res.json());
     }
 
-
     loginUsuario(usuario, gethash = null) {
         if (gethash != null) {
             usuario.gethash = gethash;

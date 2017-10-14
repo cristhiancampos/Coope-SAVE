@@ -16,7 +16,7 @@ export class PrincipalComponent implements OnInit {
   mmostrar = false;
   public usuario: Usuario;
   public usuarioRegistrado: Usuario;
-  
+
   public confirmaContra;
   public mensajeAlerta;
   public correo = "";
@@ -27,6 +27,8 @@ export class PrincipalComponent implements OnInit {
   public mensajeError = "";
   public verError = false;
   public recordarme = false;
+  public dominio;
+  public isValidPass=false;
 
 
   //constructor del componente principal
@@ -34,12 +36,12 @@ export class PrincipalComponent implements OnInit {
     private _route: ActivatedRoute,
     private _router: Router,
     private _servUsuario: ServicioUsuario
-   ) 
-    {
+  ) {
     this.usuario = new Usuario('', '', '', '', '', '', '');
     this.usuarioRegistrado = new Usuario('', '', '', '', '', '', '');
     this.confirmaContra = '';
     this.userExist = false;
+    this.dominio = "@coopesparta.fi.cr" + this.usuario.correo;
   }
 
   //cambiar valor del check para recordar credenciales
@@ -63,6 +65,7 @@ export class PrincipalComponent implements OnInit {
   //al cargarse la pagina verifica si la sesión de usuario se guardó previamente
   ngOnInit() {
     //localStorage.clear();
+    //this._router.navigate['/principal'];
     this.identity = this._servUsuario.getIndentity();
     this.token = this._servUsuario.getToken();
 
@@ -85,9 +88,29 @@ export class PrincipalComponent implements OnInit {
     this.userExist = false;
     this.verError = false;
   }
+  change(event: any) {
+    // console.log(event);
+    // console.log(event.data); //replace(re, "oranges")
+    let correoFinal = "";
+    this.usuario.correo = this.usuario.correo.trim();
+    for (let i = 0; i < this.usuario.correo.length; i++) {
+      if (this.usuario.correo.charAt(i) === " ") {
+        //console.log(i + ': ' + this.usuario.correo.charAt(i));
+      } else {
+        correoFinal += this.usuario.correo.charAt(i);
+      }
+
+    }
+    // console.log(nueva);
+    this.usuario.correo = correoFinal;
+    this.dominio = this.usuario.correo + "@coopesparta.fi.cr";
+
+  }
   // validar la existencia de correo de un usuario
   validarCorreo() {
-    this._servUsuario.getCorreo(this.usuario).subscribe(
+    let user = new Usuario('', '', '', '', '', '', '');
+    user.correo = this.dominio;
+    this._servUsuario.getCorreo(user).subscribe(
       response => {
         if (response.message) {
           console.log(response.message.correo);
@@ -109,130 +132,194 @@ export class PrincipalComponent implements OnInit {
       }
     );
   }
-    //registrar usuarios en el sistema
-    registrarUsuario() {
-      this._servUsuario.registrarUsuario(this.usuario).subscribe(
-        response => {
-          //  console.log(response.user._id);
-          let user = response.user;
-          this.usuarioRegistrado = user;
-          if (!response.user._id) {
-            this.mensajeAlerta = "error al registarse";
-            alert('Error al registrar el usario');
-          } else {
-            alert('Usuario registrado exitosamente');
-            console.log(user);
-            this.mensajeAlerta = "Usuario registrado  exitosamente";
-            if (user != null) {
-              $('#nav-user').text(user.nombre + ' ' + user.apellidos);
-            } else {
-              $('#nav-user').text(' ');
-            }
-            this.usuarioRegistrado = new Usuario('', '', '', '', '', '', '');
-            localStorage.setItem('identity', JSON.stringify(user));
-            this.cerrarModal('#registroUsuarioModal');
-            this.mmostrar = true;
-          }
-        }, error => {
-          var alertMessage = <any>error;
-          if (alertMessage != null) {
-            var body = JSON.parse(error._body);
-            this.mensajeAlerta = body.message;
-            alert('Usuario no registrado');
-          }
-        }
-      );
-    }
-    //iniciar sesión en el sistema
-    public login() {
-      console.log(this.usuario);
-      // obtener datos de usuaario identificado
-      this._servUsuario.loginUsuario(this.usuario).subscribe(response => {
-        let identity = response.user;
-        this.identity = identity;
-        if (!this.identity._id) {
-          alert('usuario no indentificado correctamente');
+  //registrar usuarios en el sistema
+  registrarUsuario() {
+    let use = new Usuario('', '', '', '', '', '', '');
+    use = this.usuario;
+    use.correo = this.dominio;
+    // alert(use.correo);
+    this._servUsuario.registrarUsuario(use).subscribe(
+      response => {
+        //  console.log(response.user._id);
+        let user = response.user;
+        this.usuarioRegistrado = user;
+        if (!response.user._id) {
+          this.mensajeAlerta = "error al registarse";
+          alert('Error al registrar el usario');
         } else {
-          // crear elemento en el localstorage para la session de usuario//
-          localStorage.setItem('identity', JSON.stringify(identity));   //JSON.stringfy(), convierte un json a string
-          console.log(response.user);
-          //conseguir el token para enviarselo a cada petición
-          this._servUsuario.loginUsuario(this.usuario, 'true').subscribe(
-            response => {
-              let token = response.token;
-              this.token = token;
-              if (this.token <= 0) {
-                alert('el token no se ha generado');
-              } else {
-                //   crear elemento en el localstorage para tener el token disponible
-                localStorage.setItem('token', token);
-                this.usuario = new Usuario('', '', '', '', '', '', '');
-                console.log(response.token);
-                this.cerrarModal('#loginModal');
-                this.mmostrar = true;
-                let identity = localStorage.getItem('identity');
-                let user = JSON.parse(identity);
-                if (user != null) {
-                  $('#nav-user').text(user.nombre + ' ' + user.apellidos);
-                  if (this.recordarme) {
-                    localStorage.setItem('remember', 'true');
-                  } else {
-                    localStorage.removeItem('remember')
-                  }
-                } else {
-                  $('#nav-user').text('');
-                }
-              }
-            }, error => {
-              var errorMensaje = <any>error;
-  
-              if (errorMensaje != null) {
-                var body = JSON.parse(error._body);
-                this.mensajeError = body.message;
-                this.verError = true;
-              }
-            }
-          );
+          alert('Usuario registrado exitosamente');
+          console.log(user);
+          this.mensajeAlerta = "Usuario registrado  exitosamente";
+          if (user != null) {
+            $('#nav-user').text(user.nombre + ' ' + user.apellidos);
+          } else {
+            $('#nav-user').text(' ');
+          }
+          this.usuarioRegistrado = new Usuario('', '', '', '', '', '', '');
+          localStorage.setItem('identity', JSON.stringify(user));
+          this.cerrarModal('#registroUsuarioModal');
+          this.mmostrar = true;
         }
       }, error => {
-        var errorMensaje = <any>error;
-        if (errorMensaje != null) {
+        var alertMessage = <any>error;
+        if (alertMessage != null) {
           var body = JSON.parse(error._body);
-          this.mensajeError = body.message;
-          this.verError = true;
+          this.mensajeAlerta = body.message;
+          alert('Usuario no registrado');
         }
       }
-      );
+    );
+  }
+  //iniciar sesión en el sistema
+  public login() {
+    console.log(this.usuario);
+    // obtener datos de usuaario identificado
+    this._servUsuario.loginUsuario(this.usuario).subscribe(response => {
+      let identity = response.user;
+      this.identity = identity;
+      if (!this.identity._id) {
+        alert('usuario no indentificado correctamente');
+      } else {
+        // crear elemento en el localstorage para la session de usuario//
+        localStorage.setItem('identity', JSON.stringify(identity));   //JSON.stringfy(), convierte un json a string
+        console.log(response.user);
+        //conseguir el token para enviarselo a cada petición
+        this._servUsuario.loginUsuario(this.usuario, 'true').subscribe(
+          response => {
+            let token = response.token;
+            this.token = token;
+            if (this.token <= 0) {
+              alert('el token no se ha generado');
+            } else {
+              //   crear elemento en el localstorage para tener el token disponible
+              localStorage.setItem('token', token);
+              this.usuario = new Usuario('', '', '', '', '', '', '');
+              console.log(response.token);
+              this.cerrarModal('#loginModal');
+              this.mmostrar = true;
+              let identity = localStorage.getItem('identity');
+              let user = JSON.parse(identity);
+              if (user != null) {
+                $('#nav-user').text(user.nombre + ' ' + user.apellidos);
+                if (this.recordarme) {
+                  localStorage.setItem('remember', 'true');
+                } else {
+                  localStorage.removeItem('remember')
+                }
+              } else {
+                $('#nav-user').text('');
+              }
+            }
+          }, error => {
+            var errorMensaje = <any>error;
+
+            if (errorMensaje != null) {
+              var body = JSON.parse(error._body);
+              this.mensajeError = body.message;
+              this.verError = true;
+            }
+          }
+        );
+      }
+    }, error => {
+      var errorMensaje = <any>error;
+      if (errorMensaje != null) {
+        var body = JSON.parse(error._body);
+        this.mensajeError = body.message;
+        this.verError = true;
+      }
     }
-//mostrar el formulario de registro de usuarios
+    );
+  }
+  //mostrar el formulario de registro de usuarios
   mostrarRegistrarse() {
+    this.usuario = new Usuario('', '', '', '', '', '', '');
     this.cerrarModal('#loginModal');
     this.abrirModal('#registroUsuarioModal');
     this.mmostrar = false;
+    this._router.navigate['/principal'];
   }
-  
-//regresar al formulario del login
-  loginBack(){
+
+  //regresar al formulario del login
+  loginBack() {
     this.usuario = new Usuario('', '', '', '', '', '', '');
     this.cerrarModal('#registroUsuarioModal');
     this.abrirModal('#loginModal');
     this.mmostrar = false;
-    this.confirmaContra ='';
+    this.confirmaContra = '';
   }
-  /*mostrar() {
-    $(".modal-backdrop").remove();
-    $('body').removeClass('modal-open');
-    $('#registroUsuarioModal').removeClass('show');
-    $('#registroUsuarioModal').css('display', 'none');
-    this.mmostrar = true;
+  validarcontra(event: any) {
+    if (this.usuario.contrasena) {
+      if (this.usuario.contrasena.length < 8) {
+        //alert('la contraseña debe ser mayor a 7 c');
+        this.isValidPass= false;
+      } else if (this.usuario.contrasena.length > 16) {
+       // alert('la contraseña debe ser menor a 17 c');
+       this.isValidPass= false;
+      } else if (!this.tieneNumero(this.usuario.contrasena)) {
+        this.isValidPass= false;
+        //alert('la contraseña debe tener numeros');
+      } else if (!this.tieneMayuscula(this.usuario.contrasena)) {
+        this.isValidPass= false;
+        //alert('la contraseña debe tener mayusculas');
+      } else if (!this.tieneMinuscula(this.usuario.contrasena)) {
+        this.isValidPass= false;
+        //alert('la contraseña debe tener mi');
+       }
+      //else if (!this.tieneCaracEspecial(this.usuario.contrasena)) {
+      //   this.isValidPass= false;
+      //   //alert('la contraseña debe tener caracteres especiales');
+      // }
+      else{
+        this.isValidPass= true;
+        //alert('contraseña correcta');
+      }
+    }
   }
-  salir() {
-    $(".modal-backdrop").remove();
-    $('body').removeClass('modal-open');
-    $('#registroUsuarioModal').removeClass('show');
-    $('#registroUsuarioModal').css('display', 'none');
-  }*/
 
+  tieneMayuscula(texto) {
+    var patron = /[A-Z]/g;
+    if (this.usuario.contrasena.match(patron)) {
+      return true;
+    }
+    return false;
+  }
+
+  tieneMinuscula(texto) {
+    var patron = /[a-z]/g;
+    if (this.usuario.contrasena.match(patron)) {
+      return true;
+    }
+    return false;
+  }
+  tieneCaracEspecial(texto) {
+    var patron = /^[.-_?@*+{}|$&#/()=¿,]/    ;
+    if (this.usuario.contrasena.match(patron)) {
+      return true;
+    }
+    return true;
+  }
+
+  tieneNumero(texto) {
+    let numeros = "0123456789";
+    for (let i = 0; i < texto.length; i++) {
+      if (numeros.indexOf(texto.charAt(i), 0) != -1) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  validarContrasena() {
+    if (this.usuario.contrasena && this.confirmaContra) {
+
+      if (this.usuario.contrasena == this.confirmaContra) {
+        alert('son iguales' + this.usuario.contrasena.length);
+      } else {
+        alert('no');
+      }
+    }
+  }
 
   // localStorage.setItem('token',token);
   // localStorage.removeItem('identity');//remover item del localStorage

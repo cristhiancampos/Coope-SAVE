@@ -24,6 +24,7 @@ export class AppComponent implements OnInit {
   public errorMessage;
   public user: Usuario;
   public mmostrar;
+  public adminEnable =false;
 
 
   constructor(
@@ -52,7 +53,7 @@ export class AppComponent implements OnInit {
       this._servUsuario.getUser().subscribe(
         response => {
           if (!response) {
-            // this._router.navigate(['/']);
+            // this.c.navigate(['/']);
           } else {
             this.SESSION = response;
           }
@@ -162,4 +163,19 @@ export class AppComponent implements OnInit {
 // var dom = wsh.UserDomain;
   }
 
+  logout()
+  {
+     localStorage.removeItem('identity');
+     localStorage.removeItem('token');
+     localStorage.removeItem('remember');
+     localStorage.clear();
+     this._router.navigate['/principal'];
+    // this.abrirModal('#loginModal');
+  }
+  abrirModal(modalId: any) {
+    $('body').append('<div class="modal-backdrop fade show" ></div>');
+    $('body').addClass('modal-open');
+    $(modalId).addClass('show');
+    $(modalId).css('display', 'block');
+  }
 }
