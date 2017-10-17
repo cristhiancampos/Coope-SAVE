@@ -4,7 +4,7 @@
     <div class="col-md-12">
       <h2> Admistración de Recursos</h2>
       <hr>
-      <button class="btn btn-primary" data-toggle="modal" data-target="#adminModalRecurso" style="float: left;margin-bottom: 6px"> <i class="fa fa-plus" aria-hidden="true"></i></button>      
+      <button class="btn btn-primary" data-toggle="modal" data-target="#modalAdminRecurso" style="float: left;margin-bottom: 6px"> <i class="fa fa-plus" aria-hidden="true"></i></button>      
     </div>
   </div>
 
@@ -141,7 +141,7 @@
   </div>
 
   <!-- Seccion del Modal: Agregar nuevo Recurso-->
-<div class="modal fade bd-example-modal-sm " id="adminModalRecurso" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade bd-example-modal-sm " id="modalAdminRecurso" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
 aria-hidden="true">
 <div class="modal-dialog bd-example-modal-sm " role="document">
   <div class="modal-content">
@@ -166,26 +166,23 @@ aria-hidden="true">
         <div class="row">
           <div class="col-md-12">
             <form #adminRecurso="ngForm" (ngSubmit)="agregarRecurso()">
-              <div class="control-group form-group">
+              <div class="contrrol-group form-group">
                 <div class="controls">
-                  <input type="text" class="form-control" #nombre="ngModel" name= "nombre" [(ngModel)]="recursos.nombre" placeholder="Nombre" required >
+                  <input type="text" class="form-control" #nombre="ngModel" name= "nombre" [(ngModel)]="recurso.nombre" placeholder="Nombre" required >
                   <small *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" ><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Campo <strong>Nombre</strong> obligatorio</small>
-                  <p class="help-block"></p>
                 </div>
               </div>
               <div class="control-group form-group">
                 <div class="controls">
-                  <input type="text" class="form-control" #codigoActivo="ngModel" name= "codigoActivo" [(ngModel)]="recursos.codigoActivo"placeholder="Código de Activo" required (focusout)="validarRecurso()" (focus)="onfocusRecurso()">
-                  <small *ngIf="codigoActivo.invalid && (codigoActivo.dirty || codigoActivo.touched)" > Campo <strong>Codigo de Activo</strong> obligatorio</small>
-                  <small *ngIf="codRecursosExist"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe un Recurso con ese Código</small> 
-                  <p class="help-block"></p>
+                  <input type="text" class="form-control" #codigo="ngModel" name= "codigo" [(ngModel)]="recurso.codigoActivo"
+                   placeholder="Código del Activo" required (focusout)="validarRecurso()">
+                  <small *ngIf="codigo.invalid && (codigo.dirty || codigo.touched)" ><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Campo <strong>Cupo de personas</strong> obligatorio</small>
                 </div>
               </div>
               <div class="control-group form-group">
                 <div class="controls">
-                  <textarea class="form-control"#descripcion="ngModel" name= "descripcion" [(ngModel)]="recursos.descripcion"placeholder="Descripción" rows="3" required></textarea>
-                  <small *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i>  Campo <strong>Descripción</strong> obligatorio</small>
-                  <p class="help-block"></p>
+                  <textarea class="form-control" #descrip="ngModel" name= "descrip" [(ngModel)]="recurso.descripcion" placeholder="Descripción" rows="3" required></textarea>
+                  <small *ngIf="descrip.invalid && (descrip.dirty || descrip.touched)" ><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Campo <strong>Descripción</strong> obligatorio</small>
                 </div>
               </div>
               <div class="control-group form-group">
@@ -202,28 +199,20 @@ aria-hidden="true">
                   </ul>
                 </div>
               </div>
-              <div class="control-group form-group">
-                <div class="controls">
-                  <div class="controls">
-                    <textarea class="form-control" #report="ngModel" name= "report" [(ngModel)]="recursos.reporte" placeholder="Reporte algún problema del activo" rows="3"></textarea>
-                    <p class="help-block"></p>
-                  </div>
-                </div>
-              </div>
-              <div id="success"></div>
               <div style="float: right">
-                  <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" (click)="salir()">Salir</button>   
-                  <button type="submit" [disabled]="!adminRecurso.form.valid" class="btn btn-default btn-modal-suc" >Confirmar</button>
-                </div>
+              <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" (click)="salir()">Salir</button>   
+              <button type="submit" [disabled]="!adminRecurso.form.valid" class="btn btn-default btn-modal-suc" >Confirmar</button>
+            </div>
             </form>
           </div>
         </div>
       </div>
     </div>
     <div class="modal-footer">
+              
       
     </div>
+    
   </div>
 </div>
 </div>
-

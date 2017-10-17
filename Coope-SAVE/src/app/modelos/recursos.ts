@@ -1,5 +1,3 @@
-
-
 export class Recurso{
     constructor(
         public _id:string,        

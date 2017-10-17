@@ -28,7 +28,7 @@ function agregarRecurso(req, res) {
                   res.status(404).send({ message: 'No se ha registrado el recurso ' });
                 } else {//todo correcto
                   
-                  res.status(200).send({ recurso: recursoStored });
+                  res.status(200).send({ message: recursoStored });
                 }
               }
             });
@@ -39,13 +39,33 @@ function agregarRecurso(req, res) {
 
 
 
+// function validarRecurso(req, res)
+// {
+//   var params = req.body;
+//   var codigoActivo = params.codigoActivo;
+
+//   console.log(params);
+  
+//   Recurso.findOne({ codigoActivo: codigoActivo }, (err, recurso) => {
+//     if (err) {
+//       res.status(200).send({ message: null });
+//     } else {
+//       if (!recurso) {
+//         res.status(200).send({ message: null });
+//       }
+//       else {
+//         res.status(200).send({ message: recurso });
+//       }
+//     }
+//   });
+// }
 function validarRecurso(req, res)
 {
   var params = req.body;
   var codigoActivo = params.codigoActivo;
+  console.log(codigoActivo);
 
-  
-  Recurso.findOne({ codigoActivo: codigoActivo }, (err, recurso) => {
+ Recurso.findOne({ codigoActivo: codigoActivo }, (err, recurso) => {
     if (err) {
       res.status(200).send({ message: null });
     } else {
@@ -58,7 +78,6 @@ function validarRecurso(req, res)
     }
   });
 }
-
     module.exports = {
         
         agregarRecurso,
