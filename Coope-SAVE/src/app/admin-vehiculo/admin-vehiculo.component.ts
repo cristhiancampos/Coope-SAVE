@@ -38,7 +38,7 @@ export class AdminVehiculoComponent implements OnInit {
           alert('Error al registrar la vehiculo');
         } else {
           alert('vehiculo registrado exitosamente');
-          this.vehiculo= new vehiculo('','','','','','','','');
+          this.vehiculo= new Vehiculo('','','','','','','','');
           
           this.cerrarModal("#modalAdminVehiculo")
           console.log(vehiculo);
