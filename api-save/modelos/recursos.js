@@ -12,4 +12,4 @@ var modeloRecursos = Schema({
   reporte: String
 });
 
-module.exports = mongoose.model('recursos', modeloRecursos);
+module.exports = mongoose.model('Recurso', modeloRecursos);

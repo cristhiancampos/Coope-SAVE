@@ -18,7 +18,7 @@ export class ServicioRecursos{
     registrarRecurso(recurso){
         
         let json = JSON.stringify(recurso);
-        let params = json;   console.log("Agregar en el servicio"+params)
+        let params = json;   
         let headers = new Headers({'Content-Type':'application/json'});
         return this._http.post(this.url+'registrarRecurso',params,{headers:headers})
         .map(res=>res.json());
@@ -28,6 +28,7 @@ export class ServicioRecursos{
 
     validarRecurso(recurso)
     {
+        console.log('entroa al servicio');
         console.log(recurso);
         
          let json = JSON.stringify(recurso);

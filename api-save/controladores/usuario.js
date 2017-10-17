@@ -78,7 +78,7 @@ function loginUsuario(req, res)
   var params = req.body;
   //console.log(req.body);
   var email = params.correo;
-  console.log(params.correo+'.....'+params.contrasena);
+  //console.log(params.correo+'.....'+params.contrasena);
   var password = params.contrasena;
 
   Usuario.findOne({ correo: email.toLowerCase() }, (err, user) => {
@@ -91,7 +91,6 @@ function loginUsuario(req, res)
         //Comprobar la contraseña
         bcrypt.compare(password, user.contrasena, function (err, check) {
           if (check) {
-            console.log();
             //devolver datos de usuario logueado
             if (params.gethash)//verificar token
             {
@@ -116,7 +115,7 @@ function verificarCredenciales(req, res)
   var params = req.body;
   //console.log(req.body);
   var email = params.correo;
-  console.log(params.correo+'.....'+params.contrasena);
+ // console.log(params.correo+'.....'+params.contrasena);
   var password = params.contrasena;
 
   Usuario.findOne({correo:email},(err,user)=>{
@@ -128,7 +127,7 @@ function verificarCredenciales(req, res)
       }else{
         if(user.contrasena == password ){
           if(params.gethash){
-            console.log(jwt.createToken(user));
+            //console.log(jwt.createToken(user));
             res.status(200).send({ token: jwt.createToken(user) });
           }else{
             res.status(200).send({ user });
