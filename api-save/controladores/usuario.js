@@ -111,6 +111,63 @@ function loginUsuario(req, res)
   });
 }
 
+function verificarCredenciales(req, res)
+{
+  var params = req.body;
+  //console.log(req.body);
+  var email = params.correo;
+  console.log(params.correo+'.....'+params.contrasena);
+  var password = params.contrasena;
+
+  Usuario.findOne({correo:email},(err,user)=>{
+    if(err){
+      res.status(500).send({ message: 'Error en la petición' });
+    }else{
+      if(!user){
+        res.status(404).send({ message: 'Credenciales incorrectas' });
+      }else{
+        if(user.contrasena == password ){
+          if(params.gethash){
+            console.log(jwt.createToken(user));
+            res.status(200).send({ token: jwt.createToken(user) });
+            
+          }else{
+            res.status(200).send({ user });
+          }
+        }else{
+          res.status(404).send({ message: 'Credenciales incorrectas' });
+        }
+       
+      }
+      
+    }
+  });
+
+  // Usuario.findOne({ correo: email.toLowerCase() }, (err, user) => {
+  //   console.log(user);
+  //   if (err) {
+  //     res.status(500).send({ message: 'Error en la petición' });
+  //   } else {
+  //     if (!user) {
+  //       res.status(404).send({ message: 'Credenciales incorrectas' });
+  //     } else {
+  //       //Comprobar la contraseña
+  //       if(user.password !=password) {
+  //         res.status(404).send({ message: 'Credenciales incorrectas' });
+  //       }else{
+  //         if (params.gethash)//verificar token
+  //           {
+  //             //devolver un token de jwt
+  //             res.status(200).send({ token: jwt.createToken(user) });
+  //           } else {
+  //             //devolver usuario
+  //             res.status(200).send({ user });
+  //           }
+  //       }
+  //     }
+  //   }
+  // });
+}
 // function updateUser(req, res){
 
 //   var userId = req.params.id;
@@ -184,10 +241,6 @@ module.exports = {
   getUsuario,
   agregarUsuario,
   getCorreo,
-  loginUsuario
-  // saveUser,
-  // loginUser,
-  // updateUser,
-  // uploadImage,
-  // getImageFile
+  loginUsuario,
+  verificarCredenciales
 };

@@ -24,7 +24,8 @@
     margin-left: 2px;
   }
   #app-title{
-    color: #fff;
+    /*color: #fff;*/
+    color : #ffcf01;
     font-size: 5rem;
   }
 

@@ -20,4 +20,5 @@ api.get('/user',ControladorUsuario.getUsuario);
 api.post('/registrar',ControladorUsuario.agregarUsuario);
 api.post('/getCorreo',ControladorUsuario.getCorreo);
 api.post('/login',ControladorUsuario.loginUsuario);
+api.post('/verificarCredenciales',ControladorUsuario.verificarCredenciales);
 module.exports = api;

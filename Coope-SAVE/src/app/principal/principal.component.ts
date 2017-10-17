@@ -28,7 +28,7 @@ export class PrincipalComponent implements OnInit {
   public verError = false;
   public recordarme = false;
   public dominio;
-  public isValidPass=false;
+  public isValidPass = false;
 
 
   //constructor del componente principal
@@ -66,42 +66,40 @@ export class PrincipalComponent implements OnInit {
   ngOnInit() {
     //localStorage.clear();
     //this._router.navigate['/principal'];
-    this.identity = this._servUsuario.getIndentity();
-    this.token = this._servUsuario.getToken();
 
-    let identity = localStorage.getItem('identity');
-    let user = JSON.parse(identity);
+    // this.identity = this._servUsuario.getIndentity();
+    // this.token = this._servUsuario.getToken();
 
-    let recordar = localStorage.getItem('remember');
-    let recordarValue = JSON.parse(recordar);
-    if (user != null) {
-      $('#nav-user').text(user.nombre + ' ' + user.apellidos);
-      this.mmostrar = true;
-    } else {
-      $('#nav-user').text(' ');
-      this.abrirModal('#loginModal');
-      this.mmostrar = false;
-    }
+    // let identity = localStorage.getItem('identity');
+    // let user = JSON.parse(identity);
+
+    // let recordar = localStorage.getItem('remember');
+    // let recordarValue = JSON.parse(recordar);
+    // if (user != null) {
+    //   $('#nav-user').text(user.nombre + ' ' + user.apellidos);
+    //   this.mmostrar = true;
+    // } else {
+    //   $('#nav-user').text(' ');
+    //   this.abrirModal('#loginModal');
+    //   this.mmostrar = false;
+    // }
+    this.verificarCredenciales();
   }
   //olcultar mensaje de existencia de usuario
   onfocusCorreo() {
     this.userExist = false;
     this.verError = false;
   }
+  //elimina los espacios de entre letras al escribir
   change(event: any) {
-    // console.log(event);
-    // console.log(event.data); //replace(re, "oranges")
     let correoFinal = "";
     this.usuario.correo = this.usuario.correo.trim();
     for (let i = 0; i < this.usuario.correo.length; i++) {
       if (this.usuario.correo.charAt(i) === " ") {
-        //console.log(i + ': ' + this.usuario.correo.charAt(i));
       } else {
         correoFinal += this.usuario.correo.charAt(i);
       }
-
     }
-    // console.log(nueva);
     this.usuario.correo = correoFinal;
     this.dominio = this.usuario.correo + "@coopesparta.fi.cr";
 
@@ -231,6 +229,86 @@ export class PrincipalComponent implements OnInit {
     }
     );
   }
+  //verificar credenciales
+  public verificarCredenciales() {
+    this.identity = this._servUsuario.getIndentity();
+    this.token = this._servUsuario.getToken();
+    let identity = localStorage.getItem('identity');
+    let user = JSON.parse(identity);
+    let recordar = localStorage.getItem('remember');
+    let recordarValue = JSON.parse(recordar);
+    if (user != null) {
+      let usuarioTemp = new Usuario('', '', '', '', '', '', '');
+      usuarioTemp.correo = user.correo;
+      usuarioTemp.contrasena = user.contrasena;
+      // obtener datos de usuario identificado
+      this._servUsuario.verificarCredenciales(usuarioTemp).subscribe(response => {
+        let identity = response.user;
+        this.identity = identity;
+        if (!this.identity._id) {
+          $('#nav-user').text(' ');
+          this.abrirModal('#loginModal');
+          this.mmostrar = false;
+        } else {
+          //conseguir el token para enviarselo a cada petición
+          this._servUsuario.verificarCredenciales(usuarioTemp, 'true').subscribe(
+            response => {
+              let token = response.token;
+              this.token = token;
+              if (this.token <= 0) {
+                $('#nav-user').text(' ');
+                this.abrirModal('#loginModal');
+                this.mmostrar = false;
+              } else {
+                // crear elemento en el localstorage para tener el token disponible
+                localStorage.setItem('token', token);
+                this.usuario = new Usuario('', '', '', '', '', '', '');
+                this.cerrarModal('#loginModal');
+                this.mmostrar = true;
+                let identity = localStorage.getItem('identity');
+                let user = JSON.parse(identity);
+                if (user != null) {
+                  $('#nav-user').text(user.nombre + ' ' + user.apellidos);
+                  if (this.recordarme) {
+                    localStorage.setItem('remember', 'true');
+                  } else {
+                    localStorage.removeItem('remember')
+                  }
+                } else {
+                  $('#nav-user').text('');
+                }
+              }
+            }, error => {
+              var errorMensaje = <any>error;
+              if (errorMensaje != null) {
+                var body = JSON.parse(error._body);
+                this.mensajeError = body.message;
+               // this.verError = true;
+                $('#nav-user').text(' ');
+                this.abrirModal('#loginModal');
+                this.mmostrar = false;
+              }
+            }
+          );
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+          this.mensajeError = body.message;
+         // this.verError = true;
+          $('#nav-user').text(' ');
+          this.abrirModal('#loginModal');
+          this.mmostrar = false;
+        }
+      }
+      );
+    } else {
+      $('#nav-user').text(' ');
+      this.abrirModal('#loginModal');
+      this.mmostrar = false;
+    }
+  }
   //mostrar el formulario de registro de usuarios
   mostrarRegistrarse() {
     this.usuario = new Usuario('', '', '', '', '', '', '');
@@ -252,26 +330,26 @@ export class PrincipalComponent implements OnInit {
     if (this.usuario.contrasena) {
       if (this.usuario.contrasena.length < 8) {
         //alert('la contraseña debe ser mayor a 7 c');
-        this.isValidPass= false;
+        this.isValidPass = false;
       } else if (this.usuario.contrasena.length > 16) {
-       // alert('la contraseña debe ser menor a 17 c');
-       this.isValidPass= false;
+        // alert('la contraseña debe ser menor a 17 c');
+        this.isValidPass = false;
       } else if (!this.tieneNumero(this.usuario.contrasena)) {
-        this.isValidPass= false;
+        this.isValidPass = false;
         //alert('la contraseña debe tener numeros');
       } else if (!this.tieneMayuscula(this.usuario.contrasena)) {
-        this.isValidPass= false;
+        this.isValidPass = false;
         //alert('la contraseña debe tener mayusculas');
       } else if (!this.tieneMinuscula(this.usuario.contrasena)) {
-        this.isValidPass= false;
+        this.isValidPass = false;
         //alert('la contraseña debe tener mi');
-       }
+      }
       //else if (!this.tieneCaracEspecial(this.usuario.contrasena)) {
       //   this.isValidPass= false;
       //   //alert('la contraseña debe tener caracteres especiales');
       // }
-      else{
-        this.isValidPass= true;
+      else {
+        this.isValidPass = true;
         //alert('contraseña correcta');
       }
     }
@@ -293,7 +371,7 @@ export class PrincipalComponent implements OnInit {
     return false;
   }
   tieneCaracEspecial(texto) {
-    var patron = /^[.-_?@*+{}|$&#/()=¿,]/    ;
+    var patron = /^[.-_?@*+{}|$&#/()=¿,]/;
     if (this.usuario.contrasena.match(patron)) {
       return true;
     }

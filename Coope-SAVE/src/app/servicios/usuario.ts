@@ -44,6 +44,18 @@ export class ServicioUsuario {
 
     }
 
+    verificarCredenciales(usuario, gethash = null) {
+        if (gethash != null) {
+            usuario.gethash = gethash;
+        }
+        let json = JSON.stringify(usuario);
+        let params = json;
+
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+
+        return this._http.post(this.url + 'verificarCredenciales', params, { headers: headers })
+            .map(res => res.json());
+    }
 
 
     /* getSong(token,id:string)
