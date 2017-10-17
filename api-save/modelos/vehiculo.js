@@ -13,4 +13,4 @@ var modeloVehiculo = Schema({
   reporte: String
 });
 
-module.exports = mongoose.model('vehiculo',modeloVehiculo);
+module.exports = mongoose.model('Vehiculo',modeloVehiculo);

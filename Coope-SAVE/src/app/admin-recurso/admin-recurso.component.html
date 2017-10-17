@@ -4,7 +4,7 @@
     <div class="col-md-12">
       <h2> Admistración de Recursos</h2>
       <hr>
-      <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="float: left;margin-bottom: 6px"> <i class="fa fa-plus" aria-hidden="true"></i></button>      
+      <button class="btn btn-primary" data-toggle="modal" data-target="#adminModalRecurso" style="float: left;margin-bottom: 6px"> <i class="fa fa-plus" aria-hidden="true"></i></button>      
     </div>
   </div>
 
@@ -98,8 +98,8 @@
       <ul class="pagination">
         <li class="page-item">
           <a class="page-link" href="#" aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
-            <span class="sr-only">Previous</span>
+            <small aria-hidden="true">&laquo;</small>
+            <small class="sr-only">Previous</small>
           </a>
         </li>
         <li class="page-item"><a class="page-link" href="#">1</a></li>
@@ -107,8 +107,8 @@
         <li class="page-item"><a class="page-link" href="#">3</a></li>
         <li class="page-item">
           <a class="page-link" href="#" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-            <span class="sr-only">Next</span>
+            <small aria-hidden="true">&raquo;</small>
+            <small class="sr-only">Next</small>
           </a>
         </li>
       </ul>
@@ -121,14 +121,14 @@
         <div class="modal-header" style="color: #FFF;background: #0069d9">
           <h5 class="modal-title" id="exampleModalLabel">Eliminar Recurso</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
+              <small aria-hidden="true">&times;</small>
             </button>
         </div>
         <div class="moda
         l-body" style="text-align: center">
-          <span >
+          <small >
             <i class="fa fa-trash fa-5x" aria-hidden="true" style="color:red"></i> 
-          </span>
+          </small>
           <br><br>
           <h5>Está seguro que desea eliminar el recurso? </h5>
           <br>
@@ -141,14 +141,14 @@
   </div>
 
   <!-- Seccion del Modal: Agregar nuevo Recurso-->
-<div class="modal fade bd-example-modal-sm " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade bd-example-modal-sm " id="adminModalRecurso" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
 aria-hidden="true">
 <div class="modal-dialog bd-example-modal-sm " role="document">
   <div class="modal-content">
     <div class="modal-header" style="background: #0069d9;color:#fff">
       <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Agregar Recurso</h5>
       <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="salir()"> 
-        <span aria-hidden="true">&times;</span>
+        <small aria-hidden="true">&times;</small>
       </button>
     </div>
     <div class="modal-body">
@@ -169,21 +169,22 @@ aria-hidden="true">
               <div class="control-group form-group">
                 <div class="controls">
                   <input type="text" class="form-control" #nombre="ngModel" name= "nombre" [(ngModel)]="recursos.nombre" placeholder="Nombre" required >
-                  <span *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" > Campo <strong>Nombre</strong> obligatorio</span>
+                  <small *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" ><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Campo <strong>Nombre</strong> obligatorio</small>
                   <p class="help-block"></p>
                 </div>
               </div>
               <div class="control-group form-group">
                 <div class="controls">
-                  <input type="text" class="form-control" #codigoActivo="ngModel" name= "codigoActivo" [(ngModel)]="recursos.codigoActico"placeholder="Código de Activo" required >
-                  <span *ngIf="codigoActivo.invalid && (codigoActivo.dirty || codigoActivo.touched)" > Campo <strong>Codigo de Activo</strong> obligatorio</span>
+                  <input type="text" class="form-control" #codigoActivo="ngModel" name= "codigoActivo" [(ngModel)]="recursos.codigoActivo"placeholder="Código de Activo" required (focusout)="validarRecurso()" (focus)="onfocusRecurso()">
+                  <small *ngIf="codigoActivo.invalid && (codigoActivo.dirty || codigoActivo.touched)" > Campo <strong>Codigo de Activo</strong> obligatorio</small>
+                  <small *ngIf="codRecursosExist"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe un Recurso con ese Código</small> 
                   <p class="help-block"></p>
                 </div>
               </div>
               <div class="control-group form-group">
                 <div class="controls">
                   <textarea class="form-control"#descripcion="ngModel" name= "descripcion" [(ngModel)]="recursos.descripcion"placeholder="Descripción" rows="3" required></textarea>
-                  <span *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)" > Campo <strong>Descripción</strong> obligatorio</span>
+                  <small *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i>  Campo <strong>Descripción</strong> obligatorio</small>
                   <p class="help-block"></p>
                 </div>
               </div>
@@ -192,7 +193,7 @@ aria-hidden="true">
                   <ul>
                     <li style="margin-left: -37px;"> <label class="switch">
                         <input type="checkbox" checked>
-                        <span class="slider round"></span>
+                        <small class="slider round"></small>
                       </label>
                     </li>
                     <li>

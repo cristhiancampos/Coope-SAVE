@@ -95,8 +95,8 @@
     <ul class="pagination">
       <li class="page-item">
         <a class="page-link" href="#" aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
-            <span class="sr-only">Previous</span>
+            <small aria-hidden="true">&laquo;</small>
+            <small class="sr-only">Previous</small>
           </a>
       </li>
       <li class="page-item"><a class="page-link" href="#">1</a></li>
@@ -104,8 +104,8 @@
       <li class="page-item"><a class="page-link" href="#">3</a></li>
       <li class="page-item">
         <a class="page-link" href="#" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-            <span class="sr-only">Next</span>
+            <small aria-hidden="true">&raquo;</small>
+            <small class="sr-only">Next</small>
           </a>
       </li>
     </ul>
@@ -121,7 +121,7 @@
       <div class="modal-header" style="background: #0069d9;color:#fff">
         <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Agregar Sala</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="salir()"> 
-          <span aria-hidden="true">&times;</span>
+          <small aria-hidden="true">&times;</small>
         </button>
       </div>
       <div class="modal-body">
@@ -142,22 +142,22 @@
                 <div class="contrrol-group form-group">
                   <div class="controls">
                     <input type="text" class="form-control" #nombre="ngModel" name= "nombre" [(ngModel)]="sala.nombre" placeholder="Nombre" required (focusout)="validarSala()">
-                    <span *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" > Campo <strong>Nombre</strong> obligatorio</span>
+                    <small *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" ><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Campo <strong>Nombre</strong> obligatorio</small>
                     <small *ngIf="nombreExist"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe una Sala con ese nombre</small> 
                     <p class="help-block"></p>
                   </div>
                 </div>
                 <div class="control-group form-group">
                   <div class="controls">
-                    <input type="number" class="form-control" #cupo="ngModel" name= "cupo" [(ngModel)]="sala.cupo" placeholder="Cupos" required>
-                    <span *ngIf="cupo.invalid && (cupo.dirty || cupo.touched)" > Campo <strong>Cupo de personas</strong> obligatorio</span>
+                    <input type="number" class="form-control" #cupo="ngModel" name= "cupo" [(ngModel)]="sala.cupo" placeholder="Cupos" required pattern="[0-9]*">
+                    <small *ngIf="cupo.invalid && (cupo.dirty || cupo.touched)" ><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Campo <strong>Cupo de personas</strong> obligatorio</small>
                     <p class="help-block"></p>
                   </div>
                 </div>
                 <div class="control-group form-group">
                   <div class="controls">
                     <textarea class="form-control" #descripcion="ngModel" name= "descripcion" [(ngModel)]="sala.descripcion" placeholder="Descripción" rows="3" required></textarea>
-                    <span *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)" > Campo <strong>Descripción</strong> obligatorio</span>
+                    <small *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)" ><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Campo <strong>Descripción</strong> obligatorio</small>
                     <p class="help-block"></p>
                   </div>
                 </div>
@@ -166,7 +166,7 @@
                     <ul>
                       <li style="margin-left: -37px;"> <label class="switch">
                           <input type="checkbox" checked>
-                          <span class="slider round"></span>
+                          <small class="slider round"></small>
                         </label>
                       </li>
                       <li>
@@ -208,13 +208,13 @@
       <div class="modal-header" style="color: #FFF;background: #0069d9">
         <h5 class="modal-title" id="exampleModalLabel">Eliminar Sala</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
+              <small aria-hidden="true">&times;</small>
             </button>
       </div>
       <div class="modal-body" style="text-align: center">
-        <span>
+        <small>
             <i class="fa fa-trash fa-5x" aria-hidden="true" style="color:red"></i> 
-          </span>
+          </small>
         <br><br>
         <h5>Está seguro que desea eliminar la sala? </h5>
         <br>

@@ -23,3 +23,4 @@ describe('AdminSalaComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+
