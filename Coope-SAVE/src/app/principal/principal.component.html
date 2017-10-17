@@ -120,32 +120,35 @@
                   <div class="controls">
                     <input type="password" class="form-control" #contrasena="ngModel" name="contrasena"
                      [(ngModel)]="usuario.contrasena" placeholder="Contraseña - min 8 caracteres"
-                      required minlength="8" (input)="validarcontra($event)">
+                      required minlength="8" maxlength="16" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"> <!-- (input)="validarcontra($event)"-->
                       <small [hidden]="contrasena.valid || (contrasena.pristine && !registerForm.submitted)">
                           <i class="fa fa-exclamation-circle" aria-hidden="true"></i> 
-                          Contraseña obligatoria
-                      </small>
-                      <!-- <small [hidden]="7==9">
+                           Contraseña obligatoria, debe contener almenos 8 carácteres, mayúsculas, minúsculas, números y carácteres especiales  <!-- <br>
                           <i class="fa fa-exclamation-circle" aria-hidden="true"></i> 
                           Debe contener Mayusculas . <br>
+                          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> 
                           Debe contener Minusculas . <br>
-                          Debe contener numeros y caracteres especiales.
-                      </small> -->
+                          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> 
+                          Debe contener numeros y caracteres especiales. . <br> -->
+                      </small>
                   </div>
                 </div>
-
                 <div class="control-group form-group">
                   <div class="controls">
-                    <input type="password" class="form-control" #confirmar="ngModel" name="confirmar" [(ngModel)]="confirmaContra" placeholder="Confirmar Contraseña"
-                      required minlength="8" validateEqual="contrasena">                  
-                    <small [hidden]="confirmar.valid || (confirmar.pristine && !registerForm.submitted) ">
-                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Las contraseñas no coinciden
-                    </small>
+                    <input id="confirmPass" type="password" class="form-control" #confirmar="ngModel" name="confirmar" [(ngModel)]="confirmaContra" placeholder="Confirmar Contraseña"
+                      required minlength="8" maxlength="16" [disabled]="!contrasena.valid"  (input)="verificarContrasenas($event)">                  
+                     <!-- <small [hidden]="!confirmar.value">
+                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Confirmar la contraseña es requerido
+                    </small>  -->
+                    <small [hidden]='!mensajeMacthPass'>
+                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i> {{mensajeMacthPass}}
+                    </small> 
+                  
                   </div>
                 </div>
                 <button type="button"  style="float:left" class="btn btn-defaul btn-modal-suc"  (click)="loginBack()">Ya poseo una cuenta</button>                
                 <button id="btnRegister" type="submit" style="float:right"
-                 [disabled]="!correo.valid || !nombre.valid || !apellidos.valid  ||  !departamento.valid || !contrasena.valid  || !confirmar.valid || userExist"
+                 [disabled]="!correo.valid || !nombre.valid || !apellidos.valid  ||  !departamento.valid || !contrasena.valid  || !confirmar.valid || userExist || !isMacthPass"
                   class="btn btn-success">Continuar</button>
               </form>
               

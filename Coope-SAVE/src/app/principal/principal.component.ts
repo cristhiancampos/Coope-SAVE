@@ -28,7 +28,8 @@ export class PrincipalComponent implements OnInit {
   public verError = false;
   public recordarme = false;
   public dominio;
-  public isValidPass = false;
+  public isMacthPass =false;
+  public mensajeMacthPass='';
 
 
   //constructor del componente principal
@@ -64,25 +65,7 @@ export class PrincipalComponent implements OnInit {
   }
   //al cargarse la pagina verifica si la sesión de usuario se guardó previamente
   ngOnInit() {
-    //localStorage.clear();
     //this._router.navigate['/principal'];
-
-    // this.identity = this._servUsuario.getIndentity();
-    // this.token = this._servUsuario.getToken();
-
-    // let identity = localStorage.getItem('identity');
-    // let user = JSON.parse(identity);
-
-    // let recordar = localStorage.getItem('remember');
-    // let recordarValue = JSON.parse(recordar);
-    // if (user != null) {
-    //   $('#nav-user').text(user.nombre + ' ' + user.apellidos);
-    //   this.mmostrar = true;
-    // } else {
-    //   $('#nav-user').text(' ');
-    //   this.abrirModal('#loginModal');
-    //   this.mmostrar = false;
-    // }
     this.verificarCredenciales();
   }
   //olcultar mensaje de existencia de usuario
@@ -169,7 +152,7 @@ export class PrincipalComponent implements OnInit {
     );
   }
   //iniciar sesión en el sistema
-  public login() {
+  login() {
     console.log(this.usuario);
     // obtener datos de usuaario identificado
     this._servUsuario.loginUsuario(this.usuario).subscribe(response => {
@@ -230,7 +213,7 @@ export class PrincipalComponent implements OnInit {
     );
   }
   //verificar credenciales
-  public verificarCredenciales() {
+  verificarCredenciales() {
     this.identity = this._servUsuario.getIndentity();
     this.token = this._servUsuario.getToken();
     let identity = localStorage.getItem('identity');
@@ -326,7 +309,19 @@ export class PrincipalComponent implements OnInit {
     this.mmostrar = false;
     this.confirmaContra = '';
   }
-  validarcontra(event: any) {
+  verificarContrasenas(event: any){
+    
+    if(this.usuario.contrasena.trim()!=this.confirmaContra.trim()){
+      $('#confirmPass').css("border-left", "5px solid #a94442");
+      this.isMacthPass = false;
+      this.mensajeMacthPass='Las contraseñas no coinciden';
+    }else{
+      $('#confirmPass').css("border-left", "5px solid #42A948");
+      this.isMacthPass = true;
+      this.mensajeMacthPass='';
+    }
+  }
+ /* validarcontra(event: any) {
     if (this.usuario.contrasena) {
       if (this.usuario.contrasena.length < 8) {
         //alert('la contraseña debe ser mayor a 7 c');
@@ -350,11 +345,11 @@ export class PrincipalComponent implements OnInit {
       // }
       else {
         this.isValidPass = true;
-        //alert('contraseña correcta');
+        alert('contraseña correcta');
       }
     }
   }
-
+/*
   tieneMayuscula(texto) {
     var patron = /[A-Z]/g;
     if (this.usuario.contrasena.match(patron)) {
@@ -397,7 +392,7 @@ export class PrincipalComponent implements OnInit {
         alert('no');
       }
     }
-  }
+  }*/
 
   // localStorage.setItem('token',token);
   // localStorage.removeItem('identity');//remover item del localStorage
