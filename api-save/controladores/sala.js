@@ -58,9 +58,24 @@ function validarSala(req, res)
   });
 }
 
+function obtenerSalas(req, res){
+  Sala.find({},(err,salas)=>{
+    if(err){
+      res.status(500).send({message:'Error en la petición'});
+    }else{
+        if(!salas){
+            res.status(404).send({message:'No existen Salas registradas en el sistema'});
+        }else{
+            res.status(200).send({message:salas});
+        }
+    }
+  }).sort('number'); 
+}
+
     module.exports = {
         
         agregarSala,
-        validarSala
+        validarSala,
+        obtenerSalas
        
       };

@@ -78,9 +78,25 @@ function validarRecurso(req, res)
     }
   });
 }
+
+
+function obtenerRecursos(req, res){
+  Recurso.find({},(err,recursos)=>{
+    if(err){
+      res.status(500).send({message:'Error en la petición'});
+    }else{
+        if(!recursos){
+            res.status(404).send({message:'No existen recursos registrados en el sistema'});
+        }else{
+            res.status(200).send({message:recursos});
+        }
+    }
+  }).sort('number'); 
+}
     module.exports = {
         
         agregarRecurso,
-        validarRecurso
+        validarRecurso,
+        obtenerRecursos
        
       };

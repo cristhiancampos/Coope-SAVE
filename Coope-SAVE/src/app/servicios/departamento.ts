@@ -6,7 +6,7 @@ import {GLOBAL} from './global';
 
 @Injectable()
 
-export class ServicioSala{
+export class ServicioDepartamento{
 
     public url: string;//url de la api rest
 
@@ -15,31 +15,31 @@ export class ServicioSala{
         this.url = GLOBAL.url;
     }
 
-    registrarSala(sala){
-        let json = JSON.stringify(sala);
+    registrarDepartamento(departamento){
+        let json = JSON.stringify(departamento);
         let params = json; 
         let headers = new Headers({'Content-Type':'application/json'});
-        return this._http.post(this.url+'registrarSala',params,{headers:headers})
+        return this._http.post(this.url+'registrarDepartamento',params,{headers:headers})
         .map(res=>res.json());
     }
 
 
-    validarSala(nombre)
+    validarDepartamento(nombre)
     {
          let json = JSON.stringify(nombre);
         let params = json; 
         let headers = new Headers({'Content-Type':'application/json'});
-        return this._http.post(this.url+'validarSala',params,{headers:headers})
+        return this._http.post(this.url+'validarDepartamento',params,{headers:headers})
         .map(res=>res.json());
     }
 
-    obtenerSalas()
+    obtenerDepartamento()
     {
         // console.log(vehiculo);
         //  let json = JSON.stringify(vehiculo);
         // let params = json; 
         let headers = new Headers({'Content-Type':'application/json'});
-        return this._http.get(this.url+'obtenerSalas',{headers:headers})
+        return this._http.get(this.url+'obtenerDepartamentos',{headers:headers})
         .map(res=>res.json());
     }
 
