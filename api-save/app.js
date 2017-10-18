@@ -13,9 +13,6 @@ var vehiculo_routes = require('./rutas/vehiculos')
 var recurso_routes = require('./rutas/recurso')
 var departamento_routes = require('./rutas/departamento')
 
-// var artist_routes = require('./routes/artist');
-// var album_routes = require('./routes/album');
-// var song_routes = require('./routes/song');
 //recibir las peticiones http
 app.use(bodyParser.urlencoded({extended:false}));
 //convertir a json los datos que llegan mediante las peticiones http
@@ -33,16 +30,13 @@ app.use((req,res,next)=>{
     res.header('Allow','GET, POST, OPTIONS, PUT, DELETE');
     next();
 });
+
 //rutas base
  app.use('/api',user_routes);
  app.use('/api',sala_routes);
  app.use('/api',vehiculo_routes);
  app.use('/api',recurso_routes);
  app.use('/api',departamento_routes);
-
-// app.use('/api',artist_routes);
-// app.use('/api',album_routes);
-// app.use('/api',song_routes);
 
 //exportar modulo
 module.exports = app;
