@@ -20,7 +20,7 @@ export class AdminVehiculoComponent implements OnInit {
   public vehiculos = [];
   public estado =true;
   public estadoMensaje= 'Habilitado';
-  public existe=true;
+  //public existe=true;
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,

@@ -17,17 +17,31 @@ nombre= '';
 public salas = [];
 nombreExist: boolean;
 mostrarModal: boolean;
+public estado =true;
+public estadoMensaje= 'Habilitado';
+
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
     private _servSala: ServicioSala
   ) { 
     this.mostrarModal= false;
-    this.sala = new Sala('','','','','','');
+    this.sala = new Sala('','','','',this.estadoMensaje,'-');
   }
 
   ngOnInit() {
     this.obtenerSalas();
+  }
+
+  cambiarEstado(){
+    this.estado =!this.estado;
+    if(this.estado){
+      this.estadoMensaje= 'Habilitado';
+     this.sala.estado=this.estadoMensaje;
+    }else{
+      this.estadoMensaje= 'Deshabilitado';
+      this.sala.estado=this.estadoMensaje;
+    } 
   }
 
 validarSala() {
@@ -35,10 +49,12 @@ validarSala() {
       response => {
         if (response.message) {
           console.log(response.message);
-          let co = response.message;
-          this.nombre = co;
+          let sala = response.message;
+          this.nombre = sala;
           this.nombreExist = true;
+          $('#input-nombre').css("border-left", "5px solid #a94442");
         } else {
+          $('#input-nombre').css("border-left", "5px solid #42A948");
           console.log('no existe sala');
           console.log(response.message);
           this.nombre = null;
@@ -64,12 +80,11 @@ agregarSala(){
       if (!response.sala._id) {    
         alert('Error al registrar la Sala');
       } else {
-        alert('Sala registrado exitosamente');
-        this.sala= new Sala('','','','','','');
-        
+        alert('Sala registrada exitosamente');
+        this.sala = new Sala('','','','',this.estadoMensaje,'-');
         this.mostrar(false);
         console.log(sala);
-        
+        this.obtenerSalas();
       }
     }, error => {
       var alertMessage = <any>error;

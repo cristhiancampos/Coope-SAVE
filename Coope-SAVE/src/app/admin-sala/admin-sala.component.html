@@ -93,7 +93,8 @@
               <form #adminSala="ngForm" (ngSubmit)="agregarSala()">
                 <div class="contrrol-group form-group">
                   <div class="controls">
-                    <input type="text" class="form-control" #nombre="ngModel" name= "nombre" [(ngModel)]="sala.nombre" placeholder="Nombre" required (focusout)="validarSala()">
+                    <input id="input-nombre" type="text" class="form-control" #nombre="ngModel" name= "nombre" [(ngModel)]="sala.nombre" 
+                    placeholder="Nombre" required (input)="validarSala()">
                     <small *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" ><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Campo <strong>Nombre</strong> obligatorio</small>
                     <small *ngIf="nombreExist"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe una Sala con ese nombre</small> 
                     <p class="help-block"></p>
@@ -117,27 +118,27 @@
                   <div class="controls">
                     <ul>
                       <li style="margin-left: -37px;"> <label class="switch">
-                          <input type="checkbox" checked>
+                          <input type="checkbox" checked (change)="cambiarEstado()">
                           <small class="slider round"></small>
                         </label>
                       </li>
                       <li>
-                        <label style="float: left;margin-top: -2.3em;">Habilitado</label>
+                        <label style="float: left;margin-top: -2.3em;">{{estadoMensaje}}</label>
                       </li>
                     </ul>
                   </div>
                 </div>
-                <div class="control-group form-group">
+               <!-- <div class="control-group form-group">
                   <div class="controls">
                     <div class="controls">
                       <textarea class="form-control" #reporte="ngModel" name= "reporte" [(ngModel)]="sala.reporte" placeholder="Reporte algún problema de la sala" rows="3"></textarea>
                       <p class="help-block"></p>
                     </div>
                   </div>
-                </div>
+                </div>-->
                 <div style="float: right">
                 <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" (click)="salir()">Salir</button>   
-                <button type="submit" [disabled]="!adminSala.form.valid" class="btn btn-default btn-modal-suc" >Confirmar</button>
+                <button id="btn-add" type="submit" [disabled]="!adminSala.form.valid || nombreExist" class="btn btn-success" >Confirmar</button>
               </div>
               </form>
             </div>

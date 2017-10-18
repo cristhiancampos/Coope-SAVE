@@ -97,3 +97,8 @@
 small{
   color: #a94442;
 }
+#btn-add[disabled]{
+  background: #888;
+  cursor:not-allowed;
+ 
+}
