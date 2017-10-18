@@ -14,6 +14,7 @@ export class AdminRecursoComponent implements OnInit {
   public recurso: Recurso;
  // codRecursos= '';
   codRecursosExist: boolean;
+  public recursos = [];
   
   constructor(
     private _route: ActivatedRoute,
@@ -24,8 +25,8 @@ export class AdminRecursoComponent implements OnInit {
    }
 
   ngOnInit() {
-    
-  }
+    this.obtenerRecursos(); 
+   }
 
   agregarRecurso(){
     this._servRecurso.registrarRecurso(this.recurso).subscribe(
@@ -49,26 +50,46 @@ export class AdminRecursoComponent implements OnInit {
   }
 
 validarRecurso() {
-  console.log('validar componete');
-  console.log(this.recurso);
+  // console.log('validar componete');
+  // console.log(this.recurso);
 
-  this._servRecurso.validarRecurso(this.recurso).subscribe(
+  // this._servRecurso.validarRecurso(this.recurso).subscribe(
+  //   response => {
+  //     if (response.message) {
+  //       console.log('existe recirsso');
+  //       console.log(response.message);
+  //       let recurso = response.message;
+  //     //  this.codRecursos = recurso;
+  //       this.codRecursosExist = true;
+  //     } else {
+  //       console.log('no existe recusrsi');
+  //       console.log(response.message);
+  //       this.recurso = null;
+  //       this.codRecursosExist = false;
+  //     }
+  //   }, error => {
+  //     alert('tuvo un errror');
+  //     var errorMensaje = <any>error;
+  //     if (errorMensaje != null) {
+  //       var body = JSON.parse(error._body);
+  //     }
+  //   }
+  // );
+}
+
+obtenerRecursos() {
+  this._servRecurso.obtenerRecursos().subscribe(
     response => {
       if (response.message) {
-        console.log('existe recirsso');
         console.log(response.message);
-        let recurso = response.message;
-      //  this.codRecursos = recurso;
-        this.codRecursosExist = true;
+      this.recursos =response.message;
       } else {
-        console.log('no existe recusrsi');
+        console.log('ho hay recursos registrados');
         console.log(response.message);
-        this.recurso = null;
-        this.codRecursosExist = false;
       }
     }, error => {
-      alert('tuvo un errror');
       var errorMensaje = <any>error;
+      console.log('Error al tratar de obtener los Recursos');
       if (errorMensaje != null) {
         var body = JSON.parse(error._body);
       }

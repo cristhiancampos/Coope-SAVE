@@ -38,4 +38,16 @@ export class ServicioRecursos{
         .map(res=>res.json());
     }
 
+    obtenerRecursos()
+    {
+        // console.log(vehiculo);
+        //  let json = JSON.stringify(vehiculo);
+        // let params = json; 
+        console.log("en el servicio");
+        let headers = new Headers({'Content-Type':'application/json'});
+        return this._http.get(this.url+'obtenerRecursos ',{headers:headers})
+        .map(res=>res.json());
+        
+    }
+
 }//Final de el export de clase

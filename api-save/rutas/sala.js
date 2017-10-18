@@ -8,5 +8,8 @@ var md_auth = require('../middlewares/authenticated');
 
 api.post('/registrarSala',ControladorSala.agregarSala);
 api.post('/validarSala',ControladorSala.validarSala);
+api.get('/obtenerSalas',ControladorSala.obtenerSalas);
+
+
 
 module.exports = api;

@@ -24,13 +24,13 @@
           </tr>
         </thead>
         <tbody style="font-family: 'Times New Roman', Times, serif">
-          <tr>
-            <th scope="row">1</th>
-            <th>Mark</th>
-            <th>Otto</th>
-            <th>@mdo</th>
-            <th>Otto</th>
-            <th>Otto</th>
+          <tr *ngFor="let sala of salas; let i = index">
+            <th scope="row">{{i+1}}</th>
+            <th>{{sala.nombre}}</th>
+            <th>{{sala.cupo}}</th>
+            <th>{{sala.descripcion}}</th>
+            <th>{{sala.estado}}</th>
+            <th>{{sala.reporte}}</th>
             <th style="text-align: center">
               <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
               <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>

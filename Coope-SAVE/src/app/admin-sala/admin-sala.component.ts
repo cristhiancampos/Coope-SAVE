@@ -14,6 +14,7 @@ export class AdminSalaComponent implements OnInit {
 
 public sala: Sala;
 nombre= '';
+public salas = [];
 nombreExist: boolean;
 mostrarModal: boolean;
   constructor(
@@ -26,6 +27,7 @@ mostrarModal: boolean;
   }
 
   ngOnInit() {
+    this.obtenerSalas();
   }
 
 validarSala() {
@@ -78,6 +80,32 @@ agregarSala(){
       }
     }
   );  
+}
+
+
+obtenerSalas() {
+  this._servSala.obtenerSalas().subscribe(
+    response => {
+      if (response.message) {
+        console.log(response.message);
+      //   let carro = response.message;
+      //   this.placa = carro;
+      //   this.placaExist = true;
+      this.salas =response.message;
+      } else {
+        console.log('ho hay Salas registradas');
+        console.log(response.message);
+        // this.placa = null;
+        // this.placaExist = false;
+      }
+    }, error => {
+      var errorMensaje = <any>error;
+      console.log('Error al tratar de obtener las salas');
+      if (errorMensaje != null) {
+        var body = JSON.parse(error._body);
+      }
+    }
+  );
 }
 
 

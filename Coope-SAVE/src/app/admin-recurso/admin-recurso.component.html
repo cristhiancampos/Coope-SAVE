@@ -22,9 +22,9 @@
           </tr>
         </thead>
         <tbody style="font-family: 'Times New Roman', Times, serif">
-          <tr>
-            <th scope="row">1</th>
-            <th>Mark</th>
+          <tr tr *ngFor="let recurso of recursos; let i = index">
+            <th scope="row">{{i+1}}</th>
+            <th>{{recurso.nombre}}/th>
             <th>Otto</th>
             <th>@mdo</th>
             <th>Otto</th>
@@ -33,61 +33,7 @@
               <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
             </th>
           </tr>
-          <tr>
-            <th scope="row">2</th>
-            <th>Jacob</th>
-            <th>Thornton</th>
-            <th>@fat</th>
-            <th>Thornton</th>
-            <th style="text-align: center">
-              <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
-            </th>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <th>Jacob</th>
-            <th>Thornton</th>
-            <th>@fat</th>
-            <th>Thornton</th>
-            <th style="text-align: center">
-              <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
-            </th>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <th>Jacob</th>
-            <th>Thornton</th>
-            <th>@fat</th>
-            <th>Thornton</th>
-            <th style="text-align: center">
-              <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
-            </th>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <th>Jacob</th>
-            <th>Thornton</th>
-            <th>@fat</th>
-            <th>Thornton</th>
-            <th style="text-align: center">
-              <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
-            </th>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <th>Jacob</th>
-            <th>Thornton</th>
-            <th>@fat</th>
-            <th>Thornton</th>
-            <th style="text-align: center">
-              <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
-            </th>
-          </tr>
+         
         </tbody>
       </table>
     </div>
