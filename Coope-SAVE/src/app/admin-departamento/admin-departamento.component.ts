@@ -37,9 +37,9 @@ export class AdminDepartamentoComponent implements OnInit {
         let departamento = response.departamento;
        
         if (!response.departamento._id) {    
-          alert('Error al registrar la Sala');
+          alert('Error al registrar la departamento');
         } else {
-          alert('Sala registrado exitosamente');
+          alert('Departamento registrado exitosamente');
           this.departamento= new departamento('','','','');
         
           console.log(departamento);

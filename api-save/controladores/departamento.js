@@ -71,8 +71,8 @@ function obtenerDepartamentos(req, res){
 
     module.exports = {
         
-        agregarSala,
-        validarSala,
+        agregarDepartamento,
+        validarDepartamento,
         obtenerDepartamentos 
        
       };
