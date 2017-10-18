@@ -71,7 +71,7 @@ function obtenerSalas(req, res){
 }
 
 module.exports = {
-    sagregarSala,
+    agregarSala,
     validarSala,
     obtenerSalas
     
