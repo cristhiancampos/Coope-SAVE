@@ -37,8 +37,6 @@ function agregarSala(req, res) {
           }
     }
 
-
-
 function validarSala(req, res)
 {
   var params = req.body;
@@ -72,10 +70,9 @@ function obtenerSalas(req, res){
   }).sort('number'); 
 }
 
-    module.exports = {
-        
-        agregarSala,
-        validarSala,
-        obtenerSalas
-       
-      };
+module.exports = {
+    sagregarSala,
+    validarSala,
+    obtenerSalas
+    
+  };

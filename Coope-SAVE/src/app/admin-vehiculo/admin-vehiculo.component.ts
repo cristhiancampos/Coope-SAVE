@@ -97,6 +97,7 @@ validarVehiculo() {
     }
   );
 }
+
 obtenerVehiculos() {
   this._servVehiculo.obtenerVehiculos().subscribe(
     response => {
