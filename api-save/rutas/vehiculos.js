@@ -8,5 +8,6 @@ var md_auth = require('../middlewares/authenticated');
 
 api.post('/registrarVehiculo',ControladorVehiculo.agregarVehiculo);
 api.post('/validarVehiculo',ControladorVehiculo.validarVehiculo);
+api.get('/obtenerVehiculos',ControladorVehiculo.obtenerVehiculos);
 
 module.exports = api;

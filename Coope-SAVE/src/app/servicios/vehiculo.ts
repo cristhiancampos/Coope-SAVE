@@ -34,4 +34,13 @@ export class ServicioVehiculo{
         .map(res=>res.json());
     }
 
+    obtenerVehiculos()
+    {
+        // console.log(vehiculo);
+        //  let json = JSON.stringify(vehiculo);
+        // let params = json; 
+        let headers = new Headers({'Content-Type':'application/json'});
+        return this._http.get(this.url+'obtenerVehiculos',{headers:headers})
+        .map(res=>res.json());
+    }
 }//Final de el export de clase
