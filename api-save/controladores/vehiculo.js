@@ -13,7 +13,7 @@ function agregarVehiculo(req, res) {
   vehiculo.placa = params.placa;
   vehiculo.descripcion = params.descripcion;
   vehiculo.kilometraje = params.kilometraje
-  vehiculo.estado = params.estado;
+  vehiculo.estado =params.estado;
   vehiculo.reporte = params.reporte;
   console.log(vehiculo);
   if (

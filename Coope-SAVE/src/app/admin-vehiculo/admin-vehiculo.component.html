@@ -6,7 +6,6 @@
       <hr>
       <button class="btn btn-primary" data-toggle="modal" data-target="#modalAdminVehiculo" style="float: left;margin-bottom: 6px"> <i class="fa fa-plus" aria-hidden="true"></i></button>
     </div>
-
   </div>
 
   <div class="col-md-12">
@@ -44,8 +43,6 @@
       </table>
     </div>
   </div>
-
-
   <!-- paginador-->
   <nav aria-label="Page navigation example">
     <ul class="pagination">
@@ -98,65 +95,66 @@ aria-hidden="true">
               <div class="control-group form-group">
                 <div class="controls">
                   <input type="text" class="form-control" #tipo="ngModel" name= "tipo" [(ngModel)]="vehiculo.tipo" placeholder="Tipo de Vehiculo" required >
-                  <small *ngIf="tipo.invalid && (tipo.dirty || tipo.touched)" ><i class="fa fa-exclamation-circle" aria-hidden="true"></i>   Campo <strong>Tipo</strong> obligatorio</small> 
-                  <p class="help-block"></p>
+                  <small *ngIf="tipo.invalid && (tipo.dirty || tipo.touched)" >
+                    <i class="fa fa-exclamation-circle" aria-hidden="true"></i>   El tipo es obligatorio</small> 
                 </div>
               </div>
               <div class="control-group form-group">
                 <div class="controls">
                   <input type="text" class="form-control"  #marca="ngModel" name= "marca" [(ngModel)]="vehiculo.marca"placeholder="Marca del Vehiculo" required>
-                  <small *ngIf="marca.invalid && (marca.dirty || marca.touched)" ><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Campo <strong>Marca</strong> obligatorio</small> 
-                  <p class="help-block"></p>
-                </div>
-                <div class="control-group form-group">
-                  <div class="controls">
-                    <input type="text" class="form-control"  #placa="ngModel" name= "placa" [(ngModel)]="vehiculo.placa"placeholder="Placa de Vehiculo"  required (focusout)="validarVehiculo()" >
-                    <small *ngIf="placa.invalid && (placa.dirty || placa.touched)" ><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Campo <strong>Placa</strong> obligatorio</small> 
-                    <small *ngIf="placaExist"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe un Vehiculo con esa placa</small> 
-                    <p class="help-block"></p>
-                  </div>
+                  <small *ngIf="marca.invalid && (marca.dirty || marca.touched)" >
+                    <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La marca es obligatoria</small> 
                 </div>
               </div>
+                <div class="control-group form-group">
+                  <div class="controls">
+                    <input id="input-placa" type="text" class="form-control"  #placa="ngModel" name= "placa" [(ngModel)]="vehiculo.placa" 
+                    placeholder="Placa de Vehiculo"  required (input)="validarVehiculo()" >
+                    <small *ngIf="placa.invalid && (placa.dirty || placa.touched)" >
+                      <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La placa es obligatoria</small> 
+                    <small *ngIf="placaExist"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe un Vehiculo con esa placa</small> 
+                    </div>
+                </div>
+              
               <div class="control-group form-group">
                 <div class="controls">
                   <textarea class="form-control" #descripcion="ngModel" name= "descripcion" [(ngModel)]="vehiculo.descripcion" placeholder="Descripción" rows="3" required></textarea>
-                  <small *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)" ><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Campo <strong>Descripción</strong> obligatorio</small> 
-                  <p class="help-block"></p>
+                  <small *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)" >
+                    <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La descripción obligatoria</small> 
                 </div>
               </div>
               <div class="control-group form-group">
                 <div class="controls">
                   <input type="number" class="form-control" #kilometraje="ngModel" name= "kilometraje" [(ngModel)]="vehiculo.kilometraje" placeholder="Kilometraje" required>
-                  <small *ngIf="kilometraje.invalid && (kilometraje.dirty || kilometraje.touched)" > <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Campo <strong>Kilometraje</strong> obligatorio</small> 
-                  <p class="help-block"></p>
+                  <small *ngIf="kilometraje.invalid && (kilometraje.dirty || kilometraje.touched)" > <i class="fa fa-exclamation-circle" aria-hidden="true">
+                    </i> El Kilometraje es obligatorio</small> 
                 </div>
               </div>
               <div class="control-group form-group">
                 <div class="controls">
                   <ul>
                     <li style="margin-left: -37px;"> <label class="switch">
-                        <input type="checkbox" checked>
+                        <input type="checkbox" checked (change)="cambiarEstado()">
                         <small class="slider round"></small>
                       </label>
                     </li>
                     <li>
-                      <label style="float: left;margin-top: -2.3em;">Habilitado</label>
+                      <label style="float: left;margin-top: -2.3em;">{{estadoMensaje}}</label>
                     </li>
                   </ul>
                 </div>
               </div>
-              <div class="control-group form-group">
+              <!-- <div class="control-group form-group">
                 <div class="controls">
                   <div class="controls">
                     <textarea class="form-control" #reporte="ngModel" name= "reporte" [(ngModel)]="vehiculo.reporte" placeholder="Reporte algún problema de la sala" rows="3"></textarea>
-                    <p class="help-block"></p>
-                  </div>
+                    </div>
                 </div>
-              </div>
+              </div> -->
               <div id="success"></div>
               <div style="float: right">
                   <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" (click)="salir()">Salir</button>   
-                  <button type="submit" [disabled]="!adminVehiculo.form.valid" class="btn btn-default btn-modal-suc" >Confirmar</button>
+                  <button id="btn-add" type="submit" [disabled]="!adminVehiculo.form.valid || placaExist" class="btn btn-success" >Confirmar</button>
                 </div>
             </form>
           </div>

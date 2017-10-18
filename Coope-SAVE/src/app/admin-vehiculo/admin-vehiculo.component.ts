@@ -18,16 +18,30 @@ export class AdminVehiculoComponent implements OnInit {
   placaExist: boolean;
   placa= '';
   public vehiculos = [];
+  public estado =true;
+  public estadoMensaje= 'Habilitado';
+  public existe=true;
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
     private _servVehiculo: ServicioVehiculo
   ) { 
-    this.vehiculo= new Vehiculo('','','','','','','','');
+    this.vehiculo= new Vehiculo('','','','','','',this.estadoMensaje,'-');
   }
 
   ngOnInit() {
    this.obtenerVehiculos();
+  }
+
+  cambiarEstado(){
+    this.estado =!this.estado;
+    if(this.estado){
+      this.estadoMensaje= 'Habilitado';
+     this.vehiculo.estado=this.estadoMensaje;
+    }else{
+      this.estadoMensaje= 'Deshabilitado';
+      this.vehiculo.estado=this.estadoMensaje;
+    } 
   }
 
   agregarVehiculo(){
@@ -40,10 +54,11 @@ export class AdminVehiculoComponent implements OnInit {
           alert('Error al registrar la vehiculo');
         } else {
           alert('vehiculo registrado exitosamente');
-          this.vehiculo= new Vehiculo('','','','','','','','');
+          this.vehiculo= new Vehiculo('','','','','','',this.estadoMensaje,'-');
           
           this.cerrarModal("#modalAdminVehiculo")
           console.log(vehiculo);
+          this.obtenerVehiculos();
           
         }
       }, error => {
@@ -57,7 +72,6 @@ export class AdminVehiculoComponent implements OnInit {
     );
   }
 
-
 validarVehiculo() {
   this._servVehiculo.validarVehiculo(this.vehiculo).subscribe(
     response => {
@@ -66,7 +80,9 @@ validarVehiculo() {
         let carro = response.message;
         this.placa = carro;
         this.placaExist = true;
+        $('#input-placa').css("border-left", "5px solid #a94442");
       } else {
+        $('#input-placa').css("border-left", "5px solid #42A948");
         console.log('no existe vehiculo');
         console.log(response.message);
         this.placa = null;
