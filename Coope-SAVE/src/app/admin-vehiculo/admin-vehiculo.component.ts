@@ -45,6 +45,8 @@ export class AdminVehiculoComponent implements OnInit {
   }
 
   agregarVehiculo(){
+    let placa = this.vehiculo.placa.trim().toUpperCase();
+    this.vehiculo.placa=placa;
     this._servVehiculo.registrarVehiculo(this.vehiculo).subscribe(
       response => {
         
@@ -73,6 +75,8 @@ export class AdminVehiculoComponent implements OnInit {
   }
 
 validarVehiculo() {
+  let placa = this.vehiculo.placa.trim().toUpperCase();
+  this.vehiculo.placa=placa;
   this._servVehiculo.validarVehiculo(this.vehiculo).subscribe(
     response => {
       if (response.message) {

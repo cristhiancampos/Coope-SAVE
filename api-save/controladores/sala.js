@@ -10,8 +10,8 @@ function agregarSala(req, res) {
       sala.nombre = params.nombre;
       sala.cupo = params.cupo;
       sala.descripcion = params.descripcion;
-      sala.reporte= '';
-      sala.estado = 'Hablilitado';
+      sala.reporte= params.reporte;
+      sala.estado = params.estado;
      
           console.log(sala);
           if (

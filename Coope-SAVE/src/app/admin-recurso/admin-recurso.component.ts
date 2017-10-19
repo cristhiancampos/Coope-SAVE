@@ -15,20 +15,33 @@ export class AdminRecursoComponent implements OnInit {
  // codRecursos= '';
   codRecursosExist: boolean;
   public recursos = [];
+  public estado =true;
+  public estadoMensaje= 'Habilitado';
   
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
     private _servRecurso: ServicioRecursos
   ) {   
-    this.recurso= new Recurso('','','','','','');
+    this.recurso= new Recurso('','','','',this.estadoMensaje,'');
    }
 
   ngOnInit() {
     this.obtenerRecursos(); 
    }
-
+   cambiarEstado(){
+    this.estado =!this.estado;
+    if(this.estado){
+      this.estadoMensaje= 'Habilitado';
+     this.recurso.estado=this.estadoMensaje;
+    }else{
+      this.estadoMensaje= 'Deshabilitado';
+      this.recurso.estado=this.estadoMensaje;
+    } 
+  }
   agregarRecurso(){
+    let codigoActivo = this.recurso.codigoActivo.trim().toUpperCase();
+    this.recurso.codigoActivo=codigoActivo;
     this._servRecurso.registrarRecurso(this.recurso).subscribe(
       response => {
         let recurso = response.message;
@@ -37,8 +50,9 @@ export class AdminRecursoComponent implements OnInit {
         } else {
           console.log(response.message);
           alert('recurso registrado exitosamente');
-          this.recurso= new Recurso('','','','','','');
-          this.cerrarModal("#modalAdminRecurso")
+          this.recurso= new Recurso('','','','',this.estadoMensaje,'');
+          this.cerrarModal("#modalAdminRecurso");
+          this.obtenerRecursos();
         }
       }, error => {
         var alertMessage = <any>error;
@@ -50,33 +64,32 @@ export class AdminRecursoComponent implements OnInit {
   }
 
 validarRecurso() {
-  // console.log('validar componete');
-  // console.log(this.recurso);
+  let codigoActivo = this.recurso.codigoActivo.trim().toUpperCase();
+  this.recurso.codigoActivo=codigoActivo;
+  this._servRecurso.validarRecurso(this.recurso).subscribe(
+    response => {
+      if (response.message) {
+        console.log(response.message);
+        let sala = response.message;
+       // this.nombre = sala;
+        this.codRecursosExist = true;
+        $('#input-codigo').css("border-left", "5px solid #a94442");
+      } else {
+        $('#input-codigo').css("border-left", "5px solid #42A948");
+        console.log('no existe recurso');
+        console.log(response.message);
+      //  this.nombre = null;
+        this.codRecursosExist = false;
+      }
+    }, error => {
+      var errorMensaje = <any>error;
 
-  // this._servRecurso.validarRecurso(this.recurso).subscribe(
-  //   response => {
-  //     if (response.message) {
-  //       console.log('existe recirsso');
-  //       console.log(response.message);
-  //       let recurso = response.message;
-  //     //  this.codRecursos = recurso;
-  //       this.codRecursosExist = true;
-  //     } else {
-  //       console.log('no existe recusrsi');
-  //       console.log(response.message);
-  //       this.recurso = null;
-  //       this.codRecursosExist = false;
-  //     }
-  //   }, error => {
-  //     alert('tuvo un errror');
-  //     var errorMensaje = <any>error;
-  //     if (errorMensaje != null) {
-  //       var body = JSON.parse(error._body);
-  //     }
-  //   }
-  // );
+      if (errorMensaje != null) {
+        var body = JSON.parse(error._body);
+      }
+    }
+  );
 }
-
 obtenerRecursos() {
   this._servRecurso.obtenerRecursos().subscribe(
     response => {

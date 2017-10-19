@@ -14,9 +14,9 @@
         <thead class="thead-default">
           <tr>
             <th class="th-color">#</th>
+            <th class="th-color">Placa</th>
             <th class="th-color">Tipo</th>
             <th class="th-color">Marca</th>
-            <th class="th-color">Placa</th>
             <th class="th-color">Descripción</th>
             <th class="th-color">Kilometraje</th>
             <th class="th-color">Estado</th>
@@ -27,9 +27,9 @@
         <tbody style="font-family: 'Times New Roman', Times, serif">
           <tr *ngFor="let vehiculo of vehiculos; let i = index">
             <th scope="row">{{i+1}}</th>
+            <th>{{vehiculo.placa}}</th>
             <th>{{vehiculo.tipo}}</th>
             <th>{{vehiculo.marca}}</th>
-            <th>{{vehiculo.placa}}</th>
             <th>{{vehiculo.descripcion}}</th>
             <th>{{vehiculo.kilometraje}}</th>
             <th>{{vehiculo.estado}}</th>
@@ -72,7 +72,7 @@ aria-hidden="true">
 <div class="modal-dialog bd-example-modal-sm " role="document">
   <div class="modal-content">
     <div class="modal-header" style="background: #0069d9;color:#fff">
-      <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Agregar Vehiculo</h5>
+      <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-car" aria-hidden="true"></i>&nbsp;&nbsp;Agregar Vehiculo</h5>
       <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="salir()"> 
         <small aria-hidden="true">&times;</small>
       </button>

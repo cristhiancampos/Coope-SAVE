@@ -85,3 +85,21 @@
         display: inline-block; list-style-type: none;
       
     }
+
+      /* color en input para validadciones*/
+.ng-valid[required], .ng-valid.required  {
+  border-left: 5px solid #42A948; /* green */
+}
+
+.ng-invalid:not(form)  {
+  border-left: 5px solid #a94442; /* red */
+}
+
+small{
+  color: #a94442;
+}
+#btn-add[disabled]{
+  background: #888;
+  cursor:not-allowed;
+ 
+}

@@ -45,6 +45,8 @@ public estadoMensaje= 'Habilitado';
   }
 
 validarSala() {
+  let nombre = this.sala.nombre.trim().toUpperCase();
+  this.sala.nombre=nombre;
     this._servSala.validarSala(this.sala).subscribe(
       response => {
         if (response.message) {
@@ -69,9 +71,10 @@ validarSala() {
       }
     );
   }
-
-
+  
 agregarSala(){
+  let nombre = this.sala.nombre.trim().toUpperCase();
+  this.sala.nombre=nombre;
   this._servSala.registrarSala(this.sala).subscribe(
     response => {
       
@@ -103,15 +106,10 @@ obtenerSalas() {
     response => {
       if (response.message) {
         console.log(response.message);
-      //   let carro = response.message;
-      //   this.placa = carro;
-      //   this.placaExist = true;
       this.salas =response.message;
       } else {
         console.log('ho hay Salas registradas');
         console.log(response.message);
-        // this.placa = null;
-        // this.placaExist = false;
       }
     }, error => {
       var errorMensaje = <any>error;
@@ -122,9 +120,6 @@ obtenerSalas() {
     }
   );
 }
-
-
-
 mostrar(opcion:boolean) {
   if(!opcion){
   $(".modal-backdrop").remove();

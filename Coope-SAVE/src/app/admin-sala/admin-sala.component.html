@@ -41,7 +41,6 @@
     </div>
   </div>
 
-
   <!-- paginador-->
   <nav aria-label="Page navigation example">
     <ul class="pagination">
@@ -93,24 +92,28 @@
               <form #adminSala="ngForm" (ngSubmit)="agregarSala()">
                 <div class="contrrol-group form-group">
                   <div class="controls">
-                    <input id="input-nombre" type="text" class="form-control" #nombre="ngModel" name= "nombre" [(ngModel)]="sala.nombre" 
-                    placeholder="Nombre" required (input)="validarSala()">
-                    <small *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" ><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Campo <strong>Nombre</strong> obligatorio</small>
-                    <small *ngIf="nombreExist"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe una Sala con ese nombre</small> 
+                    <input id="input-nombre" type="text" class="form-control" #nombre="ngModel" name="nombre" [(ngModel)]="sala.nombre" placeholder="Nombre"
+                      required (input)="validarSala()">
+                    <small *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
+                      <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El nombre es obligatorio</small>
+                    <small *ngIf="nombreExist"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe una Sala con ese nombre</small>
                     <p class="help-block"></p>
                   </div>
                 </div>
                 <div class="control-group form-group">
                   <div class="controls">
-                    <input type="number" class="form-control" #cupo="ngModel" name= "cupo" [(ngModel)]="sala.cupo" placeholder="Cupos" required pattern="[0-9]*">
-                    <small *ngIf="cupo.invalid && (cupo.dirty || cupo.touched)" ><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Campo <strong>Cupo de personas</strong> obligatorio</small>
+                    <input type="number" class="form-control" #cupo="ngModel" name="cupo" [(ngModel)]="sala.cupo" placeholder="Cupos" required
+                      pattern="[0-9]*">
+                    <small *ngIf="cupo.invalid && (cupo.dirty || cupo.touched)">
+                      <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El Cupo de personas es obligatorio</small>
                     <p class="help-block"></p>
                   </div>
                 </div>
                 <div class="control-group form-group">
                   <div class="controls">
-                    <textarea class="form-control" #descripcion="ngModel" name= "descripcion" [(ngModel)]="sala.descripcion" placeholder="Descripción" rows="3" required></textarea>
-                    <small *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)" ><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Campo <strong>Descripción</strong> obligatorio</small>
+                    <textarea class="form-control" #descripcion="ngModel" name="descripcion" [(ngModel)]="sala.descripcion" placeholder="Descripción"
+                      rows="3" required></textarea>
+                    <small *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La descripción es obligatoria</small>
                     <p class="help-block"></p>
                   </div>
                 </div>
@@ -128,7 +131,7 @@
                     </ul>
                   </div>
                 </div>
-               <!-- <div class="control-group form-group">
+                <!-- <div class="control-group form-group">
                   <div class="controls">
                     <div class="controls">
                       <textarea class="form-control" #reporte="ngModel" name= "reporte" [(ngModel)]="sala.reporte" placeholder="Reporte algún problema de la sala" rows="3"></textarea>
@@ -137,19 +140,17 @@
                   </div>
                 </div>-->
                 <div style="float: right">
-                <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" (click)="salir()">Salir</button>   
-                <button id="btn-add" type="submit" [disabled]="!adminSala.form.valid || nombreExist" class="btn btn-success" >Confirmar</button>
-              </div>
+                  <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" (click)="salir()">Salir</button>
+                  <button id="btn-add" type="submit" [disabled]="!adminSala.form.valid || nombreExist" class="btn btn-success">Confirmar</button>
+                </div>
               </form>
             </div>
           </div>
         </div>
       </div>
       <div class="modal-footer">
-                
-        
       </div>
-      
+
     </div>
   </div>
 </div>

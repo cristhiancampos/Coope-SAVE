@@ -24,9 +24,9 @@ export class ServicioDepartamento{
     }
 
 
-    validarDepartamento(nombre)
+    validarDepartamento(departamento)
     {
-         let json = JSON.stringify(nombre);
+         let json = JSON.stringify(departamento);
         let params = json; 
         let headers = new Headers({'Content-Type':'application/json'});
         return this._http.post(this.url+'validarDepartamento',params,{headers:headers})

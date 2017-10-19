@@ -10,6 +10,4 @@ api.post('/registrarDepartamento',ControladorDepartamento.agregarDepartamento);
 api.post('/validarDepartamento',ControladorDepartamento.validarDepartamento);
 api.get('/obtenerDepartamentos',ControladorDepartamento.obtenerDepartamentos);
 
-
-
 module.exports = api;

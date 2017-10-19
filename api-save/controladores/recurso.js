@@ -10,8 +10,8 @@ function agregarRecurso(req, res) {
       recurso.nombre = params.nombre;
       recurso.codigoActivo = params.codigoActivo;
       recurso.descripcion = params.descripcion;
-      recurso.reporte= '';
-      recurso.estado = 'Hablilitado';
+      recurso.reporte= params.reporte;
+      recurso.estado = params.estado;
      
           console.log(recurso);
           if (
