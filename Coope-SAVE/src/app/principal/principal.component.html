@@ -67,8 +67,8 @@
                 <div class="control-group form-group">
                   <div class="controls">
                     <div class="row" style="margin-left:0em;margin-right:0em">
-                    <input type="text" #correo="ngModel" name="correo" class="form-control col-md-4  " (input)="change($event)" [(ngModel)]="usuario.correo" 
-                    placeholder="usuario" autofocus (focusout)="validarCorreo()" (focus)="onfocusCorreo()" 
+                    <input id="input-correo" type="text" #correo="ngModel" name="correo" class="form-control col-md-4  " (input)="change($event)" [(ngModel)]="usuario.correo" 
+                    placeholder="usuario" autofocus (input)="validarCorreo()" (focus)="onfocusCorreo()" 
                     required >
                     <input type="text" #correoLabel="ngModel" name="correoLabel" class="form-control col-md-8  " [(ngModel)]="dominio" 
                     placeholder="" disabled 

@@ -35,17 +35,19 @@ export class PrincipalComponent implements OnInit {
 
 
   //constructor del componente principal
-  constructor(
+  constructor
+  (
     private _route: ActivatedRoute,
     private _router: Router,
     private _servUsuario: ServicioUsuario,
     private _servDepa: ServicioDepartamento
-  ) {
+  ) 
+  {
     this.usuario = new Usuario('', '', '', '', '', '', '');
     this.usuarioRegistrado = new Usuario('', '', '', '', '', '', '');
     this.confirmaContra = '';
     this.userExist = false;
-    this.dominio = "@coopesparta.fi.cr" + this.usuario.correo;
+    this.dominio = "@coopesparta.fi.cr";
   }
 
   //cambiar valor del check para recordar credenciales
@@ -102,7 +104,9 @@ export class PrincipalComponent implements OnInit {
           let co = response.message.correo;;
           this.correo = co;
           this.userExist = true;
+          $('#input-correo').css("border-left", "5px solid #a94442");
         } else {
+          $('#input-correo').css("border-left", "5px solid #42A948");
           console.log('no existe');
           console.log(response.message);
           this.correo = null;
@@ -326,6 +330,7 @@ export class PrincipalComponent implements OnInit {
     }
   }
 
+ //obtener la lista de departamentos
 obtenerDepartamentos() {
     this._servDepa.obtenerDepartamento().subscribe(
       response => {
