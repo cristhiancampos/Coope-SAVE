@@ -131,14 +131,6 @@
                     </ul>
                   </div>
                 </div>
-                <!-- <div class="control-group form-group">
-                  <div class="controls">
-                    <div class="controls">
-                      <textarea class="form-control" #reporte="ngModel" name= "reporte" [(ngModel)]="sala.reporte" placeholder="Reporte algún problema de la sala" rows="3"></textarea>
-                      <p class="help-block"></p>
-                    </div>
-                  </div>
-                </div>-->
                 <div style="float: right">
                   <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" (click)="salir()">Salir</button>
                   <button id="btn-add" type="submit" [disabled]="!adminSala.form.valid || nombreExist" class="btn btn-success">Confirmar</button>
@@ -217,7 +209,7 @@ aria-hidden="true">
                       </label>
                     </li>
                     <li>
-                      <label style="float: left;margin-top: -2.3em;">{{estadoMensaje}}</label>
+                      <label style="float: left;margin-top: -2.3em;">{{estadoMensajEdit}}</label>
                     </li>
                   </ul>
                 </div>
