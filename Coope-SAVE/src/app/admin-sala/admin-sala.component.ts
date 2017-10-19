@@ -21,6 +21,7 @@ mostrarModal: boolean;
 nombreExistEdit: boolean;
 public estado =true;
 public estadoMensaje= 'Habilitado';
+public estadoMensajEdit= '';
 
   constructor(
     private _route: ActivatedRoute,
@@ -137,6 +138,8 @@ this._servSala.obtenerSala(_id).subscribe(
       this.salaEdit.descripcion = response.message[0].descripcion;
       this.salaEdit.estado = response.message[0].estado;
       this.salaEdit.reporte = response.message[0].reporte;
+
+      this.estadoMensajEdit= this.salaEdit.estado;
 
       this.abrirModal('#modalEditSala');
     } else {

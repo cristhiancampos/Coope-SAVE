@@ -351,6 +351,12 @@ obtenerDepartamentos() {
     );
 
   }
+
+
+
+
+
+  
  /* validarcontra(event: any) {
     if (this.usuario.contrasena) {
       if (this.usuario.contrasena.length < 8) {
@@ -379,7 +385,8 @@ obtenerDepartamentos() {
       }
     }
   }
-/*
+
+  /*
   tieneMayuscula(texto) {
     var patron = /[A-Z]/g;
     if (this.usuario.contrasena.match(patron)) {
