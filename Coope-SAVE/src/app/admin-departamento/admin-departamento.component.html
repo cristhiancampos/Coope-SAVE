@@ -4,7 +4,8 @@
     <div class="col-md-12">
       <h2> Admistración de Departamentos</h2>
       <hr>
-      <button class="btn btn-primary" style="float: left;margin-bottom: 6px" data-toggle="modal" data-target="#modalAdminDepa"> <i class="fa fa-plus" aria-hidden="true"></i></button>
+      <button class="btn btn-primary" style="float: left;margin-bottom: 6px" data-toggle="modal" data-target="#modalAdminDepa">
+         <i class="fa fa-plus" aria-hidden="true"></i></button>
     </div>
   </div>
 
@@ -13,7 +14,7 @@
       <table class="table">
         <thead class="thead-default">
           <tr>
-            <th class="th-color">#</th>
+            <th class="th-color"><i class="fa fa-list-ol" aria-hidden="true"></i></th>
             <th class="th-color">Nombre</th>
             <th class="th-color" style="text-align: center">Color</th>
             <th class="th-color">Estado</th>
@@ -30,7 +31,7 @@
             </th>
             <th>{{departamento.estado}}</th>
             <th style="text-align: center">
-              <button class="btn btn-primary btn-accion" (click)="obtenerDepartamento(departamento._id)"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
+              <button class="btn btn-primary btn-accion" data-toggle="modal" data-target="#modalEditDepartamento" (click)="obtenerDepartamento(departamento._id)"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
               <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
             </th>
           </tr>
@@ -93,7 +94,7 @@
   <div class="modal-dialog bd-example-modal-sm " role="document">
     <div class="modal-content">
       <div class="modal-header" style="background: #0069d9;color:#fff">
-        <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Agregar Departamento</h5>
+        <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-briefcase" aria-hidden="true"></i>&nbsp;&nbsp;Agregar Departamento</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cerrarModal('#modalAdminDepa')"> 
         <span aria-hidden="true">&times;</span>
       </button>
@@ -179,7 +180,7 @@ aria-hidden="true">
 <div class="modal-dialog bd-example-modal-sm " role="document">
   <div class="modal-content">
     <div class="modal-header" style="background: #0069d9;color:#fff">
-      <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Editar Departamento</h5>
+      <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-briefcase" aria-hidden="true"></i>&nbsp;&nbsp;Editar Departamento</h5>
       <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cerrarModal('#modalEditDepartamento')"> 
       <span aria-hidden="true">&times;</span>
     </button>
@@ -198,7 +199,7 @@ aria-hidden="true">
       <div class="col-md-12">
         <div class="row">
           <div class="col-md-12">
-            <form #adminDepartamento="ngForm" (ngSubmit)="modificarDepartamento()">
+            <form #adminDepartamentoEdit="ngForm" (ngSubmit)="modificarDepartamento()">
               <div class="control-group form-group">
                 <div class="controls">
                   <input id="input-nombre" type="text" class="form-control"  #nombre="ngModel" name= "nombre" [(ngModel)]="departamentoEdit.nombre" 
@@ -230,12 +231,12 @@ aria-hidden="true">
                 <div class="controls ">
                   <ul>
                     <li style="margin-left: -37px;"><label class="switch">
-                      <input type="checkbox" checked (change)="cambiarEstado()">
+                      <input type="checkbox" [checked]='estadoEdicion' (change)="cambiarEstadoEdicion($event)" >
                       <span class="slider round"></span>
                     </label>
                     </li>
                     <li>
-                        <label style="float: left;margin-top: -2.3em;">{{estadoMensaje}}</label>
+                        <label style="float: left;margin-top: -2.3em;">{{estadoMensajEdit}}</label>
                       </li>
                     
                   </ul>
@@ -244,7 +245,7 @@ aria-hidden="true">
               <div id="success"></div>
               <div style="float: right">
                   <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" (click)="cerrarModal('#modalEditDepartamento')">Salir</button>   
-                  <button id="btn-add" type="submit" [disabled]="!adminDepartamento.form.valid" class="btn btn-success" >Confirmar</button>
+                  <button id="btn-add" type="submit" [disabled]="!adminDepartamentoEdit.form.valid || nombreExist" class="btn btn-success" >Confirmar</button>
                 </div>
             </form>
           </div>

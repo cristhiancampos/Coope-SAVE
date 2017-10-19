@@ -14,7 +14,7 @@
       <table class="table">
         <thead class="thead-default">
           <tr>
-            <th class="th-color">#</th>
+            <th class="th-color"><i class="fa fa-list-ol" aria-hidden="true"></i></th>
             <th class="th-color">Nombre</th>
             <th class="th-color">Cupo</th>
             <th class="th-color">Descripción</th>
@@ -32,7 +32,7 @@
             <th>{{sala.estado}}</th>
             <th>{{sala.reporte}}</th>
             <th style="text-align: center">
-              <button class="btn btn-primary btn-accion" (click)="obtenerSala(sala._id)" ><i class="fa fa-pencil" aria-hidden="true"></i> </button>
+              <button class="btn btn-primary btn-accion" data-toggle="modal" data-target="#modalEditSala" (click)="obtenerSala(sala._id)" ><i class="fa fa-pencil" aria-hidden="true"></i> </button>
               <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
             </th>
           </tr>
@@ -118,7 +118,7 @@
                   </div>
                 </div>
                 <div class="control-group form-group">
-                  <div class="controls">
+               <div class="controls">
                     <ul>
                       <li style="margin-left: -37px;"> <label class="switch">
                           <input type="checkbox" checked (change)="cambiarEstado()">
@@ -172,7 +172,7 @@ aria-hidden="true">
       <div class="col-md-12">
         <div class="row">
           <div class="col-md-12">
-            <form #adminSala="ngForm" (ngSubmit)="modificarSala()">
+            <form #adminSalaEdit="ngForm" (ngSubmit)="modificarSala()">
               <div class="contrrol-group form-group">
                 <div class="controls">
                   <input id="input-nombre" type="text" class="form-control" #nombre="ngModel" name="nombre" [(ngModel)]="salaEdit.nombre" placeholder="Nombre"
@@ -204,7 +204,7 @@ aria-hidden="true">
                 <div class="controls">
                   <ul>
                     <li style="margin-left: -37px;"> <label class="switch">
-                        <input type="checkbox" checked (change)="cambiarEstado()">
+                        <input type="checkbox" [checked]='estadoEdicion' (change)="cambiarEstadoEdicion($event)">
                         <small class="slider round"></small>
                       </label>
                     </li>
@@ -224,7 +224,7 @@ aria-hidden="true">
               </div>
               <div style="float: right">
                 <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" (click)="cerrarModal('#modalEditSala')">Salir</button>
-                <button id="btn-add" type="submit" [disabled]="!adminSala.form.valid || nombreExist" class="btn btn-success">Confirmar</button>
+                <button id="btn-Edit" type="submit" [disabled]="!adminSalaEdit.form.valid || nombreExist" class="btn btn-success">Confirmar</button>
               </div>
             </form>
           </div>

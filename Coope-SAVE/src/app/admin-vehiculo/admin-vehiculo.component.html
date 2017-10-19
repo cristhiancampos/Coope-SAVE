@@ -13,7 +13,7 @@
       <table class="table">
         <thead class="thead-default">
           <tr>
-            <th class="th-color">#</th>
+            <th class="th-color"><i class="fa fa-list-ol" aria-hidden="true"></i></th>
             <th class="th-color">Placa</th>
             <th class="th-color">Tipo</th>
             <th class="th-color">Marca</th>
@@ -35,7 +35,7 @@
             <th>{{vehiculo.estado}}</th>
             <th>{{vehiculo.reporte}}</th>
             <th style="text-align: center">
-              <button class="btn btn-primary btn-accion" (click)="obtenerVehiculo(vehiculo._id)"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
+              <button class="btn btn-primary btn-accion" data-toggle="modal" data-target="#modalEditVehiculo"  (click)="obtenerVehiculo(vehiculo._id)"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
               <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
             </th>
           </tr>         
@@ -67,12 +67,12 @@
 </div>
 
 <!-- Seccion del Modal: Agregar nueva Sala -->
-<div class="modal fade bd-example-modal-sm " id="modalAdminVehiculo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade bd-example-modal-sm " id="modalAdminVehiculo" tabindex="-1" role="dialog" aria-labelledby="modalAdminVehiculo"
 aria-hidden="true">
 <div class="modal-dialog bd-example-modal-sm " role="document">
   <div class="modal-content">
     <div class="modal-header" style="background: #0069d9;color:#fff">
-      <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-car" aria-hidden="true"></i>&nbsp;&nbsp;Agregar Vehiculo</h5>
+      <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-car" aria-hidden="true"></i>&nbsp;&nbsp;Agregar Vehículo</h5>
       <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="salir()"> 
         <small aria-hidden="true">&times;</small>
       </button>
@@ -144,13 +144,6 @@ aria-hidden="true">
                   </ul>
                 </div>
               </div>
-              <!-- <div class="control-group form-group">
-                <div class="controls">
-                  <div class="controls">
-                    <textarea class="form-control" #reporte="ngModel" name= "reporte" [(ngModel)]="vehiculo.reporte" placeholder="Reporte algún problema de la sala" rows="3"></textarea>
-                    </div>
-                </div>
-              </div> -->
               <div id="success"></div>
               <div style="float: right">
                   <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" (click)="salir()">Salir</button>   
@@ -170,12 +163,12 @@ aria-hidden="true">
 
 
 <!-- Seccion del Modal: Modificar Vehiculo -->
-<div class="modal fade bd-example-modal-sm " id="modalEditVehiculo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade bd-example-modal-sm" id="modalEditVehiculo" tabindex="-1" role="dialog" aria-labelledby="modalEditVehiculo"
 aria-hidden="true">
 <div class="modal-dialog bd-example-modal-sm " role="document">
   <div class="modal-content">
     <div class="modal-header" style="background: #0069d9;color:#fff">
-      <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-car" aria-hidden="true"></i>&nbsp;&nbsp;Editar Vehiculo</h5>
+      <h5 class="modal-title" id="modalEditVehiculo"><i class="fa fa-car" aria-hidden="true"></i>&nbsp;&nbsp;Editar Vehículo</h5>
       <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cerrarModal('#modalEditVehiculo')"> 
         <small aria-hidden="true">&times;</small>
       </button>
@@ -194,7 +187,7 @@ aria-hidden="true">
       <div class="col-md-12">
         <div class="row">
           <div class="col-md-12">
-            <form #adminVehiculo="ngForm" (ngSubmit)="modificarVehiculo()">
+            <form #adminVehiculoEdit="ngForm" (ngSubmit)="modificarVehiculo()">
               <div class="control-group form-group">
                 <div class="controls">
                   <input type="text" class="form-control" #tipo="ngModel" name= "tipo" [(ngModel)]="vehiculoEdit.tipo" placeholder="Tipo de Vehiculo" required >
@@ -237,12 +230,12 @@ aria-hidden="true">
                 <div class="controls">
                   <ul>
                     <li style="margin-left: -37px;"> <label class="switch">
-                        <input type="checkbox" checked (change)="cambiarEstado()">
+                        <input type="checkbox" [checked]='estadoEdicion' (change)="cambiarEstadoEdicion()">
                         <small class="slider round"></small>
                       </label>
                     </li>
                     <li>
-                      <label style="float: left;margin-top: -2.3em;">{{estadoMensaje}}</label>
+                      <label style="float: left;margin-top: -2.3em;">{{estadoMensajEdit}}</label>
                     </li>
                   </ul>
                 </div>
@@ -257,7 +250,7 @@ aria-hidden="true">
               <div id="success"></div>
               <div style="float: right">
                   <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" (click)="cerrarModal('#modalEditVehiculo')">Salir</button>   
-                  <button id="btn-add" type="submit" [disabled]="!adminVehiculo.form.valid || placaExist" class="btn btn-success" >Confirmar</button>
+                  <button id="btn-add" type="submit" [disabled]="!adminVehiculoEdit.form.valid || placaExist" class="btn btn-success" >Confirmar</button>
                 </div>
             </form>
           </div>

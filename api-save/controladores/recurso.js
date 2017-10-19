@@ -93,10 +93,26 @@ function obtenerRecursos(req, res){
     }
   }).sort('number'); 
 }
+
+function obtenerRecurso(req, res){
+  var recursoId = req.params.id;
+  Recurso.find({_id: recursoId},(err,recurso)=>{
+    if(err){
+      res.status(500).send({message:'Error en la petición'});
+    }else{
+        if(!recurso){
+            res.status(404).send({message:'No existen recursos registrados en el sistema con ese código'});
+        }else{
+            res.status(200).send({message:recurso});
+        }
+    }
+  });
+}
     module.exports = {
         
         agregarRecurso,
         validarRecurso,
-        obtenerRecursos
+        obtenerRecursos,
+        obtenerRecurso
        
       };

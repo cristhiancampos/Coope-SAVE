@@ -19,7 +19,9 @@ export class AdminDepartamentoComponent implements OnInit {
   nombreExist: boolean;
   mostralModal: boolean;
   public estado = true;
+  public estadoEdicion: boolean;
   public estadoMensaje = 'Habilitado';
+  public estadoMensajEdit = '';
 
   constructor(
     private _route: ActivatedRoute,
@@ -43,6 +45,18 @@ export class AdminDepartamentoComponent implements OnInit {
     } else {
       this.estadoMensaje = 'Deshabilitado';
       this.departamento.estado = this.estadoMensaje;
+    }
+  }
+
+  cambiarEstadoEdicion(event: any) {
+    //alert(event.target.checked);
+    this.estadoEdicion = !this.estadoEdicion;
+    if (this.estadoEdicion) {
+      this.estadoMensajEdit = 'Habilitado';
+      this.departamentoEdit.estado = this.estadoMensaje;
+    } else {
+      this.estadoMensajEdit = 'Deshabilitado';
+      this.departamentoEdit.estado = this.estadoMensaje;
     }
   }
 
@@ -129,8 +143,14 @@ export class AdminDepartamentoComponent implements OnInit {
           this.departamentoEdit.color = response.message[0].color;
           this.departamentoEdit.estado = response.message[0].estado;
         
+          this.estadoMensajEdit = this.departamentoEdit.estado;
+          if (this.departamentoEdit.estado == 'Habilitado') {
+            this.estadoEdicion = true;
+          } else {
+            this.estadoEdicion = false;
+          }
     
-          this.abrirModal('#modalEditDepartamento');
+         // this.abrirModal('#modalEditDepartamento');
         } else {
           console.log('No se ha encontrado el departamento');
           console.log(response.message);

@@ -200,6 +200,7 @@ export class PrincipalComponent implements OnInit {
               }
             }
           }, error => {
+            this.mensajeError='Error de conexión';
             var errorMensaje = <any>error;
 
             if (errorMensaje != null) {
@@ -211,6 +212,7 @@ export class PrincipalComponent implements OnInit {
         );
       }
     }, error => {
+      this.mensajeError='Error de conexión';
       var errorMensaje = <any>error;
       if (errorMensaje != null) {
         var body = JSON.parse(error._body);
@@ -270,31 +272,36 @@ export class PrincipalComponent implements OnInit {
                 }
               }
             }, error => {
-              var errorMensaje = <any>error;
-              if (errorMensaje != null) {
-                var body = JSON.parse(error._body);
-                this.mensajeError = body.message;
-               // this.verError = true;
-                $('#nav-user').text(' ');
-                this.abrirModal('#loginModal');
-                this.mmostrar = false;
-              }
+             this.mensajeError='Error de conexión'
+              $('#nav-user').text(' ');
+              this.abrirModal('#loginModal');
+              this.mmostrar = false;
+              // var errorMensaje = <any>error;
+              // if (errorMensaje != null) {
+              //   var body = JSON.parse(error._body);
+              //   this.mensajeError = body.message;
+              //  // this.verError = true;
+              //   // $('#nav-user').text(' ');
+              //   // this.abrirModal('#loginModal');
+              //   // this.mmostrar = false;
+              // }
             }
           );
         }
       }, error => {
-        var errorMensaje = <any>error;
-        if (errorMensaje != null) {
-          var body = JSON.parse(error._body);
-          this.mensajeError = body.message;
-         // this.verError = true;
-          $('#nav-user').text(' ');
-          this.abrirModal('#loginModal');
-          this.mmostrar = false;
-        }
+        this.mensajeError='Error de conexión';
+        $('#nav-user').text(' ');
+        this.abrirModal('#loginModal');
+        this.mmostrar = false;
+        // var errorMensaje = <any>error;
+        // if (errorMensaje != null) {
+        //   var body = JSON.parse(error._body);
+        //   this.mensajeError = body.message;
+        // }
       }
       );
     } else {
+      this.mensajeError='Error de conexión';
       $('#nav-user').text(' ');
       this.abrirModal('#loginModal');
       this.mmostrar = false;

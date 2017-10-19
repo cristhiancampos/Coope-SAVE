@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery';
 import { ServicioRecursos } from '../servicios/recurso';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import {Recurso} from '../modelos/recursos';
+import { Recurso } from '../modelos/recursos';
 @Component({
   selector: 'app-admin-recurso',
   templateUrl: './admin-recurso.component.html',
@@ -12,45 +12,62 @@ import {Recurso} from '../modelos/recursos';
 export class AdminRecursoComponent implements OnInit {
 
   public recurso: Recurso;
- // codRecursos= '';
+  public recursoEdit: Recurso;
+  // codRecursos= '';
   codRecursosExist: boolean;
   public recursos = [];
-  public estado =true;
-  public estadoMensaje= 'Habilitado';
-  
+  public estado = true;
+  public estadoEdicion: boolean;
+  public estadoMensaje = 'Habilitado';
+  public estadoMensajEdit = '';
+
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
     private _servRecurso: ServicioRecursos
-  ) {   
-    this.recurso= new Recurso('','','','',this.estadoMensaje,'');
-   }
+  ) {
+    this.recurso = new Recurso('', '', '', '', this.estadoMensaje, '');
+    this.recursoEdit = new Recurso('', '', '', '', '', '');
+  }
 
   ngOnInit() {
-    this.obtenerRecursos(); 
-   }
-   cambiarEstado(){
-    this.estado =!this.estado;
-    if(this.estado){
-      this.estadoMensaje= 'Habilitado';
-     this.recurso.estado=this.estadoMensaje;
-    }else{
-      this.estadoMensaje= 'Deshabilitado';
-      this.recurso.estado=this.estadoMensaje;
-    } 
+    this.obtenerRecursos();
   }
-  agregarRecurso(){
+  cambiarEstado() {
+    this.estado = !this.estado;
+    if (this.estado) {
+      this.estadoMensaje = 'Habilitado';
+      this.recurso.estado = this.estadoMensaje;
+    } else {
+      this.estadoMensaje = 'Deshabilitado';
+      this.recurso.estado = this.estadoMensaje;
+    }
+  }
+
+  cambiarEstadoEdicion(event: any) {
+    //alert(event.target.checked);
+    this.estadoEdicion = !this.estadoEdicion;
+    if (this.estadoEdicion) {
+      this.estadoMensajEdit = 'Habilitado';
+      this.recursoEdit.estado = this.estadoMensaje;
+    } else {
+      this.estadoMensajEdit = 'Deshabilitado';
+      this.recursoEdit.estado = this.estadoMensaje;
+    }
+  }
+
+  agregarRecurso() {
     let codigoActivo = this.recurso.codigoActivo.trim().toUpperCase();
-    this.recurso.codigoActivo=codigoActivo;
+    this.recurso.codigoActivo = codigoActivo;
     this._servRecurso.registrarRecurso(this.recurso).subscribe(
       response => {
         let recurso = response.message;
-        if (!response.message) {    
+        if (!response.message) {
           alert('Error al registrar la recurso');
         } else {
           console.log(response.message);
           alert('recurso registrado exitosamente');
-          this.recurso= new Recurso('','','','',this.estadoMensaje,'');
+          this.recurso = new Recurso('', '', '', '', this.estadoMensaje, '');
           this.cerrarModal("#modalAdminRecurso");
           this.obtenerRecursos();
         }
@@ -60,59 +77,94 @@ export class AdminRecursoComponent implements OnInit {
           var body = JSON.parse(error._body);
         }
       }
-    );   
+    );
   }
 
-validarRecurso() {
-  let codigoActivo = this.recurso.codigoActivo.trim().toUpperCase();
-  this.recurso.codigoActivo=codigoActivo;
-  this._servRecurso.validarRecurso(this.recurso).subscribe(
-    response => {
-      if (response.message) {
-        console.log(response.message);
-        let sala = response.message;
-       // this.nombre = sala;
-        this.codRecursosExist = true;
-        $('#input-codigo').css("border-left", "5px solid #a94442");
-      } else {
-        $('#input-codigo').css("border-left", "5px solid #42A948");
-        console.log('no existe recurso');
-        console.log(response.message);
-      //  this.nombre = null;
-        this.codRecursosExist = false;
-      }
-    }, error => {
-      var errorMensaje = <any>error;
+  validarRecurso() {
+    let codigoActivo = this.recurso.codigoActivo.trim().toUpperCase();
+    this.recurso.codigoActivo = codigoActivo;
+    this._servRecurso.validarRecurso(this.recurso).subscribe(
+      response => {
+        if (response.message) {
+          console.log(response.message);
+          let sala = response.message;
+          // this.nombre = sala;
+          this.codRecursosExist = true;
+          $('#input-codigo').css("border-left", "5px solid #a94442");
+        } else {
+          $('#input-codigo').css("border-left", "5px solid #42A948");
+          console.log('no existe recurso');
+          console.log(response.message);
+          //  this.nombre = null;
+          this.codRecursosExist = false;
+        }
+      }, error => {
+        var errorMensaje = <any>error;
 
-      if (errorMensaje != null) {
-        var body = JSON.parse(error._body);
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+        }
       }
-    }
-  );
-}
-obtenerRecursos() {
-  this._servRecurso.obtenerRecursos().subscribe(
-    response => {
-      if (response.message) {
-        console.log(response.message);
-      this.recursos =response.message;
-      } else {
-        console.log('ho hay recursos registrados');
-        console.log(response.message);
-      }
-    }, error => {
-      var errorMensaje = <any>error;
-      console.log('Error al tratar de obtener los Recursos');
-      if (errorMensaje != null) {
-        var body = JSON.parse(error._body);
-      }
-    }
-  );
-}
+    );
+  }
 
-onfocusRecurso(){
- // this.codRecursosExist= false;
-}
+  obtenerRecursos() {
+    this._servRecurso.obtenerRecursos().subscribe(
+      response => {
+        if (response.message) {
+          console.log(response.message);
+          this.recursos = response.message;
+        } else {
+          console.log('ho hay recursos registrados');
+          console.log(response.message);
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+        console.log('Error al tratar de obtener los Recursos');
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+        }
+      }
+    );
+  }
+
+  obtenerRecurso(_id: any) {
+    this._servRecurso.obtenerRecurso(_id).subscribe(
+      response => {
+        if (response.message[0]._id) {
+          console.log(response.message[0].cupo);
+          //alert(response.message.nombre);
+          this.recursoEdit._id = response.message[0]._id;
+          this.recursoEdit.nombre = response.message[0].nombre;
+          this.recursoEdit.codigoActivo = response.message[0].codigoActivo;
+          this.recursoEdit.descripcion = response.message[0].descripcion;
+          this.recursoEdit.estado = response.message[0].estado;
+          this.recursoEdit.reporte = response.message[0].reporte;
+
+          this.estadoMensajEdit = this.recursoEdit.estado;
+          if (this.recursoEdit.estado == 'Habilitado') {
+            this.estadoEdicion = true;
+          } else {
+            this.estadoEdicion = false;
+          }
+          // this.abrirModal('#modalEditSala');
+        } else {
+          console.log('No se ha encontrado la Sala');
+          console.log(response.message);
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+        console.log('Error al tratar de obtener las s445555ala');
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+        }
+      }
+    );
+  }
+  onfocusRecurso() {
+    // this.codRecursosExist= false;
+  }
+  modificarRecurso() { }
 
   cerrarModal(modalId: any) {
     $(".modal-backdrop").remove();

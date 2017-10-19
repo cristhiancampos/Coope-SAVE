@@ -20,7 +20,10 @@ export class AdminVehiculoComponent implements OnInit {
   placa= '';
   public vehiculos = [];
   public estado =true;
+  public estadoEdicion: boolean;
   public estadoMensaje= 'Habilitado';
+  public estadoMensajEdit = '';
+  
   //public existe=true;
   constructor(
     private _route: ActivatedRoute,
@@ -44,6 +47,17 @@ export class AdminVehiculoComponent implements OnInit {
       this.estadoMensaje= 'Deshabilitado';
       this.vehiculo.estado=this.estadoMensaje;
     } 
+  }
+  cambiarEstadoEdicion(event: any) {
+    //alert(event.target.checked);
+    this.estadoEdicion = !this.estadoEdicion;
+    if (this.estadoEdicion) {
+      this.estadoMensajEdit = 'Habilitado';
+      this.vehiculoEdit.estado = this.estadoMensaje;
+    } else {
+      this.estadoMensajEdit = 'Deshabilitado';
+      this.vehiculoEdit.estado = this.estadoMensaje;
+    }
   }
 
   agregarVehiculo(){
@@ -109,15 +123,10 @@ obtenerVehiculos() {
     response => {
       if (response.message) {
         console.log(response.message);
-      //   let carro = response.message;
-      //   this.placa = carro;
-      //   this.placaExist = true;
       this.vehiculos =response.message;
       } else {
         console.log('ho hay vehiculos registrados');
         console.log(response.message);
-        // this.placa = null;
-        // this.placaExist = false;
       }
     }, error => {
       var errorMensaje = <any>error;
@@ -135,7 +144,6 @@ obtenerVehiculo(_id: any){
     response => {
       if (response.message[0]._id) {
         console.log(response.message[0].cupo);
-        //alert(response.message.nombre);
         this.vehiculoEdit._id = response.message[0]._id;
         this.vehiculoEdit.placa = response.message[0].placa;
         this.vehiculoEdit.tipo = response.message[0].tipo;
@@ -144,8 +152,15 @@ obtenerVehiculo(_id: any){
         this.vehiculoEdit.kilometraje = response.message[0].kilometraje;
         this.vehiculoEdit.estado = response.message[0].estado;
         this.vehiculoEdit.reporte = response.message[0].reporte;
-  
-        this.abrirModal('#modalEditVehiculo');
+
+        this.estadoMensajEdit = this.vehiculoEdit.estado;
+        if (this.vehiculoEdit.estado == 'Habilitado') {
+          this.estadoEdicion = true;
+        } else {
+          this.estadoEdicion = false;
+        }
+       // this.cerrarModal('#modalEditVehiculo');
+       // this.abrirModal('#modalEditVehiculo');
       } else {
         console.log('No se ha encontrado el Vehiculo');
         console.log(response.message);
