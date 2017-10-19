@@ -13,10 +13,12 @@ import {Sala} from '../modelos/salas';
 export class AdminSalaComponent implements OnInit {
 
 public sala: Sala;
+public salaEdit: Sala;
 nombre= '';
 public salas = [];
 nombreExist: boolean;
 mostrarModal: boolean;
+nombreExistEdit: boolean;
 public estado =true;
 public estadoMensaje= 'Habilitado';
 
@@ -26,6 +28,7 @@ public estadoMensaje= 'Habilitado';
     private _servSala: ServicioSala
   ) { 
     this.mostrarModal= false;
+    this.salaEdit = new Sala('','','','','','');
     this.sala = new Sala('','','','',this.estadoMensaje,'-');
   }
 
@@ -120,6 +123,53 @@ obtenerSalas() {
     }
   );
 }
+
+obtenerSala(_id: any){
+
+this._servSala.obtenerSala(_id).subscribe(
+  response => {
+    if (response.message[0]._id) {
+      console.log(response.message[0].cupo);
+      //alert(response.message.nombre);
+      this.salaEdit._id = response.message[0]._id;
+      this.salaEdit.nombre = response.message[0].nombre;
+      this.salaEdit.cupo = response.message[0].cupo;
+      this.salaEdit.descripcion = response.message[0].descripcion;
+      this.salaEdit.estado = response.message[0].estado;
+      this.salaEdit.reporte = response.message[0].reporte;
+
+      this.abrirModal('#modalEditSala');
+    } else {
+      console.log('No se ha encontrado la Sala');
+      console.log(response.message);
+    }
+  }, error => {
+    var errorMensaje = <any>error;
+    console.log('Error al tratar de obtener las s445555ala');
+    if (errorMensaje != null) {
+      var body = JSON.parse(error._body);
+    }
+  }
+);
+}
+
+modificarSala(){}
+
+
+cerrarModal(modalId: any) {
+  $(".modal-backdrop").remove();
+  $('body').removeClass('modal-open');
+  $(modalId).removeClass('show');
+  $(modalId).css('display', 'none');
+}
+//abrir modal
+abrirModal(modalId: any) {
+  $('body').append('<div class="modal-backdrop fade show" ></div>');
+  $('body').addClass('modal-open');
+  $(modalId).addClass('show');
+  $(modalId).css('display', 'block');
+}
+
 mostrar(opcion:boolean) {
   if(!opcion){
   $(".modal-backdrop").remove();

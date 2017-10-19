@@ -14,7 +14,6 @@
         <thead class="thead-default">
           <tr>
             <th class="th-color">#</th>
-
             <th class="th-color">Correo</th>
             <th class="th-color">Nombre</th>
             <th class="th-color">Apellidos</th>
@@ -27,7 +26,7 @@
         <tbody style="font-family: 'Times New Roman', Times, serif">
           <tr *ngFor="let usuario of usuarios; let i = index">
             <th scope="row">{{i+1}}</th>
-            <th>@{{usuario.correo}}</th>
+            <th>{{usuario.correo}}</th>
             <th>{{usuario.nombre}}</th>
             <th>{{usuario.apellidos}}</th>
             <th>{{usuario.departamento}}</th>

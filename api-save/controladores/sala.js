@@ -70,9 +70,27 @@ function obtenerSalas(req, res){
   }).sort('number'); 
 }
 
+function obtenerSala(req, res){
+  var salaId = req.params.id;
+  Sala.find({_id: salaId},(err,sala)=>{
+    if(err){
+      res.status(500).send({message:'Error en la petición'});
+    }else{
+        if(!sala){
+            res.status(404).send({message:'No existen Salas registradas en el sistema'});
+        }else{
+            res.status(200).send({message:sala});
+        }
+    }
+  });
+
+  
+     
+}
+
 module.exports = {
     agregarSala,
     validarSala,
-    obtenerSalas
-    
+    obtenerSalas,
+    obtenerSala
   };
