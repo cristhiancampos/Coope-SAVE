@@ -5,11 +5,12 @@ import { NgModel } from '@angular/forms';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { ServicioUsuario } from '../servicios/usuario';
+import { ServicioDepartamento } from '../servicios/departamento';
 @Component({
   selector: 'app-principal',
   templateUrl: './principal.component.html',
   styleUrls: ['./principal.Component.css'],
-  providers: [ServicioUsuario]
+  providers: [ServicioUsuario,ServicioDepartamento]
 })
 export class PrincipalComponent implements OnInit {
   //identity = true;
@@ -30,13 +31,15 @@ export class PrincipalComponent implements OnInit {
   public dominio;
   public isMacthPass =false;
   public mensajeMacthPass='';
+  public departamentos=[];
 
 
   //constructor del componente principal
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
-    private _servUsuario: ServicioUsuario
+    private _servUsuario: ServicioUsuario,
+    private _servDepa: ServicioDepartamento
   ) {
     this.usuario = new Usuario('', '', '', '', '', '', '');
     this.usuarioRegistrado = new Usuario('', '', '', '', '', '', '');
@@ -67,6 +70,7 @@ export class PrincipalComponent implements OnInit {
   ngOnInit() {
     //this._router.navigate['/principal'];
     this.verificarCredenciales();
+    this.obtenerDepartamentos();
   }
   //olcultar mensaje de existencia de usuario
   onfocusCorreo() {
@@ -320,6 +324,27 @@ export class PrincipalComponent implements OnInit {
       this.isMacthPass = true;
       this.mensajeMacthPass='';
     }
+  }
+
+obtenerDepartamentos() {
+    this._servDepa.obtenerDepartamento().subscribe(
+      response => {
+        if (response.message) {
+          console.log(response.message);
+        this.departamentos =response.message;
+        } else {
+          console.log('ho hay departamentos registrados');
+          console.log(response.message);
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+        console.log('Error al tratar de obtener los departamentos');
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+        }
+      }
+    );
+
   }
  /* validarcontra(event: any) {
     if (this.usuario.contrasena) {
