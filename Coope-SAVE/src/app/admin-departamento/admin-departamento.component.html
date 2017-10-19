@@ -30,7 +30,7 @@
             </th>
             <th>{{departamento.estado}}</th>
             <th style="text-align: center">
-              <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
+              <button class="btn btn-primary btn-accion" (click)="obtenerDepartamento(departamento._id)"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
               <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
             </th>
           </tr>
@@ -94,7 +94,7 @@
     <div class="modal-content">
       <div class="modal-header" style="background: #0069d9;color:#fff">
         <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Agregar Departamento</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="salir()"> 
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cerrarModal('#modalAdminDepa')"> 
         <span aria-hidden="true">&times;</span>
       </button>
       </div>
@@ -170,4 +170,90 @@
       </div>
     </div>
   </div>
+</div>
+
+<!-- Modal de editar departamento -->
+
+<div class="modal fade bd-example-modal-sm " id="modalEditDepartamento" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog bd-example-modal-sm " role="document">
+  <div class="modal-content">
+    <div class="modal-header" style="background: #0069d9;color:#fff">
+      <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Editar Departamento</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cerrarModal('#modalEditDepartamento')"> 
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12">
+          <ol class="breadcrumb">
+            <li>
+              <a><img src="assets/img/logo.png" ></a>
+            </li>
+          </ol>
+        </div>
+      </div>
+      <!-- END BREADCRUMB-->
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-12">
+            <form #adminDepartamento="ngForm" (ngSubmit)="modificarDepartamento()">
+              <div class="control-group form-group">
+                <div class="controls">
+                  <input id="input-nombre" type="text" class="form-control"  #nombre="ngModel" name= "nombre" [(ngModel)]="departamentoEdit.nombre" 
+                  placeholder="Nombre" required (input)="validarDepartamento()" >
+                  <small *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" >
+                      <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El nombre es obligatorio
+                  </small> 
+                  <small *ngIf="nombreExist"><i class="fa fa-exclamation-circle" aria-hidden="true">
+                    </i> Ya existe un Departamento con ese nombre
+                  </small> 
+                </div>
+              </div>
+
+              <div class="control-group form-group">
+                <div class="row">
+
+                  <div class="col-md-2">
+                    <label> Color</label>
+                  </div>
+                  <div class="col-md-10">
+                    <input type="color" class="form-control"  #color="ngModel" name= "color" [(ngModel)]="departamentoEdit.color" style="padding: 0px" required>
+                    <span *ngIf="color.invalid && (color.dirty || color.touched)" >
+                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El color es obligatorio</span> 
+                    <p class="help-block"></p>
+                  </div>
+                </div>
+              </div>
+              <div class="control-group ">
+                <div class="controls ">
+                  <ul>
+                    <li style="margin-left: -37px;"><label class="switch">
+                      <input type="checkbox" checked (change)="cambiarEstado()">
+                      <span class="slider round"></span>
+                    </label>
+                    </li>
+                    <li>
+                        <label style="float: left;margin-top: -2.3em;">{{estadoMensaje}}</label>
+                      </li>
+                    
+                  </ul>
+                </div>
+              </div>
+              <div id="success"></div>
+              <div style="float: right">
+                  <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" (click)="cerrarModal('#modalEditDepartamento')">Salir</button>   
+                  <button id="btn-add" type="submit" [disabled]="!adminDepartamento.form.valid" class="btn btn-success" >Confirmar</button>
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+     
+    </div>
+  </div>
+</div>
 </div>

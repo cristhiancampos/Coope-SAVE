@@ -33,7 +33,7 @@ export class ServicioDepartamento{
         .map(res=>res.json());
     }
 
-    obtenerDepartamento()
+    obtenerDepartamentos()
     {
         // console.log(vehiculo);
         //  let json = JSON.stringify(vehiculo);
@@ -42,5 +42,17 @@ export class ServicioDepartamento{
         return this._http.get(this.url+'obtenerDepartamentos',{headers:headers})
         .map(res=>res.json());
     }
+
+    obtenerDepartamento(id:any){
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            //'Authorization':token
+        });
+        let options = new RequestOptions({headers:headers});
+        return this._http.get(this.url+'obtenerDepartamento/'+id,options)
+         .map(res=>res.json());
+
+    }
+
 
 }//Final de el export de clase

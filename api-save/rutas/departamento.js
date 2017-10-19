@@ -9,5 +9,6 @@ var md_auth = require('../middlewares/authenticated');
 api.post('/registrarDepartamento',ControladorDepartamento.agregarDepartamento);
 api.post('/validarDepartamento',ControladorDepartamento.validarDepartamento);
 api.get('/obtenerDepartamentos',ControladorDepartamento.obtenerDepartamentos);
+api.get('/obtenerDepartamento/:id',ControladorDepartamento.obtenerDepartamento);
 
 module.exports = api;

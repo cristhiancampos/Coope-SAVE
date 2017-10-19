@@ -332,7 +332,7 @@ export class PrincipalComponent implements OnInit {
 
  //obtener la lista de departamentos
 obtenerDepartamentos() {
-    this._servDepa.obtenerDepartamento().subscribe(
+    this._servDepa.obtenerDepartamentos().subscribe(
       response => {
         if (response.message) {
           console.log(response.message);

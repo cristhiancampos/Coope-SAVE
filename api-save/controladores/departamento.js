@@ -64,8 +64,26 @@ function obtenerDepartamentos(req, res) {
   }).sort('number');
 }
 
+function obtenerDepartamento(req, res){
+  var departamentoId = req.params.id;
+  Departamento.find({_id: departamentoId},(err,departamento)=>{
+    if(err){
+      res.status(500).send({message:'Error en la petición'});
+    }else{
+        if(!departamento){
+            res.status(404).send({message:'No existen Salas registradas en el sistema'});
+        }else{
+            res.status(200).send({message:departamento});
+        }
+    }
+  });
+}
+
+
 module.exports = {
   agregarDepartamento,
   validarDepartamento,
-  obtenerDepartamentos
+  obtenerDepartamentos,
+  obtenerDepartamento
+  
 };
