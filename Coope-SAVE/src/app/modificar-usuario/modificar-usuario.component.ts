@@ -21,10 +21,10 @@ export class ModificarUsuarioComponent implements OnInit {
 
 
   ngOnInit() {
-    $('body').append('<div class="modal-backdrop fade show" ></div>');
-    $('body').addClass('modal-open');
-    $('#exampleModal').addClass('show');
-    $('#exampleModal').css('display', 'block');
+    // $('body').append('<div class="modal-backdrop fade show" ></div>');
+    // $('body').addClass('modal-open');
+    // $('#exampleModal').addClass('show');
+    // $('#exampleModal').css('display', 'block');
   }
 
   mostrar() {
