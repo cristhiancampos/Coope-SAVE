@@ -139,6 +139,31 @@ function verificarCredenciales(req, res)
     }
   });
 
+}
+  function obtenerUsuarios(req, res){
+    Usuario.find({},(err,usuarios)=>{
+      if(err){
+        res.status(500).send({message:'Error en la petición'});
+      }else{
+          if(!usuarios){
+              res.status(404).send({message:'No existen usuarios registrados en el sistema'});
+          }else{
+              res.status(200).send({message:usuarios});
+          }
+      }
+    }).sort('number'); 
+  }
+  
+
+  module.exports = {
+    getUsuario,
+    agregarUsuario,
+    getCorreo,
+    loginUsuario,
+    verificarCredenciales,
+    obtenerUsuarios
+  };
+
   // Usuario.findOne({ correo: email.toLowerCase() }, (err, user) => {
   //   console.log(user);
   //   if (err) {
@@ -163,7 +188,7 @@ function verificarCredenciales(req, res)
   //     }
   //   }
   // });
-}
+
 // function updateUser(req, res){
 
 //   var userId = req.params.id;
@@ -233,10 +258,4 @@ function verificarCredenciales(req, res)
 //   });
 // }
 
-module.exports = {
-  getUsuario,
-  agregarUsuario,
-  getCorreo,
-  loginUsuario,
-  verificarCredenciales
-};
+
