@@ -43,4 +43,15 @@ export class ServicioVehiculo{
         return this._http.get(this.url+'obtenerVehiculos',{headers:headers})
         .map(res=>res.json());
     }
+
+    obtenerVehiculo(id:any){
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            //'Authorization':token
+        });
+        let options = new RequestOptions({headers:headers});
+        return this._http.get(this.url+'obtenerVehiculo/'+id,options)
+         .map(res=>res.json());
+
+    }
 }//Final de el export de clase

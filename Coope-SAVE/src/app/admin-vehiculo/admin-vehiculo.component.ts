@@ -14,6 +14,7 @@ import {Vehiculo} from '../modelos/vehiculo';
 })
 export class AdminVehiculoComponent implements OnInit {
 
+  public vehiculoEdit:  Vehiculo;
   public vehiculo: Vehiculo;
   placaExist: boolean;
   placa= '';
@@ -25,7 +26,8 @@ export class AdminVehiculoComponent implements OnInit {
     private _route: ActivatedRoute,
     private _router: Router,
     private _servVehiculo: ServicioVehiculo
-  ) { 
+  ) {
+    this.vehiculoEdit= new Vehiculo('','','','','','','','');
     this.vehiculo= new Vehiculo('','','','','','',this.estadoMensaje,'-');
   }
 
@@ -126,6 +128,40 @@ obtenerVehiculos() {
     }
   );
 }
+
+obtenerVehiculo(_id: any){
+  
+  this._servVehiculo.obtenerVehiculo(_id).subscribe(
+    response => {
+      if (response.message[0]._id) {
+        console.log(response.message[0].cupo);
+        //alert(response.message.nombre);
+        this.vehiculoEdit._id = response.message[0]._id;
+        this.vehiculoEdit.placa = response.message[0].placa;
+        this.vehiculoEdit.tipo = response.message[0].tipo;
+        this.vehiculoEdit.marca = response.message[0].marca;
+        this.vehiculoEdit.descripcion = response.message[0].descripcion;
+        this.vehiculoEdit.kilometraje = response.message[0].kilometraje;
+        this.vehiculoEdit.estado = response.message[0].estado;
+        this.vehiculoEdit.reporte = response.message[0].reporte;
+  
+        this.abrirModal('#modalEditVehiculo');
+      } else {
+        console.log('No se ha encontrado el Vehiculo');
+        console.log(response.message);
+      }
+    }, error => {
+      var errorMensaje = <any>error;
+      console.log('Error al tratar de obtener el Vehiculo');
+      if (errorMensaje != null) {
+        var body = JSON.parse(error._body);
+      }
+    }
+  );
+  }
+
+  modificarVehiculo(){}
+  
 
 
   cerrarModal(modalId: any) {

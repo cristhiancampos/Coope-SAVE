@@ -70,8 +70,28 @@ function obtenerVehiculos(req, res){
   }).sort('number'); 
 }
 
+function obtenerVehiculo(req, res){
+  var vehiculoId = req.params.id;
+  Vehiculo.find({_id: vehiculoId},(err,vehiculo)=>{
+    if(err){
+      res.status(500).send({message:'Error en la petición'});
+    }else{
+        if(!vehiculo){
+            res.status(404).send({message:'No existen Salas registradas en el sistema'});
+        }else{
+            res.status(200).send({message:vehiculo});
+        }
+    }
+  });
+
+  
+     
+}
+
+
 module.exports = {
   agregarVehiculo,
   validarVehiculo,
-  obtenerVehiculos
+  obtenerVehiculos,
+  obtenerVehiculo
 };

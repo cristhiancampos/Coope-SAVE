@@ -83,9 +83,6 @@ function obtenerSala(req, res){
         }
     }
   });
-
-  
-     
 }
 
 module.exports = {
