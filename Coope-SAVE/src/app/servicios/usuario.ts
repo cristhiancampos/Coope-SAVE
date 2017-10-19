@@ -130,5 +130,12 @@ export class ServicioUsuario {
         return this.token;
     }
 
+    obtenerUsuarios()
+    {
+        let headers = new Headers({'Content-Type':'application/json'});
+        return this._http.get(this.url+'obtenerUsuarios',{headers:headers})
+        .map(res=>res.json());
+    }
+
 
 }

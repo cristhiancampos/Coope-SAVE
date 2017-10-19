@@ -14,87 +14,31 @@
         <thead class="thead-default">
           <tr>
             <th class="th-color">#</th>
-            <th class="th-color">Código de Usuario</th>
+
+            <th class="th-color">Correo</th>
             <th class="th-color">Nombre</th>
             <th class="th-color">Apellidos</th>
             <th class="th-color">Departamento</th>
-            <th class="th-color">Tipo de Usuario</th>
-            <th class="th-color">Correo</th>
+            <th class="th-color">Rol</th>
             <th class="th-color">Estado</th>
             <th class="th-color" style="text-align: center">Acciones</th>
           </tr>
         </thead>
         <tbody style="font-family: 'Times New Roman', Times, serif">
-          <tr>
-            <th scope="row">1</th>
-            <th>COOPESPARTA/esolis</th>
-            <th>Esteban</th>
-            <th>Solis O</th>
-            <th>TI</th>
-            <th>Admin</th>
-            <th>@fff</th>
-            <th>Activo</th>
+          <tr *ngFor="let usuario of usuarios; let i = index">
+            <th scope="row">{{i+1}}</th>
+            <th>@{{usuario.correo}}</th>
+            <th>{{usuario.nombre}}</th>
+            <th>{{usuario.apellidos}}</th>
+            <th>{{usuario.departamento}}</th>
+            <th>{{usuario.rol}}</th>
+            <th>{{usuario.estado}}</th>
             <th style="text-align: center">
               <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
               <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
             </th>
           </tr>
-          <tr>
-            <th scope="row">2</th>
-            <th>COOPESPARTA/esolis</th>
-            <th>Esteban</th>
-            <th>Solis O</th>
-            <th>TI</th>
-            <th>Admin</th>
-            <th>@fff</th>
-            <th>Activo</th>
-            <th style="text-align: center">
-              <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
-            </th>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <th>COOPESPARTA/esolis</th>
-            <th>Esteban</th>
-            <th>Solis O</th>
-            <th>TI</th>
-            <th>Admin</th>
-            <th>@fff</th>
-            <th>Activo</th>
-            <th style="text-align: center">
-              <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
-            </th>
-          </tr>
-          <tr>
-            <th scope="row">4</th>
-            <th>COOPESPARTA/esolis</th>
-            <th>Esteban</th>
-            <th>Solis O</th>
-            <th>TI</th>
-            <th>Admin</th>
-            <th>@fff</th>
-            <th>Activo</th>
-            <th style="text-align: center">
-              <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
-            </th>
-          </tr>
-          <tr>
-            <th scope="row">5</th>
-            <th>COOPESPARTA/esolis</th>
-            <th>Esteban</th>
-            <th>Solis O</th>
-            <th>TI</th>
-            <th>Admin</th>
-            <th>@fff</th>
-            <th>Activo</th>
-            <th style="text-align: center">
-              <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
-            </th>
-          </tr>
+          
         </tbody>
       </table>
     </div>
