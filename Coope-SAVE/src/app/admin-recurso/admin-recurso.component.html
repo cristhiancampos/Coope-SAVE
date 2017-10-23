@@ -211,8 +211,8 @@ aria-hidden="true">
  
                <div class="control-group form-group">
                  <div class="controls">
-                   <input id="input-codigo" type="text" class="form-control" #codigo="ngModel" name= "codigo" [(ngModel)]="recursoEdit.codigoActivo"
-                    placeholder="Código del Activo" required (input)="validarRecurso()">
+                   <input id="input-cod-edit" type="text" class="form-control" #codigo="ngModel" name= "codigo" [(ngModel)]="recursoEdit.codigoActivo"
+                    placeholder="Código del Activo" required (input)="validarModificacion()">
                     <small *ngIf="codigo.invalid && (codigo.dirty || codigo.touched)">
                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El código del activo es obligatorio
                      </small>
