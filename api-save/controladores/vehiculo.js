@@ -7,7 +7,6 @@ function agregarVehiculo(req, res) {
   var vehiculo = new Vehiculo();//creamos un nuevo objeto vehiculo 
   var params = req.body;//obtenemos los datos de la peticion
   //llenamos el nuevo objeto usuario a agregar con los datos del request
-  console.log(params);
   vehiculo.tipo = params.tipo;
   vehiculo.marca = params.marca;
   vehiculo.placa = params.placa;
@@ -15,7 +14,8 @@ function agregarVehiculo(req, res) {
   vehiculo.kilometraje = params.kilometraje
   vehiculo.estado =params.estado;
   vehiculo.reporte = params.reporte;
-  console.log(vehiculo);
+  vehiculo.created_at = new Date();
+
   if (
     vehiculo.tipo != null && vehiculo.marca != null && vehiculo.placa != null && vehiculo.descripcion != null && vehiculo.kilometraje != null
     && vehiculo.estado != null) {
@@ -41,8 +41,8 @@ function agregarVehiculo(req, res) {
 function validarVehiculo(req, res) {
   var params = req.body;
   var placa = params.placa;
-  console.log(placa);
-  Vehiculo.findOne({ placa: placa }, (err, vehiculo) => {
+
+  Vehiculo.findOne({ placa: placa, estado: { $ne: "Eliminado" } }, (err, vehiculo) => {
     if (err) {
       res.status(200).send({ message: null });
     } else {
@@ -57,7 +57,7 @@ function validarVehiculo(req, res) {
 }
 
 function obtenerVehiculos(req, res){
-  Vehiculo.find({},(err,vehiculos)=>{
+  Vehiculo.find({ estado: { $ne: "Eliminado" } },(err,vehiculos)=>{
     if(err){
       res.status(500).send({message:'Error en la petición'});
     }else{
@@ -88,10 +88,27 @@ function obtenerVehiculo(req, res){
      
 }
 
+function eliminarVehiculo(req, res) {
+  var vehiculoId = req.params.id;
+  var update = req.body;
+  Vehiculo.findByIdAndUpdate(vehiculoId, { $set: { estado: 'Eliminado' } }, { new: true }, (err, vehiculoDeleted) => {
+    if (err) {
+      res.status(500).send({ message: 'Error al eliminar el vehículo' });
+    } else {
+      if (!vehiculoDeleted) {
+        res.status(404).send({ message: 'No se ha podido eliminar el vehículo' });
+      } else {
+        res.status(200).send({ message: vehiculoDeleted });
+      }
+    }
+  });
+}
+
 
 module.exports = {
   agregarVehiculo,
   validarVehiculo,
   obtenerVehiculos,
-  obtenerVehiculo
+  obtenerVehiculo,
+  eliminarVehiculo
 };

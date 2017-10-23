@@ -1,5 +1,5 @@
 .intro-message{
-  top:30%;background-color: transparent;position: absolute;z-index: 3000; text-align:center;
+  top:30%;background-color: transparent;position: absolute;z-index: 100; text-align:center;
 }
 .intro-divider {
     width: 400px;

@@ -4,3 +4,8 @@ footer {
     width: 100%;
     
 }
+#btn-user-opt {
+    color: #fff;
+    background-color: transparent; 
+     border-color: transparent; 
+}

@@ -30,13 +30,15 @@
             <th>{{recurso.estado}}</th>
             <th style="text-align: center">
               <button class="btn btn-primary btn-accion" data-toggle="modal" data-target="#modalAdminRecursoEdit" (click)="obtenerRecurso(recurso._id)"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete" (click)="obtenerRecurso(recurso._id)"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
             </th>
           </tr>
          
         </tbody>
       </table>
     </div>
+    <h5 *ngIf='recursos ==undefined || recursos.length==0'>No existen recursos registrados en el sistema.<br></h5> 
+    <hr *ngIf='recursos ==undefined || recursos.length==0'>
   </div>
 
   <!-- paginador-->
@@ -78,8 +80,8 @@
           <br><br>
           <h5>Está seguro que desea eliminar el recurso? </h5>
           <br>
-          <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-default btn-modal-suc" data-dismiss="modal">Confirmar</button>
+          <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" >Cancelar</button>
+          <button type="button" class="btn btn-default btn-modal-suc" data-dismiss="modal" (click)="eliminarRecurso()">Confirmar</button>
         <br>
         </div>
       </div>
@@ -93,7 +95,7 @@ aria-hidden="true">
   <div class="modal-content">
     <div class="modal-header" style="background: #0069d9;color:#fff">
       <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-laptop" aria-hidden="true"></i>&nbsp;&nbsp;Agregar Recurso</h5>
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="salir()"> 
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"> 
         <small aria-hidden="true">&times;</small>
       </button>
     </div>

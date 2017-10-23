@@ -10,5 +10,6 @@ api.post('/registrarRecurso',ControladorRecurso.agregarRecurso);
 api.post('/validarRecurso',ControladorRecurso.validarRecurso);
 api.get('/obtenerRecursos',ControladorRecurso.obtenerRecursos);
 api.get('/obtenerRecurso/:id',ControladorRecurso.obtenerRecurso);
+api.delete('/eliminarRecurso/:id', ControladorRecurso.eliminarRecurso);
 
 module.exports = api;

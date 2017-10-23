@@ -174,6 +174,28 @@ export class AdminSalaComponent implements OnInit {
 
   modificarSala() { }
 
+  eliminarSala(){
+    
+    this._servSala.eliminarSala(this.salaEdit._id).subscribe(
+      response => {
+
+        if (!response.message._id) {
+          alert('Error al elimar la Sala');
+        } else {
+          alert('Sala eliminada exitosamente');
+          this.salaEdit = new Sala('', '', '', '', '', '-');
+          this.obtenerSalas();
+        }
+      }, error => {
+        var alertMessage = <any>error;
+        if (alertMessage != null) {
+          var body = JSON.parse(error._body);
+          alert('Sala no eliminada');
+          //console.log(error);
+        }
+      }
+    );
+  }
 
   cerrarModal(modalId: any) {
     $(".modal-backdrop").remove();

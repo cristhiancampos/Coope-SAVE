@@ -41,6 +41,8 @@
         </tbody>
       </table>
     </div>
+    <h5 *ngIf='usuarios ==undefined || usuarios.length==0'>No existen usuarios registrados en el sistema.<br></h5> 
+    <hr *ngIf='usuarios ==undefined || usuarios.length==0'>
   </div>
 
   <!-- paginador-->

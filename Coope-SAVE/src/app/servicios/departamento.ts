@@ -35,9 +35,6 @@ export class ServicioDepartamento{
 
     obtenerDepartamentos()
     {
-        // console.log(vehiculo);
-        //  let json = JSON.stringify(vehiculo);
-        // let params = json; 
         let headers = new Headers({'Content-Type':'application/json'});
         return this._http.get(this.url+'obtenerDepartamentos',{headers:headers})
         .map(res=>res.json());
@@ -51,7 +48,17 @@ export class ServicioDepartamento{
         let options = new RequestOptions({headers:headers});
         return this._http.get(this.url+'obtenerDepartamento/'+id,options)
          .map(res=>res.json());
+    }
 
+    eliminarDepartamento(id:string)
+    {
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            //'Authorization':token
+        });
+        let options = new RequestOptions({headers:headers});
+        return this._http.delete(this.url+'eliminarDepartamento/'+id,options)
+         .map(res=>res.json());
     }
 
 

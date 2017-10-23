@@ -19,8 +19,11 @@ export class ModificarUsuarioComponent implements OnInit {
    }
 
 
-
+   public date = new Date();
+   public year = this.date.getFullYear();
+  
   ngOnInit() {
+    console.log('modificar usuario.ts cargado ...FECHA' + this.date + '.....año' + this.year);
     // $('body').append('<div class="modal-backdrop fade show" ></div>');
     // $('body').addClass('modal-open');
     // $('#exampleModal').addClass('show');

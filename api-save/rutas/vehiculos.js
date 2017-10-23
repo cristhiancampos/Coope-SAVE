@@ -10,6 +10,7 @@ api.post('/registrarVehiculo',ControladorVehiculo.agregarVehiculo);
 api.post('/validarVehiculo',ControladorVehiculo.validarVehiculo);
 api.get('/obtenerVehiculos',ControladorVehiculo.obtenerVehiculos);
 api.get('/obtenerVehiculo/:id',ControladorVehiculo.obtenerVehiculo);
+api.delete('/eliminarVehiculo/:id', ControladorVehiculo.eliminarVehiculo);
 
 
 module.exports = api;

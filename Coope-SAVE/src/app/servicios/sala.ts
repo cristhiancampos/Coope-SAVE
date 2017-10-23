@@ -53,4 +53,15 @@ export class ServicioSala{
          .map(res=>res.json());
 
     }
+
+    eliminarSala(id:string)
+    {
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            //'Authorization':token
+        });
+        let options = new RequestOptions({headers:headers});
+        return this._http.delete(this.url+'eliminarSala/'+id,options)
+         .map(res=>res.json());
+    }
 }//Final de el export de clase

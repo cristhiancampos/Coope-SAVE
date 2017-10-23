@@ -21,6 +21,8 @@ function agregarUsuario(req, res) {
   user.estado = 'Hablilitado';
   user.departamento = params.departamento;
   user.contrasena = params.contrasena;
+  user.created_at = new Date();
+  
 
   if (params.contrasena && user.contrasena != null) {
     //encriptar password

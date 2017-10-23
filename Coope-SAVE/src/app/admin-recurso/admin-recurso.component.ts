@@ -65,7 +65,6 @@ export class AdminRecursoComponent implements OnInit {
         if (!response.message) {
           alert('Error al registrar la recurso');
         } else {
-          console.log(response.message);
           alert('recurso registrado exitosamente');
           this.recurso = new Recurso('', '', '', '', this.estadoMensaje, '');
           this.cerrarModal("#modalAdminRecurso");
@@ -86,16 +85,11 @@ export class AdminRecursoComponent implements OnInit {
     this._servRecurso.validarRecurso(this.recurso).subscribe(
       response => {
         if (response.message) {
-          console.log(response.message);
           let sala = response.message;
-          // this.nombre = sala;
           this.codRecursosExist = true;
           $('#input-codigo').css("border-left", "5px solid #a94442");
-        } else {
+        } else {//no existe el recurso
           $('#input-codigo').css("border-left", "5px solid #42A948");
-          console.log('no existe recurso');
-          console.log(response.message);
-          //  this.nombre = null;
           this.codRecursosExist = false;
         }
       }, error => {
@@ -112,15 +106,11 @@ export class AdminRecursoComponent implements OnInit {
     this._servRecurso.obtenerRecursos().subscribe(
       response => {
         if (response.message) {
-          console.log(response.message);
           this.recursos = response.message;
-        } else {
-          console.log('ho hay recursos registrados');
-          console.log(response.message);
+        } else {//no hay recursos registrados
         }
       }, error => {
         var errorMensaje = <any>error;
-        console.log('Error al tratar de obtener los Recursos');
         if (errorMensaje != null) {
           var body = JSON.parse(error._body);
         }
@@ -132,8 +122,6 @@ export class AdminRecursoComponent implements OnInit {
     this._servRecurso.obtenerRecurso(_id).subscribe(
       response => {
         if (response.message[0]._id) {
-          console.log(response.message[0].cupo);
-          //alert(response.message.nombre);
           this.recursoEdit._id = response.message[0]._id;
           this.recursoEdit.nombre = response.message[0].nombre;
           this.recursoEdit.codigoActivo = response.message[0].codigoActivo;
@@ -147,14 +135,10 @@ export class AdminRecursoComponent implements OnInit {
           } else {
             this.estadoEdicion = false;
           }
-          // this.abrirModal('#modalEditSala');
-        } else {
-          console.log('No se ha encontrado la Sala');
-          console.log(response.message);
+        } else {//no se encontró el recurso
         }
       }, error => {
         var errorMensaje = <any>error;
-        console.log('Error al tratar de obtener las s445555ala');
         if (errorMensaje != null) {
           var body = JSON.parse(error._body);
         }
@@ -165,6 +149,28 @@ export class AdminRecursoComponent implements OnInit {
     // this.codRecursosExist= false;
   }
   modificarRecurso() { }
+
+  eliminarRecurso(){
+    
+    this._servRecurso.eliminarRecurso(this.recursoEdit._id).subscribe(
+      response => {
+
+        if (!response.message._id) {
+          alert('Error al elimar la Sala');
+        } else {
+          alert('Sala eliminada exitosamente');
+          this.recursoEdit = new Recurso('', '', '', '', '', '-');
+          this.obtenerRecursos();
+        }
+      }, error => {
+        var alertMessage = <any>error;
+        if (alertMessage != null) {
+          var body = JSON.parse(error._body);
+          alert('Sala no eliminada');
+        }
+      }
+    );
+  }
 
   cerrarModal(modalId: any) {
     $(".modal-backdrop").remove();

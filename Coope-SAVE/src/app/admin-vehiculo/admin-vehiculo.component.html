@@ -36,12 +36,14 @@
             <th>{{vehiculo.reporte}}</th>
             <th style="text-align: center">
               <button class="btn btn-primary btn-accion" data-toggle="modal" data-target="#modalEditVehiculo"  (click)="obtenerVehiculo(vehiculo._id)"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete" (click)="obtenerVehiculo(vehiculo._id)"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
             </th>
           </tr>         
         </tbody>
       </table>
     </div>
+    <h5 *ngIf='vehiculos ==undefined || vehiculos.length==0'>No existen vehiculos registrados en el sistema.<br></h5> 
+    <hr *ngIf='vehiculos ==undefined || vehiculos.length==0'>
   </div>
   <!-- paginador-->
   <nav aria-label="Page navigation example">
@@ -281,7 +283,7 @@ aria-hidden="true">
         <h5>Está seguro que desea eliminar el vehículo? </h5>
         <br>
         <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-default btn-modal-suc" data-dismiss="modal">Confirmar</button>
+        <button type="button" class="btn btn-default btn-modal-suc" data-dismiss="modal" (click)="eliminarVehiculo()">Confirmar</button>
       </div>
     </div>
   </div>

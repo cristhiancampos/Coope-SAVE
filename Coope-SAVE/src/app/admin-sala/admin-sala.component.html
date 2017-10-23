@@ -33,12 +33,14 @@
             <th>{{sala.reporte}}</th>
             <th style="text-align: center">
               <button class="btn btn-primary btn-accion" data-toggle="modal" data-target="#modalEditSala" (click)="obtenerSala(sala._id)" ><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete" (click)="obtenerSala(sala._id)"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
             </th>
           </tr>
         </tbody>
       </table>
     </div>
+    <h5 *ngIf='salas ==undefined || salas.length==0'>No existen salas registradas en el sistema.<br></h5> 
+  <hr *ngIf='salas ==undefined || salas.length==0'>
   </div>
 
   <!-- paginador-->
@@ -256,7 +258,7 @@ aria-hidden="true">
         <h5>Está seguro que desea eliminar la sala? </h5>
         <br>
         <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-default btn-modal-suc" data-dismiss="modal">Confirmar</button>
+        <button type="button" class="btn btn-default btn-modal-suc" data-dismiss="modal" (click)="eliminarSala()">Confirmar</button>
       </div>
     </div>
   </div>

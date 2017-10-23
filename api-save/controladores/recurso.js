@@ -12,8 +12,8 @@ function agregarRecurso(req, res) {
       recurso.descripcion = params.descripcion;
       recurso.reporte= params.reporte;
       recurso.estado = params.estado;
-     
-          console.log(recurso);
+      recurso.created_at = new Date();
+ 
           if (
             recurso.nombre != null && recurso.codigoActivo != null && recurso.descripcion != null
             && recurso.estado != null 
@@ -37,35 +37,12 @@ function agregarRecurso(req, res) {
           }
     }
 
-
-
-// function validarRecurso(req, res)
-// {
-//   var params = req.body;
-//   var codigoActivo = params.codigoActivo;
-
-//   console.log(params);
-  
-//   Recurso.findOne({ codigoActivo: codigoActivo }, (err, recurso) => {
-//     if (err) {
-//       res.status(200).send({ message: null });
-//     } else {
-//       if (!recurso) {
-//         res.status(200).send({ message: null });
-//       }
-//       else {
-//         res.status(200).send({ message: recurso });
-//       }
-//     }
-//   });
-// }
 function validarRecurso(req, res)
 {
   var params = req.body;
   var codigoActivo = params.codigoActivo;
-  console.log(codigoActivo);
 
- Recurso.findOne({ codigoActivo: codigoActivo }, (err, recurso) => {
+ Recurso.findOne({ codigoActivo: codigoActivo,estado: { $ne: "Eliminado" } }, (err, recurso) => {
     if (err) {
       res.status(200).send({ message: null });
     } else {
@@ -81,7 +58,7 @@ function validarRecurso(req, res)
 
 
 function obtenerRecursos(req, res){
-  Recurso.find({},(err,recursos)=>{
+  Recurso.find({ estado: { $ne: "Eliminado" } },(err,recursos)=>{
     if(err){
       res.status(500).send({message:'Error en la petición'});
     }else{
@@ -108,11 +85,27 @@ function obtenerRecurso(req, res){
     }
   });
 }
+
+function eliminarRecurso(req, res) {
+  var recursoId = req.params.id;
+  var update = req.body;
+  Recurso.findByIdAndUpdate(recursoId, { $set: { estado: 'Eliminado' } }, { new: true }, (err, recursoDeleted) => {
+    if (err) {
+      res.status(500).send({ message: 'Error al eliminar el recurso' });
+    } else {
+      if (!recursoDeleted) {
+        res.status(404).send({ message: 'No se ha podido elimina el recurso' });
+      } else {
+        res.status(200).send({ message: recursoDeleted });
+      }
+    }
+  });
+}
     module.exports = {
         
         agregarRecurso,
         validarRecurso,
         obtenerRecursos,
-        obtenerRecurso
-       
+        obtenerRecurso,
+        eliminarRecurso
       };

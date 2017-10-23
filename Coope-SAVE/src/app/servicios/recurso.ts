@@ -28,9 +28,6 @@ export class ServicioRecursos{
 
     validarRecurso(recurso)
     {
-        console.log('entroa al servicio');
-        console.log(recurso);
-        
          let json = JSON.stringify(recurso);
         let params = json; 
         let headers = new Headers({'Content-Type':'application/json'});
@@ -40,10 +37,6 @@ export class ServicioRecursos{
 
     obtenerRecursos()
     {
-        // console.log(vehiculo);
-        //  let json = JSON.stringify(vehiculo);
-        // let params = json; 
-        console.log("en el servicio");
         let headers = new Headers({'Content-Type':'application/json'});
         return this._http.get(this.url+'obtenerRecursos ',{headers:headers})
         .map(res=>res.json());
@@ -58,7 +51,17 @@ export class ServicioRecursos{
         let options = new RequestOptions({headers:headers});
         return this._http.get(this.url+'obtenerRecurso/'+id,options)
          .map(res=>res.json());
+    }
 
+    eliminarRecurso(id:string)
+    {
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            //'Authorization':token
+        });
+        let options = new RequestOptions({headers:headers});
+        return this._http.delete(this.url+'eliminarRecurso/'+id,options)
+         .map(res=>res.json());
     }
 
 }//Final de el export de clase

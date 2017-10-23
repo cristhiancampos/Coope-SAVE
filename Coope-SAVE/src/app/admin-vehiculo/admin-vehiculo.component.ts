@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery';
 import { ServicioVehiculo } from '../servicios/vehiculo';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import {Vehiculo} from '../modelos/vehiculo';
+import { Vehiculo } from '../modelos/vehiculo';
 
 @Component({
   selector: 'app-admin-vehiculo',
@@ -10,43 +10,43 @@ import {Vehiculo} from '../modelos/vehiculo';
   styleUrls: ['./admin-vehiculo.component.css'],
   providers: [ServicioVehiculo]
 
-  
+
 })
 export class AdminVehiculoComponent implements OnInit {
 
-  public vehiculoEdit:  Vehiculo;
+  public vehiculoEdit: Vehiculo;
   public vehiculo: Vehiculo;
   placaExist: boolean;
-  placa= '';
+  placa = '';
   public vehiculos = [];
-  public estado =true;
+  public estado = true;
   public estadoEdicion: boolean;
-  public estadoMensaje= 'Habilitado';
+  public estadoMensaje = 'Habilitado';
   public estadoMensajEdit = '';
-  
+
   //public existe=true;
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
     private _servVehiculo: ServicioVehiculo
   ) {
-    this.vehiculoEdit= new Vehiculo('','','','','','','','');
-    this.vehiculo= new Vehiculo('','','','','','',this.estadoMensaje,'-');
+    this.vehiculoEdit = new Vehiculo('', '', '', '', '', '', '', '');
+    this.vehiculo = new Vehiculo('', '', '', '', '', '', this.estadoMensaje, '-');
   }
 
   ngOnInit() {
-   this.obtenerVehiculos();
+    this.obtenerVehiculos();
   }
 
-  cambiarEstado(){
-    this.estado =!this.estado;
-    if(this.estado){
-      this.estadoMensaje= 'Habilitado';
-     this.vehiculo.estado=this.estadoMensaje;
-    }else{
-      this.estadoMensaje= 'Deshabilitado';
-      this.vehiculo.estado=this.estadoMensaje;
-    } 
+  cambiarEstado() {
+    this.estado = !this.estado;
+    if (this.estado) {
+      this.estadoMensaje = 'Habilitado';
+      this.vehiculo.estado = this.estadoMensaje;
+    } else {
+      this.estadoMensaje = 'Deshabilitado';
+      this.vehiculo.estado = this.estadoMensaje;
+    }
   }
   cambiarEstadoEdicion(event: any) {
     //alert(event.target.checked);
@@ -60,24 +60,21 @@ export class AdminVehiculoComponent implements OnInit {
     }
   }
 
-  agregarVehiculo(){
+  agregarVehiculo() {
     let placa = this.vehiculo.placa.trim().toUpperCase();
-    this.vehiculo.placa=placa;
+    this.vehiculo.placa = placa;
     this._servVehiculo.registrarVehiculo(this.vehiculo).subscribe(
       response => {
-        
+
         let vehiculo = response.vehiculo;
-       
-        if (!response.vehiculo.placa) {    
+
+        if (!response.vehiculo.placa) {
           alert('Error al registrar la vehiculo');
         } else {
           alert('vehiculo registrado exitosamente');
-          this.vehiculo= new Vehiculo('','','','','','',this.estadoMensaje,'-');
-          
+          this.vehiculo = new Vehiculo('', '', '', '', '', '', this.estadoMensaje, '-');
           this.cerrarModal("#modalAdminVehiculo")
-          console.log(vehiculo);
           this.obtenerVehiculos();
-          
         }
       }, error => {
         var alertMessage = <any>error;
@@ -90,94 +87,100 @@ export class AdminVehiculoComponent implements OnInit {
     );
   }
 
-validarVehiculo() {
-  let placa = this.vehiculo.placa.trim().toUpperCase();
-  this.vehiculo.placa=placa;
-  this._servVehiculo.validarVehiculo(this.vehiculo).subscribe(
-    response => {
-      if (response.message) {
-        console.log(response.message);
-        let carro = response.message;
-        this.placa = carro;
-        this.placaExist = true;
-        $('#input-placa').css("border-left", "5px solid #a94442");
-      } else {
-        $('#input-placa').css("border-left", "5px solid #42A948");
-        console.log('no existe vehiculo');
-        console.log(response.message);
-        this.placa = null;
-        this.placaExist = false;
-      }
-    }, error => {
-      var errorMensaje = <any>error;
-
-      if (errorMensaje != null) {
-        var body = JSON.parse(error._body);
-      }
-    }
-  );
-}
-
-obtenerVehiculos() {
-  this._servVehiculo.obtenerVehiculos().subscribe(
-    response => {
-      if (response.message) {
-        console.log(response.message);
-      this.vehiculos =response.message;
-      } else {
-        console.log('ho hay vehiculos registrados');
-        console.log(response.message);
-      }
-    }, error => {
-      var errorMensaje = <any>error;
-      console.log('hay erro en la vara');
-      if (errorMensaje != null) {
-        var body = JSON.parse(error._body);
-      }
-    }
-  );
-}
-
-obtenerVehiculo(_id: any){
-  
-  this._servVehiculo.obtenerVehiculo(_id).subscribe(
-    response => {
-      if (response.message[0]._id) {
-        console.log(response.message[0].cupo);
-        this.vehiculoEdit._id = response.message[0]._id;
-        this.vehiculoEdit.placa = response.message[0].placa;
-        this.vehiculoEdit.tipo = response.message[0].tipo;
-        this.vehiculoEdit.marca = response.message[0].marca;
-        this.vehiculoEdit.descripcion = response.message[0].descripcion;
-        this.vehiculoEdit.kilometraje = response.message[0].kilometraje;
-        this.vehiculoEdit.estado = response.message[0].estado;
-        this.vehiculoEdit.reporte = response.message[0].reporte;
-
-        this.estadoMensajEdit = this.vehiculoEdit.estado;
-        if (this.vehiculoEdit.estado == 'Habilitado') {
-          this.estadoEdicion = true;
-        } else {
-          this.estadoEdicion = false;
+  validarVehiculo() {
+    let placa = this.vehiculo.placa.trim().toUpperCase();
+    this.vehiculo.placa = placa;
+    this._servVehiculo.validarVehiculo(this.vehiculo).subscribe(
+      response => {
+        if (response.message) {//vehículo existe
+          let carro = response.message;
+          this.placa = carro;
+          this.placaExist = true;
+          $('#input-placa').css("border-left", "5px solid #a94442");
+        } else {// el vehiculo no existe
+          $('#input-placa').css("border-left", "5px solid #42A948");
+          this.placa = null;
+          this.placaExist = false;
         }
-       // this.cerrarModal('#modalEditVehiculo');
-       // this.abrirModal('#modalEditVehiculo');
-      } else {
-        console.log('No se ha encontrado el Vehiculo');
-        console.log(response.message);
+      }, error => {
+        var errorMensaje = <any>error;
+
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+        }
       }
-    }, error => {
-      var errorMensaje = <any>error;
-      console.log('Error al tratar de obtener el Vehiculo');
-      if (errorMensaje != null) {
-        var body = JSON.parse(error._body);
-      }
-    }
-  );
+    );
   }
 
-  modificarVehiculo(){}
-  
+  obtenerVehiculos() {
+    this._servVehiculo.obtenerVehiculos().subscribe(
+      response => {
+        if (response.message) {
+          this.vehiculos = response.message;
+        } else {//ho hay vehiculos registrados
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+        }
+      }
+    );
+  }
 
+  obtenerVehiculo(_id: any) {
+    this._servVehiculo.obtenerVehiculo(_id).subscribe(
+      response => {
+        if (response.message[0]._id) {
+          this.vehiculoEdit._id = response.message[0]._id;
+          this.vehiculoEdit.placa = response.message[0].placa;
+          this.vehiculoEdit.tipo = response.message[0].tipo;
+          this.vehiculoEdit.marca = response.message[0].marca;
+          this.vehiculoEdit.descripcion = response.message[0].descripcion;
+          this.vehiculoEdit.kilometraje = response.message[0].kilometraje;
+          this.vehiculoEdit.estado = response.message[0].estado;
+          this.vehiculoEdit.reporte = response.message[0].reporte;
+
+          this.estadoMensajEdit = this.vehiculoEdit.estado;
+          if (this.vehiculoEdit.estado == 'Habilitado') {
+            this.estadoEdicion = true;
+          } else {
+            this.estadoEdicion = false;
+          }
+        } else {//No se ha encontrado el Vehiculo
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+        }
+      }
+    );
+  }
+
+  modificarVehiculo() { }
+
+  eliminarVehiculo() {
+
+    this._servVehiculo.eliminarVehiculo(this.vehiculoEdit._id).subscribe(
+      response => {
+
+        if (!response.message._id) {
+          alert('Error al eliminar el vehículo');
+        } else {
+          alert('Vehículo eliminado exitosamente');
+          this.vehiculoEdit = new Vehiculo('', '', '', '', '', '', '', '');
+          this.obtenerVehiculos();
+        }
+      }, error => {
+        var alertMessage = <any>error;
+        if (alertMessage != null) {
+          var body = JSON.parse(error._body);
+          alert('Vehículo no eliminada');
+        }
+      }
+    );
+  }
 
   cerrarModal(modalId: any) {
     $(".modal-backdrop").remove();
@@ -185,7 +188,7 @@ obtenerVehiculo(_id: any){
     $(modalId).removeClass('show');
     $(modalId).css('display', 'none');
   }
-  //abrir modal
+
   abrirModal(modalId: any) {
     $('body').append('<div class="modal-backdrop fade show" ></div>');
     $('body').addClass('modal-open');

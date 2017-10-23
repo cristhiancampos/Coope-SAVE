@@ -10,5 +10,5 @@ api.post('/registrarDepartamento',ControladorDepartamento.agregarDepartamento);
 api.post('/validarDepartamento',ControladorDepartamento.validarDepartamento);
 api.get('/obtenerDepartamentos',ControladorDepartamento.obtenerDepartamentos);
 api.get('/obtenerDepartamento/:id',ControladorDepartamento.obtenerDepartamento);
-
+api.delete('/eliminarDepartamento/:id', ControladorDepartamento.eliminarDepartamento);
 module.exports = api;

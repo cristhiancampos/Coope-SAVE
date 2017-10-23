@@ -10,7 +10,9 @@ var modeloVehiculo = Schema({
   descripcion: String,
   kilometraje: String,
   estado: String,
-  reporte: String
+  reporte: String,
+  created_at: String,
+  updated_at: String
 });
 
 module.exports = mongoose.model('Vehiculo',modeloVehiculo);

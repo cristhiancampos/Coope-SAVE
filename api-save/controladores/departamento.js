@@ -10,8 +10,7 @@ function agregarDepartamento(req, res) {
   departamento.nombre = params.nombre;
   departamento.color = params.color;
   departamento.estado = params.estado;
-
-  console.log(departamento);
+  departamento.created_at = new Date();
   if ( departamento.nombre != null && departamento.color != null && departamento.estado != null) {
     //guardar usuario
     departamento.save((err, departamentoStored) => {
@@ -35,8 +34,7 @@ function agregarDepartamento(req, res) {
 function validarDepartamento(req, res) {
   var params = req.body;
   var nombre = params.nombre;
-  console.log(nombre);
-  Departamento.findOne({ nombre: nombre }, (err, departamento) => {
+  Departamento.findOne({ nombre: nombre, estado: { $ne: "Eliminado" } }, (err, departamento) => {
     if (err) {
       res.status(200).send({ message: null });
     } else {
@@ -44,14 +42,14 @@ function validarDepartamento(req, res) {
         res.status(200).send({ message: null });
       }
       else {
-        res.status(200).send({ message: departamento });
+        res.status(200).send({ message: departamento }); 
       }
     }
   });
 }
 
 function obtenerDepartamentos(req, res) {
-  Departamento.find({}, (err, departamentos) => {
+  Departamento.find({ estado: { $ne: "Eliminado" } }, (err, departamentos) => {
     if (err) {
       res.status(500).send({ message: 'Error en la petición' });
     } else {
@@ -79,11 +77,28 @@ function obtenerDepartamento(req, res){
   });
 }
 
+function eliminarDepartamento(req, res) {
+  var departamentoId = req.params.id;
+  var update = req.body;
+  Departamento.findByIdAndUpdate(departamentoId, { $set: { estado: 'Eliminado' } }, { new: true }, (err, departamentoDeleted) => {
+    if (err) {
+      res.status(500).send({ message: 'Error al eliminar el departamento' });
+    } else {
+      if (!departamentoDeleted) {
+        res.status(404).send({ message: 'No se ha podido eliminar el departamento' });
+      } else {
+        res.status(200).send({ message: departamentoDeleted });
+      }
+    }
+  });
+}
+
 
 module.exports = {
   agregarDepartamento,
   validarDepartamento,
   obtenerDepartamentos,
-  obtenerDepartamento
+  obtenerDepartamento,
+  eliminarDepartamento
   
 };
