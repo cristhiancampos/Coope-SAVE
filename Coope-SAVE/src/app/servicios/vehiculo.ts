@@ -64,13 +64,11 @@ export class ServicioVehiculo{
 
     validarModificacion(vehiculo: any)
     {
-        console.log("servicio"+vehiculo.placa)
          let json = JSON.stringify(vehiculo);
         let params = json; 
         let headers = new Headers({'Content-Type':'application/json'});
-        return this._http.post(this.url+'validarModificacion',params,{headers:headers})
+        return this._http.post(this.url+'validarModificacionVehiculo',params,{headers:headers})
         .map(res=>res.json());
-        
     }
 
     modificarVehiculo(vehiculo:any)
