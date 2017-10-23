@@ -43,8 +43,8 @@ export class PrincipalComponent implements OnInit {
     private _servDepa: ServicioDepartamento
   ) 
   {
-    this.usuario = new Usuario('', '', '', '', '', '', '');
-    this.usuarioRegistrado = new Usuario('', '', '', '', '', '', '');
+    this.usuario = new Usuario('','','','','','','','','','');
+    this.usuarioRegistrado =new  Usuario('','','','','','','','','','');
     this.confirmaContra = '';
     this.userExist = false;
     this.dominio = "@coopesparta.fi.cr";
@@ -95,7 +95,7 @@ export class PrincipalComponent implements OnInit {
   }
   // validar la existencia de correo de un usuario
   validarCorreo() {
-    let user = new Usuario('', '', '', '', '', '', '');
+    let user = new Usuario('','','','','','','','','','');;
     user.correo = this.dominio;
     this._servUsuario.getCorreo(user).subscribe(
       response => {
@@ -123,7 +123,7 @@ export class PrincipalComponent implements OnInit {
   }
   //registrar usuarios en el sistema
   registrarUsuario() {
-    let use = new Usuario('', '', '', '', '', '', '');
+    let use = new Usuario('','','','','','','','','','');
     use = this.usuario;
     use.correo = this.dominio;
     // alert(use.correo);
@@ -144,7 +144,7 @@ export class PrincipalComponent implements OnInit {
           } else {
             $('#nav-user').text(' ');
           }
-          this.usuarioRegistrado = new Usuario('', '', '', '', '', '', '');
+          this.usuarioRegistrado = new Usuario('','','','','','','','','','');
           localStorage.setItem('identity', JSON.stringify(user));
           this.cerrarModal('#registroUsuarioModal');
           this.mmostrar = true;
@@ -182,7 +182,7 @@ export class PrincipalComponent implements OnInit {
             } else {
               //   crear elemento en el localstorage para tener el token disponible
               localStorage.setItem('token', token);
-              this.usuario = new Usuario('', '', '', '', '', '', '');
+              this.usuario = new Usuario('','','','','','','','','','');
               console.log(response.token);
               this.cerrarModal('#loginModal');
               this.mmostrar = true;
@@ -231,7 +231,7 @@ export class PrincipalComponent implements OnInit {
     let recordar = localStorage.getItem('remember');
     let recordarValue = JSON.parse(recordar);
     if (user != null) {
-      let usuarioTemp = new Usuario('', '', '', '', '', '', '');
+      let usuarioTemp = new Usuario('','','','','','','','','','');
       usuarioTemp.correo = user.correo;
       usuarioTemp.contrasena = user.contrasena;
       // obtener datos de usuario identificado
@@ -255,7 +255,7 @@ export class PrincipalComponent implements OnInit {
               } else {
                 // crear elemento en el localstorage para tener el token disponible
                 localStorage.setItem('token', token);
-                this.usuario = new Usuario('', '', '', '', '', '', '');
+                this.usuario = new Usuario('','','','','','','','','','');
                 this.cerrarModal('#loginModal');
                 this.mmostrar = true;
                 let identity = localStorage.getItem('identity');
@@ -309,7 +309,7 @@ export class PrincipalComponent implements OnInit {
   }
   //mostrar el formulario de registro de usuarios
   mostrarRegistrarse() {
-    this.usuario = new Usuario('', '', '', '', '', '', '');
+    this.usuario = new Usuario('','','','','','','','','','');
     this.cerrarModal('#loginModal');
     this.abrirModal('#registroUsuarioModal');
     this.mmostrar = false;
@@ -318,7 +318,7 @@ export class PrincipalComponent implements OnInit {
 
   //regresar al formulario del login
   loginBack() {
-    this.usuario = new Usuario('', '', '', '', '', '', '');
+    this.usuario = new Usuario('','','','','','','','','','');
     this.cerrarModal('#registroUsuarioModal');
     this.abrirModal('#loginModal');
     this.mmostrar = false;

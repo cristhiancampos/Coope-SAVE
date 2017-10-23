@@ -138,4 +138,45 @@ export class ServicioUsuario {
     }
 
 
+    eliminarUsuario(id:string)
+    {
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            //'Authorization':token
+        });
+        let options = new RequestOptions({headers:headers});
+        return this._http.delete(this.url+'eliminarUsuario/'+id,options)
+         .map(res=>res.json());
+    }
+
+    obtenerUsuario(id:any){
+        let headers = new Headers({
+            'Content-Type':'application/json',
+            //'Authorization':token
+        });
+        let options = new RequestOptions({headers:headers});
+        return this._http.get(this.url+'obtenerUsuario/'+id,options)
+         .map(res=>res.json());
+
+    }
+
+   /* validarModificacion(sala: any)
+    {
+         let json = JSON.stringify(sala);
+        let params = json; 
+        let headers = new Headers({'Content-Type':'application/json'});
+        return this._http.post(this.url+'validarModificacion',params,{headers:headers})
+        .map(res=>res.json());
+    }
+
+    modificarUsuario(sala:any)
+    {
+         let json = JSON.stringify(sala);
+        let params = json; 
+        let headers = new Headers({'Content-Type':'application/json'});
+        return this._http.put(this.url+'modificarSala',params,{headers:headers})
+        .map(res=>res.json());
+    }*/
+
+
 }

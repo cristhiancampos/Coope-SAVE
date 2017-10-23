@@ -34,10 +34,7 @@ export class ServicioSala{
     }
 
     obtenerSalas()
-    {
-        // console.log(vehiculo);
-        //  let json = JSON.stringify(vehiculo);
-        // let params = json; 
+    { 
         let headers = new Headers({'Content-Type':'application/json'});
         return this._http.get(this.url+'obtenerSalas',{headers:headers})
         .map(res=>res.json());

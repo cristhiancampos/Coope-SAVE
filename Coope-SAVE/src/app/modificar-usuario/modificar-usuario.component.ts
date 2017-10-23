@@ -15,7 +15,7 @@ export class ModificarUsuarioComponent implements OnInit {
   codigo=''; //process.env["USERPROFILE"];
 
   constructor(private _router: Router) {
-    this.usuario= new Usuario('','','','','','','');
+    this.usuario= new Usuario('','','','','','','','','','');
    }
 
 

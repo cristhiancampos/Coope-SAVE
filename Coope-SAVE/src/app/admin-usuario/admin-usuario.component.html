@@ -34,7 +34,7 @@
             <th>{{usuario.estado}}</th>
             <th style="text-align: center">
               <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete" (click)="obtenerUsuario(usuario._id)"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
             </th>
           </tr>
           
@@ -84,7 +84,7 @@
         <h5>Está seguro que desea eliminar el usuario? </h5>
         <br>
         <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-default btn-modal-suc" data-dismiss="modal">Confirmar</button>
+        <button type="button" class="btn btn-default btn-modal-suc" data-dismiss="modal" (click)="eliminarSala()">Confirmar</button>
       </div>
     </div>
   </div>

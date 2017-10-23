@@ -93,7 +93,7 @@ export class AppComponent implements OnInit {
             } else {
               //crear elemento en el localstorage para tener el token disponible
               localStorage.setItem('token', token);
-              this.user = new Usuario('', '', '', '', '', '', '');
+              this.user = new Usuario('','','','','','','','','','');
             }
           }, error => {
             var errorMensaje = <any>error;

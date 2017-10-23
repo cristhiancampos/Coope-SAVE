@@ -22,7 +22,7 @@ function agregarUsuario(req, res) {
   user.departamento = params.departamento;
   user.contrasena = params.contrasena;
   user.created_at = new Date();
-  
+
 
   if (params.contrasena && user.contrasena != null) {
     //encriptar password
@@ -75,15 +75,14 @@ function getCorreo(req, res) {
   });
 }
 
-function loginUsuario(req, res)
-{
+function loginUsuario(req, res) {
   var params = req.body;
   //console.log(req.body);
   var email = params.correo;
   //console.log(params.correo+'.....'+params.contrasena);
   var password = params.contrasena;
 
-  Usuario.findOne({ correo: email.toLowerCase() }, (err, user) => {
+  Usuario.findOne({ correo: email.toLowerCase(), estado: { $ne: "Eliminado" } }, (err, user) => {
     if (err) {
       res.status(500).send({ message: 'Error en la petición' });
     } else {
@@ -112,29 +111,28 @@ function loginUsuario(req, res)
   });
 }
 
-function verificarCredenciales(req, res)
-{
+function verificarCredenciales(req, res) {
   var params = req.body;
   //console.log(req.body);
   var email = params.correo;
- // console.log(params.correo+'.....'+params.contrasena);
+  // console.log(params.correo+'.....'+params.contrasena);
   var password = params.contrasena;
 
-  Usuario.findOne({correo:email},(err,user)=>{
-    if(err){
+  Usuario.findOne({ correo: email, estado: { $ne: "Eliminado" } }, (err, user) => {
+    if (err) {
       res.status(500).send({ message: 'Error en la petición' });
-    }else{
-      if(!user){
+    } else {
+      if (!user) {
         res.status(404).send({ message: 'Credenciales incorrectas' });
-      }else{
-        if(user.contrasena == password ){
-          if(params.gethash){
+      } else {
+        if (user.contrasena == password) {
+          if (params.gethash) {
             //console.log(jwt.createToken(user));
             res.status(200).send({ token: jwt.createToken(user) });
-          }else{
+          } else {
             res.status(200).send({ user });
           }
-        }else{
+        } else {
           res.status(404).send({ message: 'Credenciales incorrectas' });
         }
       }
@@ -142,29 +140,62 @@ function verificarCredenciales(req, res)
   });
 
 }
-  function obtenerUsuarios(req, res){
-    Usuario.find({},(err,usuarios)=>{
-      if(err){
-        res.status(500).send({message:'Error en la petición'});
-      }else{
-          if(!usuarios){
-              res.status(404).send({message:'No existen usuarios registrados en el sistema'});
-          }else{
-              res.status(200).send({message:usuarios});
-          }
+function obtenerUsuarios(req, res) {
+  Usuario.find({estado: { $ne: "Eliminado" }}, (err, usuarios) => {
+    if (err) {
+      res.status(500).send({ message: 'Error en la petición' });
+    } else {
+      if (!usuarios) {
+        res.status(404).send({ message: 'No existen usuarios registrados en el sistema' });
+      } else {
+        res.status(200).send({ message: usuarios });
       }
-    }).sort('number'); 
-  }
-  
+    }
+  }).sort('number');
+}
 
-  module.exports = {
-    getUsuario,
-    agregarUsuario,
-    getCorreo,
-    loginUsuario,
-    verificarCredenciales,
-    obtenerUsuarios
-  };
+function eliminarUsuario(req, res) {
+  var usuarioId = req.params.id;
+  var update = req.body;
+  Usuario.findByIdAndUpdate(usuarioId, { $set: { estado: 'Eliminado' } }, { new: true }, (err, userDeleted) => {
+    if (err) {
+      res.status(500).send({ message: 'Error al eliminar el usuario' });
+    } else {
+      if (!userDeleted) {
+        res.status(404).send({ message: 'No se ha podido eliminar el usuario' });
+      } else {
+        res.status(200).send({ message: userDeleted });
+      }
+    }
+  });
+}
+
+function obtenerUsuario(req, res) {
+  var userId = req.params.id;
+
+  Usuario.find({ _id: userId }, (err, sala) => {
+    if (err) {
+      res.status(500).send({ message: 'Error en la petición' });
+    } else {
+      if (!sala) {
+        res.status(404).send({ message: 'No existen usuarios registrados en el sistema' });
+      } else {
+        res.status(200).send({ message: sala });
+      }
+    }
+  });
+}
+
+module.exports = {
+  getUsuario,
+  agregarUsuario,
+  getCorreo,
+  loginUsuario,
+  verificarCredenciales,
+  obtenerUsuarios,
+  eliminarUsuario,
+  obtenerUsuario
+};
 
   // Usuario.findOne({ correo: email.toLowerCase() }, (err, user) => {
   //   console.log(user);
