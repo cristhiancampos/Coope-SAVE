@@ -153,7 +153,7 @@ function modificarRecurso(req, res) {
         }
       }
     });
-
+  }
 
     module.exports = {
         
