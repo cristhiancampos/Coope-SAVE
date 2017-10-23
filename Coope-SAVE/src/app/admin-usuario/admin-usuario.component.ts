@@ -3,12 +3,13 @@ import * as $ from 'jquery';
 import { ServicioUsuario } from '../servicios/usuario';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import {Usuario} from '../modelos/usuario';
+import { ServicioDepartamento } from '../servicios/departamento';
 
 @Component({
   selector: 'app-admin-usuario',
   templateUrl: './admin-usuario.component.html',
   styleUrls: ['./admin-usuario.component.css'],
-  providers: [ServicioUsuario]
+  providers: [ServicioUsuario,ServicioDepartamento]
 })
 export class AdminUsuarioComponent implements OnInit {
 
@@ -20,12 +21,16 @@ export class AdminUsuarioComponent implements OnInit {
   public estadoMensajEdit:String;
   public estadoEdicion: boolean;
   public estadoMensaje = 'Habilitado';
+  public currentUser="";
+  public departamentos=[];
+  public userExist:boolean;
 
 
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
-    private _servUsuario: ServicioUsuario
+    private _servUsuario: ServicioUsuario,
+    private _servDepa: ServicioDepartamento
   ) {
     this.mostrarModal= false;
     this.usuario = new Usuario('','','','','','','','','','');
@@ -34,6 +39,7 @@ export class AdminUsuarioComponent implements OnInit {
 
   ngOnInit() {
     this.obtenerUsuarios();
+    this.obtenerDepartamentos();
   }
 
 
@@ -50,6 +56,12 @@ export class AdminUsuarioComponent implements OnInit {
   }
 
   obtenerUsuarios() {
+    let identity = localStorage.getItem('identity');
+    let user = JSON.parse(identity);
+    if (user != null) {
+      this.currentUser=user.correo.trim();
+    }else{this.currentUser=""}
+  
     this._servUsuario.obtenerUsuarios().subscribe(
       response => {
         if (response.message) {
@@ -68,6 +80,28 @@ export class AdminUsuarioComponent implements OnInit {
       }
     );
   }
+
+  obtenerDepartamentos() {
+    this._servDepa.obtenerDepartamentos().subscribe(
+      response => {
+        if (response.message) {
+          console.log(response.message);
+        this.departamentos =response.message;
+        } else {
+          console.log('ho hay departamentos registrados');
+          console.log(response.message);
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+        console.log('Error al tratar de obtener los departamentos');
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+        }
+      }
+    );
+
+  }
+
   obtenerUsuario(_id: any) {
     this._servUsuario.obtenerUsuario(_id).subscribe(
       response => {
@@ -116,6 +150,10 @@ export class AdminUsuarioComponent implements OnInit {
         }
       }
     );
+  }
+
+  modificarUsuario(){
+
   }
 
 

@@ -33,16 +33,16 @@
             <th>{{usuario.rol}}</th>
             <th>{{usuario.estado}}</th>
             <th style="text-align: center">
-              <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete" (click)="obtenerUsuario(usuario._id)"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+              <button class="btn btn-primary btn-accion" data-toggle="modal" data-target="#editAdminUserModal"  (click)="obtenerUsuario(usuario._id)"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
+              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete" [disabled]='usuario.correo==currentUser' (click)="obtenerUsuario(usuario._id)"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
             </th>
           </tr>
           
         </tbody>
       </table>
     </div>
-    <h5 *ngIf='usuarios ==undefined || usuarios.length==0'>No existen usuarios registrados en el sistema.<br></h5> 
-    <hr *ngIf='usuarios ==undefined || usuarios.length==0'>
+    <!-- <h5 *ngIf='usuarios ==undefined || usuarios.length==0'>No existen usuarios registrados en el sistema.<br></h5> 
+    <hr *ngIf='usuarios ==undefined || usuarios.length==0'> -->
   </div>
 
   <!-- paginador-->
@@ -88,4 +88,113 @@
       </div>
     </div>
   </div>
+</div>
+
+
+
+
+<!-- Modal  Modificar Usuario-->
+<div class="modal fade bd-example-modal-sm " id="editAdminUserModal" tabindex="-1" role="dialog"
+aria-hidden="true">
+<div class="modal-dialog bd-example-modal-sm " role="document">
+  <div class="modal-content">
+    <div class="modal-header" style="background: #0069d9;color:#fff">
+      <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-user-circle-o"></i>&nbsp;&nbsp;Modificar Usuario</h5>
+      <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="salir()"> 
+          <span aria-hidden="true">&times;</span>
+        </button>-->
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12">
+          <ol class="breadcrumb">
+            <li>
+              <a><img src="assets/img/logo.png" ></a>
+            </li>
+          </ol>
+        </div>
+      </div>
+      <!-- END BREADCRUMB-->
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-12">
+
+            <form #editAdmiUserForm="ngForm" (ngSubmit)="modificarUsuario()">
+              <div class="control-group form-group">
+                <div class="controls">
+                  <div class="row" style="margin-left:0em;margin-right:0em">
+                  <input id="input-correo-admin-edit" type="text" #correo="ngModel" name="correo" class="form-control" [(ngModel)]="usuarioEdit.correo" 
+                  placeholder="usuario" autofocus required >
+                  </div>
+                  <small *ngIf="correo.touched && correo.value==''"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El correo es obligatorio. </small>
+                   <!-- <small *ngIf="!correo.valid && correo.value!null"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Formato de correo inválido.</small>                      -->
+                  <small *ngIf="userExist"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe una cuenta con ese correo</small>  
+                </div>
+              </div>
+              <div class="control-group form-group">
+                <div class="controls">
+                  <input type="text" class="form-control" #nombre="ngModel" name="nombre" [(ngModel)]="usuarioEdit.nombre" placeholder="Nombre"
+                    required>
+                    <small [hidden]="nombre.valid || (nombre.pristine && !registerForm.submitted)">
+                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El nombre es obligatorio
+                    </small>
+                </div>
+              </div>
+
+              <div class="control-group form-group">
+                <div class="controls">
+
+                  <input type="text" class="form-control" #apellidos="ngModel" name="apellidos" [(ngModel)]="usuarioEdit.apellidos" placeholder="Apellidos"
+                    required maxlength="60">
+                    <small [hidden]="apellidos.valid || (apellidos.pristine && !registerForm.submitted)">
+                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Los apellidos son obligatorios
+                    </small>
+                </div>
+              </div>
+
+              <div class="control-group form-group">
+                <div class="controls">
+                  <select #departamento="ngModel" name="departamento" [(ngModel)]="usuarioEdit.departamento" class="selectpicker" 
+                  style="width: 100%;padding: .5rem .75rem;" required  >  
+                    <option value="" selected disabled >Departamento</option>
+                        <option *ngFor="let depa of departamentos;">{{depa.nombre}}</option>
+                      </select>
+                      <small [hidden]="departamento.valid || (departamento.pristine && !registerForm.submitted)">
+                          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El departamento es  obligatorio
+                      </small>
+                </div>
+              </div>
+              <div class="control-group form-group">
+                  <div class="controls">
+                       <ul>
+                         <li style="margin-left: -37px;"> <label class="switch">
+                             <input type="checkbox" checked (change)="cambiarEstadoEdicion($event)">
+                             <small class="slider round"></small>
+                           </label>
+                         </li>
+                         <li>
+                           <label style="float: left;margin-top: -2.3em;">{{estadoMensaje}}</label>
+                         </li>
+                       </ul>
+                     </div>
+                   </div>
+
+              <div style="float: right">
+                  <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" >Salir</button>               
+                  <button id="btn-edit-admin-usuario" type="submit" 
+                   [disabled]="!correo.valid || !nombre.valid || !apellidos.valid  ||  !departamento.valid "
+                    class="btn btn-success">Continuar</button>
+              </div>
+            </form>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+
+      <!-- <button type="button" class="btn btn-secondary"  style="background: #f00a0a;" (click)="salir()">Salir</button>         -->
+    </div>
+  </div>
+</div>
 </div>
