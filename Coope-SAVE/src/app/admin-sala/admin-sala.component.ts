@@ -30,8 +30,8 @@ export class AdminSalaComponent implements OnInit {
     private _servSala: ServicioSala
   ) {
     this.mostrarModal = false;
-    this.salaEdit = new Sala('', '', '', '', '', '');
-    this.sala = new Sala('', '', '', '', this.estadoMensaje, '-');
+    this.salaEdit = new Sala('', '', '', '', '', '', '', '');
+    this.sala = new Sala('', '', '', '', this.estadoMensaje, '-', '', '');
   }
 
   ngOnInit() {
@@ -67,15 +67,12 @@ export class AdminSalaComponent implements OnInit {
     this._servSala.validarSala(this.sala).subscribe(
       response => {
         if (response.message) {
-          console.log(response.message);
           let sala = response.message;
           this.nombre = sala;
           this.nombreExist = true;
           $('#input-nombre').css("border-left", "5px solid #a94442");
-        } else {
+        } else {//no existe la sala
           $('#input-nombre').css("border-left", "5px solid #42A948");
-          console.log('no existe sala');
-          console.log(response.message);
           this.nombre = null;
           this.nombreExist = false;
         }
@@ -101,9 +98,8 @@ export class AdminSalaComponent implements OnInit {
           alert('Error al registrar la Sala');
         } else {
           alert('Sala registrada exitosamente');
-          this.sala = new Sala('', '', '', '', this.estadoMensaje, '-');
+          this.sala = new Sala('', '', '', '', this.estadoMensaje, '-', '', '');
           this.mostrar(false);
-          console.log(sala);
           this.obtenerSalas();
         }
       }, error => {
@@ -111,7 +107,6 @@ export class AdminSalaComponent implements OnInit {
         if (alertMessage != null) {
           var body = JSON.parse(error._body);
           alert('Sala no registrado');
-          //console.log(error);
         }
       }
     );
@@ -122,15 +117,11 @@ export class AdminSalaComponent implements OnInit {
     this._servSala.obtenerSalas().subscribe(
       response => {
         if (response.message) {
-          console.log(response.message);
           this.salas = response.message;
-        } else {
-          console.log('ho hay Salas registradas');
-          console.log(response.message);
+        } else {//no hay Salas registradas
         }
       }, error => {
         var errorMensaje = <any>error;
-        console.log('Error al tratar de obtener las salas');
         if (errorMensaje != null) {
           var body = JSON.parse(error._body);
         }
@@ -142,8 +133,6 @@ export class AdminSalaComponent implements OnInit {
     this._servSala.obtenerSala(_id).subscribe(
       response => {
         if (response.message[0]._id) {
-          console.log(response.message[0].cupo);
-          //alert(response.message.nombre);
           this.salaEdit._id = response.message[0]._id;
           this.salaEdit.nombre = response.message[0].nombre;
           this.salaEdit.cupo = response.message[0].cupo;
@@ -157,14 +146,10 @@ export class AdminSalaComponent implements OnInit {
           } else {
             this.estadoEdicion = false;
           }
-         // this.abrirModal('#modalEditSala');
-        } else {
-          console.log('No se ha encontrado la Sala');
-          console.log(response.message);
+        } else {//No se ha encontrado la Sala
         }
       }, error => {
         var errorMensaje = <any>error;
-        console.log('Error al tratar de obtener las s445555ala');
         if (errorMensaje != null) {
           var body = JSON.parse(error._body);
         }
@@ -172,10 +157,32 @@ export class AdminSalaComponent implements OnInit {
     );
   }
 
-  modificarSala() { }
+  modificarSala() {
+    this.salaEdit.estado = this.estadoMensajEdit;
+    this._servSala.modificarSala(this.salaEdit).subscribe(
+      response => {
 
-  eliminarSala(){
-    
+        if (!response.message._id) {
+          alert('Error al modificar la Sala');
+        } else {
+          alert('Sala modificada exitosamente');
+          this.salaEdit = new Sala('', '', '', '', '', '-', '', '');
+          this.obtenerSalas();
+          this.cerrarModal('#modalEditSala');
+        }
+      }, error => {
+        var alertMessage = <any>error;
+        if (alertMessage != null) {
+          var body = JSON.parse(error._body);
+          alert('Sala no se pudo modificar');
+
+        }
+      }
+    );
+
+  }
+
+  eliminarSala() {
     this._servSala.eliminarSala(this.salaEdit._id).subscribe(
       response => {
 
@@ -183,7 +190,7 @@ export class AdminSalaComponent implements OnInit {
           alert('Error al elimar la Sala');
         } else {
           alert('Sala eliminada exitosamente');
-          this.salaEdit = new Sala('', '', '', '', '', '-');
+          this.salaEdit = new Sala('', '', '', '', '', '', '', '');
           this.obtenerSalas();
         }
       }, error => {
@@ -191,7 +198,30 @@ export class AdminSalaComponent implements OnInit {
         if (alertMessage != null) {
           var body = JSON.parse(error._body);
           alert('Sala no eliminada');
-          //console.log(error);
+        }
+      }
+    );
+  }
+
+  validarModificacion() {
+    let nombre = this.salaEdit.nombre.trim().toUpperCase();
+    this.salaEdit.nombre = nombre;
+
+    this._servSala.validarModificacion(this.salaEdit).subscribe(
+      response => {
+        if (response.message) {
+          let sala = response.message;
+          this.nombreExistEdit = true;
+          $('#input-nombre').css("border-left", "5px solid #a94442");
+        } else {//no existe la sala
+          $('#input-nombre').css("border-left", "5px solid #42A948");
+          this.nombreExistEdit = false;
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
         }
       }
     );

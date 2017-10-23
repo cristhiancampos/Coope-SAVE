@@ -134,7 +134,7 @@
                   </div>
                 </div>
                 <div style="float: right">
-                  <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" (click)="salir()">Salir</button>
+                  <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" >Salir</button>
                   <button id="btn-add" type="submit" [disabled]="!adminSala.form.valid || nombreExist" class="btn btn-success">Confirmar</button>
                 </div>
               </form>
@@ -156,7 +156,7 @@ aria-hidden="true">
   <div class="modal-content">
     <div class="modal-header" style="background: #0069d9;color:#fff">
       <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Editar Sala</h5>
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cerrarModal('#modalEditSala')"> 
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal"> 
         <small aria-hidden="true">&times;</small>
       </button>
     </div>
@@ -178,10 +178,10 @@ aria-hidden="true">
               <div class="contrrol-group form-group">
                 <div class="controls">
                   <input id="input-nombre" type="text" class="form-control" #nombre="ngModel" name="nombre" [(ngModel)]="salaEdit.nombre" placeholder="Nombre"
-                    required (input)="validarSala()">
+                    required (input)="validarModificacion()">
                   <small *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
                     <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El nombre es obligatorio</small>
-                  <small *ngIf="nombreExist"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe una Sala con ese nombre</small>
+                  <small *ngIf="nombreExistEdit"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe una Sala con ese nombre</small>
                   <p class="help-block"></p>
                 </div>
               </div>
@@ -225,8 +225,8 @@ aria-hidden="true">
                 </div>
               </div>
               <div style="float: right">
-                <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" (click)="cerrarModal('#modalEditSala')">Salir</button>
-                <button id="btn-Edit" type="submit" [disabled]="!adminSalaEdit.form.valid || nombreExist" class="btn btn-success">Confirmar</button>
+                <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" >Salir</button>
+                <button id="btn-Edit" type="submit" [disabled]="!adminSalaEdit.form.valid || nombreExistEdit" class="btn btn-success" >Confirmar</button>
               </div>
             </form>
           </div>

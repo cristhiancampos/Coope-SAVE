@@ -5,6 +5,8 @@ export class Sala{
         public cupo:string,
         public descripcion :string,
         public estado :string,
-        public reporte :string
+        public reporte :string,
+        created_at: String,
+        updated_at: String
     ){}
 }

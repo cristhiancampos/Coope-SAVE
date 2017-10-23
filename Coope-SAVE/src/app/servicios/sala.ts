@@ -64,4 +64,24 @@ export class ServicioSala{
         return this._http.delete(this.url+'eliminarSala/'+id,options)
          .map(res=>res.json());
     }
+
+    validarModificacion(sala: any)
+    {
+         let json = JSON.stringify(sala);
+        let params = json; 
+        let headers = new Headers({'Content-Type':'application/json'});
+        return this._http.post(this.url+'validarModificacion',params,{headers:headers})
+        .map(res=>res.json());
+    }
+
+    modificarSala(sala:any)
+    {
+         let json = JSON.stringify(sala);
+        let params = json; 
+        let headers = new Headers({'Content-Type':'application/json'});
+        return this._http.put(this.url+'modificarSala',params,{headers:headers})
+        .map(res=>res.json());
+    }
+
+
 }//Final de el export de clase
