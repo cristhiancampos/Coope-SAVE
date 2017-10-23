@@ -61,4 +61,28 @@ export class ServicioVehiculo{
         return this._http.delete(this.url+'eliminarVehiculo/'+id,options)
          .map(res=>res.json());
     }
+
+    validarModificacion(vehiculo: any)
+    {
+        console.log("servicio"+vehiculo.placa)
+         let json = JSON.stringify(vehiculo);
+        let params = json; 
+        let headers = new Headers({'Content-Type':'application/json'});
+        return this._http.post(this.url+'validarModificacion',params,{headers:headers})
+        .map(res=>res.json());
+        
+    }
+
+    modificarVehiculo(vehiculo:any)
+    {
+        
+         let json = JSON.stringify(vehiculo);
+        let params = json; 
+        let headers = new Headers({'Content-Type':'application/json'});
+        return this._http.put(this.url+'modificarVehiculo',params,{headers:headers})
+        .map(res=>res.json());
+
+    }
+
+
 }//Final de el export de clase
