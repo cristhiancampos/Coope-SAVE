@@ -125,6 +125,35 @@ function modificarRecurso(req, res) {
     });
   }
 
+  function validarModificacion(req, res) {
+    var params = req.body;
+    var nombre = params.nombre;
+    var id = params._id;
+  
+    Sala.findOne({ _id: id, nombre: nombre, estado: { $ne: "Eliminado" } }, (err, sala) => {
+      if (err) {
+        res.status(200).send({ message: null });
+      } else {
+        if (!sala) {
+          Sala.findOne({ nombre: nombre, estado: { $ne: "Eliminado" } }, (err, salaEdit) => {
+            if (err) {
+              res.status(200).send({ message: null });
+            } else {
+              if (!salaEdit) {
+                res.status(200).send({ message: null });
+              }
+              else {
+                res.status(200).send({ message: salaEdit });
+              }
+            }
+          })
+        }
+        else {
+          res.status(200).send({ message: null });
+        }
+      }
+    });
+
 
     module.exports = {
         
