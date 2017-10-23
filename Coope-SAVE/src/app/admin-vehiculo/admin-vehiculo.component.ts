@@ -3,7 +3,7 @@ import * as $ from 'jquery';
 import { ServicioVehiculo } from '../servicios/vehiculo';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Vehiculo } from '../modelos/vehiculo';
-
+import swal from 'sweetalert2'
 @Component({
   selector: 'app-admin-vehiculo',
   templateUrl: './admin-vehiculo.component.html',
@@ -70,9 +70,9 @@ export class AdminVehiculoComponent implements OnInit {
         let vehiculo = response.vehiculo;
 
         if (!response.vehiculo.placa) {
-          alert('Error al registrar la vehiculo');
+          this.msjError("El Vehiculo no pudo ser agregado");
         } else {
-          alert('vehiculo registrado exitosamente');
+          this.msjExitoso("Vehiculo Agregado Exitosamente");
           this.vehiculo = new Vehiculo('', '', '', '', '', '', this.estadoMensaje, '-','','');
           this.cerrarModal("#modalAdminVehiculo")
           this.obtenerVehiculos();
@@ -81,8 +81,9 @@ export class AdminVehiculoComponent implements OnInit {
         var alertMessage = <any>error;
         if (alertMessage != null) {
           var body = JSON.parse(error._body);
-          alert('vehiculo no registrado');
-          //console.log(error);
+         
+          this.msjError("El Vehiculo no pudo ser agregado");
+          
         }
       }
     );
@@ -166,12 +167,12 @@ export class AdminVehiculoComponent implements OnInit {
       response => {
 
         if (!response.message._id) {
-          alert('Error al modificar el vehiculo');
+          this.msjError("El Vehiculo no pudo ser Modificado");
         } else {
-          alert('Sala modificada exitosamente');
           this.vehiculoEdit = new Vehiculo('', '', '', '', '', '', '', '-','','');
           this.obtenerVehiculos();
           this.cerrarModal('#modalEditVehiculo');
+          this.msjExitoso("Vehiculo Modificado Exitosamente");
         }
       }, error => {
         var alertMessage = <any>error;
@@ -200,7 +201,6 @@ export class AdminVehiculoComponent implements OnInit {
           this.placaExistEdit = false;
         }
       }, error => {
-        console.log('error');
         var errorMensaje = <any>error;
 
         if (errorMensaje != null) {
@@ -215,9 +215,9 @@ export class AdminVehiculoComponent implements OnInit {
       response => {
 
         if (!response.message._id) {
-          alert('Error al eliminar el vehículo');
+          this.msjError("El Vehiculo no pudo ser Eliminado");
         } else {
-          alert('Vehículo eliminado exitosamente');
+          this.msjExitoso("Vehiculo Eliminado Exitosamente");
           this.vehiculoEdit = new Vehiculo('', '', '', '', '', '', '', '','','');
           this.obtenerVehiculos();
         }
@@ -225,12 +225,29 @@ export class AdminVehiculoComponent implements OnInit {
         var alertMessage = <any>error;
         if (alertMessage != null) {
           var body = JSON.parse(error._body);
-          alert('Vehículo no eliminada');
+          this.msjError("El Vehiculo no pudo ser Eliminado");
         }
       }
     );
   }
 
+  msjExitoso(texto: string){
+    swal({
+      position: 'top',
+      type: 'success',
+      title: texto,
+      showConfirmButton: false,
+      timer: 2500
+    })
+  }
+  
+  msjError(texto: string){
+    swal(
+      'Oops...',
+      texto,
+      'error'
+    )
+  }
   cerrarModal(modalId: any) {
     $(".modal-backdrop").remove();
     $('body').removeClass('modal-open');
