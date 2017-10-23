@@ -16,7 +16,9 @@ export class AdminDepartamentoComponent implements OnInit {
   public departamentoEdit: Departamento;
   public departamentos = [];
   nombreExist: boolean;
+  nombreExistEdit: boolean;
   mostralModal: boolean;
+
   public estado = true;
   public estadoEdicion: boolean;
   public estadoMensaje = 'Habilitado';
@@ -28,8 +30,8 @@ export class AdminDepartamentoComponent implements OnInit {
     private _servDepartamento: ServicioDepartamento
   ) {
     this.mostralModal = false;
-    this.departamentoEdit = new Departamento('', '', '', '');
-    this.departamento = new Departamento('', '', '', this.estadoMensaje);
+    this.departamentoEdit = new Departamento('', '', '', '','','');
+    this.departamento = new Departamento('', '', '', this.estadoMensaje,'','');
   }
 
   ngOnInit() {
@@ -69,7 +71,7 @@ export class AdminDepartamentoComponent implements OnInit {
         } else {
           alert('Departamento registrado exitosamente');
           this.cerrarModal('#modalAdminDepa');
-          this.departamento = new Departamento('', '', '', this.estadoMensaje);
+          this.departamento = new Departamento('', '', '', this.estadoMensaje,'','');
           this.obtenerDepartamentos();
         }
       }, error => {
@@ -148,7 +150,55 @@ export class AdminDepartamentoComponent implements OnInit {
     );
   }
 
-  modificarSala() { }
+  modificarDepartamento() {
+    this.departamentoEdit.estado = this.estadoMensajEdit;
+    this._servDepartamento.modificarDepartamento(this.departamentoEdit).subscribe(
+      response => {
+
+        if (!response.message._id) {
+          alert('Error al modificar el departamento');
+        } else {
+          alert('Departamento modificado exitosamente');
+          this.departamentoEdit = new Departamento('', '', '', '', '', '');
+          this.obtenerDepartamentos();
+          this.cerrarModal('#modalEditDepartamento');
+        }
+      }, error => {
+        var alertMessage = <any>error;
+        if (alertMessage != null) {
+          var body = JSON.parse(error._body);
+          alert('Departamento no se pudo modificar');
+
+        }
+      }
+    );
+   }
+
+   validarModificacion() {
+    let nombre = this.departamentoEdit.nombre.trim().toUpperCase();
+    this.departamentoEdit.nombre = nombre;
+
+    this._servDepartamento.validarModificacion(this.departamentoEdit).subscribe(
+      response => {
+        if (response.message) {
+          console.log("existe"+response.message);
+          
+          this.nombreExistEdit = true;
+          $('#input-nombre').css("border-left", "5px solid #a94442");
+        } else {//no existe la sala
+          $('#input-nombre').css("border-left", "5px solid #42A948");
+          this.nombreExistEdit = false;
+          console.log("no existe"+response.message);
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+        }
+      }
+    );
+  }
 
   eliminarDepartamento() {
 
@@ -159,7 +209,7 @@ export class AdminDepartamentoComponent implements OnInit {
           alert('Error al elimar el departamento');
         } else {
           alert('Departamento eliminada exitosamente');
-          this.departamentoEdit = new Departamento('', '', '', '');
+          this.departamentoEdit = new Departamento('', '', '', '','','');
           this.obtenerDepartamentos();
         }
       }, error => {
@@ -171,6 +221,8 @@ export class AdminDepartamentoComponent implements OnInit {
       }
     );
   }
+
+
 
   cerrarModal(modalId: any) {
     $(".modal-backdrop").remove();

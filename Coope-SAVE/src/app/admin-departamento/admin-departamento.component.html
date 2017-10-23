@@ -205,11 +205,11 @@ aria-hidden="true">
               <div class="control-group form-group">
                 <div class="controls">
                   <input id="input-nombre" type="text" class="form-control"  #nombre="ngModel" name= "nombre" [(ngModel)]="departamentoEdit.nombre" 
-                  placeholder="Nombre" required (input)="validarDepartamento()" >
+                  placeholder="Nombre" required (input)="validarModificacion()" >
                   <small *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" >
                       <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El nombre es obligatorio
                   </small> 
-                  <small *ngIf="nombreExist"><i class="fa fa-exclamation-circle" aria-hidden="true">
+                  <small *ngIf="nombreExistEdit"><i class="fa fa-exclamation-circle" aria-hidden="true">
                     </i> Ya existe un Departamento con ese nombre
                   </small> 
                 </div>

@@ -101,6 +101,31 @@ function eliminarRecurso(req, res) {
     }
   });
 }
+
+function modificarRecurso(req, res) {
+
+    var params = req.body;
+    var recursoId = params._id;
+    params.updated_at = new Date();
+  
+  
+    Recurso.findByIdAndUpdate(recursoId, params, (err, modificaRecurso) => {
+      if (err) {
+  
+        res.status(500).send({ message: 'Error al actualizar la sala' });
+      } else {
+        if (!modificaRecurso) {
+  
+          res.status(404).send({ message: 'No se ha podido actualizar la sala' });
+        } else {
+  
+          res.status(200).send({ message: modificaRecurso });
+        }
+      }
+    });
+  }
+
+
     module.exports = {
         
         agregarRecurso,

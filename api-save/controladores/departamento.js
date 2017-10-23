@@ -94,11 +94,70 @@ function eliminarDepartamento(req, res) {
 }
 
 
+
+
+function modificarDepartamento(req, res) {
+  
+  
+    var params = req.body;
+    var departamentoId = params._id;
+    params.updated_at = new Date();
+  
+  
+    Departamento.findByIdAndUpdate(departamentoId, params, (err, modificaDepartamento) => {
+      if (err) {
+  
+        res.status(500).send({ message: 'Error al actualizar el Departamento' });
+      } else {
+        if (!modificaDepartamento) {
+  
+          res.status(404).send({ message: 'No se ha podido actualizar el Departamento' });
+        } else {
+  
+          res.status(200).send({ message: modificaDepartamento });
+        }
+      }
+    });
+  }
+
+function validarModificacion(req, res) {
+  var params = req.body;
+  var nombre = params.nombre;
+  var id = params._id;
+  console.log("Controlador");
+  Departamento.findOne({ _id: id, nombre: nombre, estado: { $ne: "Eliminado" } }, (err, sala) => {
+    if (err) {
+      res.status(200).send({ message: null });
+    } else {
+      if (!sala) {
+        Departamento.findOne({ nombre: nombre, estado: { $ne: "Eliminado" } }, (err, departamentoEdit) => {
+          if (err) {
+            res.status(200).send({ message: null });
+          } else {
+            if (!departamentoEdit) {
+              res.status(200).send({ message: null });
+            }
+            else {
+              res.status(200).send({ message: departamentoEdit });
+            }
+          }
+        })
+      }
+      else {
+        res.status(200).send({ message: null });
+      }
+    }
+  });
+}
+
+
 module.exports = {
   agregarDepartamento,
   validarDepartamento,
   obtenerDepartamentos,
   obtenerDepartamento,
-  eliminarDepartamento
+  eliminarDepartamento,
+  validarModificacion,
+  modificarDepartamento
   
 };
