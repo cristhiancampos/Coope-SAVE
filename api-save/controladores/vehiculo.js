@@ -104,11 +104,78 @@ function eliminarVehiculo(req, res) {
   });
 }
 
+function modificarVehiculo(req, res) {
+  
+   
+    var params =req.body;
+    var vehiculoId = params._id;
+    params.updated_at= new Date();
+  
+    Vehiculo.findByIdAndUpdate(vehiculoId, params, (err, modificarVehiculo) => {
+      if (err) {
+        
+        res.status(500).send({ message: 'Error al actualizar la sala' });
+      } else {
+        if (!modificarVehiculo) {
+         
+          res.status(404).send({ message: 'No se ha podido actualizar la sala' });
+        } else {
+          
+          res.status(200).send({ message: modificarVehiculo });
+        }
+      }
+    });
+  }
+
+  function validarModificacion(req, res) {
+    console.log("llama en el controlador api");
+ 
+    var params = req.body;
+    var placa = params.placa;
+    var id = params._id;
+   
+    Vehiculo.findOne({ _id: id, placa: placa, estado: { $ne: "Eliminado" } }, (err, vehiculo) => {
+      if (err) {
+        res.status(200).send({ message: null });
+      } else {
+        if (!vehiculo) {
+          Vehiculo.findOne({ placa: placa, estado: { $ne: "Eliminado" } }, (err, vehiculoEdit) => {
+            if (err) {
+              res.status(200).send({ message: null });
+            } else {
+              if (!vehiculoEdit) {
+                res.status(200).send({ message: null });
+              }
+              else {
+                res.status(200).send({ message: vehiculoEdit });
+              }
+            }
+          })
+        } 
+        else {
+          res.status(200).send({ message: null });
+        }
+      }
+    });
+  }
+
+  function m(req, res){
+    console.log("llama en el controlador api");
+
+  }
+
+
+
+
+
 
 module.exports = {
   agregarVehiculo,
   validarVehiculo,
   obtenerVehiculos,
   obtenerVehiculo,
-  eliminarVehiculo
+  eliminarVehiculo,
+  modificarVehiculo,
+  validarModificacion,
+  m
 };

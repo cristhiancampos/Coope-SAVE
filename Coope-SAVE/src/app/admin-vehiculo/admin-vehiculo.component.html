@@ -207,7 +207,7 @@ aria-hidden="true">
                 <div class="control-group form-group">
                   <div class="controls">
                     <input id="input-placa" type="text" class="form-control"  #placa="ngModel" name= "placa" [(ngModel)]="vehiculoEdit.placa" 
-                    placeholder="Placa de Vehiculo"  required (input)="validarVehiculo()" >
+                    placeholder="Placa de Vehiculo"  required (input)="validarModificacion()" >
                     <small *ngIf="placa.invalid && (placa.dirty || placa.touched)" >
                       <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La placa es obligatoria</small> 
                     <small *ngIf="placaExist"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe un Vehiculo con esa placa</small> 
@@ -252,7 +252,7 @@ aria-hidden="true">
               <div id="success"></div>
               <div style="float: right">
                   <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" (click)="cerrarModal('#modalEditVehiculo')">Salir</button>   
-                  <button id="btn-add" type="submit" [disabled]="!adminVehiculoEdit.form.valid || placaExist" class="btn btn-success" >Confirmar</button>
+                  <button id="btn-add" type="submit" [disabled]="!adminVehiculoEdit.form.valid || placaExistEdit" class="btn btn-success" >Confirmar</button>
                 </div>
             </form>
           </div>

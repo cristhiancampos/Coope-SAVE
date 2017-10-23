@@ -103,22 +103,22 @@ function eliminarSala(req, res) {
 
 function modificarSala(req, res) {
 
- 
-  var params =req.body;
-  var salaId = params._id;
-  params.updated_at= new Date();
 
-  console.log(salaId);
+  var params = req.body;
+  var salaId = params._id;
+  params.updated_at = new Date();
+
+
   Sala.findByIdAndUpdate(salaId, params, (err, modificaSala) => {
     if (err) {
-      console.log("erroor");
+
       res.status(500).send({ message: 'Error al actualizar la sala' });
     } else {
-      if (!modificarSala) {
-        console.log("no se pudo");
+      if (!modificaSala) {
+
         res.status(404).send({ message: 'No se ha podido actualizar la sala' });
       } else {
-        console.log("modifico");
+
         res.status(200).send({ message: modificaSala });
       }
     }

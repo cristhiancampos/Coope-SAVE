@@ -17,6 +17,7 @@ export class AdminVehiculoComponent implements OnInit {
   public vehiculoEdit: Vehiculo;
   public vehiculo: Vehiculo;
   placaExist: boolean;
+  placaExistEdit: boolean;
   placa = '';
   public vehiculos = [];
   public estado = true;
@@ -30,8 +31,8 @@ export class AdminVehiculoComponent implements OnInit {
     private _router: Router,
     private _servVehiculo: ServicioVehiculo
   ) {
-    this.vehiculoEdit = new Vehiculo('', '', '', '', '', '', '', '');
-    this.vehiculo = new Vehiculo('', '', '', '', '', '', this.estadoMensaje, '-');
+    this.vehiculoEdit = new Vehiculo('', '', '', '', '', '', '', '','','');
+    this.vehiculo = new Vehiculo('', '', '', '', '', '', this.estadoMensaje, '-','','');
   }
 
   ngOnInit() {
@@ -72,7 +73,7 @@ export class AdminVehiculoComponent implements OnInit {
           alert('Error al registrar la vehiculo');
         } else {
           alert('vehiculo registrado exitosamente');
-          this.vehiculo = new Vehiculo('', '', '', '', '', '', this.estadoMensaje, '-');
+          this.vehiculo = new Vehiculo('', '', '', '', '', '', this.estadoMensaje, '-','','');
           this.cerrarModal("#modalAdminVehiculo")
           this.obtenerVehiculos();
         }
@@ -158,7 +159,55 @@ export class AdminVehiculoComponent implements OnInit {
     );
   }
 
-  modificarVehiculo() { }
+  modificarVehiculo() {
+
+    this.vehiculoEdit.estado = this.estadoMensajEdit;
+    this._servVehiculo.modificarVehiculo(this.vehiculoEdit).subscribe(
+      response => {
+
+        if (!response.message._id) {
+          alert('Error al modificar el vehiculo');
+        } else {
+          alert('Sala modificada exitosamente');
+          this.vehiculoEdit = new Vehiculo('', '', '', '', '', '', '', '-','','');
+          this.obtenerVehiculos();
+          this.cerrarModal('#modalEditVehiculo');
+        }
+      }, error => {
+        var alertMessage = <any>error;
+        if (alertMessage != null) {
+          var body = JSON.parse(error._body);
+          alert('El Vehiculo no se pudo modificar');
+
+        }
+      }
+    );
+
+   }
+
+   validarModificacion() {
+    let placa = this.vehiculoEdit.placa.trim().toUpperCase();
+    this.vehiculoEdit.placa = placa;
+    
+    this._servVehiculo.validarModificacion(this.vehiculoEdit).subscribe(
+      response => {
+        if (response.message) {
+          let sala = response.message;
+          this.placaExistEdit = true;
+          $('#input-nombre').css("border-left", "5px solid #a94442");
+        } else {//no existe la sala
+          $('#input-nombre').css("border-left", "5px solid #42A948");
+          this.placaExistEdit = false;
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+        }
+      }
+    );
+  }
 
   eliminarVehiculo() {
 
@@ -169,7 +218,7 @@ export class AdminVehiculoComponent implements OnInit {
           alert('Error al eliminar el vehículo');
         } else {
           alert('Vehículo eliminado exitosamente');
-          this.vehiculoEdit = new Vehiculo('', '', '', '', '', '', '', '');
+          this.vehiculoEdit = new Vehiculo('', '', '', '', '', '', '', '','','');
           this.obtenerVehiculos();
         }
       }, error => {
