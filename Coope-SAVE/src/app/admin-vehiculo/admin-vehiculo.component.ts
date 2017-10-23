@@ -182,24 +182,25 @@ export class AdminVehiculoComponent implements OnInit {
         }
       }
     );
-
    }
 
    validarModificacion() {
     let placa = this.vehiculoEdit.placa.trim().toUpperCase();
     this.vehiculoEdit.placa = placa;
-    
+
     this._servVehiculo.validarModificacion(this.vehiculoEdit).subscribe(
       response => {
         if (response.message) {
+          console.log(response.message);
           let sala = response.message;
           this.placaExistEdit = true;
-          $('#input-nombre').css("border-left", "5px solid #a94442");
+          $('#input-placa-edit').css("border-left", "5px solid #a94442");
         } else {//no existe la sala
-          $('#input-nombre').css("border-left", "5px solid #42A948");
+          $('#input-placa-edit').css("border-left", "5px solid #42A948");
           this.placaExistEdit = false;
         }
       }, error => {
+        console.log('error');
         var errorMensaje = <any>error;
 
         if (errorMensaje != null) {
@@ -210,7 +211,6 @@ export class AdminVehiculoComponent implements OnInit {
   }
 
   eliminarVehiculo() {
-
     this._servVehiculo.eliminarVehiculo(this.vehiculoEdit._id).subscribe(
       response => {
 

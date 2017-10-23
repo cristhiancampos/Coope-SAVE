@@ -190,6 +190,15 @@ aria-hidden="true">
         <div class="row">
           <div class="col-md-12">
             <form #adminVehiculoEdit="ngForm" (ngSubmit)="modificarVehiculo()">
+                <div class="control-group form-group">
+                    <div class="controls">
+                      <input id="input-placa-edit" type="text" class="form-control"  #placa="ngModel" name= "placa" [(ngModel)]="vehiculoEdit.placa" 
+                      placeholder="Placa de Vehiculo"  required (input)="validarModificacion()" >
+                      <small *ngIf="placa.invalid && (placa.dirty || placa.touched)" >
+                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La placa es obligatoria</small> 
+                      <small *ngIf="placaExistEdit"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe un Vehiculo con esa placa</small> 
+                      </div>
+                  </div>
               <div class="control-group form-group">
                 <div class="controls">
                   <input type="text" class="form-control" #tipo="ngModel" name= "tipo" [(ngModel)]="vehiculoEdit.tipo" placeholder="Tipo de Vehiculo" required >
@@ -204,15 +213,6 @@ aria-hidden="true">
                     <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La marca es obligatoria</small> 
                 </div>
               </div>
-                <div class="control-group form-group">
-                  <div class="controls">
-                    <input id="input-placa" type="text" class="form-control"  #placa="ngModel" name= "placa" [(ngModel)]="vehiculoEdit.placa" 
-                    placeholder="Placa de Vehiculo"  required (input)="validarModificacion()" >
-                    <small *ngIf="placa.invalid && (placa.dirty || placa.touched)" >
-                      <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La placa es obligatoria</small> 
-                    <small *ngIf="placaExist"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe un Vehiculo con esa placa</small> 
-                    </div>
-                </div>
               
               <div class="control-group form-group">
                 <div class="controls">

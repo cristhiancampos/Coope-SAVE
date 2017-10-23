@@ -11,8 +11,7 @@ api.post('/validarVehiculo',ControladorVehiculo.validarVehiculo);
 api.get('/obtenerVehiculos',ControladorVehiculo.obtenerVehiculos);
 api.get('/obtenerVehiculo/:id',ControladorVehiculo.obtenerVehiculo);
 api.delete('/eliminarVehiculo/:id', ControladorVehiculo.eliminarVehiculo);
-api.post('/validarModificacion',ControladorVehiculo.validarModificacion);
+api.post('/validarModificacionVehiculo',ControladorVehiculo.validarModificacion);
 api.put('/modificarVehiculo',ControladorVehiculo.modificarVehiculo);
-
 
 module.exports = api;

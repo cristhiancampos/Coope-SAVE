@@ -105,8 +105,6 @@ function eliminarVehiculo(req, res) {
 }
 
 function modificarVehiculo(req, res) {
-  
-   
     var params =req.body;
     var vehiculoId = params._id;
     params.updated_at= new Date();
@@ -128,12 +126,12 @@ function modificarVehiculo(req, res) {
   }
 
   function validarModificacion(req, res) {
-    console.log("llama en el controlador api");
- 
     var params = req.body;
     var placa = params.placa;
     var id = params._id;
-   
+
+    console.log(params);
+  
     Vehiculo.findOne({ _id: id, placa: placa, estado: { $ne: "Eliminado" } }, (err, vehiculo) => {
       if (err) {
         res.status(200).send({ message: null });
@@ -147,27 +145,17 @@ function modificarVehiculo(req, res) {
                 res.status(200).send({ message: null });
               }
               else {
-                res.status(200).send({ message: vehiculoEdit });
+                res.status(200).send({ message: vehiculoEdit});
               }
             }
           })
-        } 
+        }
         else {
           res.status(200).send({ message: null });
         }
       }
     });
   }
-
-  function m(req, res){
-    console.log("llama en el controlador api");
-
-  }
-
-
-
-
-
 
 module.exports = {
   agregarVehiculo,
@@ -176,6 +164,5 @@ module.exports = {
   obtenerVehiculo,
   eliminarVehiculo,
   modificarVehiculo,
-  validarModificacion,
-  m
+  validarModificacion
 };
