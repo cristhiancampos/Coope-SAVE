@@ -3,6 +3,7 @@ import * as $ from 'jquery';
 import { ServicioSala } from '../servicios/sala';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Sala } from '../modelos/salas';
+import swal from 'sweetalert2'
 
 @Component({
   selector: 'app-admin-sala',
@@ -95,9 +96,9 @@ export class AdminSalaComponent implements OnInit {
         let sala = response.sala;
 
         if (!response.sala._id) {
-          alert('Error al registrar la Sala');
+          this.msjError("La Sala no pudo ser agregada");
         } else {
-          alert('Sala registrada exitosamente');
+          this.msjExitoso("Sala Agregada Exitosamente");
           this.sala = new Sala('', '', '', '', this.estadoMensaje, '-', '', '');
           this.mostrar(false);
           this.obtenerSalas();
@@ -163,18 +164,18 @@ export class AdminSalaComponent implements OnInit {
       response => {
 
         if (!response.message._id) {
-          alert('Error al modificar la Sala');
+          this.msjError("La Sala no pudo ser Modificada");
         } else {
-          alert('Sala modificada exitosamente');
           this.salaEdit = new Sala('', '', '', '', '', '-', '', '');
           this.obtenerSalas();
           this.cerrarModal('#modalEditSala');
+          this.msjExitoso("Sala Modificada Exitosamente");
         }
       }, error => {
         var alertMessage = <any>error;
         if (alertMessage != null) {
           var body = JSON.parse(error._body);
-          alert('Sala no se pudo modificar');
+          this.msjError("La Sala no pudo ser Modificada");
 
         }
       }
@@ -187,9 +188,9 @@ export class AdminSalaComponent implements OnInit {
       response => {
 
         if (!response.message._id) {
-          alert('Error al elimar la Sala');
+          this.msjError("La Sala no pudo ser Eliminada");
         } else {
-          alert('Sala eliminada exitosamente');
+          this.msjExitoso("Sala Eliminada Exitosamente");
           this.salaEdit = new Sala('', '', '', '', '', '', '', '');
           this.obtenerSalas();
         }
@@ -197,7 +198,7 @@ export class AdminSalaComponent implements OnInit {
         var alertMessage = <any>error;
         if (alertMessage != null) {
           var body = JSON.parse(error._body);
-          alert('Sala no eliminada');
+          this.msjError("La Sala no pudo ser Eliminada");
         }
       }
     );
@@ -225,6 +226,24 @@ export class AdminSalaComponent implements OnInit {
         }
       }
     );
+  }
+
+  msjExitoso(texto: string){
+    swal({
+      position: 'top',
+      type: 'success',
+      title: texto,
+      showConfirmButton: false,
+      timer: 2500
+    })
+  }
+  
+  msjError(texto: string){
+    swal(
+      'Oops...',
+      texto,
+      'error'
+    )
   }
 
   cerrarModal(modalId: any) {

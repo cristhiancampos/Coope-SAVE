@@ -3,6 +3,7 @@ import * as $ from 'jquery';
 import { ServicioRecursos } from '../servicios/recurso';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Recurso } from '../modelos/recursos';
+import swal from 'sweetalert2'
 @Component({
   selector: 'app-admin-recurso',
   templateUrl: './admin-recurso.component.html',
@@ -63,11 +64,11 @@ export class AdminRecursoComponent implements OnInit {
       response => {
         let recurso = response.message;
         if (!response.message) {
-          alert('Error al registrar la recurso');
+          this.msjError("El recurso no pudo ser agregado");
         } else {
-          alert('recurso registrado exitosamente');
           this.recurso = new Recurso('', '', '', '', this.estadoMensaje, '','','');
           this.cerrarModal("#modalAdminRecurso");
+          this.msjExitoso("Recurso Agregado Exitosamente");
           this.obtenerRecursos();
         }
       }, error => {
@@ -154,12 +155,12 @@ export class AdminRecursoComponent implements OnInit {
       response => {
 
         if (!response.message._id) {
-          alert('Error al modificar el recurso');
+          this.msjError("El recurso no pudo ser Mofificado");
         } else {
-          alert('Recurso modificada exitosamente');
           this.recursoEdit = new Recurso('', '', '', '', '', '-', '', '');
           this.obtenerRecursos();
           this.cerrarModal('#modalAdminRecursoEdit');
+          this.msjExitoso("Recurso Modificado Exitosamente");
         }
       }, error => {
         var alertMessage = <any>error;
@@ -180,9 +181,9 @@ export class AdminRecursoComponent implements OnInit {
       response => {
 
         if (!response.message._id) {
-          alert('Error al elimar la Sala');
+          this.msjError("El recurso no pudo ser Eliminado");
         } else {
-          alert('Sala eliminada exitosamente');
+          this.msjExitoso("Recurso eliminado Exitosamente");
           this.recursoEdit = new Recurso('', '', '', '', '', '-','','');
           this.obtenerRecursos();
         }
@@ -220,6 +221,24 @@ export class AdminRecursoComponent implements OnInit {
         }
       }
     );
+  }
+
+  msjExitoso(texto: string){
+    swal({
+      position: 'top',
+      type: 'success',
+      title: texto,
+      showConfirmButton: false,
+      timer: 2500
+    })
+  }
+  
+  msjError(texto: string){
+    swal(
+      'Oops...',
+      texto,
+      'error'
+    )
   }
 
   cerrarModal(modalId: any) {

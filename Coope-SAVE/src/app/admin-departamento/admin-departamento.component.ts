@@ -3,6 +3,8 @@ import * as $ from 'jquery';
 import { ServicioDepartamento } from '../servicios/departamento';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Departamento } from '../modelos/departamento';
+import swal from 'sweetalert2'
+
 
 @Component({
   selector: 'app-admin-departamento',
@@ -69,8 +71,9 @@ export class AdminDepartamentoComponent implements OnInit {
         if (!response.message._id) {
           alert('Error al registrar la departamento');
         } else {
-          alert('Departamento registrado exitosamente');
+         //alert('Departamento registrado exitosamente');
           this.cerrarModal('#modalAdminDepa');
+          this.msjExitoso("Departamento Agregado Exitosamente");
           this.departamento = new Departamento('', '', '', this.estadoMensaje,'','');
           this.obtenerDepartamentos();
         }
@@ -78,7 +81,7 @@ export class AdminDepartamentoComponent implements OnInit {
         var alertMessage = <any>error;
         if (alertMessage != null) {
           var body = JSON.parse(error._body);
-          alert('Departamento no registrado');
+          this.msjError("El departamento no pudo ser registrado");
         }
       }
     );
@@ -158,17 +161,16 @@ export class AdminDepartamentoComponent implements OnInit {
         if (!response.message._id) {
           alert('Error al modificar el departamento');
         } else {
-          alert('Departamento modificado exitosamente');
           this.departamentoEdit = new Departamento('', '', '', '', '', '');
           this.obtenerDepartamentos();
           this.cerrarModal('#modalEditDepartamento');
+          this.msjExitoso("Departamento modificado Exitosamente");
         }
       }, error => {
         var alertMessage = <any>error;
         if (alertMessage != null) {
           var body = JSON.parse(error._body);
-          alert('Departamento no se pudo modificar');
-
+          this.msjError("El departamento no pudo ser Modificado");
         }
       }
     );
@@ -208,7 +210,8 @@ export class AdminDepartamentoComponent implements OnInit {
         if (!response.message._id) {
           alert('Error al elimar el departamento');
         } else {
-          alert('Departamento eliminada exitosamente');
+         
+          this.msjExitoso("Departamento Eliminado Exitosamente");
           this.departamentoEdit = new Departamento('', '', '', '','','');
           this.obtenerDepartamentos();
         }
@@ -216,13 +219,29 @@ export class AdminDepartamentoComponent implements OnInit {
         var alertMessage = <any>error;
         if (alertMessage != null) {
           var body = JSON.parse(error._body);
-          alert('Departamento no eliminado');
+          this.msjError("El departamento no pudo ser Eliminado");
         }
       }
     );
   }
+ 
+msjExitoso(texto: string){
+  swal({
+    position: 'top',
+    type: 'success',
+    title: texto,
+    showConfirmButton: false,
+    timer: 2500
+  })
+}
 
-
+msjError(texto: string){
+  swal(
+    'Oops...',
+    texto,
+    'error'
+  )
+}
 
   cerrarModal(modalId: any) {
     $(".modal-backdrop").remove();
@@ -237,5 +256,7 @@ export class AdminDepartamentoComponent implements OnInit {
     $(modalId).addClass('show');
     $(modalId).css('display', 'block');
   }
+
+  
 
 }
