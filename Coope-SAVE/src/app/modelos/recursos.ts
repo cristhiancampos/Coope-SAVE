@@ -5,6 +5,8 @@ export class Recurso{
         public codigoActivo:string,
         public descripcion :string,
         public estado :string,
-        public reporte: string
+        public reporte: string,
+        public created_at: String,
+        public updated_at: String
     ){}
 }

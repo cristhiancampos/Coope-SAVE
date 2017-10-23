@@ -64,4 +64,23 @@ export class ServicioRecursos{
          .map(res=>res.json());
     }
 
+    validarModificacion(recurso: any)
+    {
+         let json = JSON.stringify(recurso);
+        let params = json; 
+        let headers = new Headers({'Content-Type':'application/json'});
+        return this._http.post(this.url+'validarModificacionRecurso',params,{headers:headers})
+        .map(res=>res.json());
+    }
+
+    modificarRecurso(recurso:any)
+    {
+         let json = JSON.stringify(recurso);
+        let params = json; 
+        let headers = new Headers({'Content-Type':'application/json'});
+        return this._http.put(this.url+'modificarRecurso',params,{headers:headers})
+        .map(res=>res.json());
+    }
+
+
 }//Final de el export de clase

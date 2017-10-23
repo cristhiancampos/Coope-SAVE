@@ -26,8 +26,8 @@ export class AdminRecursoComponent implements OnInit {
     private _router: Router,
     private _servRecurso: ServicioRecursos
   ) {
-    this.recurso = new Recurso('', '', '', '', this.estadoMensaje, '');
-    this.recursoEdit = new Recurso('', '', '', '', '', '');
+    this.recurso = new Recurso('', '', '', '', this.estadoMensaje, '','','');
+    this.recursoEdit = new Recurso('', '', '', '', '', '','','');
   }
 
   ngOnInit() {
@@ -66,7 +66,7 @@ export class AdminRecursoComponent implements OnInit {
           alert('Error al registrar la recurso');
         } else {
           alert('recurso registrado exitosamente');
-          this.recurso = new Recurso('', '', '', '', this.estadoMensaje, '');
+          this.recurso = new Recurso('', '', '', '', this.estadoMensaje, '','','');
           this.cerrarModal("#modalAdminRecurso");
           this.obtenerRecursos();
         }
@@ -148,7 +148,31 @@ export class AdminRecursoComponent implements OnInit {
   onfocusRecurso() {
     // this.codRecursosExist= false;
   }
-  modificarRecurso() { }
+  modificarRecurso() { 
+    this.recursoEdit.estado = this.estadoMensajEdit;
+    this._servRecurso.modificarRecurso(this.recursoEdit).subscribe(
+      response => {
+
+        if (!response.message._id) {
+          alert('Error al modificar el recurso');
+        } else {
+          alert('Recurso modificada exitosamente');
+          this.recursoEdit = new Recurso('', '', '', '', '', '-', '', '');
+          this.obtenerRecursos();
+          this.cerrarModal('#modalAdminRecursoEdit');
+        }
+      }, error => {
+        var alertMessage = <any>error;
+        if (alertMessage != null) {
+          var body = JSON.parse(error._body);
+          alert('Sala no se pudo modificar');
+
+        }
+      }
+    );
+  }
+
+
 
   eliminarRecurso(){
     
@@ -159,7 +183,7 @@ export class AdminRecursoComponent implements OnInit {
           alert('Error al elimar la Sala');
         } else {
           alert('Sala eliminada exitosamente');
-          this.recursoEdit = new Recurso('', '', '', '', '', '-');
+          this.recursoEdit = new Recurso('', '', '', '', '', '-','','');
           this.obtenerRecursos();
         }
       }, error => {
@@ -167,6 +191,32 @@ export class AdminRecursoComponent implements OnInit {
         if (alertMessage != null) {
           var body = JSON.parse(error._body);
           alert('Sala no eliminada');
+        }
+      }
+    );
+  }
+
+  validarModificacion() {
+    let placa = this.recursoEdit.codigoActivo.trim().toUpperCase();
+    this.recursoEdit.codigoActivo = placa;
+
+    this._servRecurso.validarModificacion(this.recursoEdit).subscribe(
+      response => {
+        if (response.message) {
+          console.log(response.message);
+          let sala = response.message;
+          this.codRecursosExist = true;
+          $('#input-cod-edit').css("border-left", "5px solid #a94442");
+        } else {//no existe la sala
+          $('#input-cod-edit').css("border-left", "5px solid #42A948");
+          this.codRecursosExist = false;
+        }
+      }, error => {
+        console.log('error');
+        var errorMensaje = <any>error;
+
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
         }
       }
     );

@@ -127,23 +127,23 @@ function modificarRecurso(req, res) {
 
   function validarModificacion(req, res) {
     var params = req.body;
-    var nombre = params.nombre;
+    var codigoActivo = params.codigoActivo;
     var id = params._id;
   
-    Sala.findOne({ _id: id, nombre: nombre, estado: { $ne: "Eliminado" } }, (err, sala) => {
+    Recurso.findOne({ _id: id, codigoActivo: codigoActivo, estado: { $ne: "Eliminado" } }, (err, recurso) => {
       if (err) {
         res.status(200).send({ message: null });
       } else {
-        if (!sala) {
-          Sala.findOne({ nombre: nombre, estado: { $ne: "Eliminado" } }, (err, salaEdit) => {
+        if (!recurso) {
+          Recurso.findOne({ codigoActivo: codigoActivo, estado: { $ne: "Eliminado" } }, (err, recursoEdit) => {
             if (err) {
               res.status(200).send({ message: null });
             } else {
-              if (!salaEdit) {
+              if (!recursoEdit) {
                 res.status(200).send({ message: null });
               }
               else {
-                res.status(200).send({ message: salaEdit });
+                res.status(200).send({ message: recursoEdit });
               }
             }
           })
@@ -161,5 +161,7 @@ function modificarRecurso(req, res) {
         validarRecurso,
         obtenerRecursos,
         obtenerRecurso,
-        eliminarRecurso
+        eliminarRecurso,
+        validarModificacion,
+        modificarRecurso
       };
