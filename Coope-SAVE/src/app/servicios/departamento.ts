@@ -61,15 +61,15 @@ export class ServicioDepartamento{
          .map(res=>res.json());
     }
 
-    validarModificacion(departamento: any)
+    validarModificacion(vehiculo: any)
     {
-        
-         let json = JSON.stringify(departamento);
+         let json = JSON.stringify(vehiculo);
         let params = json; 
         let headers = new Headers({'Content-Type':'application/json'});
-        return this._http.post(this.url+'validarModificacion',params,{headers:headers})
+        return this._http.post(this.url+'validarModificacionDepartamento',params,{headers:headers})
         .map(res=>res.json());
     }
+
 
     modificarDepartamento(departamento:any)
     {
@@ -79,5 +79,6 @@ export class ServicioDepartamento{
         return this._http.put(this.url+'modificarDepartamento',params,{headers:headers})
         .map(res=>res.json());
     }
+    
 
 }//Final de el export de clase

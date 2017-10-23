@@ -204,7 +204,7 @@ aria-hidden="true">
             <form #adminDepartamentoEdit="ngForm" (ngSubmit)="modificarDepartamento()">
               <div class="control-group form-group">
                 <div class="controls">
-                  <input id="input-nombre" type="text" class="form-control"  #nombre="ngModel" name= "nombre" [(ngModel)]="departamentoEdit.nombre" 
+                  <input id="input-nombre-edit-dep" type="text" class="form-control"  #nombre="ngModel" name= "nombre" [(ngModel)]="departamentoEdit.nombre" 
                   placeholder="Nombre" required (input)="validarModificacion()" >
                   <small *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" >
                       <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El nombre es obligatorio

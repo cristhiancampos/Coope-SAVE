@@ -129,9 +129,6 @@ function modificarVehiculo(req, res) {
     var params = req.body;
     var placa = params.placa;
     var id = params._id;
-
-    console.log(params);
-  
     Vehiculo.findOne({ _id: id, placa: placa, estado: { $ne: "Eliminado" } }, (err, vehiculo) => {
       if (err) {
         res.status(200).send({ message: null });

@@ -181,16 +181,16 @@ export class AdminDepartamentoComponent implements OnInit {
     this._servDepartamento.validarModificacion(this.departamentoEdit).subscribe(
       response => {
         if (response.message) {
-          console.log("existe"+response.message);
-          
+          console.log(response.message);
+          let sala = response.message;
           this.nombreExistEdit = true;
-          $('#input-nombre').css("border-left", "5px solid #a94442");
+          $('#input-nombre-edit-dep').css("border-left", "5px solid #a94442");
         } else {//no existe la sala
-          $('#input-nombre').css("border-left", "5px solid #42A948");
+          $('#input-nombre-edit-dep').css("border-left", "5px solid #42A948");
           this.nombreExistEdit = false;
-          console.log("no existe"+response.message);
         }
       }, error => {
+        console.log('error');
         var errorMensaje = <any>error;
 
         if (errorMensaje != null) {
