@@ -4,6 +4,7 @@ import { ServicioUsuario } from '../servicios/usuario';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import {Usuario} from '../modelos/usuario';
 import { ServicioDepartamento } from '../servicios/departamento';
+import swal from 'sweetalert2'
 
 @Component({
   selector: 'app-admin-usuario',
@@ -136,9 +137,9 @@ export class AdminUsuarioComponent implements OnInit {
       response => {
 
         if (!response.message._id) {
-          alert('Error al eliminar el usuario');
+          this.msjError("El Usuario no pudo ser Eliminado");
         } else {
-          alert('Sala eliminada exitosamente');
+          this.msjExitoso("Usuario Eliminado Exitosamente");
           this.usuarioEdit = new Usuario('','','','','','','','','','');
           this.obtenerUsuarios();
         }
@@ -146,12 +147,29 @@ export class AdminUsuarioComponent implements OnInit {
         var alertMessage = <any>error;
         if (alertMessage != null) {
           var body = JSON.parse(error._body);
-          alert('Sala no eliminada');
+          this.msjError("El Usuario no pudo ser Eliminado");
         }
       }
     );
   }
 
+  msjExitoso(texto: string){
+    swal({
+      position: 'top',
+      type: 'success',
+      title: texto,
+      showConfirmButton: false,
+      timer: 2500
+    })
+  }
+  
+  msjError(texto: string){
+    swal(
+      'Oops...',
+      texto,
+      'error'
+    )
+  }
   modificarUsuario(){
 
   }
