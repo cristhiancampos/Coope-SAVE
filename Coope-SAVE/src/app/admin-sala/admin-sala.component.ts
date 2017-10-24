@@ -4,6 +4,8 @@ import { ServicioSala } from '../servicios/sala';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Sala } from '../modelos/salas';
 import swal from 'sweetalert2'
+import { ServicioUsuario } from '../servicios/usuario';
+import { Usuario } from '../modelos/usuario';
 
 @Component({
   selector: 'app-admin-sala',
@@ -24,10 +26,13 @@ export class AdminSalaComponent implements OnInit {
   public estadoEdicion: boolean;
   public estadoMensaje = 'Habilitado';
   public estadoMensajEdit = '';
+  public token;
+  public identity;
 
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
+    private _servUsuario: ServicioUsuario,
     private _servSala: ServicioSala
   ) {
     this.mostrarModal = false;
@@ -36,9 +41,65 @@ export class AdminSalaComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.obtenerSalas();
+    this.verificarCredenciales();
   }
 
+  verificarCredenciales() {
+    this.identity = this._servUsuario.getIndentity();
+    this.token = this._servUsuario.getToken();
+    let identity = localStorage.getItem('identity');
+    let user = JSON.parse(identity);
+    let recordar = localStorage.getItem('remember');
+    let recordarValue = JSON.parse(recordar);
+    if (user != null) {
+      let usuarioTemp = new Usuario('', '', '', '', '', '', '', '', '', '');
+      usuarioTemp.correo = user.correo;
+      usuarioTemp.contrasena = user.contrasena;
+      // obtener datos de usuario identificado
+      this._servUsuario.verificarCredenciales(usuarioTemp).subscribe(response => {
+        let identity = response.user;
+        this.identity = identity;
+        if (!this.identity._id) {
+          $('#nav-user').text(' ');
+          this.abrirModal('#loginModal');
+        } else {
+          //conseguir el token para enviarselo a cada petición
+          this._servUsuario.verificarCredenciales(usuarioTemp, 'true').subscribe(
+            response => {
+              let token = response.token;
+              this.token = token;
+              if (this.token <= 0) {
+                $('#nav-user').text(' ');
+                this.abrirModal('#loginModal');
+              } else {
+                // crear elemento en el localstorage para tener el token disponible
+                localStorage.setItem('token', token);
+                let identity = localStorage.getItem('identity');
+                let user = JSON.parse(identity);
+                if (user != null) {
+                  $('#nav-user').text(user.nombre + ' ' + user.apellidos);
+                  this.obtenerSalas();
+                } else {
+                  $('#nav-user').text('');
+                }
+              }
+            }, error => {
+              $('#nav-user').text(' ');
+              this.abrirModal('#loginModal');
+            }
+          );
+        }
+      }, error => {
+        $('#nav-user').text(' ');
+        this.abrirModal('#loginModal');
+      }
+      );
+    } else {
+      $('#nav-user').text(' ');
+      this.abrirModal('#loginModal');
+    }
+  }
+  
   cambiarEstado() {
     this.estado = !this.estado;
     if (this.estado) {
