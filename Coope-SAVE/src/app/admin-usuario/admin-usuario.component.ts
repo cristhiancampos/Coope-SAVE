@@ -23,7 +23,8 @@ export class AdminUsuarioComponent implements OnInit {
   public estadoEdicion: boolean;
   public estadoMensaje = 'Habilitado';
   public currentUser = "";
-  public identity:any;
+  public identity: any;;
+  public token;
   public tempUserRol;
   public departamentos = [];
   public userExist: boolean;
@@ -41,11 +42,66 @@ export class AdminUsuarioComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.obtenerUsuarios();
-    this.obtenerDepartamentos();
+    this.verificarCredenciales();
   }
 
-
+  verificarCredenciales() {
+    this.identity = this._servUsuario.getIndentity();
+    this.token = this._servUsuario.getToken();
+    let identity = localStorage.getItem('identity');
+    let user = JSON.parse(identity);
+    let recordar = localStorage.getItem('remember');
+    let recordarValue = JSON.parse(recordar);
+    if (user != null) {
+      let usuarioTemp = new Usuario('', '', '', '', '', '', '', '', '', '');
+      usuarioTemp.correo = user.correo;
+      usuarioTemp.contrasena = user.contrasena;
+      // obtener datos de usuario identificado
+      this._servUsuario.verificarCredenciales(usuarioTemp).subscribe(response => {
+        let identity = response.user;
+        this.identity = identity;
+        if (!this.identity._id) {
+          $('#nav-user').text(' ');
+          this.abrirModal('#loginModal');
+        } else {
+          //conseguir el token para enviarselo a cada petición
+          this._servUsuario.verificarCredenciales(usuarioTemp, 'true').subscribe(
+            response => {
+              let token = response.token;
+              this.token = token;
+              if (this.token <= 0) {
+                $('#nav-user').text(' ');
+                this.abrirModal('#loginModal');
+              } else {
+                // crear elemento en el localstorage para tener el token disponible
+                localStorage.setItem('token', token);
+                this.usuario = new Usuario('', '', '', '', '', '', '', '', '', '');
+                let identity = localStorage.getItem('identity');
+                let user = JSON.parse(identity);
+                if (user != null) {
+                  $('#nav-user').text(user.nombre + ' ' + user.apellidos);
+                  this.obtenerUsuarios();
+                  this.obtenerDepartamentos();
+                } else {
+                  $('#nav-user').text('');
+                }
+              }
+            }, error => {
+              $('#nav-user').text(' ');
+              this.abrirModal('#loginModal');
+            }
+          );
+        }
+      }, error => {
+        $('#nav-user').text(' ');
+        this.abrirModal('#loginModal');
+      }
+      );
+    } else {
+      $('#nav-user').text(' ');
+      this.abrirModal('#loginModal');
+    }
+  }
   cambiarEstadoEdicion(event: any) {
     //alert(event.target.checked);
     this.estadoEdicion = !this.estadoEdicion;
@@ -62,7 +118,7 @@ export class AdminUsuarioComponent implements OnInit {
     let identity = localStorage.getItem('identity');
     let user = JSON.parse(identity);
     if (user != null) {
-      this.identity=user;
+      this.identity = user;
 
       this.currentUser = user.correo.trim();
     } else { this.currentUser = "" }
@@ -110,7 +166,7 @@ export class AdminUsuarioComponent implements OnInit {
           this.usuarioEdit.rol = response.message[0].rol;
           this.usuarioEdit.departamento = response.message[0].departamento;
           this.usuarioEdit.estado = response.message[0].estado;
-          this.tempUserRol=response.message[0].rol;
+          this.tempUserRol = response.message[0].rol;
           this.estadoMensajEdit = this.usuarioEdit.estado;
           if (this.usuarioEdit.estado === 'Habilitado') {
             this.estadoEdicion = true;
@@ -203,7 +259,6 @@ export class AdminUsuarioComponent implements OnInit {
   validarModificacion() {
     let correo = this.usuarioEdit.correo.trim();
     this.usuarioEdit.correo = correo;
-
     this._servUsuario.validarModificacion(this.usuarioEdit).subscribe(
       response => {
         if (response.message) {
@@ -226,7 +281,6 @@ export class AdminUsuarioComponent implements OnInit {
   }
 
   modificarUsuario() {
-
     this.usuarioEdit.estado = this.estadoMensajEdit;
     this._servUsuario.modificarUsuario(this.usuarioEdit).subscribe(
       response => {
@@ -234,7 +288,7 @@ export class AdminUsuarioComponent implements OnInit {
         if (!response.message._id) {
           this.msjError("El Usuario no pudo ser Modificado");
         } else {
-          this.usuarioEdit = new   Usuario('', '', '', '', '', '', '', '', '', '');
+          this.usuarioEdit = new Usuario('', '', '', '', '', '', '', '', '', '');
           this.obtenerUsuarios();
           this.cerrarModal('#editAdminUserModal');
           this.msjExitoso("Usuario Modificado Exitosamente");
@@ -255,6 +309,12 @@ export class AdminUsuarioComponent implements OnInit {
     $(modalId).removeClass('show');
     $(modalId).css('display', 'none');
   }
-
+  //abrir modal
+  abrirModal(modalId: any) {
+    $('body').append('<div class="modal-backdrop fade show" ></div>');
+    $('body').addClass('modal-open');
+    $(modalId).addClass('show');
+    $(modalId).css('display', 'block');
+  }
 
 }

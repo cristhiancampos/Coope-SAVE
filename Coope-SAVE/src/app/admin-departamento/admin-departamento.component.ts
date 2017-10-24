@@ -4,7 +4,8 @@ import { ServicioDepartamento } from '../servicios/departamento';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Departamento } from '../modelos/departamento';
 import swal from 'sweetalert2'
-
+import { ServicioUsuario } from '../servicios/usuario';
+import { Usuario } from '../modelos/usuario';
 
 @Component({
   selector: 'app-admin-departamento',
@@ -20,6 +21,9 @@ export class AdminDepartamentoComponent implements OnInit {
   nombreExist: boolean;
   nombreExistEdit: boolean;
   mostralModal: boolean;
+  public token;
+  public identity;
+  
 
   public estado = true;
   public estadoEdicion: boolean;
@@ -29,6 +33,7 @@ export class AdminDepartamentoComponent implements OnInit {
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
+    private _servUsuario: ServicioUsuario,
     private _servDepartamento: ServicioDepartamento
   ) {
     this.mostralModal = false;
@@ -37,7 +42,63 @@ export class AdminDepartamentoComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.obtenerDepartamentos();
+    //this.obtenerDepartamentos();
+    this.verificarCredenciales();
+  }
+  verificarCredenciales() {
+    this.identity = this._servUsuario.getIndentity();
+    this.token = this._servUsuario.getToken();
+    let identity = localStorage.getItem('identity');
+    let user = JSON.parse(identity);
+    let recordar = localStorage.getItem('remember');
+    let recordarValue = JSON.parse(recordar);
+    if (user != null) {
+      let usuarioTemp = new Usuario('', '', '', '', '', '', '', '', '', '');
+      usuarioTemp.correo = user.correo;
+      usuarioTemp.contrasena = user.contrasena;
+      // obtener datos de usuario identificado
+      this._servUsuario.verificarCredenciales(usuarioTemp).subscribe(response => {
+        let identity = response.user;
+        this.identity = identity;
+        if (!this.identity._id) {
+          $('#nav-user').text(' ');
+          this.abrirModal('#loginModal');
+        } else {
+          //conseguir el token para enviarselo a cada petición
+          this._servUsuario.verificarCredenciales(usuarioTemp, 'true').subscribe(
+            response => {
+              let token = response.token;
+              this.token = token;
+              if (this.token <= 0) {
+                $('#nav-user').text(' ');
+                this.abrirModal('#loginModal');
+              } else {
+                // crear elemento en el localstorage para tener el token disponible
+                localStorage.setItem('token', token);
+                let identity = localStorage.getItem('identity');
+                let user = JSON.parse(identity);
+                if (user != null) {
+                  $('#nav-user').text(user.nombre + ' ' + user.apellidos);
+                  this.obtenerDepartamentos();
+                } else {
+                  $('#nav-user').text('');
+                }
+              }
+            }, error => {
+              $('#nav-user').text(' ');
+              this.abrirModal('#loginModal');
+            }
+          );
+        }
+      }, error => {
+        $('#nav-user').text(' ');
+        this.abrirModal('#loginModal');
+      }
+      );
+    } else {
+      $('#nav-user').text(' ');
+      this.abrirModal('#loginModal');
+    }
   }
 
   cambiarEstado() {
@@ -157,7 +218,6 @@ export class AdminDepartamentoComponent implements OnInit {
     this.departamentoEdit.estado = this.estadoMensajEdit;
     this._servDepartamento.modificarDepartamento(this.departamentoEdit).subscribe(
       response => {
-
         if (!response.message._id) {
           alert('Error al modificar el departamento');
         } else {
@@ -192,7 +252,6 @@ export class AdminDepartamentoComponent implements OnInit {
           this.nombreExistEdit = false;
         }
       }, error => {
-        console.log('error');
         var errorMensaje = <any>error;
 
         if (errorMensaje != null) {
@@ -203,7 +262,6 @@ export class AdminDepartamentoComponent implements OnInit {
   }
 
   eliminarDepartamento() {
-
     this._servDepartamento.eliminarDepartamento(this.departamentoEdit._id).subscribe(
       response => {
 

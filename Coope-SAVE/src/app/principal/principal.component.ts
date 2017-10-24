@@ -3,7 +3,7 @@ import * as $ from 'jquery';
 import { Usuario } from '../modelos/usuario';
 import { NgModel } from '@angular/forms';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-
+import swal from 'sweetalert2';
 import { ServicioUsuario } from '../servicios/usuario';
 import { ServicioDepartamento } from '../servicios/departamento';
 @Component({
@@ -100,23 +100,19 @@ export class PrincipalComponent implements OnInit {
     this._servUsuario.getCorreo(user).subscribe(
       response => {
         if (response.message) {
-          console.log(response.message.correo);
           let co = response.message.correo;;
           this.correo = co;
           this.userExist = true;
           $('#input-correo').css("border-left", "5px solid #a94442");
-        } else {
-          $('#input-correo').css("border-left", "5px solid #42A948");
-          console.log('no existe');
-          console.log(response.message);
+        } else {//no existe el corrreo
+          $('#input-correo').css("border-left", "5px solid #42A948");;
           this.correo = null;
           this.userExist = false;
         }
       }, error => {
         var errorMensaje = <any>error;
-
         if (errorMensaje != null) {
-          var body = JSON.parse(error._body);
+          //var body = JSON.parse(error._body);
         }
       }
     );
@@ -126,18 +122,15 @@ export class PrincipalComponent implements OnInit {
     let use = new Usuario('','','','','','','','','','');
     use = this.usuario;
     use.correo = this.dominio;
-    // alert(use.correo);
     this._servUsuario.registrarUsuario(use).subscribe(
       response => {
-        //  console.log(response.user._id);
         let user = response.user;
         this.usuarioRegistrado = user;
         if (!response.user._id) {
-          this.mensajeAlerta = "error al registarse";
-          alert('Error al registrar el usario');
+          this.mensajeAlerta = "Error al registarse";
+          this.msjError('Error al registrar el usuario');
         } else {
-          alert('Usuario registrado exitosamente');
-          console.log(user);
+          this.msjExitoso('Usuario registrado exitosamente');
           this.mensajeAlerta = "Usuario registrado  exitosamente";
           if (user != null) {
             $('#nav-user').text(user.nombre + ' ' + user.apellidos);
@@ -152,9 +145,9 @@ export class PrincipalComponent implements OnInit {
       }, error => {
         var alertMessage = <any>error;
         if (alertMessage != null) {
-          var body = JSON.parse(error._body);
-          this.mensajeAlerta = body.message;
-          alert('Usuario no registrado');
+          //var body = JSON.parse(error._body);
+          //this.mensajeAlerta = body.message;
+          this.msjError('Error al registrar el usuario');
         }
       }
     );
@@ -167,18 +160,16 @@ export class PrincipalComponent implements OnInit {
       let identity = response.user;
       this.identity = identity;
       if (!this.identity._id) {
-        alert('usuario no indentificado correctamente');
+        this.msjError('Credenciales Incorrectas');
       } else {
         // crear elemento en el localstorage para la session de usuario//
         localStorage.setItem('identity', JSON.stringify(identity));   //JSON.stringfy(), convierte un json a string
-        console.log(response.user);
-        //conseguir el token para enviarselo a cada petición
         this._servUsuario.loginUsuario(this.usuario, 'true').subscribe(
           response => {
             let token = response.token;
             this.token = token;
             if (this.token <= 0) {
-              alert('el token no se ha generado');
+              this.msjError('Comprobación de Credenciales');
             } else {
               //   crear elemento en el localstorage para tener el token disponible
               localStorage.setItem('token', token);
@@ -335,6 +326,24 @@ export class PrincipalComponent implements OnInit {
       this.isMacthPass = true;
       this.mensajeMacthPass='';
     }
+  }
+
+  msjExitoso(texto: string){
+    swal({
+      position: 'top',
+      type: 'success',
+      title: texto,
+      showConfirmButton: false,
+      timer: 2500
+    })
+  }
+  
+  msjError(texto: string){
+    swal(
+      'Oops...',
+      texto,
+      'error'
+    )
   }
 
  //obtener la lista de departamentos
