@@ -1,14 +1,17 @@
 <ng-template #modalContent let-close="close">
-    <div class="modal-header">
-      <h5 class="modal-title">Event action occurred</h5>
+    <div class="modal-header" style="background: #0069d9;color:#fff">
+      <!-- <h5 class="modal-title">Event action occurred</h5>
       <button type="button" class="close" (click)="close()">
         <span aria-hidden="true">&times;</span>
+      </button> -->
+      <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;{{ modalData?.action }} Solicitud</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal" (click)="close()"> 
+        <small aria-hidden="true">&times;</small>
       </button>
     </div>
     <div class="modal-body">
       <div>
-        Acción:
-        <pre>{{ modalData?.action }} <a><img src="assets/img/logo.png" ></a></pre>
+        <pre> <a><img src="assets/img/logo.png" ></a> </pre>
       </div>
       <div>
         Evento:
@@ -107,7 +110,7 @@
   </div>
   
   <h3>
-    Editar eventos
+  <!--  Editar eventos 
     <button
       class="btn btn-primary pull-right"
       (click)="addEvent()" style="margin-right: 2%">
@@ -116,6 +119,7 @@
     <div class="clearfix"></div>
   </h3>
   
+
   <table class="table table-bordered">
   
     <thead>
@@ -175,4 +179,4 @@
       </tr>
     </tbody>
   
-  </table>
+  </table>-->
