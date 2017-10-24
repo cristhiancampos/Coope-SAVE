@@ -4,7 +4,7 @@
     <div class="col-md-12">
       <h2> Admistración de Usuarios</h2>
       <hr>
-      <button class="btn btn-primary" style="float: left;margin-bottom: 6px"> <i class="fa fa-plus" aria-hidden="true"></i></button>
+      <!-- <button class="btn btn-primary" style="float: left;margin-bottom: 6px"> <i class="fa fa-plus" aria-hidden="true"></i></button> -->
     </div>
   </div>
 
@@ -34,15 +34,15 @@
             <th>{{usuario.estado}}</th>
             <th style="text-align: center">
               <button class="btn btn-primary btn-accion" data-toggle="modal" data-target="#editAdminUserModal"  (click)="obtenerUsuario(usuario._id)"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete" [disabled]='usuario.correo==currentUser' (click)="obtenerUsuario(usuario._id)"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete" [disabled]='usuario.correo==currentUser || usuario.rol=="ADMINISTRADOR"' (click)="obtenerUsuario(usuario._id)"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
             </th>
           </tr>
           
         </tbody>
       </table>
     </div>
-    <!-- <h5 *ngIf='usuarios ==undefined || usuarios.length==0'>No existen usuarios registrados en el sistema.<br></h5> 
-    <hr *ngIf='usuarios ==undefined || usuarios.length==0'> -->
+     <h5 *ngIf='usuarios ==undefined || usuarios.length==0'>No existen usuarios registrados en el sistema.<br></h5> 
+    <hr *ngIf='usuarios ==undefined || usuarios.length==0'> 
   </div>
 
   <!-- paginador-->
@@ -121,11 +121,11 @@ aria-hidden="true">
                 <div class="controls">
                   <div class="row" style="margin-left:0em;margin-right:0em">
                   <input id="input-correo-admin-edit" type="text" #correo="ngModel" name="correo" class="form-control" [(ngModel)]="usuarioEdit.correo" 
-                  placeholder="usuario" autofocus required >
+                  placeholder="usuario" autofocus required (input)="validarModificacion()" (onfocus)="!usuarioExist" >
                   </div>
                   <small *ngIf="correo.touched && correo.value==''"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El correo es obligatorio. </small>
                    <!-- <small *ngIf="!correo.valid && correo.value!null"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Formato de correo inválido.</small>                      -->
-                  <small *ngIf="userExist"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe una cuenta con ese correo</small>  
+                  <small *ngIf="usuarioExist"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe una cuenta con ese correo</small>  
                 </div>
               </div>
               <div class="control-group form-group">
@@ -162,15 +162,30 @@ aria-hidden="true">
                 </div>
               </div>
               <div class="control-group form-group">
-                  <div class="controls">
+                <div class="controls">
+                  <select [disabled]='tempUserRol=="ADMINISTRADOR"' #rol="ngModel" name="rol" [(ngModel)]="usuarioEdit.rol" class="selectpicker" 
+                  style="width: 100%;padding: .5rem .75rem;" required  >  
+                    <option value="" selected disabled >Rol</option>
+                        <option>ADMINISTRADOR</option>
+                        <option>NOTIFICACIONES</option>
+                        <option>USUARIO</option>
+                      </select>
+                      <small *ngIf='tempUserRol!="ADMINISTRADOR"' [hidden]="rol.valid || (rol.pristine && !editAdmiUserForm.submitted)">
+                          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El rol de usario es  obligatorio
+                      </small>
+                </div>
+              </div>
+
+              <div class="control-group form-group">
+                  <div class="controls" >
                        <ul>
-                         <li style="margin-left: -37px;"> <label class="switch">
-                             <input type="checkbox" checked (change)="cambiarEstadoEdicion($event)">
+                         <li style="margin-left: -37px;" > <label class="switch">
+                             <input [disabled]='tempUserRol=="ADMINISTRADOR"' type="checkbox" [checked]='estadoEdicion' (change)="cambiarEstadoEdicion($event)">
                              <small class="slider round"></small>
                            </label>
                          </li>
                          <li>
-                           <label style="float: left;margin-top: -2.3em;">{{estadoMensaje}}</label>
+                           <label style="float: left;margin-top: -2.3em;">{{estadoMensajEdit}}</label>
                          </li>
                        </ul>
                      </div>
@@ -179,7 +194,7 @@ aria-hidden="true">
               <div style="float: right">
                   <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" >Salir</button>               
                   <button id="btn-edit-admin-usuario" type="submit" 
-                   [disabled]="!correo.valid || !nombre.valid || !apellidos.valid  ||  !departamento.valid "
+                   [disabled]="!correo.valid || !nombre.valid || !apellidos.valid  ||  !departamento.valid || usuarioExist"
                     class="btn btn-success">Continuar</button>
               </div>
             </form>
