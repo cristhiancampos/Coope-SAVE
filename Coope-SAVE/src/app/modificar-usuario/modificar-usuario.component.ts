@@ -78,6 +78,30 @@ export class ModificarUsuarioComponent implements OnInit {
           }
         );
       }
+      modificarUsuarioCompleto() {
+        
+        alert("esta madre no funciona");
+            console.log("Llamo componente");
+            this._servUsuario.modificarUsuarioCompleto(this.usuarioEdit).subscribe(
+              response => {
+        
+                if (!response.message._id) {
+                  this.msjError("El Usuario no pudo ser Modificado");
+                } else {
+                  this.usuarioEdit = new   Usuario('', '', '', '', '', '', '', '', '', '');
+                  this.msjExitoso("Usuario Modificado Exitosamente");
+                }
+              }, error => {
+                var alertMessage = <any>error;
+                if (alertMessage != null) {
+                  var body = JSON.parse(error._body);
+                  alert('El Usuario no se pudo modificar');
+        
+                }
+              }
+            );
+          }
+  
   verificarContrasenas(event: any){
     
     if(this.usuarioEdit.contrasena.trim()!=this.confirmaContra.trim()){

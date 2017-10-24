@@ -169,13 +169,23 @@ export class ServicioUsuario {
         .map(res=>res.json());
     }
 
-    modificarUsuario(vehiculo:any)
+    modificarUsuario(usuario:any)
     {
         
-         let json = JSON.stringify(vehiculo);
+         let json = JSON.stringify(usuario);
         let params = json; 
         let headers = new Headers({'Content-Type':'application/json'});
         return this._http.put(this.url+'modificarUsuario',params,{headers:headers})
+        .map(res=>res.json());
+
+    }
+    modificarUsuarioCompleto(usuario:any)
+    {
+        
+         let json = JSON.stringify(usuario);
+        let params = json; 
+        let headers = new Headers({'Content-Type':'application/json'});
+        return this._http.put(this.url+'modificarUsuarioCompleto',params,{headers:headers})
         .map(res=>res.json());
 
     }

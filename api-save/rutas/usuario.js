@@ -25,6 +25,7 @@ api.get('/obtenerUsuarios',ControladorUsuario.obtenerUsuarios);
 api.get('/obtenerUsuario/:id',ControladorUsuario.obtenerUsuario);
 api.delete('/eliminarUsuario/:id', ControladorUsuario.eliminarUsuario);
 api.put('/modificarUsuario',ControladorUsuario.modificarUsuario);
+api.put('/modificarUsuarioCompleto',ControladorUsuario.modificarUsuarioCompleto);
 api.post('/validarModificacionUsuario',ControladorUsuario.validarModificacion);
 
 module.exports = api;

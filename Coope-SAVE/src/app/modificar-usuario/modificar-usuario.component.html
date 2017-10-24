@@ -11,7 +11,7 @@
   </div>
   <div  class="container">
     <div class="modificar col-md-6">
-    <form #modificarUsuarioPersonal="ngForm" (ngSubmit)="modificarUsuario()">
+    <form #modificarUsuarioPersonal="ngForm" (ngSubmit)="modificarUsuarioCompleto()">
       <div class="control-group form-group">
         <div class="controls">
           <input id="input-correo-admin-edit" type="text" #correoModificar="ngModel" name="correoModificar" class="form-control" [(ngModel)]="usuarioEdit.correo" 
@@ -71,16 +71,17 @@
         
         </div>
       </div>
+      <div class="container">
+        <div id="btnModificar">
+          <div class="col-md-4 ">
+                <button  type="submit" [disabled]="!modificarUsuarioPersonal.form.valid "class="btn btn-primary" style="height: 50px;">Guardar Cambios</button>
+          </div>
+        </div>
+        </div>
     </form>
   </div >
   </div >
-  <div class="container">
-  <div id="btnModificar">
-    <div class="col-md-4 ">
-          <button   type="submit" [disabled]="!modificarUsuarioPersonal.form.valid "class="btn btn-primary" style="height: 50px;">Guardar Cambios</button>
-    </div>
-  </div>
-  </div>
+  
 </div>
 </section>
 
