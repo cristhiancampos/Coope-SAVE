@@ -11,6 +11,7 @@ import {Usuario} from '../modelos/usuario';
 export class ModificarUsuarioComponent implements OnInit {
   mmostrar = false;
   public usuario: Usuario;
+  correoExist: boolean;
 
   codigo=''; //process.env["USERPROFILE"];
 

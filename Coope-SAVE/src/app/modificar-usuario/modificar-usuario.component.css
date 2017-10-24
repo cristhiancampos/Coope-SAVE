@@ -1,0 +1,80 @@
+.formModificarUsuario {
+margin-top: 8%;
+}
+
+.modificar{
+    margin-left: 26%;
+}
+
+#btnModificar{
+    float: right;
+    margin-right: 24%;
+    height: 50px;
+}
+
+
+@media (max-width: 820px) and (min-width: 761px)  { 
+    .formModificarUsuario {
+        margin-top: 13%;
+        }
+        .modificar{
+            margin-left: 26%;
+        }
+        #btnModificar{
+            margin-left: 37%;
+        }
+}
+
+@media  (max-width: 760px) and (min-width: 501px)  { 
+    .formModificarUsuario {
+        margin-top: 13%;
+        }
+        .modificar{
+            margin-left: 0%;
+           
+        }
+        #btnModificar{
+            margin-left: 38%;
+        }
+
+}
+
+  @media (max-width: 500px) and (min-width: 341px)
+  {
+    .modificar{ 
+    margin-left: 0%;
+    }
+    .formModificarUsuario {
+    margin-top: 23%;
+    }
+    #btnModificar{
+        margin-left: 25%;
+    }
+}
+
+@media only screen and (max-width: 340px) and (min-width: 5px)  { 
+
+        .formModificarUsuario {
+        margin-top: 40%;
+        font-size: 5px;
+        }
+        .modificar{
+            margin-left: 0;
+        }
+        #btnModificar{
+            margin-left: 19%;
+        }
+}
+
+.ng-valid[required], .ng-valid.required  {
+    border-left: 5px solid #42A948; /* green */
+  }
+  
+  .ng-invalid:not(form)  {
+    border-left: 5px solid #a94442; /* red */
+  }
+  
+  small{
+    color: #a94442;
+  }
+

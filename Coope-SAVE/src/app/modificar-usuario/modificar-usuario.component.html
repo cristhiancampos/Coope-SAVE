@@ -1,204 +1,76 @@
-<!-- <div class="modal fade bd-example-modal-sm " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-aria-hidden="true">
-<div class="modal-dialog bd-example-modal-sm " role="document">
-  <div class="modal-content">
-    <div class="modal-header" style="background: #0069d9;color:#fff">
-      <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-user-circle-o"></i>&nbsp;&nbsp;Modificar Usuario {{codigo}}</h5>
-       <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="salir()"> 
-      <span aria-hidden="true">&times;</span>
-    </button>
-    </div>
-    <div class="modal-body">
-      <div class="row">
-        <div class="col-md-12">
-          <ol class="breadcrumb">
-            <li>
-              <a><img src="assets/img/logo.png" ></a>
-            </li>
-          </ol>
+
+
+<section class="formModificarUsuario">
+<div class="container">
+  <div class="col-md-6 modificar" >
+    <ol class="breadcrumb" style="background-color: #0069d9; color: #fff">
+      <li>
+        <H2 style="text-align: center;"> <i class="fa fa-user" aria-hidden="true" ></i> Perfil de Usuario</H2>
+      </li>
+    </ol>
+  </div>
+  <div  class="container">
+    <div class="modificar col-md-6">
+    <form #modificarUsuario="ngForm" (ngSubmit)="modificarUusario()">
+      <div class="control-group form-group">
+        <div class="controls">
+          <input type="email" class="form-control" #correo="ngModel" name="correo" [(ngModel)]="usuario.correo" placeholder="Correo"
+            required>
+          <small *ngIf="correo.invalid && (correo.dirty || correo.touched)" class="fa fa-exclamation-circle"> Campo Correo  obligatorio</small>
+          <small *ngIf="correoExist"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe un Usuario con ese correo</small>
+          <p class="help-block"></p>
         </div>
       </div>
-      <!-- END BREADCRUMB
-      <div class="col-md-12">
-        <div class="row">
-          <div class="col-md-12">
-            <form #modificarUsuario="ngForm" (ngSubmit)="modificarUusario()">
-                <div class="control-group form-group">
-                    <div class="controls">
-                      <input type="email" class="form-control"  #correo="ngModel" name= "correo" [(ngModel)]="usuario.correo" placeholder="Correo" required>
-                      <span *ngIf="correo.invalid && (correo.dirty || correo.touched)" > Campo <strong>Correo</strong> obligatorio</span> 
-                      <p class="help-block"></p>
-                    </div>
-                  </div>
-              <div class="control-group form-group">
-                <div class="controls">
-                  <input type="text" class="form-control"  #nombre="ngModel" name= "nombre" [(ngModel)]="usuario.nombre" placeholder="Nombre" required>
-                  <span *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" > Campo <strong>Nombre</strong> obligatorio</span>
-                  <p class="help-block"></p>
-                </div>
-              </div>
-              <div class="control-group form-group">
-                <div class="controls">
-                  <input type="text" class="form-control"  #apellidos="ngModel" name= "apellidos" [(ngModel)]="usuario.apellidos" placeholder="Apellidos" required>
-                  <span *ngIf="!apellidos.valid && apellidos.touched" > Campo <strong>Apellidos</strong> obligatorio</span>
-                  <p class="help-block"></p>
-                </div>
-              </div>              
-              <div class="control-group form-group">
-                <div class="controls">
-                  <select  #departamento="ngModel" name= "departamento" [(ngModel)]="usuario.departamento" class="selectpicker" style="width: 100%;padding: .5rem .75rem;">
+      <div class="control-group form-group">
+        <div class="controls">
+          <input type="text" class="form-control" #nombre="ngModel" name="nombre" [(ngModel)]="usuario.nombre" placeholder="Nombre"
+            required>
+          <small *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="fa fa-exclamation-circle"> Campo Nombre  obligatorio</small>
+          <p class="help-block"></p>
+        </div>
+      </div>
+      <div class="control-group form-group">
+        <div class="controls">
+          <input type="text" class="form-control" #apellidos="ngModel" name="apellidos" [(ngModel)]="usuario.apellidos" placeholder="Apellidos"
+            required>
+          <small *ngIf="!apellidos.valid && apellidos.touched" class="fa fa-exclamation-circle"> Campo Apellidos  obligatorio</small>
+          <p class="help-block"></p>
+        </div>
+      </div>
+      <div class="control-group form-group">
+        <div class="controls">
+          <select #departamento="ngModel" name="departamento" [(ngModel)]="usuario.departamento" class="selectpicker" style="width: 100%;padding: .5rem .75rem;">
                                     <option>Recursos Humanos</option>
                                     <option>Administración</option>
                                     <option>Tenologías de la Información</option>
                   </select>
-                  <p class="help-block"></p>
-                </div>
-              </div>
-              <div class="control-group form-group">
-                  <div class="controls">
-                    <input type="password" class="form-control" #contrasena="ngModel" name= "contrasena" [(ngModel)]="usuario.contrasena" placeholder="Contraseña"  (focusout)="validarContrasena()" required>
-                    <span *ngIf="!contrasena.valid && contrasena.touched" > Campo <strong>Contraseña</strong> obligatorio</span>
-                  </div>
-                </div>
-
-                  <div class="control-group form-group">
-                    <div class="controls">
-                      <input type="password" class="form-control"  #confirmar="ngModel" name= "confirmar" [(ngModel)]="confirmaContra"  required placeholder="Confirmar Contraseña">
-                      <span *ngIf="!confirmar.valid && confirmar.touched" > Campo <strong>Confirmar Contraseña</strong> obligatorio</span>
-                    </div>
-                  </div> 
-              <div id="success"></div>
-              <div class="modal-footer" style="float: right">
-                  <button type="submit" [disabled]="!modificarUsuario.form.valid"class="btn btn-primary">Guardar Campos</button>
-                   <button type="button" class="btn btn-secondary"  style="background: #f00a0a;" >Salir</button>   
-                </div>
-            </form>
-          </div>
+          <p class="help-block"></p>
         </div>
       </div>
+      <div class="control-group form-group">
+        <div class="controls">
+          <input type="password" class="form-control" #contrasena="ngModel" name="contrasena" [(ngModel)]="usuario.contrasena" placeholder="Contraseña"
+            (focusout)="validarContrasena()" required>
+          <small *ngIf="!contrasena.valid && contrasena.touched" class="fa fa-exclamation-circle"> Campo Contraseña  obligatorio</small>
+        </div>
+      </div>
+
+      <div class="control-group form-group">
+        <div class="controls">
+          <input type="password" class="form-control" #confirmar="ngModel" name="confirmar" [(ngModel)]="confirmaContra" required placeholder="Confirmar Contraseña">
+          <small *ngIf="!confirmar.valid && confirmar.touched" class="fa fa-exclamation-circle"> Campo Confirmar Contraseña  obligatorio</small>
+        </div>
+      </div>
+    </form>
+  </div >
+  </div >
+  <div class="container">
+  <div id="btnModificar">
+    <div class="col-md-4 ">
+          <button   type="submit" [disabled]="!modificarUsuario.form.valid" class="btn btn-primary" style="height: 50px;">Guardar Cambios</button>
     </div>
-    
+  </div>
   </div>
 </div>
-</div> -->
-
-
-<section class="container">
-  <div class="row" style="margin-top: 10%; text-align: center">
-    <div class="col-md-4">
-      <ol class="breadcrumb">
-        <li>
-          <H2> <i class="fa fa-user" aria-hidden="true"></i> Perfil de Usuario</H2>
-        </li>
-      </ol>
-    </div>
-  </div>
 </section>
 
-<section class="container">
-  <div class="row" style="text-align: center">
-    <div class="col-md-4">
-      <form #modificarUsuario="ngForm" (ngSubmit)="modificarUusario()">
-        <div class="control-group form-group">
-          <div class="controls">
-            <input type="email" class="form-control" #correo="ngModel" name="correo" [(ngModel)]="usuario.correo" placeholder="Correo"
-              required>
-            <span *ngIf="correo.invalid && (correo.dirty || correo.touched)"> Campo <strong>Correo</strong> obligatorio</span>
-            <p class="help-block"></p>
-          </div>
-        </div>
-        <div class="control-group form-group">
-          <div class="controls">
-            <input type="text" class="form-control" #nombre="ngModel" name="nombre" [(ngModel)]="usuario.nombre" placeholder="Nombre"
-              required>
-            <span *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)"> Campo <strong>Nombre</strong> obligatorio</span>
-            <p class="help-block"></p>
-          </div>
-        </div>
-        <div class="control-group form-group">
-          <div class="controls">
-            <input type="text" class="form-control" #apellidos="ngModel" name="apellidos" [(ngModel)]="usuario.apellidos" placeholder="Apellidos"
-              required>
-            <span *ngIf="!apellidos.valid && apellidos.touched"> Campo <strong>Apellidos</strong> obligatorio</span>
-            <p class="help-block"></p>
-          </div>
-        </div>
-        <div class="control-group form-group">
-          <div class="controls">
-            <select #departamento="ngModel" name="departamento" [(ngModel)]="usuario.departamento" class="selectpicker" style="width: 100%;padding: .5rem .75rem;">
-                                      <option>Recursos Humanos</option>
-                                      <option>Administración</option>
-                                      <option>Tenologías de la Información</option>
-                    </select>
-            <p class="help-block"></p>
-          </div>
-        </div>
-        <div class="control-group form-group">
-          <div class="controls">
-            <input type="password" class="form-control" #contrasena="ngModel" name="contrasena" [(ngModel)]="usuario.contrasena" placeholder="Contraseña"
-              (focusout)="validarContrasena()" required>
-            <span *ngIf="!contrasena.valid && contrasena.touched"> Campo <strong>Contraseña</strong> obligatorio</span>
-          </div>
-        </div>
-
-        <div class="control-group form-group">
-          <div class="controls">
-            <input type="password" class="form-control" #confirmar="ngModel" name="confirmar" [(ngModel)]="confirmaContra" required placeholder="Confirmar Contraseña">
-            <span *ngIf="!confirmar.valid && confirmar.touched"> Campo <strong>Confirmar Contraseña</strong> obligatorio</span>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-</section>
-
-<section class="container">
-  <div class="row" style="text-align: center">
-    <div class="col-md-4">
-          <button   type="submit" [disabled]="!modificarUsuario.form.valid" class="btn btn-primary">Guardar Cambios</button>
-    </div>
-  </div>
-</section>
-
-<div class="row">
-    <div class="col-lg-4"></div>
-    <div class="col-lg-4">
-    <form class="form-horizontal">
-      <div class="form-group">
-        <label class="col-lg-8 control-label">Nombres</label>
-        <div class="col-lg-12">
-          <input type="text" class="form-control" name="nombre" />
-        </div>
-      </div>
-    
-      <div class="form-group">
-        <label class="col-lg-8 control-label">Apellidos</label>
-        <div class="col-lg-12">
-          <input type="text" class="form-control" name="apellido" />
-        </div>
-      </div>
-    
-      <div class="form-group">
-        <label class="col-lg-8 control-label">Correo Electrónico</label>
-        <div class="col-lg-12">
-          <input type="text" class="form-control" name="email" />
-        </div>
-      </div>
-    
-      <div class="form-group">
-        <label class="col-lg-8 control-label">Teléfono Celular</label>
-        <div class="col-lg-12">
-          <input type="text" class="form-control" name="telefono_cel" />
-        </div>
-      </div>
-    
-      <div class="form-group">
-        <div class="">
-          <button type="submit" class="btn btn-success left">Registrarse</button>
-        </div>
-      </div>
-    
-    </form>
-    </div>
-    <div class="col-lg-4"></div>
-    </div>
