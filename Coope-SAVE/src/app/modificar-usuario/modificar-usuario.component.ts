@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { ServicioUsuario } from '../servicios/usuario';
+import { ServicioDepartamento} from '../servicios/departamento';
 import { Usuario } from '../modelos/usuario';
 import swal from 'sweetalert2'
 
@@ -10,7 +11,7 @@ import swal from 'sweetalert2'
   selector: 'app-modificar-usuario',
   templateUrl: './modificar-usuario.component.html',
   styleUrls: ['./modificar-usuario.component.css'],
-  providers: [ServicioUsuario]
+  providers: [ServicioUsuario, ServicioDepartamento]
 })
 export class ModificarUsuarioComponent implements OnInit {
   mmostrar = false;
@@ -23,13 +24,17 @@ export class ModificarUsuarioComponent implements OnInit {
   public mensajeMacthPass='';
   public estadoMensajEdit: String;
   public tempUserRol;
+  public identity;
+  public departamentos = [];
 
   codigo=''; //process.env["USERPROFILE"];
 
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
-    private _servUsuario: ServicioUsuario)
+    private _servUsuario: ServicioUsuario,
+    private _servDepa: ServicioDepartamento,
+  )
      {
 
     this.usuarioEdit= new Usuario('','','','','','','','','','');
@@ -45,13 +50,15 @@ export class ModificarUsuarioComponent implements OnInit {
    
   
   ngOnInit() {
-    //obtenerUsuario();
+    this.obtenerUsuario();
+    this.obtenerDepartamentos();
     console.log('modificar usuario.ts cargado ...FECHA' + this.date + '.....año' + this.year);
   }
 
   modificarUsuario() {
     
-        this.usuarioEdit.estado = this.estadoMensajEdit;
+    alert("esta madre no funciona");
+        console.log("Llamo componente");
         this._servUsuario.modificarUsuario(this.usuarioEdit).subscribe(
           response => {
     
@@ -84,18 +91,41 @@ export class ModificarUsuarioComponent implements OnInit {
     }
   }
 
-  obtenerUsuario(_id: any) {
-    this._servUsuario.obtenerUsuario(_id).subscribe(
+  obtenerUsuario() {
+
+    let identity = localStorage.getItem('identity');
+    let user = JSON.parse(identity);
+    if (user != null) {
+      this.identity = user;
+      this._servUsuario.obtenerUsuario(this.identity._id).subscribe(
+        response => {
+          if (response.message[0]._id) {
+            this.usuarioEdit._id = response.message[0]._id;
+            this.usuarioEdit.nombre = response.message[0].nombre;
+            this.usuarioEdit.correo = response.message[0].correo;
+            this.usuarioEdit.apellidos = response.message[0].apellidos;
+            this.usuarioEdit.departamento = response.message[0].departamento;         
+            this.estadoMensajEdit = this.usuarioEdit.estado;
+           
+          } else {//No se ha encontrado la Sala
+          }
+        }, error => {
+          var errorMensaje = <any>error;
+          if (errorMensaje != null) {
+            var body = JSON.parse(error._body);
+          }
+        }
+      );
+    } else{// mensaje de error}
+  }
+  }
+
+  obtenerDepartamentos() {
+    this._servDepa.obtenerDepartamentos().subscribe(
       response => {
-        if (response.message[0]._id) {
-          this.usuarioEdit._id = response.message[0]._id;
-          this.usuarioEdit.nombre = response.message[0].nombre;
-          this.usuarioEdit.correo = response.message[0].correo;
-          this.usuarioEdit.apellidos = response.message[0].apellidos;
-          this.usuarioEdit.departamento = response.message[0].departamento;         
-          this.estadoMensajEdit = this.usuarioEdit.estado;
-         
-        } else {//No se ha encontrado la Sala
+        if (response.message) {
+          this.departamentos = response.message;
+        } else {//no hay departamentos registrados
         }
       }, error => {
         var errorMensaje = <any>error;
@@ -104,8 +134,8 @@ export class ModificarUsuarioComponent implements OnInit {
         }
       }
     );
-  }
 
+  }
   eliminarUsuario() {
     this._servUsuario.eliminarUsuario(this.usuarioEdit._id).subscribe(
       response => {
