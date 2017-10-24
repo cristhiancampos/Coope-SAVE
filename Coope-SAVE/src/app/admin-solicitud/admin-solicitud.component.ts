@@ -3,6 +3,7 @@ import * as $ from 'jquery';
 import swal from 'sweetalert2';
 import { ServicioUsuario } from '../servicios/usuario';
 import { Usuario } from '../modelos/usuario';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 
 
 @Component({
@@ -16,7 +17,10 @@ export class AdminSolicitudComponent implements OnInit {
   private token;
   private identity;
 
-  constructor(private _servUsuario: ServicioUsuario) {
+  constructor(
+    private _route: ActivatedRoute,
+    private _router: Router,
+    private _servUsuario: ServicioUsuario) {
   }
 
   ngOnInit() {
@@ -76,7 +80,8 @@ export class AdminSolicitudComponent implements OnInit {
       );
     } else {
       $('#nav-user').text(' ');
-      this.abrirModal('#loginModal');
+      //this.abrirModal('#loginModal');
+      this._router.navigate(['/principal']);
     }
   }
   // tslint:disable-next-line:one-line

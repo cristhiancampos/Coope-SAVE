@@ -154,7 +154,6 @@ export class PrincipalComponent implements OnInit {
   }
   //iniciar sesión en el sistema
   login() {
-    console.log(this.usuario);
     // obtener datos de usuaario identificado
     this._servUsuario.loginUsuario(this.usuario).subscribe(response => {
       let identity = response.user;
