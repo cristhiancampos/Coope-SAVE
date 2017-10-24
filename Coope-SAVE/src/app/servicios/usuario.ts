@@ -160,23 +160,25 @@ export class ServicioUsuario {
 
     }
 
-   /* validarModificacion(sala: any)
+    validarModificacion(usuario: any)
     {
-         let json = JSON.stringify(sala);
+         let json = JSON.stringify(usuario);
         let params = json; 
         let headers = new Headers({'Content-Type':'application/json'});
-        return this._http.post(this.url+'validarModificacion',params,{headers:headers})
+        return this._http.post(this.url+'validarModificacionUsuario',params,{headers:headers})
         .map(res=>res.json());
     }
 
-    modificarUsuario(sala:any)
+    modificarUsuario(vehiculo:any)
     {
-         let json = JSON.stringify(sala);
+        
+         let json = JSON.stringify(vehiculo);
         let params = json; 
         let headers = new Headers({'Content-Type':'application/json'});
-        return this._http.put(this.url+'modificarSala',params,{headers:headers})
+        return this._http.put(this.url+'modificarUsuario',params,{headers:headers})
         .map(res=>res.json());
-    }*/
+
+    }
 
 
 }

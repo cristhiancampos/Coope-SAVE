@@ -186,6 +186,68 @@ function obtenerUsuario(req, res) {
   });
 }
 
+function modificarUsuario(req, res) {
+  var params =req.body;
+  var usuarioId = params._id;
+  params.updated_at= new Date();
+
+  Usuario.find({ _id: usuarioId }, (err, usuario) => {
+    if (err) {
+      res.status(500).send({ message: 'Error en la petición' });
+    } else {
+      if (!usuario) {
+        res.status(404).send({ message: 'No existen usuarios registrados en el sistema' });
+      } else {
+        params.contrasena = usuario.contrasena;
+        console.log(usuario);
+        Usuario.findByIdAndUpdate(usuarioId, params, (err, modificarUsuario) => {
+          if (err) {
+            
+            res.status(500).send({ message: 'Error al actualizar el usuario' });
+          } else {
+            if (!modificarUsuario) {
+             
+              res.status(404).send({ message: 'No se ha podido actualizar el usuario' });
+            } else {
+              
+              res.status(200).send({ message: modificarUsuario });
+            }
+          }
+        });
+      }
+    }
+  });
+}
+
+function validarModificacion(req, res) {
+  var params = req.body;
+  var correo = params.correo;
+  var id = params._id;
+  Usuario.findOne({ _id: id, placa: placa, estado: { $ne: "Eliminado" } }, (err, usuario) => {
+    if (err) {
+      res.status(200).send({ message: null });
+    } else {
+      if (!usuario) {
+        Vehiculo.findOne({ correo: correo, estado: { $ne: "Eliminado" } }, (err, usuarioEdit) => {
+          if (err) {
+            res.status(200).send({ message: null });
+          } else {
+            if (!usuarioEdit) {
+              res.status(200).send({ message: null });
+            }
+            else {
+              res.status(200).send({ message: usuarioEdit});
+            }
+          }
+        })
+      }
+      else {
+        res.status(200).send({ message: null });
+      }
+    }
+  });
+}
+
 module.exports = {
   getUsuario,
   agregarUsuario,
@@ -194,7 +256,10 @@ module.exports = {
   verificarCredenciales,
   obtenerUsuarios,
   eliminarUsuario,
-  obtenerUsuario
+  obtenerUsuario,
+  modificarUsuario,
+  validarModificacion
+
 };
 
   // Usuario.findOne({ correo: email.toLowerCase() }, (err, user) => {

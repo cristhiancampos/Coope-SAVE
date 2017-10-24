@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery';
 import { ServicioUsuario } from '../servicios/usuario';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import {Usuario} from '../modelos/usuario';
+import { Usuario } from '../modelos/usuario';
 import { ServicioDepartamento } from '../servicios/departamento';
 import swal from 'sweetalert2'
 
@@ -10,21 +10,21 @@ import swal from 'sweetalert2'
   selector: 'app-admin-usuario',
   templateUrl: './admin-usuario.component.html',
   styleUrls: ['./admin-usuario.component.css'],
-  providers: [ServicioUsuario,ServicioDepartamento]
+  providers: [ServicioUsuario, ServicioDepartamento]
 })
 export class AdminUsuarioComponent implements OnInit {
 
   public usuario: Usuario;
   public usuarioEdit: Usuario;
   public usuarios = [];
-  usuarioExist: boolean;
-  mostrarModal: boolean;
-  public estadoMensajEdit:String;
+  public usuarioExist: boolean;
+  public mostrarModal: boolean;
+  public estadoMensajEdit: String;
   public estadoEdicion: boolean;
   public estadoMensaje = 'Habilitado';
-  public currentUser="";
-  public departamentos=[];
-  public userExist:boolean;
+  public currentUser = "";
+  public departamentos = [];
+  public userExist: boolean;
 
 
   constructor(
@@ -33,14 +33,13 @@ export class AdminUsuarioComponent implements OnInit {
     private _servUsuario: ServicioUsuario,
     private _servDepa: ServicioDepartamento
   ) {
-    this.mostrarModal= false;
-    this.usuario = new Usuario('','','','','','','','','','');
-    this.usuarioEdit = new Usuario('','','','','','','','','','');
-   }
+    this.mostrarModal = false;
+    this.usuario = new Usuario('', '', '', '', '', '', '', '', '', '');
+    this.usuarioEdit = new Usuario('', '', '', '', '', '', '', '', '', '');
+  }
 
   ngOnInit() {
     this.obtenerUsuarios();
-    this.obtenerDepartamentos();
   }
 
 
@@ -60,14 +59,14 @@ export class AdminUsuarioComponent implements OnInit {
     let identity = localStorage.getItem('identity');
     let user = JSON.parse(identity);
     if (user != null) {
-      this.currentUser=user.correo.trim();
-    }else{this.currentUser=""}
-  
+      this.currentUser = user.correo.trim();
+    } else { this.currentUser = "" }
+
     this._servUsuario.obtenerUsuarios().subscribe(
       response => {
         if (response.message) {
           console.log(response.message);
-        this.usuarios =response.message;
+          this.usuarios = response.message;
         } else {
           console.log('ho hay Usuarios registradas');
           console.log(response.message);
@@ -81,13 +80,30 @@ export class AdminUsuarioComponent implements OnInit {
       }
     );
   }
+  // obtenerUsuarios() {
+  //   this.usuarios = [];
+  //   this._servUsuario.obtenerUsuarios().subscribe(
+  //     response => {
+  //       if (response.message) {
+  //         this.usuarios = response.message;
+  //         console.log(this.usuarios);
+  //       } else {//ho hay vehiculos registrados
+  //       }
+  //     }, error => {
+  //       var errorMensaje = <any>error;
+  //       if (errorMensaje != null) {
+  //         var body = JSON.parse(error._body);
+  //       }
+  //     }
+  //   );
+  // }
 
   obtenerDepartamentos() {
     this._servDepa.obtenerDepartamentos().subscribe(
       response => {
         if (response.message) {
           console.log(response.message);
-        this.departamentos =response.message;
+          this.departamentos = response.message;
         } else {
           console.log('ho hay departamentos registrados');
           console.log(response.message);
@@ -104,6 +120,7 @@ export class AdminUsuarioComponent implements OnInit {
   }
 
   obtenerUsuario(_id: any) {
+    this.obtenerDepartamentos();
     this._servUsuario.obtenerUsuario(_id).subscribe(
       response => {
         if (response.message[0]._id) {
@@ -140,7 +157,7 @@ export class AdminUsuarioComponent implements OnInit {
           this.msjError("El Usuario no pudo ser Eliminado");
         } else {
           this.msjExitoso("Usuario Eliminado Exitosamente");
-          this.usuarioEdit = new Usuario('','','','','','','','','','');
+          this.usuarioEdit = new Usuario('', '', '', '', '', '', '', '', '', '');
           this.obtenerUsuarios();
         }
       }, error => {
@@ -152,8 +169,28 @@ export class AdminUsuarioComponent implements OnInit {
       }
     );
   }
+  eliminarUsuario() {
+    this._servUsuario.eliminarUsuario(this.usuarioEdit._id).subscribe(
+      response => {
 
-  msjExitoso(texto: string){
+        if (!response.message._id) {
+          this.msjError("El Vehiculo no pudo ser Eliminado");
+        } else {
+          this.msjExitoso("Vehiculo Eliminado Exitosamente");
+          this.usuarioEdit = new Usuario('', '', '', '', '', '', '', '', '', '');
+          this.obtenerUsuarios();
+        }
+      }, error => {
+        var alertMessage = <any>error;
+        if (alertMessage != null) {
+          var body = JSON.parse(error._body);
+          this.msjError("El Vehiculo no pudo ser Eliminado");
+        }
+      }
+    );
+  }
+
+  msjExitoso(texto: string) {
     swal({
       position: 'top',
       type: 'success',
@@ -162,18 +199,83 @@ export class AdminUsuarioComponent implements OnInit {
       timer: 2500
     })
   }
-  
-  msjError(texto: string){
+
+  msjError(texto: string) {
     swal(
       'Oops...',
       texto,
       'error'
     )
   }
-  modificarUsuario(){
+  //elimina los espacios de entre letras al escribir
+  change(event: any) {
+    let correoFinal = "";
+    this.usuarioEdit.correo = this.usuarioEdit.correo.trim();
+    for (let i = 0; i < this.usuarioEdit.correo.length; i++) {
+      if (this.usuarioEdit.correo.charAt(i) === " ") {
+      } else {
+        correoFinal += this.usuarioEdit.correo.charAt(i);
+      }
+    }
+    this.usuario.correo = correoFinal;
 
   }
 
+  validarModificacion() {
+    let correo = this.usuarioEdit.correo.trim();
+    this.usuarioEdit.correo = correo;
+
+    this._servUsuario.validarModificacion(this.usuarioEdit).subscribe(
+      response => {
+        if (response.message) {
+          console.log(response.message);
+          let sala = response.message;
+          this.usuarioExist = true;
+          $('#input-correo-admin-edit').css("border-left", "5px solid #a94442");
+        } else {//no existe la sala
+          $('#input-correo-admin-edit').css("border-left", "5px solid #42A948");
+          this.usuarioExist = false;
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+        }
+      }
+    );
+  }
+
+  modificarUsuario() {
+
+    this.usuarioEdit.estado = this.estadoMensajEdit;
+    this._servUsuario.modificarUsuario(this.usuarioEdit).subscribe(
+      response => {
+
+        if (!response.message._id) {
+          this.msjError("El Vehiculo no pudo ser Modificado");
+        } else {
+          this.usuarioEdit = new   Usuario('', '', '', '', '', '', '', '', '', '');
+          this.obtenerUsuarios();
+          this.cerrarModal('#editAdminUserModal');
+          this.msjExitoso("Vehiculo Modificado Exitosamente");
+        }
+      }, error => {
+        var alertMessage = <any>error;
+        if (alertMessage != null) {
+          var body = JSON.parse(error._body);
+          alert('El Vehiculo no se pudo modificar');
+
+        }
+      }
+    );
+  }
+  cerrarModal(modalId: any) {
+    $(".modal-backdrop").remove();
+    $('body').removeClass('modal-open');
+    $(modalId).removeClass('show');
+    $(modalId).css('display', 'none');
+  }
 
 
 }

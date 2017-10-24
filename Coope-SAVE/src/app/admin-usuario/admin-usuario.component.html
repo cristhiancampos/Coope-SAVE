@@ -84,14 +84,11 @@
         <h5>Está seguro que desea eliminar el usuario? </h5>
         <br>
         <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-default btn-modal-suc" data-dismiss="modal" (click)="eliminarSala()">Confirmar</button>
+        <button type="button" class="btn btn-default btn-modal-suc" data-dismiss="modal" (click)="eliminarUsuario()">Confirmar</button>
       </div>
     </div>
   </div>
 </div>
-
-
-
 
 <!-- Modal  Modificar Usuario-->
 <div class="modal fade bd-example-modal-sm " id="editAdminUserModal" tabindex="-1" role="dialog"
@@ -100,9 +97,9 @@ aria-hidden="true">
   <div class="modal-content">
     <div class="modal-header" style="background: #0069d9;color:#fff">
       <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-user-circle-o"></i>&nbsp;&nbsp;Modificar Usuario</h5>
-      <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="salir()"> 
+       <button type="button" class="close" data-dismiss="modal" aria-label="Close"> 
           <span aria-hidden="true">&times;</span>
-        </button>-->
+        </button>
     </div>
     <div class="modal-body">
       <div class="row">
@@ -135,7 +132,7 @@ aria-hidden="true">
                 <div class="controls">
                   <input type="text" class="form-control" #nombre="ngModel" name="nombre" [(ngModel)]="usuarioEdit.nombre" placeholder="Nombre"
                     required>
-                    <small [hidden]="nombre.valid || (nombre.pristine && !registerForm.submitted)">
+                    <small [hidden]="nombre.valid || (nombre.pristine && !editAdmiUserForm.submitted)">
                         <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El nombre es obligatorio
                     </small>
                 </div>
@@ -146,7 +143,7 @@ aria-hidden="true">
 
                   <input type="text" class="form-control" #apellidos="ngModel" name="apellidos" [(ngModel)]="usuarioEdit.apellidos" placeholder="Apellidos"
                     required maxlength="60">
-                    <small [hidden]="apellidos.valid || (apellidos.pristine && !registerForm.submitted)">
+                    <small [hidden]="apellidos.valid || (apellidos.pristine && !editAdmiUserForm.submitted)">
                         <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Los apellidos son obligatorios
                     </small>
                 </div>
@@ -159,7 +156,7 @@ aria-hidden="true">
                     <option value="" selected disabled >Departamento</option>
                         <option *ngFor="let depa of departamentos;">{{depa.nombre}}</option>
                       </select>
-                      <small [hidden]="departamento.valid || (departamento.pristine && !registerForm.submitted)">
+                      <small [hidden]="departamento.valid || (departamento.pristine && !editAdmiUserForm.submitted)">
                           <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El departamento es  obligatorio
                       </small>
                 </div>

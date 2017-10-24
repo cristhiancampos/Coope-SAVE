@@ -24,7 +24,7 @@ api.post('/verificarCredenciales',ControladorUsuario.verificarCredenciales);
 api.get('/obtenerUsuarios',ControladorUsuario.obtenerUsuarios);
 api.get('/obtenerUsuario/:id',ControladorUsuario.obtenerUsuario);
 api.delete('/eliminarUsuario/:id', ControladorUsuario.eliminarUsuario);
-/*api.put('/modificarSala',ControladorSala.modificarSala);
-api.post('/validarModificacion',ControladorSala.validarModificacion);*/
+api.put('/modificarUsuario',ControladorUsuario.modificarUsuario);
+api.post('/validarModificacionUsuario',ControladorUsuario.validarModificacion);
 
 module.exports = api;
