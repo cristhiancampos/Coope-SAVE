@@ -18,7 +18,7 @@ function agregarUsuario(req, res) {
   user.apellidos = params.apellidos;
   user.correo = params.correo;
   user.rol = 'USUARIO';
-  user.estado = 'Hablilitado';
+  user.estado = 'Habilitado';
   user.departamento = params.departamento;
   user.contrasena = params.contrasena;
   user.created_at = new Date();
@@ -198,9 +198,19 @@ function modificarUsuario(req, res) {
       if (!usuario) {
         res.status(404).send({ message: 'No existen usuarios registrados en el sistema' });
       } else {
-        params.contrasena = usuario.contrasena;
-        console.log(usuario);
-        Usuario.findByIdAndUpdate(usuarioId, params, (err, modificarUsuario) => {
+       /// params.contrasena = usuario.contrasena;
+       // console.log(usuario);
+        params.updated_at= new Date();
+        Usuario.findByIdAndUpdate(usuarioId,
+           {
+             correo:params.correo,
+             nombre:params.nombre,
+             apellidos:params.apellidos,
+             departamento:params.departamento,
+             rol:params.rol,
+             estado:params.estado,
+             updated_at:params.updated_at
+          }, (err, modificarUsuario) => {
           if (err) {
             
             res.status(500).send({ message: 'Error al actualizar el usuario' });
@@ -223,12 +233,12 @@ function validarModificacion(req, res) {
   var params = req.body;
   var correo = params.correo;
   var id = params._id;
-  Usuario.findOne({ _id: id, placa: placa, estado: { $ne: "Eliminado" } }, (err, usuario) => {
+  Usuario.findOne({ _id: id, correo: correo }, (err, usuario) => {
     if (err) {
       res.status(200).send({ message: null });
     } else {
       if (!usuario) {
-        Vehiculo.findOne({ correo: correo, estado: { $ne: "Eliminado" } }, (err, usuarioEdit) => {
+        Usuario.findOne({ correo: correo }, (err, usuarioEdit) => {
           if (err) {
             res.status(200).send({ message: null });
           } else {

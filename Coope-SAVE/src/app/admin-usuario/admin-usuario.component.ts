@@ -23,6 +23,8 @@ export class AdminUsuarioComponent implements OnInit {
   public estadoEdicion: boolean;
   public estadoMensaje = 'Habilitado';
   public currentUser = "";
+  public identity:any;
+  public tempUserRol;
   public departamentos = [];
   public userExist: boolean;
 
@@ -40,6 +42,7 @@ export class AdminUsuarioComponent implements OnInit {
 
   ngOnInit() {
     this.obtenerUsuarios();
+    this.obtenerDepartamentos();
   }
 
 
@@ -59,58 +62,35 @@ export class AdminUsuarioComponent implements OnInit {
     let identity = localStorage.getItem('identity');
     let user = JSON.parse(identity);
     if (user != null) {
+      this.identity=user;
+
       this.currentUser = user.correo.trim();
     } else { this.currentUser = "" }
 
     this._servUsuario.obtenerUsuarios().subscribe(
       response => {
         if (response.message) {
-          console.log(response.message);
           this.usuarios = response.message;
-        } else {
-          console.log('ho hay Usuarios registradas');
-          console.log(response.message);
+        } else {//no hay Usuarios registradas
         }
       }, error => {
         var errorMensaje = <any>error;
-        console.log('Error al tratar de obtener los Usuarios');
         if (errorMensaje != null) {
           var body = JSON.parse(error._body);
         }
       }
     );
   }
-  // obtenerUsuarios() {
-  //   this.usuarios = [];
-  //   this._servUsuario.obtenerUsuarios().subscribe(
-  //     response => {
-  //       if (response.message) {
-  //         this.usuarios = response.message;
-  //         console.log(this.usuarios);
-  //       } else {//ho hay vehiculos registrados
-  //       }
-  //     }, error => {
-  //       var errorMensaje = <any>error;
-  //       if (errorMensaje != null) {
-  //         var body = JSON.parse(error._body);
-  //       }
-  //     }
-  //   );
-  // }
 
   obtenerDepartamentos() {
     this._servDepa.obtenerDepartamentos().subscribe(
       response => {
         if (response.message) {
-          console.log(response.message);
           this.departamentos = response.message;
-        } else {
-          console.log('ho hay departamentos registrados');
-          console.log(response.message);
+        } else {//no hay departamentos registrados
         }
       }, error => {
         var errorMensaje = <any>error;
-        console.log('Error al tratar de obtener los departamentos');
         if (errorMensaje != null) {
           var body = JSON.parse(error._body);
         }
@@ -120,7 +100,6 @@ export class AdminUsuarioComponent implements OnInit {
   }
 
   obtenerUsuario(_id: any) {
-    this.obtenerDepartamentos();
     this._servUsuario.obtenerUsuario(_id).subscribe(
       response => {
         if (response.message[0]._id) {
@@ -131,9 +110,9 @@ export class AdminUsuarioComponent implements OnInit {
           this.usuarioEdit.rol = response.message[0].rol;
           this.usuarioEdit.departamento = response.message[0].departamento;
           this.usuarioEdit.estado = response.message[0].estado;
-
+          this.tempUserRol=response.message[0].rol;
           this.estadoMensajEdit = this.usuarioEdit.estado;
-          if (this.usuarioEdit.estado == 'Habilitado') {
+          if (this.usuarioEdit.estado === 'Habilitado') {
             this.estadoEdicion = true;
           } else {
             this.estadoEdicion = false;
@@ -174,9 +153,9 @@ export class AdminUsuarioComponent implements OnInit {
       response => {
 
         if (!response.message._id) {
-          this.msjError("El Vehiculo no pudo ser Eliminado");
+          this.msjError("El Usuario no pudo ser Eliminado");
         } else {
-          this.msjExitoso("Vehiculo Eliminado Exitosamente");
+          this.msjExitoso("Usuario Eliminado Exitosamente");
           this.usuarioEdit = new Usuario('', '', '', '', '', '', '', '', '', '');
           this.obtenerUsuarios();
         }
@@ -184,7 +163,7 @@ export class AdminUsuarioComponent implements OnInit {
         var alertMessage = <any>error;
         if (alertMessage != null) {
           var body = JSON.parse(error._body);
-          this.msjError("El Vehiculo no pudo ser Eliminado");
+          this.msjError("El Usuario no pudo ser Eliminado");
         }
       }
     );
@@ -253,18 +232,18 @@ export class AdminUsuarioComponent implements OnInit {
       response => {
 
         if (!response.message._id) {
-          this.msjError("El Vehiculo no pudo ser Modificado");
+          this.msjError("El Usuario no pudo ser Modificado");
         } else {
           this.usuarioEdit = new   Usuario('', '', '', '', '', '', '', '', '', '');
           this.obtenerUsuarios();
           this.cerrarModal('#editAdminUserModal');
-          this.msjExitoso("Vehiculo Modificado Exitosamente");
+          this.msjExitoso("Usuario Modificado Exitosamente");
         }
       }, error => {
         var alertMessage = <any>error;
         if (alertMessage != null) {
           var body = JSON.parse(error._body);
-          alert('El Vehiculo no se pudo modificar');
+          alert('El Usuario no se pudo modificar');
 
         }
       }
