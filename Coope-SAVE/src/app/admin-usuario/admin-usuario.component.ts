@@ -4,7 +4,8 @@ import { ServicioUsuario } from '../servicios/usuario';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Usuario } from '../modelos/usuario';
 import { ServicioDepartamento } from '../servicios/departamento';
-import swal from 'sweetalert2'
+import swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-admin-usuario',
@@ -29,12 +30,12 @@ export class AdminUsuarioComponent implements OnInit {
   public departamentos = [];
   public userExist: boolean;
 
-
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
     private _servUsuario: ServicioUsuario,
-    private _servDepa: ServicioDepartamento
+    private _servDepa: ServicioDepartamento,
+    
   ) {
     this.mostrarModal = false;
     this.usuario = new Usuario('', '', '', '', '', '', '', '', '', '');
@@ -99,7 +100,8 @@ export class AdminUsuarioComponent implements OnInit {
       );
     } else {
       $('#nav-user').text(' ');
-      this.abrirModal('#loginModal');
+      this._router.navigate(['/principal']);
+     // this.abrirModal('#loginModal');
     }
   }
   cambiarEstadoEdicion(event: any) {
@@ -184,26 +186,26 @@ export class AdminUsuarioComponent implements OnInit {
     );
   }
 
-  eliminarSala() {
-    this._servUsuario.eliminarUsuario(this.usuarioEdit._id).subscribe(
-      response => {
+  // eliminarSala() {
+  //   this._servUsuario.eliminarUsuario(this.usuarioEdit._id).subscribe(
+  //     response => {
 
-        if (!response.message._id) {
-          this.msjError("El Usuario no pudo ser Eliminado");
-        } else {
-          this.msjExitoso("Usuario Eliminado Exitosamente");
-          this.usuarioEdit = new Usuario('', '', '', '', '', '', '', '', '', '');
-          this.obtenerUsuarios();
-        }
-      }, error => {
-        var alertMessage = <any>error;
-        if (alertMessage != null) {
-          var body = JSON.parse(error._body);
-          this.msjError("El Usuario no pudo ser Eliminado");
-        }
-      }
-    );
-  }
+  //       if (!response.message._id) {
+  //         this.msjError("El Usuario no pudo ser Eliminado");
+  //       } else {
+  //         this.msjExitoso("Usuario Eliminado Exitosamente");
+  //         this.usuarioEdit = new Usuario('', '', '', '', '', '', '', '', '', '');
+  //         this.obtenerUsuarios();
+  //       }
+  //     }, error => {
+  //       var alertMessage = <any>error;
+  //       if (alertMessage != null) {
+  //         var body = JSON.parse(error._body);
+  //         this.msjError("El Usuario no pudo ser Eliminado");
+  //       }
+  //     }
+  //   );
+  // }
   eliminarUsuario() {
     this._servUsuario.eliminarUsuario(this.usuarioEdit._id).subscribe(
       response => {

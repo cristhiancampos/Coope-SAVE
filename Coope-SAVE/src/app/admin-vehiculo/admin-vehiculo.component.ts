@@ -96,7 +96,8 @@ export class AdminVehiculoComponent implements OnInit {
       );
     } else {
       $('#nav-user').text(' ');
-      this.abrirModal('#loginModal');
+      this._router.navigate(['/principal']);
+      //this.abrirModal('#loginModal');
     }
   }
   cambiarEstado() {
