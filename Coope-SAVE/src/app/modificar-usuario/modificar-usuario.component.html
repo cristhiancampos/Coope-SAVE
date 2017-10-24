@@ -18,7 +18,7 @@
           placeholder="usuario" autofocus required (input)="validarModificacion()" (onfocus)="!usuarioExistEdit" >
           
           <small *ngIf="correoModificar.touched && correoModificar.value==''"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El correo es obligatorio. </small>                     
-          <small *ngIf="usuarioExistEdit"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe una cuenta con ese correo</small>
+          <small *ngIf="userExistEdit"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe una cuenta con ese correo</small>
         </div>
       </div>
       <div class="control-group form-group">
@@ -31,22 +31,25 @@
       </div>
       <div class="control-group form-group">
         <div class="controls">
-          <input type="text" class="form-control" #apellidosModoficar="ngModel" name="apellidosModoficar" [(ngModel)]="usuarioEdit.apellidos" placeholder="Apellidos"
+          <input type="text" class="form-control" #apellidosModificar="ngModel" name="apellidosModificar" [(ngModel)]="usuarioEdit.apellidos" placeholder="Apellidos"
             required>
-          <small *ngIf="!apellidosModoficar.valid && apellidosModoficar.touched" class="fa fa-exclamation-circle"> Campo Apellidos  obligatorio</small>
+          <small *ngIf="!apellidosModificar.valid && apellidosModificar.touched" class="fa fa-exclamation-circle"> Campo Apellidos  obligatorio</small>
           <p class="help-block"></p>
         </div>
       </div>
       <div class="control-group form-group">
         <div class="controls">
-          <select #departamentoModificar="ngModel" name="departamentoModificar" [(ngModel)]="usuarioEdit.departamento" class="selectpicker" style="width: 100%;padding: .5rem .75rem;">
-                                    <option>Recursos Humanos</option>
-                                    <option>Administración</option>
-                                    <option>Tenologías de la Información</option>
-                  </select>
-          <p class="help-block"></p>
+          <select #departamentoModificar="ngModel" name="departamentoModificar" [(ngModel)]="usuarioEdit.departamento" class="selectpicker" 
+          style="width: 100%;padding: .5rem .75rem;" required  >  
+            <option value="" selected disabled >Departamento</option>
+                <option *ngFor="let depa of departamentos;">{{depa.nombre}}</option>
+              </select>
+              <small [hidden]="departamentoModificar.valid || (departamentoModificar.pristine && !modificarUsuarioPersonal.submitted)">
+                  <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El departamento es  obligatorio
+              </small>
         </div>
       </div>
+      
       <div class="control-group form-group">
         <div class="controls">
           <input type="password" class="form-control" #contrasenaModificar="ngModel" name="contrasenaModificar"
@@ -74,7 +77,7 @@
   <div class="container">
   <div id="btnModificar">
     <div class="col-md-4 ">
-          <button   type="submit" [disabled]="!modificarUsuarioPersonal.form.valid" class="btn btn-primary" style="height: 50px;">Guardar Cambios</button>
+          <button   type="submit" [disabled]="!modificarUsuarioPersonal.form.valid "class="btn btn-primary" style="height: 50px;">Guardar Cambios</button>
     </div>
   </div>
   </div>
