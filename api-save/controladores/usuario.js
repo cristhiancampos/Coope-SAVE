@@ -229,6 +229,43 @@ function modificarUsuario(req, res) {
   });
 }
 
+function modificarUsuarioCompleto(req, res) {
+  var params =req.body;
+  var usuarioId = params._id;
+  params.updated_at= new Date();
+
+  if (params.contrasena!= null) {
+    bcrypt.hash(params.contrasena, null, null, function (err, hash) {
+      params.contrasena = hash;
+    });
+  } else {
+    res.status(200).send({ message: 'Debe Digitar un contraseña' + '   params..... ' + params });
+  }
+  Usuario.findByIdAndUpdate(usuarioId,
+     {
+       correo:params.correo,
+       nombre:params.nombre,
+       apellidos:params.apellidos,
+       departamento:params.departamento,
+       contrasena: params.contrasena,
+       updated_at:params.updated_at
+    }, (err, modificarUsuario) => {
+    if (err) {
+      
+      res.status(500).send({ message: 'Error al actualizar el usuario' });
+    } else {
+      if (!modificarUsuario) {
+       
+        res.status(404).send({ message: 'No se ha podido actualizar el usuario' });
+      } else {
+        
+        res.status(200).send({ message: modificarUsuario });
+      }
+    }
+  });
+}
+
+
 function validarModificacion(req, res) {
   var params = req.body;
   var correo = params.correo;
@@ -268,7 +305,8 @@ module.exports = {
   eliminarUsuario,
   obtenerUsuario,
   modificarUsuario,
-  validarModificacion
+  validarModificacion,
+  modificarUsuarioCompleto
 
 };
 
