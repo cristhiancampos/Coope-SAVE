@@ -27,5 +27,7 @@ api.delete('/eliminarUsuario/:id', ControladorUsuario.eliminarUsuario);
 api.put('/modificarUsuario',ControladorUsuario.modificarUsuario);
 api.put('/modificarUsuarioCompleto',ControladorUsuario.modificarUsuarioCompleto);
 api.post('/validarModificacionUsuario',ControladorUsuario.validarModificacion);
+api.post('/validarContrasena',ControladorUsuario.validarContrasena);
+
 
 module.exports = api;

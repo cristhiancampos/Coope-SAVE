@@ -15,11 +15,14 @@ import swal from 'sweetalert2'
 })
 export class ModificarUsuarioComponent implements OnInit {
   mmostrar = false;
-  public usuario: Usuario;
+  public usuarioContrasena: Usuario;
   public usuarioEdit: Usuario;
   public userExistEdit: boolean;
   public correoExist: boolean;
   public confirmaContra;
+  
+  public confirmaContraExist: boolean;
+  public validarContrasena='';
   public isMacthPass =false;
   public mensajeMacthPass='';
   public estadoMensajEdit: String;
@@ -38,9 +41,11 @@ export class ModificarUsuarioComponent implements OnInit {
      {
 
     this.usuarioEdit= new Usuario('','','','','','','','','','');
-    this.usuario= new Usuario('','','','','','','','','','');
+    this.usuarioContrasena= new Usuario('','','','','','','','','','');
     this.confirmaContra = '';
+    
     this.userExistEdit = false;
+    this.confirmaContraExist= false;
 
    }
 
@@ -80,7 +85,7 @@ export class ModificarUsuarioComponent implements OnInit {
       }
       modificarUsuarioCompleto() {
         
-        alert("esta madre no funciona");
+        
             console.log("Llamo componente");
             this._servUsuario.modificarUsuarioCompleto(this.usuarioEdit).subscribe(
               response => {
@@ -113,6 +118,32 @@ export class ModificarUsuarioComponent implements OnInit {
       this.isMacthPass = true;
       this.mensajeMacthPass='';
     }
+  }
+
+  contrasenaActual(event: any){
+    console.log("Metodo en el componente");
+
+    this.usuarioContrasena._id= this.usuarioEdit._id;
+    this.usuarioContrasena.contrasena= this.validarContrasena;
+    this._servUsuario.validarContrasena(this.usuarioContrasena).subscribe(
+      response => {
+        if (!response.message) {
+          this.confirmaContraExist= false;
+          console.log("Contra;esa no es igual");
+          console.log(response.message);
+        } else {
+          this.confirmaContraExist= false;
+          console.log("Contra;esa es igual");
+        }
+      }, error => {
+        var alertMessage = <any>error;
+        if (alertMessage != null) {
+          var body = JSON.parse(error._body);
+          alert('El Usuario no se pudo modificar');
+
+        }
+      }
+    );
   }
 
   obtenerUsuario() {
@@ -186,7 +217,7 @@ export class ModificarUsuarioComponent implements OnInit {
   validarModificacion() {
     let correo = this.usuarioEdit.correo.trim();
     this.usuarioEdit.correo = correo;
-console.log(this.usuarioEdit.correo);
+    console.log(this.usuarioEdit.correo);
     this._servUsuario.validarModificacion(this.usuarioEdit).subscribe(
       response => {
         if (response.message) {

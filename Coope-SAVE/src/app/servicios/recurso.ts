@@ -82,6 +82,7 @@ export class ServicioRecursos{
         .map(res=>res.json());
     }
 
+<<<<<<<
     obtenerRecursosHabilitados()
     {
         let headers = new Headers({'Content-Type':'application/json'});
@@ -89,4 +90,9 @@ export class ServicioRecursos{
         .map(res=>res.json());
         
     }
+=======
+  
+
+
+>>>>>>>
 }//Final de el export de clase
