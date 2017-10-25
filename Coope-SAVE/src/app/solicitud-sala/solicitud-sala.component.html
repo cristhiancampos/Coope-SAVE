@@ -177,10 +177,7 @@
                 <td>
                   <select name="rol" class="selectpicker" style="width: 100%;font-size: 1.2rem;" required>  
                       <option value="" selected disabled >Seleccione Sala</option>
-                          <option>Sala 1</option>
-                          <option>Sala 2</option>
-                          <option>Sala 3</option>
-                          <option>Sala 4</option>
+                          <option *ngFor="let sala of salas">{{sala.nombre}}</option>
                         </select>
                   <br><br>
                   <input type="number" placeholder="Cupos 10" class="form-control" [(ngModel)]="title" (keyup)="refresh.next()">
@@ -190,106 +187,23 @@
             </tbody>
           </table>
           <div class="container">
-            <h4>Lista de Recursos disponibles</h4>
-            <hr>
+            <h4 style="color:#0069d9">Lista de Recursos disponibles</h4> <br>
             <div class="row">
-              <!-- <div class="col-md-4">
-                    <input type="number"  placeholder="Cupos disponibles 10" class="form-control" [(ngModel)]="title" (keyup)="refresh.next()">
-                </div> -->
-
-              <!-- <div class="col-md-3">
-              </div>
-              <hr> -->
               <div class="col-md-12" style="font-size: 1rem">
-
                 <div class="container">
                   <div class="form-group">
-                    <div class="row col-md-12">
-                      <div class="col-md-6">
-                        <label class="custom-control custom-checkbox">
-                                  <input type="checkbox" class="custom-control-input">
-                                  <span class="custom-control-indicator"></span>
-                                  <span class="custom-control-description">Check this custom checkbox</span>
-                                </label>
+                    <div class="row col-md-12" style="overflow-y: scroll; height: 140px">
+                      <div class="col-md-6" *ngFor="let recurso of recursos;" style="text-align: left">
+                        <label class="custom-control custom-checkbox"  >
+                          <input type="checkbox" class="custom-control-input">
+                          <span class="custom-control-indicator"></span>
+                          <span class="custom-control-description">{{recurso.nombre}}</span>
+                        </label>
                       </div>
-                      <div class="col-md-6">
-                        <label class="custom-control custom-checkbox">
-                                  <input type="checkbox" class="custom-control-input">
-                                  <span class="custom-control-indicator"></span>
-                                  <span class="custom-control-description">Check this custom checkbox</span>
-                                </label>
-                      </div>
-
-                      <div class="col-md-6">
-                        <label class="custom-control custom-checkbox">
-                                  <input type="checkbox" class="custom-control-input">
-                                  <span class="custom-control-indicator"></span>
-                                  <span class="custom-control-description">Check this custom checkbox</span>
-                                </label>
-                      </div>
-                      <div class="col-md-6">
-                          <label class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input">
-                                    <span class="custom-control-indicator"></span>
-                                    <span class="custom-control-description">Check this custom checkbox</span>
-                                  </label>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="custom-control custom-checkbox">
-                                      <input type="checkbox" class="custom-control-input">
-                                      <span class="custom-control-indicator"></span>
-                                      <span class="custom-control-description">Check this custom checkbox</span>
-                                    </label>
-                          </div>
-                          <div class="col-md-6">
-                              <label class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input">
-                                        <span class="custom-control-indicator"></span>
-                                        <span class="custom-control-description">Check this custom checkbox</span>
-                                      </label>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="custom-control custom-checkbox">
-                                          <input type="checkbox" class="custom-control-input">
-                                          <span class="custom-control-indicator"></span>
-                                          <span class="custom-control-description">Check this custom checkbox</span>
-                                        </label>
-                              </div>
-
-                     </div>
+                    </div>
                   </div>
-                  <!-- <h4>Checkbox Buttons</h4> -->
-                  <!-- <div class="funkyradio">
-                              <div class="funkyradio-success">
-                                  <input type="checkbox" name="checkbox" id="checkbox3" checked/>
-                                  <label for="checkbox3">Third Option success</label>
-                              </div>
-                              <div class="funkyradio-success">
-                                  <input type="checkbox" name="checkbox" id="checkbox3" checked/>
-                                  <label for="checkbox3">Third Option success</label>
-                              </div>
-                              <div class="funkyradio-success">
-                                  <input type="checkbox" name="checkbox" id="checkbox3" checked/>
-                                  <label for="checkbox3">Third Option success</label>
-                              </div>
-                              <div class="funkyradio-success">
-                                  <input type="checkbox" name="checkbox" id="checkbox3" checked/>
-                                  <label for="checkbox3">Third Option success</label>
-                              </div>
-                              <div class="funkyradio-success">
-                                  <input type="checkbox" name="checkbox" id="checkbox3" checked/>
-                                  <label for="checkbox3">Third Option success</label>
-                              </div>
-                              <div class="funkyradio-success">
-                                  <input type="checkbox" name="checkbox" id="checkbox3" checked/>
-                                  <label for="checkbox3">Third Option success</label>
-                              </div>
-                          </div> -->
-
                 </div>
               </div>
-              <!-- <div class="col-md-3">
-              </div> -->
             </div>
           </div>
           <hr>

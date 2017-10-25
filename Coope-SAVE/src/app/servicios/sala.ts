@@ -79,6 +79,11 @@ export class ServicioSala{
         return this._http.put(this.url+'modificarSala',params,{headers:headers})
         .map(res=>res.json());
     }
-
+    obtenerSalasHabilitadas()
+    { 
+        let headers = new Headers({'Content-Type':'application/json'});
+        return this._http.get(this.url+'obtenerSalasHabilitadas',{headers:headers})
+        .map(res=>res.json());
+    }
 
 }//Final de el export de clase

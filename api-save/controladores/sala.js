@@ -155,8 +155,19 @@ function validarModificacion(req, res) {
   });
 }
 
-
-
+function obtenerSalasHabilitadas(req, res) {
+  Sala.find({ estado:'Habilitado'}, (err, salas) => {
+    if (err) {
+      res.status(500).send({ message: 'Error en la petición' });
+    } else {
+      if (!salas) {
+        res.status(404).send({ message: 'No existen Salas registradas en el sistema' });
+      } else {
+        res.status(200).send({ message: salas });
+      }
+    }
+  }).sort('number');
+}
 
 module.exports = {
   agregarSala,
@@ -165,5 +176,6 @@ module.exports = {
   obtenerSala,
   eliminarSala,
   modificarSala,
-  validarModificacion
+  validarModificacion,
+  obtenerSalasHabilitadas
 };

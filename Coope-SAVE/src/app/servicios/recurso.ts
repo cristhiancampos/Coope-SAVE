@@ -82,5 +82,11 @@ export class ServicioRecursos{
         .map(res=>res.json());
     }
 
-
+    obtenerRecursosHabilitados()
+    {
+        let headers = new Headers({'Content-Type':'application/json'});
+        return this._http.get(this.url+'obtenerRecursosHabilitados ',{headers:headers})
+        .map(res=>res.json());
+        
+    }
 }//Final de el export de clase

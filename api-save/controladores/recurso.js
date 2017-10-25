@@ -107,8 +107,7 @@ function modificarRecurso(req, res) {
     var params = req.body;
     var recursoId = params._id;
     params.updated_at = new Date();
-  
-  
+
     Recurso.findByIdAndUpdate(recursoId, params, (err, modificaRecurso) => {
       if (err) {
   
@@ -155,6 +154,20 @@ function modificarRecurso(req, res) {
     });
   }
 
+  function obtenerRecursosHabilitados(req, res){
+    Recurso.find({ estado: 'Habilitado'},(err,recursos)=>{
+      if(err){
+        res.status(500).send({message:'Error en la petición'});
+      }else{
+          if(!recursos){
+              res.status(404).send({message:'No existen recursos registrados en el sistema'});
+          }else{
+              res.status(200).send({message:recursos});
+          }
+      }
+    }).sort('number'); 
+  }
+
     module.exports = {
         
         agregarRecurso,
@@ -163,5 +176,6 @@ function modificarRecurso(req, res) {
         obtenerRecurso,
         eliminarRecurso,
         validarModificacion,
-        modificarRecurso
+        modificarRecurso,
+        obtenerRecursosHabilitados
       };

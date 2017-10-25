@@ -1,11 +1,15 @@
 
-import {Component, ChangeDetectionStrategy, ViewChild, TemplateRef} from '@angular/core';
-import {startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours} from 'date-fns';
+import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef } from '@angular/core';
+import { startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours } from 'date-fns';
 import { Subject } from 'rxjs/Subject';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import {CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent
+import {
+  CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent
 } from 'angular-calendar';
 import * as $ from 'jquery';
+
+import { ServicioSala } from '../servicios/sala';
+import { ServicioRecursos } from '../servicios/recurso';
 
 const colors: any = {
   red: {
@@ -26,14 +30,15 @@ const colors: any = {
   selector: 'app-solicitud-sala',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './solicitud-sala.component.html',
-  styleUrls: ['./solicitud-sala.component.css']
+  styleUrls: ['./solicitud-sala.component.css'],
+  providers: [ServicioSala,ServicioRecursos]
 })
 
 export class SolicitudSalaComponent {
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
   view = 'month';
 
-   viewDate: Date = new Date();
+  viewDate: Date = new Date();
 
   modalData: {
     action: string;
@@ -95,21 +100,33 @@ export class SolicitudSalaComponent {
   locale: string = 'es';
   activeDayIsOpen = true;
 
-  constructor(private modal: NgbModal) {
 
+  //*********************************************AGREGADOS***************************** */
+  title;//
+  start;//
+  end;//
+  salas = [];
+  recursos = [];
+
+  constructor(
+    private modal: NgbModal,
+    private _servSala: ServicioSala,
+    private _servRecurso:ServicioRecursos
+  ) {
+
+    this.obtenerSalas();
+    this.obtenerRecursos();
   }
 
-  public title;//
-  public start;//
-  public end;//
+
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
-    this.title=date;//
-    this.start=date;;//
-    this.end=date;//
+    this.title = date;//
+    this.start = date;;//
+    this.end = date;//
     this.activeDayIsOpen = false;
     this.abrirModal('#modal-add-new-request');
-   // alert(date);
+    // alert(date);
     // if (isSameMonth(date, this.viewDate)) {
     //   if (
     //     (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
@@ -122,18 +139,18 @@ export class SolicitudSalaComponent {
     //   }
     // }
   }
-  
+
   eventTimesChanged({
     event,
     newStart,
     newEnd
-    
+
   }: CalendarEventTimesChangedEvent): void {
     event.start = newStart;
     event.end = newEnd;
 
-    this.start=event.start;//
-    this.end= event.end;//
+    this.start = event.start;//
+    this.end = event.end;//
 
     this.handleEvent('Dropped or resized', event);
     this.refresh.next();
@@ -159,9 +176,41 @@ export class SolicitudSalaComponent {
     this.refresh.next();
   }
 
-  click(event:any){
+  ///***************************************************METODOS AGREGADOS***********************************
+  click(event: any) {
     // alert(event.target.ViewChild);
     // console.log(event);
+  }
+
+  obtenerSalas() {
+    this._servSala.obtenerSalasHabilitadas().subscribe(
+      response => {
+        if (response.message) {
+          this.salas = response.message;
+        } else {//no hay Salas registradas
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+        }
+      }
+    );
+  }
+  obtenerRecursos() {
+    this._servRecurso.obtenerRecursosHabilitados().subscribe(
+      response => {
+        if (response.message) {
+          this.recursos = response.message;
+        } else {//no hay Salas registradas
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+        }
+      }
+    );
   }
 
 
