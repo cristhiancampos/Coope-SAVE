@@ -336,7 +336,8 @@ module.exports = {
   obtenerUsuario,
   modificarUsuario,
   validarModificacion,
-  modificarUsuarioCompleto
+  modificarUsuarioCompleto,
+  validarContrasena
 
 };
 
