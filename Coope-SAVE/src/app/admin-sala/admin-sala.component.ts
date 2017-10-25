@@ -3,7 +3,7 @@ import * as $ from 'jquery';
 import { ServicioSala } from '../servicios/sala';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Sala } from '../modelos/salas';
-import swal from 'sweetalert2'
+import swal from 'sweetalert2';
 import { ServicioUsuario } from '../servicios/usuario';
 import { Usuario } from '../modelos/usuario';
 

@@ -12,6 +12,7 @@ var sala_routes = require('./rutas/sala');
 var vehiculo_routes = require('./rutas/vehiculos')
 var recurso_routes = require('./rutas/recurso')
 var departamento_routes = require('./rutas/departamento')
+var solicitudSala_routes = require('./rutas/solicitudSala')
 
 //recibir las peticiones http
 app.use(bodyParser.urlencoded({extended:false}));
@@ -37,6 +38,7 @@ app.use((req,res,next)=>{
  app.use('/api',vehiculo_routes);
  app.use('/api',recurso_routes);
  app.use('/api',departamento_routes);
-
+ app.use('/api',solicitudSala_routes);
+ 
 //exportar modulo
 module.exports = app;

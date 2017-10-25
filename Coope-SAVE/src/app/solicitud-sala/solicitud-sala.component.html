@@ -156,60 +156,76 @@
         </div>
         <div class="modal-body" style="text-align: center">
           <br>
-          <table class="table table-bordered table-responsive">
-            <thead>
-              <tr>
-                <th class="th-color">Inicia</th>
-                <th class="th-color">Termina</th>
-                <th class="th-color">Sala</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <mwl-demo-utils-date-time-picker [(ngModel)]="start" (ngModelChange)="refresh.next()" locale="locale" placeholder="Not set">
-                  </mwl-demo-utils-date-time-picker>
-                </td>
-                <td>
-                  <mwl-demo-utils-date-time-picker [(ngModel)]="end" (ngModelChange)="refresh.next()" placeholder="Not set">
-                  </mwl-demo-utils-date-time-picker>
-                </td>
-                <td>
-                  <select name="rol" class="selectpicker" style="width: 100%;font-size: 1.2rem;" required>  
+
+          <!---************************************************************* -->
+          <form #addSolicitudSalaForm="ngForm" (ngSubmit)="agregarSolicitud()">
+            <table class="table table-bordered table-responsive">
+              <thead>
+                <tr>
+                  <th class="th-color">Inicia</th>
+                  <th class="th-color">Termina</th>
+                  <th class="th-color">Sala</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <mwl-demo-utils-date-time-picker [(ngModel)]="solicitudSala.horaInicio" (ngModelChange)="refresh.next()" locale="locale"
+                      placeholder="Not set">
+                    </mwl-demo-utils-date-time-picker>
+                  </td>
+                  <td>
+                    <mwl-demo-utils-date-time-picker [(ngModel)]="solicitudSala.horaFin" (ngModelChange)="refresh.next()" placeholder="Not set">
+                    </mwl-demo-utils-date-time-picker>
+                  </td>
+                  <td>
+                    <select name="rol" class="selectpicker" style="width: 100%;font-size: 1.2rem;" [(ngModel)]="solicitudSala.sala">  
                       <option value="" selected disabled >Seleccione Sala</option>
                           <option *ngFor="let sala of salas">{{sala.nombre}}</option>
                         </select>
-                  <br><br>
-                  <input type="number" placeholder="Cupos 10" class="form-control" [(ngModel)]="title" (keyup)="refresh.next()">
-                  <!-- <input type="text" class="form-control" [(ngModel)]="title" (keyup)="refresh.next()"> -->
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="container">
-            <h4 style="color:#0069d9">Lista de Recursos disponibles</h4> <br>
+                    <br><br>
+                    <!-- <input type="text" class="form-control" [(ngModel)]="title" (keyup)="refresh.next()"> -->
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
             <div class="row">
-              <div class="col-md-12" style="font-size: 1rem">
-                <div class="container">
-                  <div class="form-group">
-                    <div class="row col-md-12" style="overflow-y: scroll; height: 140px">
-                      <div class="col-md-6" *ngFor="let recurso of recursos;" style="text-align: left">
-                        <label class="custom-control custom-checkbox"  >
-                          <input type="checkbox" class="custom-control-input">
+              <div class="col-md-6">
+                <input type="text" class="form-control" [(ngModel)]="solicitudSala.descripcion" (keyup)="refresh.next()" placeholder="Descripción">
+              </div>
+              <div class="col-md-6">
+                <input type="number" placeholder="Cupos 10" class="form-control" [(ngModel)]="solicitudSala.cantidadPersonas" (keyup)="refresh.next()">
+              </div>
+            </div>
+            <div class="container-fluid">
+              <hr>
+              <h4 style="color:#0069d9">Lista de Recursos disponibles</h4> <br>
+              <div class="row">
+                <div class="col-md-12" style="font-size: 1rem">
+                  <div class="container">
+                    <div class="form-group">
+                      <div class="row col-md-12" style="overflow-y: scroll; height: 100px">
+                        <div class="col-md-6" *ngFor="let recurso of recursos;" style="text-align: left">
+                          <label class="custom-control custom-checkbox">
+                          <input type="checkbox" class="custom-control-input" (change)="changeRecursos($event,recurso._id)" >
                           <span class="custom-control-indicator"></span>
                           <span class="custom-control-description">{{recurso.nombre}}</span>
                         </label>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <hr>
-          <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="cerrarModal('#modal-add-new-request')">Cancelar</button>
-          <button type="button" class="btn btn-success" data-dismiss="modal" (click)="addEvent()">Confirmar</button>
-          <br><br>
+            <hr>
+            <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="cerrarModal('#modal-add-new-request')">Cancelar</button>
+            <button type="submit" class="btn btn-success" data-dismiss="modal" [disabled]="!adminSala.form.valid">Confirmar</button>
+            <!-- (click)="addEvent()"-->
+            <br>
+          </form>
+          <!-- ********************************************************************************************************-->
         </div>
       </div>
     </div>
