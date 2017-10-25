@@ -66,9 +66,9 @@
                             <table class="table">
                               <tr>
                                 <td>
-                                  <input id="validarContrasena" type="password" class="form-control" #validarContrasena="ngModel" name="validarContrasena"
-                                  [(ngModel)]="validarContrasena" placeholder=" Contraseña Actual" required minlength="8"
-                                  maxlength="16" [disabled]="" (input)="contrasenaActual($event)" (onfocus)="!confirmaContraExist">
+                                  <input id="confirmPass" type="password" class="form-control" #contrasenaActual="ngModel" name="confirmarContrasenena"
+                                  [(ngModel)]="confirmaContra" placeholder=" Contraseña Actual" required minlength="8"
+                                  maxlength="16" [disabled]="!contrasenaModificar.valid" (input)="contrasenaActual($event)" (onfocus)="!confirmaContraExist">
                                   <small [hidden]='!mensajeMacthPass'>
                                   <i class="fa fa-exclamation-circle" aria-hidden="true"></i> {{mensajeMacthPass}}
                                   </small>
