@@ -22,7 +22,7 @@ export class ModificarUsuarioComponent implements OnInit {
   public confirmaContra;
   
   public confirmaContraExist: boolean;
-  public validarContrasena='';
+  public validarContrasena;
   public isMacthPass =false;
   public mensajeMacthPass='';
   public estadoMensajEdit: String;
@@ -43,7 +43,7 @@ export class ModificarUsuarioComponent implements OnInit {
     this.usuarioEdit= new Usuario('','','','','','','','','','');
     this.usuarioContrasena= new Usuario('','','','','','','','','','');
     this.confirmaContra = '';
-    
+    this.validarContrasena= '';
     this.userExistEdit = false;
     this.confirmaContraExist= false;
 
@@ -121,18 +121,16 @@ export class ModificarUsuarioComponent implements OnInit {
   }
 
   contrasenaActual(event: any){
-    console.log("Metodo en el componente");
-
+    
     this.usuarioContrasena._id= this.usuarioEdit._id;
     this.usuarioContrasena.contrasena= this.validarContrasena;
     this._servUsuario.validarContrasena(this.usuarioContrasena).subscribe(
       response => {
         if (!response.message) {
-          this.confirmaContraExist= false;
+          this.confirmaContraExist=false;
           console.log("Contra;esa no es igual");
-          console.log(response.message);
         } else {
-          this.confirmaContraExist= false;
+          this.confirmaContraExist= true;
           console.log("Contra;esa es igual");
         }
       }, error => {
