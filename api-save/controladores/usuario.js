@@ -295,6 +295,36 @@ function validarModificacion(req, res) {
   });
 }
 
+
+ function validarContrasena(req, res){
+  var params = req.body;
+  var id = params._id;
+  var contrasena;
+
+  if(params.contrasena !=null){
+    bcrypt.hash(params.contrasena, null, null, function (err, hash) {
+      contrasena = hash});
+  }
+  else{
+    res.status(200).send({ message: 'Debe rellenar todos los campos ' });
+  }
+
+  Usuario.findOne({ _id: id, contrasena:contrasena}, (err, usuario) => {
+    if (err) {
+      res.status(200).send({ message: null });
+    } 
+    else {
+      if (!usuario) {
+        res.status(200).send({ message: null });
+      }
+      else {
+        res.status(200).send({ message: usuario});
+      }
+      }
+    
+  });
+}
+
 module.exports = {
   getUsuario,
   agregarUsuario,

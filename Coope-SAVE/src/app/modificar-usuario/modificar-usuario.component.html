@@ -1,87 +1,134 @@
-
-
 <section class="formModificarUsuario">
-<div class="container">
-  <div class="col-md-6 modificar" >
-    <ol class="breadcrumb" style="background-color: #0069d9; color: #fff">
-      <li>
-        <H2 style="text-align: center;"> <i class="fa fa-user" aria-hidden="true" ></i> Perfil de Usuario</H2>
-      </li>
-    </ol>
-  </div>
-  <div  class="container">
-    <div class="modificar col-md-6">
-    <form #modificarUsuarioPersonal="ngForm" (ngSubmit)="modificarUsuarioCompleto()">
-      <div class="control-group form-group">
-        <div class="controls">
-          <input id="input-correo-admin-edit" type="text" #correoModificar="ngModel" name="correoModificar" class="form-control" [(ngModel)]="usuarioEdit.correo" 
-          placeholder="usuario" autofocus required (input)="validarModificacion()" (onfocus)="!usuarioExistEdit" >
-          
-          <small *ngIf="correoModificar.touched && correoModificar.value==''"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El correo es obligatorio. </small>                     
-          <small *ngIf="userExistEdit"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe una cuenta con ese correo</small>
-        </div>
-      </div>
-      <div class="control-group form-group">
-        <div class="controls">
-          <input type="text" class="form-control" #nombreModificar="ngModel" name="nombreModificar" [(ngModel)]="usuarioEdit.nombre" placeholder="Nombre"
-            required>
-          <small *ngIf="nombreModificar.invalid && (nombreModificar.dirty || nombreModificar.touched)" class="fa fa-exclamation-circle"> Campo Nombre  obligatorio</small>
-          <p class="help-block"></p>
-        </div>
-      </div>
-      <div class="control-group form-group">
-        <div class="controls">
-          <input type="text" class="form-control" #apellidosModificar="ngModel" name="apellidosModificar" [(ngModel)]="usuarioEdit.apellidos" placeholder="Apellidos"
-            required>
-          <small *ngIf="!apellidosModificar.valid && apellidosModificar.touched" class="fa fa-exclamation-circle"> Campo Apellidos  obligatorio</small>
-          <p class="help-block"></p>
-        </div>
-      </div>
-      <div class="control-group form-group">
-        <div class="controls">
-          <select #departamentoModificar="ngModel" name="departamentoModificar" [(ngModel)]="usuarioEdit.departamento" class="selectpicker" 
-          style="width: 100%;padding: .5rem .75rem;" required  >  
+  <div class="container">
+    <div class="col-md-6 modificar">
+      <ol class="breadcrumb" style="background-color: #0069d9; color: #fff">
+        <li>
+          <H2 style="text-align: center;"> <i class="fa fa-user" aria-hidden="true"></i> Perfil de Usuario</H2>
+        </li>
+      </ol>
+    </div>
+    <div class="container">
+      <div class="modificar col-md-6">
+        <form #modificarUsuarioPersonal="ngForm" (ngSubmit)="modificarUsuarioCompleto()">
+          <div class="control-group form-group">
+            <div class="controls">
+              <input id="input-correo-admin-edit" type="text" #correoModificar="ngModel" name="correoModificar" class="form-control" [(ngModel)]="usuarioEdit.correo"
+                placeholder="usuario" autofocus required (input)="validarModificacion()" (onfocus)="!usuarioExistEdit">
+
+              <small *ngIf="correoModificar.touched && correoModificar.value==''"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El correo es obligatorio. </small>
+              <small *ngIf="userExistEdit"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe una cuenta con ese correo</small>
+            </div>
+          </div>
+          <div class="control-group form-group">
+            <div class="controls">
+              <input type="text" class="form-control" #nombreModificar="ngModel" name="nombreModificar" [(ngModel)]="usuarioEdit.nombre"
+                placeholder="Nombre" required>
+              <small *ngIf="nombreModificar.invalid && (nombreModificar.dirty || nombreModificar.touched)" class="fa fa-exclamation-circle"> Campo Nombre  obligatorio</small>
+              <p class="help-block"></p>
+            </div>
+          </div>
+          <div class="control-group form-group">
+            <div class="controls">
+              <input type="text" class="form-control" #apellidosModificar="ngModel" name="apellidosModificar" [(ngModel)]="usuarioEdit.apellidos"
+                placeholder="Apellidos" required>
+              <small *ngIf="!apellidosModificar.valid && apellidosModificar.touched" class="fa fa-exclamation-circle"> Campo Apellidos  obligatorio</small>
+              <p class="help-block"></p>
+            </div>
+          </div>
+          <div class="control-group form-group">
+            <div class="controls">
+              <select #departamentoModificar="ngModel" name="departamentoModificar" [(ngModel)]="usuarioEdit.departamento" class="selectpicker"
+                style="width: 100%;padding: .5rem .75rem;" required>  
             <option value="" selected disabled >Departamento</option>
                 <option *ngFor="let depa of departamentos;">{{depa.nombre}}</option>
               </select>
               <small [hidden]="departamentoModificar.valid || (departamentoModificar.pristine && !modificarUsuarioPersonal.submitted)">
                   <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El departamento es  obligatorio
               </small>
-        </div>
-      </div>
-      
-      <div class="control-group form-group">
-        <div class="controls">
-          <input type="password" class="form-control" #contrasenaModificar="ngModel" name="contrasenaModificar"
-           [(ngModel)]="usuarioEdit.contrasena" placeholder="Contraseña - min 8 caracteres"
-            required minlength="8" maxlength="16" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"> 
-            <small [hidden]="contrasenaModificar.valid || (contrasenaModificar.pristine && !modificarUsuarioPersonal.submitted)">
-                <i class="fa fa-exclamation-circle" aria-hidden="true"></i> 
-                 Contraseña obligatoria, debe contener almenos 8 carácteres, mayúsculas, minúsculas, números y carácteres especiales  
-            </small>
-        </div>
-      </div>
-      <div class="control-group form-group">
-        <div class="controls">
-          <input id="confirmPass" type="password" class="form-control" #confirmarContrasenena="ngModel" name="confirmarContrasenena" [(ngModel)]="confirmaContra" placeholder="Confirmar Contraseña"
-            required minlength="8" maxlength="16" [disabled]="!contrasenaModificar.valid"  (input)="verificarContrasenas($event)">                  
-          <small [hidden]='!mensajeMacthPass'>
-              <i class="fa fa-exclamation-circle" aria-hidden="true"></i> {{mensajeMacthPass}}
-          </small> 
-        
-        </div>
-      </div>
-      <div class="container">
-        <div id="btnModificar">
-          <div class="col-md-4 ">
-                <button  type="submit" [disabled]="!modificarUsuarioPersonal.form.valid "class="btn btn-primary" style="height: 50px;">Guardar Cambios</button>
+            </div>
           </div>
-        </div>
-        </div>
-    </form>
-  </div >
-  </div >
-  
-</div>
-</section>
 
+          <div class="control-group form-group">
+            <div class="controls">
+              <div class="container">
+                <div class="row">
+                  <div class="">
+                    <div class="panel-group" id="accordion">
+                      <div class="panel panel-default">
+                        <div class="panel-heading">
+                          <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><span class="" >
+                                    </span>Cambiar Contraseña</a><hr>
+                          </h4>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse in">
+                          <div class="panel-body">
+                            <table class="table">
+                              <tr>
+                                <td>
+                                  <input id="confirmPass" type="password" class="form-control" #confirmarContrasenena="ngModel" name="confirmarContrasenena"
+                                  [(ngModel)]="confirmaContra" placeholder="Confirmar Contraseña" required minlength="8"
+                                  maxlength="16" [disabled]="!contrasenaModificar.valid" (input)="contrasenaActual($event)">
+                                  <small [hidden]='!mensajeMacthPass'>
+                                  <i class="fa fa-exclamation-circle" aria-hidden="true"></i> {{mensajeMacthPass}}
+                                  </small>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <input type="password" class="form-control" #contrasenaModificar="ngModel" name="contrasenaModificar" [(ngModel)]="usuarioEdit.contrasena"
+                                    placeholder="Contraseña - min 8 caracteres" required minlength="8" maxlength="16" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+                                  <small [hidden]="contrasenaModificar.valid || (contrasenaModificar.pristine && !modificarUsuarioPersonal.submitted)">
+                                                   <i class="fa fa-exclamation-circle" aria-hidden="true"></i> 
+                                                    Contraseña obligatoria, debe contener almenos 8 carácteres, mayúsculas, minúsculas, números y carácteres especiales  
+                                               </small>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <div class="control-group form-group">
+                                    <div class="controls">
+                                      <input id="confirmPass" type="password" class="form-control" #confirmarContrasenena="ngModel" name="confirmarContrasenena"
+                                        [(ngModel)]="confirmaContra" placeholder="Confirmar Contraseña" required minlength="8"
+                                        maxlength="16" [disabled]="!contrasenaModificar.valid" (input)="verificarContrasenas($event)">
+                                      <small [hidden]='!mensajeMacthPass'>
+                                      <i class="fa fa-exclamation-circle" aria-hidden="true"></i> {{mensajeMacthPass}}
+                                      </small>
+
+                                    </div>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <span class="glyphicon glyphicon-comment text-success"></span><a href="http://www.jquery2dotnet.com">Comments</a>
+                                  <span class="badge">42</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="container">
+            <div id="btnModificar">
+              <div class="col-md-4 ">
+                <button type="submit" [disabled]="!modificarUsuarioPersonal.form.valid " class="btn btn-primary" style="height: 50px;">Guardar Cambios</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+
+    </div>
+
+  </div>
+</section>

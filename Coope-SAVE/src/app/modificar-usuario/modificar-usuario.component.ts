@@ -20,6 +20,7 @@ export class ModificarUsuarioComponent implements OnInit {
   public userExistEdit: boolean;
   public correoExist: boolean;
   public confirmaContra;
+  public validarContrasena;
   public isMacthPass =false;
   public mensajeMacthPass='';
   public estadoMensajEdit: String;
@@ -40,6 +41,7 @@ export class ModificarUsuarioComponent implements OnInit {
     this.usuarioEdit= new Usuario('','','','','','','','','','');
     this.usuario= new Usuario('','','','','','','','','','');
     this.confirmaContra = '';
+    this.validarContrasena='';
     this.userExistEdit = false;
 
    }
@@ -115,6 +117,10 @@ export class ModificarUsuarioComponent implements OnInit {
     }
   }
 
+  contrasenaActual(event: any){
+ 
+  }
+
   obtenerUsuario() {
 
     let identity = localStorage.getItem('identity');
@@ -186,7 +192,7 @@ export class ModificarUsuarioComponent implements OnInit {
   validarModificacion() {
     let correo = this.usuarioEdit.correo.trim();
     this.usuarioEdit.correo = correo;
-console.log(this.usuarioEdit.correo);
+    console.log(this.usuarioEdit.correo);
     this._servUsuario.validarModificacion(this.usuarioEdit).subscribe(
       response => {
         if (response.message) {
