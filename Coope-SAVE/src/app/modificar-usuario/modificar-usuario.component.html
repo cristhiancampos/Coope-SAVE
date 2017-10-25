@@ -47,76 +47,6 @@
               </small>
             </div>
           </div>
-
-          <div class="control-group form-group">
-            <div class="controls">
-              <div class="container">
-                <div class="row">
-                  <div class="">
-                    <div class="panel-group" id="accordion">
-                      <div class="panel panel-default">
-                        <div class="panel-heading">
-                          <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><span class="" >
-                                    </span>Cambiar Contraseña</a><hr>
-                          </h4>
-                        </div>
-                        <div id="collapseOne" class="panel-collapse collapse in">
-                          <div class="panel-body">
-                            <table class="table">
-                              <tr>
-                                <td>
-                                  <input id="confirmPass" type="password" class="form-control" #contrasenaActual="ngModel" name="confirmarContrasenena"
-                                  [(ngModel)]="confirmaContra" placeholder=" Contraseña Actual" required minlength="8"
-                                  maxlength="16" [disabled]="!contrasenaModificar.valid" (input)="contrasenaActual($event)" (onfocus)="!confirmaContraExist">
-                                  <small [hidden]='!mensajeMacthPass'>
-                                  <i class="fa fa-exclamation-circle" aria-hidden="true"></i> {{mensajeMacthPass}}
-                                  </small>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>
-                                  <input type="password" class="form-control" #contrasenaModificar="ngModel" name="contrasenaModificar" [(ngModel)]="usuarioEdit.contrasena"
-                                    placeholder="Contraseña - min 8 caracteres" required minlength="8" maxlength="16" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
-                                  <small [hidden]="contrasenaModificar.valid || (contrasenaModificar.pristine && !modificarUsuarioPersonal.submitted)">
-                                                   <i class="fa fa-exclamation-circle" aria-hidden="true"></i> 
-                                                    Contraseña obligatoria, debe contener almenos 8 carácteres, mayúsculas, minúsculas, números y carácteres especiales  
-                                               </small>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>
-                                  <div class="control-group form-group">
-                                    <div class="controls">
-                                      <input id="confirmPass" type="password" class="form-control" #confirmarContrasenena="ngModel" name="confirmarContrasenena"
-                                        [(ngModel)]="confirmaContra" placeholder="Confirmar Contraseña" required minlength="8"
-                                        maxlength="16" [disabled]="!contrasenaModificar.valid" (input)="verificarContrasenas($event)">
-                                      <small [hidden]='!mensajeMacthPass'>
-                                      <i class="fa fa-exclamation-circle" aria-hidden="true"></i> {{mensajeMacthPass}}
-                                      </small>
-
-                                    </div>
-                                  </div>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>
-                                  <span class="glyphicon glyphicon-comment text-success"></span><a href="http://www.jquery2dotnet.com">Comments</a>
-                                  <span class="badge">42</span>
-                                </td>
-                              </tr>
-                            </table>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-
           <div class="container">
             <div id="btnModificar">
               <div class="col-md-4 ">
@@ -126,9 +56,90 @@
           </div>
         </form>
       </div>
-
-
     </div>
 
   </div>
+  <div class="container" style="margin-top: 70px;">
+      <div class="modificar col-md-6">
+        <form #modificarContrasenaActual="ngForm" (ngSubmit)=" modificarUsuarioCompleto()">
+            <div class="container">
+                <div class="row">
+                    <div class="">
+                        <div class="panel-group" id="accordion">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><span class="glyphicon glyphicon-folder-close">
+                                        </span>Cambiar Contraseña</a>
+                                    </h4>
+                                </div>
+                                <div id="collapseOne" class="panel-collapse collapse in">
+                                    <div class="panel-body">
+                                        <table class="table">
+                                            <tr>
+                                                <td>
+                                                    <div class="control-group form-group">
+                                                        <div class="controls"> <!-- Imput de contrasena Actual -->
+                                                          <input type="password" class="form-control" #validar="ngModel" name="validar"
+                                                          [(ngModel)]="validarContrasena" placeholder="Contraseña Actual" (input)="contrasenaActual($event)" required> 
+                                                          <small *ngIf="!confirmaContraExist"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La Contraseña no coinciden</small>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="control-group form-group">
+                                                        <div class="controls"><!-- Imput de contrasena Nueva -->
+                                                          <input type="password" class="form-control" #nuevaContrasena="ngModel" name="nuevaContrasena"
+                                                          [(ngModel)]="usuarioEdit.contrasena" placeholder="Contraseña - min 8 caracteres"
+                                                           required minlength="8" maxlength="16"  [disabled]="!validar.valid"  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"> <!-- (input)="validarcontra($event)"-->
+                                                           <small [hidden]="nuevaContrasena.valid || nuevaContrasena.pristine">
+                                                               <i class="fa fa-exclamation-circle" aria-hidden="true"></i> 
+                                                                Contraseña obligatoria, debe contener almenos 8 carácteres, mayúsculas, minúsculas, números y carácteres especiales  
+                                                           </small>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="control-group form-group">
+                                                        <div class="controls"> <!-- Imput de confirmar contrasena Nueva -->
+                                                            <input id="confirmPass" type="password" class="form-control" #confirmarNueva="ngModel" name="confirmarNueva" 
+                                                            [(ngModel)]="confirmaContra" placeholder="Confirmar Contraseña"
+                                                            required minlength="8" maxlength="16" [disabled]="!nuevaContrasena.valid"  (input)="verificarContrasenas($event)">                  
+                                                          <small [hidden]='!mensajeMacthPass'>
+                                                              <i class="fa fa-exclamation-circle" aria-hidden="true"></i> {{mensajeMacthPass}}
+                                                          </small> 
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+            
+        </form>
+      </div>
+  </div>
 </section>
+
+
+
+   
+  
+
+
+
+
+
+
+

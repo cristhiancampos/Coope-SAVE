@@ -192,7 +192,6 @@ export class ServicioUsuario {
     validarContrasena(usuario:any){
         let json = JSON.stringify(usuario);
         let params = json; 
-        console.log(params);
         let headers = new Headers({'Content-Type':'application/json'});
         return this._http.post(this.url+'validarContrasena',params,{headers:headers})
         .map(res=>res.json());

@@ -299,30 +299,42 @@ function validarModificacion(req, res) {
  function validarContrasena(req, res){
   var params = req.body;
   var id = params._id;
-  var contrasena;
+  var contrasena=params.contrasena;
+  if(contrasena !=null){
+      Usuario.findOne({ _id: id}, (err, usuario) => {
+        if (err) {
+          res.status(200).send({ message: null });
+        } 
+        else {
+          if (!usuario) {
+            res.status(200).send({ message: null });
+          }
+          else {
+            bcrypt.compare(contrasena, usuario.contrasena, function (err, check) {
+              if (check) {
+                
+                res.status(200).send({ message: usuario});
+                
+              } else {
+                
+                res.status(200).send({ message: null });
+              }
+            });
 
-  if(params.contrasena !=null){
-    bcrypt.hash(params.contrasena, null, null, function (err, hash) {
-      contrasena = hash});
+
+
+          }
+          }
+        
+      });
+     
+      
   }
   else{
     res.status(200).send({ message: 'Debe rellenar todos los campos ' });
   }
 
-  Usuario.findOne({ _id: id, contrasena:contrasena}, (err, usuario) => {
-    if (err) {
-      res.status(200).send({ message: null });
-    } 
-    else {
-      if (!usuario) {
-        res.status(200).send({ message: null });
-      }
-      else {
-        res.status(200).send({ message: usuario});
-      }
-      }
-    
-  });
+ 
 }
 
 module.exports = {
