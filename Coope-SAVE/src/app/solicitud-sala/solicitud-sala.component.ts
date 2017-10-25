@@ -107,6 +107,7 @@ export class SolicitudSalaComponent {
     this.title=date;//
     this.start=date;;//
     this.end=date;//
+    this.activeDayIsOpen = false;
     this.abrirModal('#modal-add-new-request');
    // alert(date);
     // if (isSameMonth(date, this.viewDate)) {
