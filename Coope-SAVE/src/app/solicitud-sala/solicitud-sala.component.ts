@@ -5,6 +5,7 @@ import { Subject } from 'rxjs/Subject';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent
 } from 'angular-calendar';
+import * as $ from 'jquery';
 
 const colors: any = {
   red: {
@@ -98,27 +99,41 @@ export class SolicitudSalaComponent {
 
   }
 
-  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
-    if (isSameMonth(date, this.viewDate)) {
-      if (
-        (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
-        events.length === 0
-      ) {
-        this.activeDayIsOpen = false;
-      } else {
-        this.activeDayIsOpen = true;
-        this.viewDate = date;
-      }
-    }
-  }
+  public title;//
+  public start;//
+  public end;//
 
+  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+    this.title=date;//
+    this.start=date;;//
+    this.end=date;//
+    this.abrirModal('#modal-add-new-request');
+   // alert(date);
+    // if (isSameMonth(date, this.viewDate)) {
+    //   if (
+    //     (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
+    //     events.length === 0
+    //   ) {
+    //     this.activeDayIsOpen = false;
+    //   } else {
+    //     this.activeDayIsOpen = true;
+    //     this.viewDate = date;
+    //   }
+    // }
+  }
+  
   eventTimesChanged({
     event,
     newStart,
     newEnd
+    
   }: CalendarEventTimesChangedEvent): void {
     event.start = newStart;
     event.end = newEnd;
+
+    this.start=event.start;//
+    this.end= event.end;//
+
     this.handleEvent('Dropped or resized', event);
     this.refresh.next();
   }
@@ -141,6 +156,26 @@ export class SolicitudSalaComponent {
       }
     });
     this.refresh.next();
+  }
+
+  click(event:any){
+    // alert(event.target.ViewChild);
+    // console.log(event);
+  }
+
+
+  cerrarModal(modalId: any) {
+    $(".modal-backdrop").remove();
+    $('body').removeClass('modal-open');
+    $(modalId).removeClass('show');
+    $(modalId).css('display', 'none');
+  }
+
+  abrirModal(modalId: any) {
+    $('body').append('<div class="modal-backdrop fade show" ></div>');
+    $('body').addClass('modal-open');
+    $(modalId).addClass('show');
+    $(modalId).css('display', 'block');
   }
 }
 

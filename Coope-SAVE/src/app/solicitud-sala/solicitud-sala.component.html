@@ -1,115 +1,76 @@
 <ng-template #modalContent let-close="close">
-    <div class="modal-header" style="background: #0069d9;color:#fff">
-      <!-- <h5 class="modal-title">Event action occurred</h5>
+  <div class="modal-header" style="background: #0069d9;color:#fff">
+    <!-- <h5 class="modal-title">Event action occurred</h5>
       <button type="button" class="close" (click)="close()">
         <span aria-hidden="true">&times;</span>
       </button> -->
-      <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;{{ modalData?.action }} Solicitud</h5>
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal" (click)="close()"> 
+    <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;{{ modalData?.action }} Solicitud</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal" (click)="close()"> 
         <small aria-hidden="true">&times;</small>
       </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <pre> <a><img src="assets/img/logo.png" ></a> </pre>
     </div>
-    <div class="modal-body">
-      <div>
-        <pre> <a><img src="assets/img/logo.png" ></a> </pre>
+    <div>
+      Evento:
+      <pre>{{ modalData?.event | json }}</pre>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="close()">OK</button>
+  </div>
+</ng-template>
+
+<div class="row text-center" style="margin-top: 8%">
+
+  <div class="col-md-4">
+    <div class="btn-group">
+      <div class="btn btn-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate">
+        Anterior
       </div>
-      <div>
-        Evento:
-        <pre>{{ modalData?.event | json }}</pre>
+      <div class="btn btn-outline-secondary" mwlCalendarToday [(viewDate)]="viewDate">
+        Hoy
       </div>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-outline-secondary" (click)="close()">OK</button>
-    </div>
-  </ng-template>
-  
-  <div class="row text-center" style="margin-top: 8%"  >
-    
-    <div class="col-md-4">
-      <div class="btn-group">
-        <div
-          class="btn btn-primary"
-          mwlCalendarPreviousView
-          [view]="view"
-          [(viewDate)]="viewDate">
-          Anterior
-        </div>
-        <div
-          class="btn btn-outline-secondary"
-          mwlCalendarToday
-          [(viewDate)]="viewDate">
-          Hoy
-        </div>
-        <div
-          class="btn btn-primary"
-          mwlCalendarNextView
-          [view]="view"
-          [(viewDate)]="viewDate">
-          Siguiente
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'es' }}</h3>
-    </div>
-    <div class="col-md-4">
-      <div class="btn-group">
-        <div
-          class="btn btn-primary"
-          (click)="view = 'month'"
-          [class.active]="view === 'month'">
-          Mes
-        </div>
-        <div
-          class="btn btn-primary"
-          (click)="view = 'week'"
-          [class.active]="view === 'week'">
-          Semana
-        </div>
-        <div
-          class="btn btn-primary"
-          (click)="view = 'day'"
-          [class.active]="view === 'day'">
-          Día
-        </div>
+      <div class="btn btn-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate">
+        Siguiente
       </div>
     </div>
   </div>
-  <br>
- <!-- [locale]="locale"  para que tome el idioma definido en el componente, la var locale-->
-  <div [ngSwitch]="view" class="contaniner-fluid" style="margin-left: 30px;margin-right: 30px;margin-bottom: 10px">
-    <mwl-calendar-month-view
-      *ngSwitchCase="'month'"
-      [viewDate]="viewDate"
-      [events]="events"
-      [locale]="locale" 
-      [refresh]="refresh"
-      [activeDayIsOpen]="activeDayIsOpen"
-      (dayClicked)="dayClicked($event.day)"
-      (eventClicked)="handleEvent('Clicked', $event.event)"
-      (eventTimesChanged)="eventTimesChanged($event)">
-    </mwl-calendar-month-view>
-    <mwl-calendar-week-view
-      *ngSwitchCase="'week'"
-      [viewDate]="viewDate"
-      [events]="events"
-      [locale]="locale"
-      [refresh]="refresh"
-      (eventClicked)="handleEvent('Clicked', $event.event)"
-      (eventTimesChanged)="eventTimesChanged($event)">
-    </mwl-calendar-week-view>
-    <mwl-calendar-day-view
-      *ngSwitchCase="'day'"
-      [viewDate]="viewDate"
-      [events]="events"
-      [locale]="locale"
-      [refresh]="refresh"
-      (eventClicked)="handleEvent('Clicked', $event.event)"
-      (eventTimesChanged)="eventTimesChanged($event)">
-    </mwl-calendar-day-view>
+  <div class="col-md-4">
+    <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'es' }}</h3>
   </div>
-  
-  <h3>
+  <div class="col-md-4">
+    <div class="btn-group">
+      <div class="btn btn-primary" (click)="view = 'month'" [class.active]="view === 'month'">
+        Mes
+      </div>
+      <div class="btn btn-primary" (click)="view = 'week'" [class.active]="view === 'week'">
+        Semana
+      </div>
+      <div class="btn btn-primary" (click)="view = 'day'" [class.active]="view === 'day'">
+        Día
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+<!-- [locale]="locale"  para que tome el idioma definido en el componente, la var locale-->
+<div [ngSwitch]="view" class="contaniner-fluid" style="margin-left: 30px;margin-right: 30px;margin-bottom: 10px">
+  <mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="viewDate" [events]="events" [locale]="locale" [refresh]="refresh"
+    [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)" (eventClicked)="handleEvent('Clicked', $event.event)"
+    (eventTimesChanged)="eventTimesChanged($event)" (click)="click($event)">
+  </mwl-calendar-month-view>
+  <mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events" [locale]="locale" [refresh]="refresh"
+    (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
+  </mwl-calendar-week-view>
+  <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events" [locale]="locale" [refresh]="refresh"
+    (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
+  </mwl-calendar-day-view>
+</div>
+
+<h3>
   <!--  Editar eventos 
     <button
       class="btn btn-primary pull-right"
@@ -180,3 +141,50 @@
     </tbody>
   
   </table>-->
+
+
+  <!-- Modal  agregar nueva solicitud-->
+  <div class="modal fade bd-example-modal-lg" id="modal-add-new-request" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="color: #FFF;background: #0069d9">
+          <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar-plus-o" aria-hidden="true"></i> Solicitar Sala</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cerrarModal('#modal-add-new-request')">
+            <small aria-hidden="true">&times;</small>
+          </button>
+        </div>
+        <div class="modal-body" style="text-align: center">
+          <br>
+          <table class="table table-bordered table-responsive">
+            <thead >
+              <tr>
+                <th class="th-color">Titulo</th>
+                <th class="th-color">Inicia</th>
+                <th class="th-color">Termina</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <input type="text" class="form-control" [(ngModel)]="title" (keyup)="refresh.next()">
+                </td>
+                <td>
+                  <mwl-demo-utils-date-time-picker [(ngModel)]="start" (ngModelChange)="refresh.next()" locale="locale" placeholder="Not set">
+                  </mwl-demo-utils-date-time-picker>
+                </td>
+                <td>
+                  <mwl-demo-utils-date-time-picker [(ngModel)]="end" (ngModelChange)="refresh.next()" placeholder="Not set">
+                  </mwl-demo-utils-date-time-picker>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <br>
+          <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="cerrarModal('#modal-add-new-request')">Cancelar</button>
+          <button type="button" class="btn btn-success" data-dismiss="modal" (click)="addEvent()">Confirmar</button>
+        <br><br>
+        </div>
+      </div>
+    </div>
+  </div>

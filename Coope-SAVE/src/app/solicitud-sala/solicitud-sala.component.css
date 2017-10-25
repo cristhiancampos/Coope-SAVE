@@ -26,3 +26,15 @@ h3 {
   .cal-month-view .cal-day-cell {
     min-height: 50px;
 }
+
+.th-color{
+  color:#0082c8;
+  text-align: center;
+  }
+  
+  .table-bordered td, .table-bordered th {
+    border: 1px solid #eee;
+}
+.th-color[_ngcontent-c1] {
+  font-size: 1rem;
+}
