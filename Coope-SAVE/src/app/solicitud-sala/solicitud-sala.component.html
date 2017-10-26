@@ -158,7 +158,7 @@
           <br>
 
           <!---************************************************************* -->
-          <form #addSolicitudSalaForm="ngForm" (ngSubmit)="agregarSolicitud()">
+          <!-- <form #addSolicitudSalaForm="ngForm" (ngSubmit)="agregarSolicitud()">  -->
             <table class="table table-bordered table-responsive">
               <thead>
                 <tr>
@@ -171,7 +171,7 @@
                 <tr>
                   <td>
                     <mwl-demo-utils-date-time-picker [(ngModel)]="solicitudSala.horaInicio" (ngModelChange)="refresh.next()" locale="locale"
-                      placeholder="Not set">
+                      placeholder="Fecha">
                     </mwl-demo-utils-date-time-picker>
                   </td>
                   <td>
@@ -179,7 +179,7 @@
                     </mwl-demo-utils-date-time-picker>
                   </td>
                   <td>
-                    <select name="rol" class="selectpicker" style="width: 100%;font-size: 1.2rem;" [(ngModel)]="solicitudSala.sala">  
+                    <select name="rol" class="selectpicker" style="width: 100%;font-size: 1.2rem;" [(ngModel)]="solicitudSala.sala" required>  
                       <option value="" selected disabled >Seleccione Sala</option>
                           <option *ngFor="let sala of salas">{{sala.nombre}}</option>
                         </select>
@@ -221,10 +221,10 @@
             </div>
             <hr>
             <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="cerrarModal('#modal-add-new-request')">Cancelar</button>
-            <button type="submit" class="btn btn-success" data-dismiss="modal" [disabled]="!adminSala.form.valid">Confirmar</button>
+            <button type="submit" class="btn btn-success" data-dismiss="modal" >Confirmar</button>
             <!-- (click)="addEvent()"-->
             <br>
-          </form>
+           <!-- </form> -->
           <!-- ********************************************************************************************************-->
         </div>
       </div>
