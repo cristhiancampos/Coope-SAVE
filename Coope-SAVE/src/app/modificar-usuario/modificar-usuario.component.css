@@ -1,15 +1,37 @@
-.formModificarUsuario {
+#formModificarUsuario {
 margin-top: 8%;
 }
 
-.modificar{
+#modificarInformacion{
+ border-style: ridge;
+ border-width: 1px;
+ padding: 40px;
+ margin-left: 7%;   
+ margin-top: 35px;
+}
+#modificarContrasena{    
+    border-style: ridge;
+    border-width: 1px;
+    padding: 40px;
+    margin-left: 5%;
+    margin-top: 35px;
+    margin-right: 3%;
+    
+}
+
+#tituloModificarUser{
     margin-left: 26%;
 }
+
 
 #btnModificar{
     float: right;
     margin-right: 24%;
     height: 50px;
+}
+
+.btnModificar{
+    float: right;
 }
 
 .panel-body { padding:0px; }
@@ -21,7 +43,7 @@ margin-top: 8%;
     .formModificarUsuario {
         margin-top: 13%;
         }
-        .modificar{
+        .modificarInformacion{
             margin-left: 26%;
         }
         #btnModificar{
@@ -33,7 +55,7 @@ margin-top: 8%;
     .formModificarUsuario {
         margin-top: 13%;
         }
-        .modificar{
+        .modificarInformacion{
             margin-left: 0%;
            
         }
@@ -45,7 +67,7 @@ margin-top: 8%;
 
   @media (max-width: 500px) and (min-width: 341px)
   {
-    .modificar{ 
+    .modificarInformacion{ 
     margin-left: 0%;
     }
     .formModificarUsuario {
@@ -62,7 +84,7 @@ margin-top: 8%;
         margin-top: 40%;
         
         }
-        .modificar{
+        .modificarInformacion{
             margin-left: 0;
         }
         #btnModificar{
