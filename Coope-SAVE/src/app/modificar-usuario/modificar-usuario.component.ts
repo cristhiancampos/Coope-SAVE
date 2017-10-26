@@ -84,8 +84,6 @@ export class ModificarUsuarioComponent implements OnInit {
         );
       }
       modificarUsuarioCompleto() {
-        
-        
             console.log("Llamo componente");
             this._servUsuario.modificarUsuarioCompleto(this.usuarioEdit).subscribe(
               response => {
@@ -93,8 +91,14 @@ export class ModificarUsuarioComponent implements OnInit {
                 if (!response.message._id) {
                   this.msjError("El Usuario no pudo ser Modificado");
                 } else {
-                  this.usuarioEdit = new   Usuario('', '', '', '', '', '', '', '', '', '');
                   this.msjExitoso("Usuario Modificado Exitosamente");
+                  this.obtenerUsuario();
+                  localStorage.setItem('identity', response.message);
+                  let identity = localStorage.getItem('identity');
+                  let user = JSON.parse(identity);
+                  if (user != null) {
+                    $('#nav-user').text(user.nombre + ' ' + user.apellidos);
+                  }
                 }
               }, error => {
                 var alertMessage = <any>error;
