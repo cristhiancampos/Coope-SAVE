@@ -62,16 +62,22 @@ export class ModificarUsuarioComponent implements OnInit {
 
   modificarUsuario() {
     
-    alert("esta madre no funciona");
-        console.log("Llamo componente");
+    
         this._servUsuario.modificarUsuario(this.usuarioEdit).subscribe(
           response => {
     
             if (!response.message._id) {
               this.msjError("El Usuario no pudo ser Modificado");
             } else {
-              this.usuarioEdit = new   Usuario('', '', '', '', '', '', '', '', '', '');
               this.msjExitoso("Usuario Modificado Exitosamente");
+              localStorage.removeItem('identity');
+              localStorage.setItem('identity', response.message);
+              let identity = localStorage.getItem('identity');
+              let user = JSON.parse(identity);
+              this.obtenerUsuario();
+              if (user != null) {
+                $('#nav-user').text(user.nombre + ' ' + user.apellidos);
+              }
             }
           }, error => {
             var alertMessage = <any>error;
