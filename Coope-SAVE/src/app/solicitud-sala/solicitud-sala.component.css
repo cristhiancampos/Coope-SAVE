@@ -50,4 +50,16 @@ h3 {
   
   small{
     color: #a94442;
+    font-size: 1rem;
+  }
+
+  #btn-add-solid[disabled]{
+    /* background: #888; */
+    cursor:not-allowed;
+   
+  }
+  #btn-add-solid:enabled{
+    /* background: #888; */
+    cursor:pointer;
+   
   }
