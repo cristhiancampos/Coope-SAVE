@@ -171,19 +171,38 @@
                 <tr>
                   <td>
                     <mwl-demo-utils-date-time-picker [(ngModel)]="solicitudSala.horaInicio" (ngModelChange)="refresh.next()" locale="locale"
-                      placeholder="Fecha">
+                      placeholder="Fecha Inicio">
                     </mwl-demo-utils-date-time-picker>
                   </td>
                   <td>
-                    <mwl-demo-utils-date-time-picker [(ngModel)]="solicitudSala.horaFin" (ngModelChange)="refresh.next()" placeholder="Not set">
+                    <mwl-demo-utils-date-time-picker [(ngModel)]="solicitudSala.horaFin" (ngModelChange)="refresh.next()" 
+                    placeholder="Fecha Fin">
                     </mwl-demo-utils-date-time-picker>
                   </td>
                   <td>
-                    <select name="rol" class="selectpicker" style="width: 100%;font-size: 1.2rem;" [(ngModel)]="solicitudSala.sala" required>  
+                      <!-- <div class="control-group form-group" >
+                          <div class="controls">
+                    <select  #salas="ngModel"  name="salas" class="selectpicker" style="width: 100%;font-size: 1.2rem;"  
+                    [(ngModel)]="solicitudSala.sala" required>  
                       <option value="" selected disabled >Seleccione Sala</option>
                           <option *ngFor="let sala of salas">{{sala.nombre}}</option>
                         </select>
-                    <br><br>
+                      </div >
+                    </div> -->
+                    <div class="control-group form-group">
+                        <div class="controls">
+                          <select #sal="ngModel" name="sal" [(ngModel)]="solicitudSala.sala" 
+                          class="selectpicker"  style="width: 100%;font-size: 1.2rem;min-width: 10em;" required  >  
+                            <option value="" selected disabled >Seleccione Sala</option>
+                                <option *ngFor="let sala of salas;">{{sala.nombre}}</option>
+                              </select>
+                              <small [hidden]="sal.valid || (sal.pristine || sal.touched)">
+                                  <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La sala es  obligatoria
+                              </small>
+                        </div>
+                      </div>
+
+
                     <!-- <input type="text" class="form-control" [(ngModel)]="title" (keyup)="refresh.next()"> -->
                   </td>
                 </tr>
@@ -191,12 +210,30 @@
             </table>
 
             <div class="row">
-              <div class="col-md-6">
+                <div class="control-group form-group col-md-6" >
+                    <div class="controls">
+                      <!-- <input type="text" class="form-control" #descp="ngModel" name="descp" [(ngModel)]="solicitudSala.descripcion" 
+                      placeholder="Descripción" required > -->
+                      <textarea class="form-control" #descp="ngModel" name="descp" [(ngModel)]="solicitudSala.descripcion" placeholder="Descripción"
+                      rows="1" required></textarea>
+                      <small *ngIf="descp.invalid && (descp.dirty || descp.touched)">
+                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La descripción es obligatoria</small>
+                    </div>
+                  </div>
+                  <div class="control-group form-group col-md-6" >
+                      <div class="controls">
+                        <input type="number" class="form-control" #cup="ngModel" name="cup" [(ngModel)]="solicitudSala.cantidadPersonas" 
+                        placeholder="Cupos 10" required >
+                        <small *ngIf="cup.invalid && (cup.dirty || cup.touched)">
+                          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La cantidad de personas es obligatoria</small>
+                      </div>
+                    </div>
+              <!-- <div class="col-md-6 ">
                 <input type="text" class="form-control" [(ngModel)]="solicitudSala.descripcion" (keyup)="refresh.next()" placeholder="Descripción">
-              </div>
-              <div class="col-md-6">
+              </div> -->
+              <!-- <div class="col-md-6">
                 <input type="number" placeholder="Cupos 10" class="form-control" [(ngModel)]="solicitudSala.cantidadPersonas" (keyup)="refresh.next()">
-              </div>
+              </div> -->
             </div>
             <div class="container-fluid">
               <hr>
@@ -221,7 +258,8 @@
             </div>
             <hr>
             <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="cerrarModal('#modal-add-new-request')">Cancelar</button>
-            <button type="submit" class="btn btn-success" data-dismiss="modal" >Confirmar</button>
+            <button id="btn-add-solid" type="submit" class="btn btn-success" data-dismiss="modal"
+             (click)="agregarSolicitud()" [disabled]="!descp.valid || !cup.valid || !sal.valid">Confirmar</button>
             <!-- (click)="addEvent()"-->
             <br>
            <!-- </form> -->
