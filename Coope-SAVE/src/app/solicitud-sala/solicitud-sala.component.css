@@ -63,3 +63,10 @@ h3 {
     cursor:pointer;
    
   }
+  .custom-checkbox:hover{
+   cursor: pointer; 
+  }
+  select:hover{
+    cursor: pointer; 
+  }
+ 

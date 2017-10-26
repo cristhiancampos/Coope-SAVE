@@ -24,6 +24,13 @@ export class ServicioSolicitudSala{
         .map(res=>res.json());
     }
 
+    fechaActual()
+    { 
+        let headers = new Headers({'Content-Type':'application/json'});
+        return this._http.get(this.url+'fechaActual',{headers:headers})
+        .map(res=>res.json());
+    }
+
 /*
     validarSala(nombre)
     {

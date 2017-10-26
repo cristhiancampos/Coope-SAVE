@@ -7,6 +7,7 @@ var api = express.Router();
 var md_auth = require('../middlewares/authenticated');
 
  api.post('/registrarSolicitudSala',ControladorSolicitudSala.agregarSolicitud);
+ api.get('/fechaActual',ControladorSolicitudSala.obtenerFechaActual);
 // api.post('/validarSala',ControladorSala.validarSala);
 // api.get('/obtenerSalas',ControladorSala.obtenerSalas);
 // api.get('/obtenerSalasHabilitadas',ControladorSala.obtenerSalasHabilitadas);

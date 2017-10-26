@@ -159,110 +159,90 @@
 
           <!---************************************************************* -->
           <!-- <form #addSolicitudSalaForm="ngForm" (ngSubmit)="agregarSolicitud()">  -->
-            <table class="table table-bordered table-responsive">
-              <thead>
-                <tr>
-                  <th class="th-color">Inicia</th>
-                  <th class="th-color">Termina</th>
-                  <th class="th-color">Sala</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <mwl-demo-utils-date-time-picker [(ngModel)]="solicitudSala.horaInicio" (ngModelChange)="refresh.next()" locale="locale"
-                      placeholder="Fecha Inicio">
-                    </mwl-demo-utils-date-time-picker>
-                  </td>
-                  <td>
-                    <mwl-demo-utils-date-time-picker [(ngModel)]="solicitudSala.horaFin" (ngModelChange)="refresh.next()" 
-                    placeholder="Fecha Fin">
-                    </mwl-demo-utils-date-time-picker>
-                  </td>
-                  <td>
-                      <!-- <div class="control-group form-group" >
-                          <div class="controls">
-                    <select  #salas="ngModel"  name="salas" class="selectpicker" style="width: 100%;font-size: 1.2rem;"  
-                    [(ngModel)]="solicitudSala.sala" required>  
-                      <option value="" selected disabled >Seleccione Sala</option>
-                          <option *ngFor="let sala of salas">{{sala.nombre}}</option>
-                        </select>
-                      </div >
-                    </div> -->
-                    <div class="control-group form-group">
-                        <div class="controls">
-                          <select #sal="ngModel" name="sal" [(ngModel)]="solicitudSala.sala" 
-                          class="selectpicker"  style="width: 100%;font-size: 1.2rem;min-width: 10em;" required  >  
+          <table class="table table-bordered table-responsive">
+            <thead>
+              <tr>
+                <th class="th-color">Inicia</th>
+                <th class="th-color">Termina</th>
+                <th class="th-color">Sala</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <mwl-demo-utils-date-time-picker [(ngModel)]="solicitudSala.horaInicio" (ngModelChange)="refresh.next()" locale="locale"
+                    placeholder="Fecha Inicio">
+                  </mwl-demo-utils-date-time-picker>
+                </td>
+                <td>
+                  <mwl-demo-utils-date-time-picker [(ngModel)]="solicitudSala.horaFin" (ngModelChange)="refresh.next()" placeholder="Fecha Fin">
+                  </mwl-demo-utils-date-time-picker>
+                </td>
+                <td>
+                  <div class="control-group form-group">
+                    <div class="controls">
+                      <select #sal="ngModel" name="sal" [(ngModel)]="solicitudSala.sala" class="selectpicker" style="width: 100%;font-size: 1.2rem;min-width: 10em;"
+                        required>  
                             <option value="" selected disabled >Seleccione Sala</option>
                                 <option *ngFor="let sala of salas;">{{sala.nombre}}</option>
                               </select>
-                              <small [hidden]="sal.valid || (sal.pristine || sal.touched)">
-                                  <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La sala es  obligatoria
-                              </small>
-                        </div>
-                      </div>
-
-
-                    <!-- <input type="text" class="form-control" [(ngModel)]="title" (keyup)="refresh.next()"> -->
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-            <div class="row">
-                <div class="control-group form-group col-md-6" >
-                    <div class="controls">
-                      <!-- <input type="text" class="form-control" #descp="ngModel" name="descp" [(ngModel)]="solicitudSala.descripcion" 
-                      placeholder="Descripción" required > -->
-                      <textarea class="form-control" #descp="ngModel" name="descp" [(ngModel)]="solicitudSala.descripcion" placeholder="Descripción"
-                      rows="1" required></textarea>
-                      <small *ngIf="descp.invalid && (descp.dirty || descp.touched)">
-                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La descripción es obligatoria</small>
+                      <small [hidden]="sal.valid || (sal.pristine || sal.touched)">
+                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La sala es  obligatoria
+                      </small>
                     </div>
                   </div>
-                  <div class="control-group form-group col-md-6" >
-                      <div class="controls">
-                        <input type="number" class="form-control" #cup="ngModel" name="cup" [(ngModel)]="solicitudSala.cantidadPersonas" 
-                        placeholder="Cupos 10" required >
-                        <small *ngIf="cup.invalid && (cup.dirty || cup.touched)">
-                          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La cantidad de personas es obligatoria</small>
-                      </div>
-                    </div>
-              <!-- <div class="col-md-6 ">
-                <input type="text" class="form-control" [(ngModel)]="solicitudSala.descripcion" (keyup)="refresh.next()" placeholder="Descripción">
-              </div> -->
-              <!-- <div class="col-md-6">
-                <input type="number" placeholder="Cupos 10" class="form-control" [(ngModel)]="solicitudSala.cantidadPersonas" (keyup)="refresh.next()">
-              </div> -->
+
+                  <!-- <input type="text" class="form-control" [(ngModel)]="title" (keyup)="refresh.next()"> -->
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="row">
+            <div class="control-group form-group col-md-6">
+              <div class="controls">
+                <textarea class="form-control" #descp="ngModel" name="descp" [(ngModel)]="solicitudSala.descripcion" placeholder="Descripción"
+                  rows="1" required></textarea>
+                <small *ngIf="descp.invalid && (descp.dirty || descp.touched)">
+                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La descripción es obligatoria</small>
+              </div>
             </div>
-            <div class="container-fluid">
-              <hr>
-              <h4 style="color:#0069d9">Lista de Recursos disponibles</h4> <br>
-              <div class="row">
-                <div class="col-md-12" style="font-size: 1rem">
-                  <div class="container">
-                    <div class="form-group">
-                      <div class="row col-md-12" style="overflow-y: scroll; height: 100px">
-                        <div class="col-md-6" *ngFor="let recurso of recursos;" style="text-align: left">
-                          <label class="custom-control custom-checkbox">
+            <div class="control-group form-group col-md-6">
+              <div class="controls">
+                <input type="number" class="form-control" #cup="ngModel" name="cup" [(ngModel)]="solicitudSala.cantidadPersonas" placeholder="Cupos 10"
+                  required>
+                <small *ngIf="cup.invalid && (cup.dirty || cup.touched)">
+                          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La cantidad de personas es obligatoria</small>
+              </div>
+            </div>
+          </div>
+          <div class="container-fluid">
+            <hr>
+            <h4 style="color:#0069d9">Lista de Recursos disponibles</h4> <br>
+            <div class="row">
+              <div class="col-md-12" style="font-size: 1rem">
+                <div class="container">
+                  <div class="form-group">
+                    <div class="row col-md-12" style="overflow-y: scroll; height: 100px">
+                      <div class="col-md-6" *ngFor="let recurso of recursos;" style="text-align: left">
+                        <label class="custom-control custom-checkbox">
                           <input type="checkbox" class="custom-control-input" (change)="changeRecursos($event,recurso._id)" >
                           <span class="custom-control-indicator"></span>
                           <span class="custom-control-description">{{recurso.nombre}}</span>
                         </label>
-                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <hr>
-            <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="cerrarModal('#modal-add-new-request')">Cancelar</button>
-            <button id="btn-add-solid" type="submit" class="btn btn-success" data-dismiss="modal"
-             (click)="agregarSolicitud()" [disabled]="!descp.valid || !cup.valid || !sal.valid">Confirmar</button>
-            <!-- (click)="addEvent()"-->
-            <br>
-           <!-- </form> -->
+          </div>
+          <hr>
+          <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="cerrarModal('#modal-add-new-request')">Cancelar</button>
+          <button id="btn-add-solid" type="submit" class="btn btn-success" data-dismiss="modal" (click)="agregarSolicitud()" [disabled]="!descp.valid || !cup.valid || !sal.valid">Confirmar</button>
+          <!-- (click)="addEvent()"-->
+          <br>
+          <!-- </form> -->
           <!-- ********************************************************************************************************-->
         </div>
       </div>

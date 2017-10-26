@@ -113,6 +113,7 @@ export class SolicitudSalaComponent {
   salas = [];
   recursos = [];
   tempRecursos =[];
+  curreDate:String;
 
   constructor(
     private modal: NgbModal,
@@ -131,6 +132,10 @@ export class SolicitudSalaComponent {
     // this.title = date;//
     // this.start = date;;//
     // this.end = date;//
+    //alert('puede realizarse la solitud'+date.getDate());
+   /// this.getServerCurrentDate();
+    this.diaSemana();
+    //this.compararFecha(date);
     this.solicitudSala.horaInicio = date;//
     this.solicitudSala.horaFin = date;//
     this.solicitudSala.fecha = date;
@@ -299,6 +304,55 @@ export class SolicitudSalaComponent {
     this.tempRecursos= this.tempRecursos.filter(item => item !== _id);
    }
   }
+
+  getServerCurrentDate() {
+    this._servSolicitud.fechaActual().subscribe(
+      response => {
+        if (response.currentDate) {
+          this.curreDate = response.currentDate;
+          alert(this.curreDate);
+        } else {//no hay Salas registradas
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+        }
+      }
+    );
+  }
+   compararFecha(userDate:Date){
+     this.diaSemana();
+    //  if (userDate < this.curreDate) {
+    //   alert('No se puede realizar la solicitud');
+    //  }else{
+    //   //alert('puede realizarse la solitud'+this.curreDate.getDay);
+    //  }
+
+   }
+
+   
+   diaSemana() {
+     this.getServerCurrentDate();
+    alert(this.curreDate+'semqan');
+    let dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
+    let meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+    //let d =new Date();
+   // d=this.curreDate;
+   
+    //Obtengo directo del string y no de la variable tipo fecha
+    // var fechaString =this.curreDate.toDateString(); //d.toISOString();
+    // var mes_name = parseInt( fechaString.substring(5,7))-1;
+    // console.log(mes_name);
+    // var fechaNum = fechaString.substring(8,10);
+    // console.log(fechaNum);
+    // var year = fechaString.substring(0,4);
+    // console.log(year);
+  
+    // alert(dias[this.curreDate.getDay()] + " " + fechaNum + " de " + meses[mes_name] + " de " +         year);
+  
+   
+   }
 }
 
 
