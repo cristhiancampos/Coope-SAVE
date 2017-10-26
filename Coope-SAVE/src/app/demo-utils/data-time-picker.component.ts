@@ -45,11 +45,13 @@ export const DATE_TIME_PICKER_CONTROL_VALUE_ACCESSOR: any = {
         </div>
       </div>
     </form>
+    <div class="form-group">
     <ngb-timepicker
       [(ngModel)]="timeStruct"
       (ngModelChange)="updateTime()"
       [meridian]="true">
     </ngb-timepicker>
+    </div>
   `,
     styles: [
         `
@@ -108,6 +110,7 @@ export class DateTimePickerComponent implements ControlValueAccessor {
     }
 
     updateTime(): void {
+        alert('actualizar el tiempo');
         const newDate: Date = setHours(
             setMinutes(
                 setSeconds(this.date, this.timeStruct.second),

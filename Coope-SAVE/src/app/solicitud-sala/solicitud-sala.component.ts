@@ -14,6 +14,27 @@ import { ServicioSala } from '../servicios/sala';
 import { ServicioRecursos } from '../servicios/recurso';
 import { ServicioSolicitudSala } from '../servicios/solicitudSala';
 import swal from 'sweetalert2';
+import * as moment from 'moment';
+
+import { ChangeDetectorRef, forwardRef, Input } from '@angular/core';
+import {
+    getSeconds,
+    getMinutes,
+    getHours,
+    getDate,
+    getMonth,
+    getYear,
+    setSeconds,
+    setMinutes,
+    setHours,
+    setDate,
+    setMonth,
+    setYear
+} from 'date-fns';
+import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { DateTimePickerComponent } from "../demo-utils/data-time-picker.component";
+
 
 const colors: any = {
   red: {
@@ -29,16 +50,23 @@ const colors: any = {
     secondary: '#FDF1BA'
   }
 };
+const DATE_TIME_PICKER_CONTROL_VALUE_ACCESSOR: any = {
+  provide: NG_VALUE_ACCESSOR,
+  useExisting: forwardRef(() => DateTimePickerComponent),
+  multi: true,
+  
+
+};
 
 @Component({
   selector: 'app-solicitud-sala',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './solicitud-sala.component.html',
   styleUrls: ['./solicitud-sala.component.css'],
-  providers: [ServicioSala, ServicioRecursos, ServicioSolicitudSala]
+  providers: [ServicioSala, ServicioRecursos, ServicioSolicitudSala, DATE_TIME_PICKER_CONTROL_VALUE_ACCESSOR]
 })
 
-export class SolicitudSalaComponent {
+export class SolicitudSalaComponent  implements ControlValueAccessor{
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
   view = 'month';
 
@@ -69,29 +97,66 @@ export class SolicitudSalaComponent {
   refresh: Subject<any> = new Subject();
 
   events: CalendarEvent[] = [
+    // {
+    //   start: subDays(startOfDay(new Date()), 1),
+    //   end: addDays(new Date(), 1),
+    //   title: 'A 3 day event',
+    //   color: colors.red,
+    //   actions: this.actions
+    // },
+    // {
+    //   start: startOfDay(new Date()),
+    //   title: 'An event with no end date',
+    //   color: colors.yellow,
+    //   actions: this.actions
+    // },
+    // {
+    //   start: subDays(endOfMonth(new Date()), 3),
+    //   end: addDays(endOfMonth(new Date()), 3),
+    //   title: 'A long event that spans 2 months',
+    //   color: colors.blue
+    // },
     {
-      start: subDays(startOfDay(new Date()), 1),
-      end: addDays(new Date(), 1),
-      title: 'A 3 day event',
-      color: colors.red,
-      actions: this.actions
-    },
-    {
-      start: startOfDay(new Date()),
-      title: 'An event with no end date',
+      start: addHours(startOfDay(new Date()), 2),
+      end: new Date(),
+      title: 'Reunión semanal',
       color: colors.yellow,
-      actions: this.actions
-    },
-    {
-      start: subDays(endOfMonth(new Date()), 3),
-      end: addDays(endOfMonth(new Date()), 3),
-      title: 'A long event that spans 2 months',
-      color: colors.blue
+      actions: this.actions,
+      resizable: {
+        beforeStart: true,
+        afterEnd: true
+      },
+      draggable: true
     },
     {
       start: addHours(startOfDay(new Date()), 2),
       end: new Date(),
-      title: 'A draggable and resizable event',
+      title: 'Junta Administrativa',
+      color: colors.yellow,
+      actions: this.actions,
+      resizable: {
+        beforeStart: true,
+        afterEnd: true
+      },
+      draggable: true
+    },
+    {
+      start: addHours(startOfDay(new Date()), 2),
+      end: new Date(),
+      title: 'Reunión de TI',
+      color: colors.yellow,
+      actions: this.actions,
+      resizable: {
+        beforeStart: true,
+        afterEnd: true
+      },
+      draggable: true
+    }
+    ,
+    {
+      start: addHours(startOfDay(new Date()), 2),
+      end: new Date(),
+      title: 'Reunión de TI',
       color: colors.yellow,
       actions: this.actions,
       resizable: {
@@ -112,38 +177,53 @@ export class SolicitudSalaComponent {
   end;//
   salas = [];
   recursos = [];
-  tempRecursos =[];
-  curreDate:String;
+  tempRecursos = [];
+  currentDate;
+
+  @Input() placeholder: string;
+  
+      date: Date;
+  
+      dateStruct: NgbDateStruct;
+  
+      timeStruct: NgbTimeStruct;
+  
+      datePicker: any;
+  
+      private onChangeCallback: (date: Date) => void = () => { };
 
   constructor(
     private modal: NgbModal,
     private _servSala: ServicioSala,
     private _servRecurso: ServicioRecursos,
-    private _servSolicitud: ServicioSolicitudSala
+    private _servSolicitud: ServicioSolicitudSala,
+    private cdr: ChangeDetectorRef
   ) {
-    this.solicitudSala = new SolicitudSala('', '', '', null, null,null, '', '', '', null, '', '');
+    this.solicitudSala = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
     this.obtenerSalas();
     this.obtenerRecursos();
+
+    // $(document).ready(function(){
+    //  // console.log('ready');
+    // 	$(".cal-cell-top").mouseover(function(){
+    //         $(this).css('background','red');
+    //         $(this).css('cursor','not-allowed');
+    //   	});
+
+    // 	$(".cal-cell-top").mouseout(function(){
+    //     $(this).css('background','#FFF');
+    //  	});
+    // });
+
   }
 
 
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
-    // this.title = date;//
-    // this.start = date;;//
-    // this.end = date;//
-    //alert('puede realizarse la solitud'+date.getDate());
-   /// this.getServerCurrentDate();
-    this.diaSemana();
-    //this.compararFecha(date);
-    this.solicitudSala.horaInicio = date;//
-    this.solicitudSala.horaFin = date;//
-    this.solicitudSala.fecha = date;
-
     this.activeDayIsOpen = false;
-    this.obtenerSalas();
-    this.obtenerRecursos();
-    this.abrirModal('#modal-add-new-request');
+    this.verificarFechaSeleccionada(date);
+  
+
     // alert(date);
     // if (isSameMonth(date, this.viewDate)) {
     //   if (
@@ -195,11 +275,6 @@ export class SolicitudSalaComponent {
   }
 
   ///***************************************************METODOS AGREGADOS***********************************
-  click(event: any) {
-    // alert(event.target.ViewChild);
-    // console.log(event);
-  }
-
   obtenerSalas() {
     this._servSala.obtenerSalasHabilitadas().subscribe(
       response => {
@@ -231,7 +306,7 @@ export class SolicitudSalaComponent {
       }
     );
   }
-  
+
   agregarSolicitud() {
     let identity = localStorage.getItem('identity');
     let user = JSON.parse(identity);
@@ -239,8 +314,8 @@ export class SolicitudSalaComponent {
     let recordarValue = JSON.parse(recordar);
     let recursos = JSON.parse(identity);
     if (user != null) {
-      this.solicitudSala.usuario=user._id;
-      this.solicitudSala.recursos=this.tempRecursos;
+      this.solicitudSala.usuario = user._id;
+      this.solicitudSala.recursos = this.tempRecursos;
       this._servSolicitud.registrarSolicitud(this.solicitudSala).subscribe(
         response => {
           if (!response.message._id) {
@@ -249,7 +324,7 @@ export class SolicitudSalaComponent {
             this.msjExitoso("Solicitud Agregada Exitosamente");
             this.solicitudSala = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
             this.cerrarModal('#modal-add-new-request');
-           // this.obtenerSalas();
+            // this.obtenerSalas();
           }
         }, error => {
           var alertMessage = <any>error;
@@ -259,7 +334,7 @@ export class SolicitudSalaComponent {
           }
         }
       );
-    }else{
+    } else {
       this.msjError('Debe validar sus credenciales');
     }
 
@@ -296,22 +371,46 @@ export class SolicitudSalaComponent {
       'error'
     )
   }
-
-  changeRecursos(event:any, _id:any){
-   if(event.target.checked){
-     this.tempRecursos.push(_id);
-   }else{
-    this.tempRecursos= this.tempRecursos.filter(item => item !== _id);
-   }
+  msInfo(texto: String) {
+    swal({
+      title: '',
+      type: 'info',
+      html: texto + '',
+      showCloseButton: true,
+      focusConfirm: false,
+      confirmButtonText: 'OK'
+    })
   }
 
-  getServerCurrentDate() {
+  changeRecursos(event: any, _id: any) {
+    if (event.target.checked) {
+      this.tempRecursos.push(_id);
+    } else {
+      this.tempRecursos = this.tempRecursos.filter(item => item !== _id);
+    }
+  }
+  //
+  verificarFechaSeleccionada(userDate: Date) {
     this._servSolicitud.fechaActual().subscribe(
       response => {
         if (response.currentDate) {
-          this.curreDate = response.currentDate;
-          alert(this.curreDate);
-        } else {//no hay Salas registradas
+          this.currentDate = response.currentDate;
+          //fecha parseada del servidor
+          var momentDate = moment(this.currentDate, 'YYYY-MM-DD HH:mm:ss');
+          let serverDate = momentDate.toDate();
+
+          if (userDate.getFullYear() < serverDate.getFullYear()
+            || ((userDate.getMonth() + 1) < (serverDate.getMonth() + 1))
+            || userDate.getDate() < serverDate.getDate()) {
+            this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
+          } else {
+            // this.solicitudSala.horaInicio = serverDate;//
+            // this.solicitudSala.horaFin = new Date();//
+            // this.solicitudSala.fecha ;
+            this.writeValue(userDate);
+            this.abrirModal('#modal-add-new-request');
+          }
+        } else {//error
         }
       }, error => {
         var errorMensaje = <any>error;
@@ -320,39 +419,84 @@ export class SolicitudSalaComponent {
         }
       }
     );
+
   }
-   compararFecha(userDate:Date){
-     this.diaSemana();
-    //  if (userDate < this.curreDate) {
-    //   alert('No se puede realizar la solicitud');
-    //  }else{
-    //   //alert('puede realizarse la solitud'+this.curreDate.getDay);
-    //  }
 
-   }
+
+  ///////////////////////////////////////////////////TIMPE PICKER///////////////////////////////////////////////////////////////////
+  writeValue(date: Date): void {
+    this.date = date;
+    this.dateStruct = {
+        day: getDate(date),
+        month: getMonth(date) + 1,
+        year: getYear(date)
+    };
+    this.timeStruct = {
+        second: getSeconds(date),
+        minute: getMinutes(date),
+        hour: getHours(date)
+    };
+    this.cdr.detectChanges();
+}
+
+registerOnChange(fn: any): void {
+    this.onChangeCallback = fn;
+}
+
+registerOnTouched(fn: any): void { }
+
+updateDate(): void {
+   const newDate: Date = setYear(
+        setMonth(
+            setDate(this.date, this.dateStruct.day),
+            this.dateStruct.month - 1
+        ),
+        this.dateStruct.year
+    );
+    this.onChangeCallback(newDate);
+  alert(this.date);
+  // this._servSolicitud.fechaActual().subscribe(
+  //   response => {
+  //     if (response.currentDate) {
+  //       this.currentDate = response.currentDate;
+  //       //fecha parseada del servidor
+  //       var momentDate = moment(this.currentDate, 'YYYY-MM-DD HH:mm:ss');
+  //       let serverDate = momentDate.toDate();
+
+  //       if (this.date.getFullYear() < serverDate.getFullYear()
+  //         || ((this.date.getMonth() + 1) < (serverDate.getMonth() + 1))
+  //         || this.date.getDate() < serverDate.getDate()) {
+  //         this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
+  //       } else {
+  //         // this.solicitudSala.horaInicio = serverDate;//
+  //         // this.solicitudSala.horaFin = new Date();//
+  //         // this.solicitudSala.fecha ;
+  //         this.writeValue(this.date);
+  //       }
+  //     } else {//error
+  //     }
+  //   }, error => {
+  //     var errorMensaje = <any>error;
+  //     if (errorMensaje != null) {
+  //       var body = JSON.parse(error._body);
+  //     }
+  //   }
+  // );
 
    
-   diaSemana() {
-     this.getServerCurrentDate();
-    alert(this.curreDate+'semqan');
-    let dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
-    let meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-    //let d =new Date();
-   // d=this.curreDate;
-   
-    //Obtengo directo del string y no de la variable tipo fecha
-    // var fechaString =this.curreDate.toDateString(); //d.toISOString();
-    // var mes_name = parseInt( fechaString.substring(5,7))-1;
-    // console.log(mes_name);
-    // var fechaNum = fechaString.substring(8,10);
-    // console.log(fechaNum);
-    // var year = fechaString.substring(0,4);
-    // console.log(year);
-  
-    // alert(dias[this.curreDate.getDay()] + " " + fechaNum + " de " + meses[mes_name] + " de " +         year);
-  
-   
-   }
+}
+
+updateTime(): void {
+   // alert('actualizar el tiempo'+this.solicitudSala.fecha);
+    const newDate: Date = setHours(
+        setMinutes(
+            setSeconds(this.date, this.timeStruct.second),
+            this.timeStruct.minute
+        ),
+        this.timeStruct.hour
+    );
+    this.onChangeCallback(newDate);
+}
 }
 
 

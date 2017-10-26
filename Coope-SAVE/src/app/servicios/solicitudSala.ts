@@ -4,6 +4,7 @@ import 'rxjs/add/operator/map';
 import {Observable } from 'rxjs/Observable';
 import {GLOBAL} from './global';
 
+
 @Injectable()
 
 export class ServicioSolicitudSala{

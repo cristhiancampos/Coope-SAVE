@@ -156,9 +156,6 @@
         </div>
         <div class="modal-body" style="text-align: center">
           <br>
-
-          <!---************************************************************* -->
-          <!-- <form #addSolicitudSalaForm="ngForm" (ngSubmit)="agregarSolicitud()">  -->
           <table class="table table-bordered table-responsive">
             <thead>
               <tr>
@@ -170,13 +167,45 @@
             <tbody>
               <tr>
                 <td>
-                  <mwl-demo-utils-date-time-picker [(ngModel)]="solicitudSala.horaInicio" (ngModelChange)="refresh.next()" locale="locale"
+                  <form class="form-inline">
+                    <div class="form-group">
+                      <div class="input-group">
+                        <input readonly class="form-control" [placeholder]="placeholder" name="date" [(ngModel)]="dateStruct" (ngModelChange)="updateDate()"
+                          ngbDatepicker #datePicker="ngbDatepicker">
+                        <div class="input-group-addon" (click)="datePicker.toggle()">
+                          <i class="fa fa-calendar"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <div class="form-group">
+                    <ngb-timepicker [(ngModel)]="solicitudSala.horaInicio" (ngModelChange)="updateTime()" [meridian]="true" locale="locale">
+                    </ngb-timepicker>
+                  </div>
+                  <!-- <mwl-demo-utils-date-time-picker [(ngModel)]="solicitudSala.horaInicio" (ngModelChange)="refresh.next()" locale="locale"
                     placeholder="Fecha Inicio">
-                  </mwl-demo-utils-date-time-picker>
+                  </mwl-demo-utils-date-time-picker> -->
                 </td>
                 <td>
-                  <mwl-demo-utils-date-time-picker [(ngModel)]="solicitudSala.horaFin" (ngModelChange)="refresh.next()" placeholder="Fecha Fin">
-                  </mwl-demo-utils-date-time-picker>
+                  <!-- <mwl-demo-utils-date-time-picker [(ngModel)]="solicitudSala.horaFin" (ngModelChange)="refresh.next()" placeholder="Fecha Fin">
+                  </mwl-demo-utils-date-time-picker> -->
+
+                  <form class="form-inline">
+                    <div class="form-group">
+                      <div class="input-group">
+                        <input readonly class="form-control" [placeholder]="placeholder" name="date" [(ngModel)]="dateStruct" (ngModelChange)="updateDate()"
+                          ngbDatepicker #datePicker="ngbDatepicker">
+                        <div class="input-group-addon" (click)="datePicker.toggle()">
+                          <i class="fa fa-calendar"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <div class="form-group">
+                    <ngb-timepicker [(ngModel)]="solicitudSala.horaFin" (ngModelChange)="updateTime()" [meridian]="true" locale="locale">
+                    </ngb-timepicker>
+                  </div>
+
                 </td>
                 <td>
                   <div class="control-group form-group">
@@ -192,6 +221,14 @@
                     </div>
                   </div>
 
+                  <div class="control-group form-group">
+                    <div class="controls">
+                      <input type="number" class="form-control" #cup="ngModel" name="cup" [(ngModel)]="solicitudSala.cantidadPersonas" placeholder="Capacidad 10"
+                        required>
+                      <small *ngIf="cup.invalid && (cup.dirty || cup.touched)">
+                          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La cantidad de personas es obligatoria</small>
+                    </div>
+                  </div>
                   <!-- <input type="text" class="form-control" [(ngModel)]="title" (keyup)="refresh.next()"> -->
                 </td>
               </tr>
@@ -199,20 +236,12 @@
           </table>
 
           <div class="row">
-            <div class="control-group form-group col-md-6">
+            <div class="control-group form-group col-md-12">
               <div class="controls">
-                <textarea class="form-control" #descp="ngModel" name="descp" [(ngModel)]="solicitudSala.descripcion" placeholder="Descripción"
-                  rows="1" required></textarea>
+                <textarea class="form-control" #descp="ngModel" name="descp" [(ngModel)]="solicitudSala.descripcion" placeholder="Motivo por el cuál solicita la sala."
+                  rows="2" required></textarea>
                 <small *ngIf="descp.invalid && (descp.dirty || descp.touched)">
                         <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La descripción es obligatoria</small>
-              </div>
-            </div>
-            <div class="control-group form-group col-md-6">
-              <div class="controls">
-                <input type="number" class="form-control" #cup="ngModel" name="cup" [(ngModel)]="solicitudSala.cantidadPersonas" placeholder="Cupos 10"
-                  required>
-                <small *ngIf="cup.invalid && (cup.dirty || cup.touched)">
-                          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La cantidad de personas es obligatoria</small>
               </div>
             </div>
           </div>
@@ -242,8 +271,6 @@
           <button id="btn-add-solid" type="submit" class="btn btn-success" data-dismiss="modal" (click)="agregarSolicitud()" [disabled]="!descp.valid || !cup.valid || !sal.valid">Confirmar</button>
           <!-- (click)="addEvent()"-->
           <br>
-          <!-- </form> -->
-          <!-- ********************************************************************************************************-->
         </div>
       </div>
     </div>

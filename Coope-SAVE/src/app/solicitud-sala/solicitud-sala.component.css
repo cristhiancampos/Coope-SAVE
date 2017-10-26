@@ -70,3 +70,10 @@ h3 {
     cursor: pointer; 
   }
  
+  .cal-event {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 2px;
+}
