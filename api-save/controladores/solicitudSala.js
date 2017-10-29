@@ -3,7 +3,6 @@
 var SolicitudSala = require('../modelos/solicitudSala');
 
 function agregarSolicitud(req, res) {
-
   var solicitud = new SolicitudSala();
   var params = req.body;
   solicitud.sala = params.sala;
@@ -16,7 +15,8 @@ function agregarSolicitud(req, res) {
   solicitud.estado = 'Habilitado';
   solicitud.recursos = params.recursos;
   solicitud.created_at = new Date();
-  solicitud.updated_at = params.updated_at;
+  //solicitud.updated_at = params.updated_at;
+
   if (
     solicitud.sala != null && solicitud.usuario != null && solicitud.fecha != null
     && solicitud.horaInicio != null && solicitud.horaFin != null && solicitud.descripcion != null
@@ -37,13 +37,12 @@ function agregarSolicitud(req, res) {
       }
     });
   } else {
-    res.status(200).send({ message: 'Debe rellenar todos los campos  requeridos' });
+    res.status(200).send({ message: 'Debe rellenar todos los campos  requeridos y de la manera correcta.' });
   }
 }
 
-function obtenerFechaActual(req,res)
-{
-  res.status(200).send({ currentDate: new Date()});
+function obtenerFechaActual(req, res) {
+  res.status(200).send({ currentDate: new Date() });
 }
 module.exports = {
   agregarSolicitud,

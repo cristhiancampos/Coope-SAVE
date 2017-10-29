@@ -7,9 +7,9 @@ var Schema = mongoose.Schema;
 var modeloSolicitudSala = Schema({      
     sala:String,
     usuario:String,
-    fecha :String,
-    horaInicio :String,
-    horaFin :String,
+    fecha :{},
+    horaInicio:{} ,
+    horaFin : {} ,
     descripcion :String,
     cantidadPersonas :String,
     estado :String,

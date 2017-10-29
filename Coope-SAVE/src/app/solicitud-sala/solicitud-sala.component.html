@@ -145,13 +145,13 @@
 
   <!-- Modal  agregar nueva solicitud-->
   <div class="modal fade bd-example-modal-lg" id="modal-add-new-request" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
+    aria-hidden="true" style="min-width: 900px">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header" style="color: #FFF;background: #0069d9">
           <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar-plus-o" aria-hidden="true"></i> Solicitar Sala</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cerrarModal('#modal-add-new-request')">
-            <small aria-hidden="true">&times;</small>
+            <small aria-hidden="true" style="font-size: 2rem; cursor: pointer">&times;</small>
           </button>
         </div>
         <div class="modal-body" style="text-align: center">
@@ -159,38 +159,85 @@
           <table class="table table-bordered table-responsive">
             <thead>
               <tr>
-                <th class="th-color">Inicia</th>
-                <th class="th-color">Termina</th>
+                <th class="th-color">Horario</th>
+                <!-- <th class="th-color">Termina</th> -->
                 <th class="th-color">Sala</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>
-                  <form class="form-inline">
-                    <div class="form-group">
-                      <div class="input-group">
-                        <input readonly class="form-control" [placeholder]="placeholder" name="date" [(ngModel)]="dateStruct" (ngModelChange)="updateDate()"
-                          ngbDatepicker #datePicker="ngbDatepicker">
-                        <div class="input-group-addon" (click)="datePicker.toggle()">
-                          <i class="fa fa-calendar"></i>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <form class="form-inline">
+                        <div class="form-group">
+                          <div class="input-group">
+                            <input readonly class="form-control" [placeholder]="placeholder" name="date" [(ngModel)]="dateStruct" (ngModelChange)="updateDate()"
+                              ngbDatepicker #datePicker="ngbDatepicker">
+                            <div class="input-group-addon" (click)="datePicker.toggle()">
+                              <i class="fa fa-calendar"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+
+                      <div style="font-size: 1rem">
+                        <br>
+                        <label for="">Inicia</label>
+                        <div class="form-group">
+                          <ngb-timepicker [(ngModel)]="solicitudSala.horaInicio" (ngModelChange)="updateTime()" [meridian]="true" (input)="updateInitDateOnInput()"
+                            #ctrlInitDate="ngModel" name="ctrlInitDate" required>
+                          </ngb-timepicker>
+                          <div *ngIf="ctrlInitDate.valid" class="small form-text text-success">Correcto <i class="fa fa-check" aria-hidden="true"></i> </div>
+                          <div class="small form-text text-danger" *ngIf="!ctrlInitDate.valid">
+                            <div *ngIf="ctrlInitDate.errors['required']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i>Debe ingresar valores Numericos</div>
+                            <div *ngIf="ctrlInitDate.errors['tooLate']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en
+                              las horas</div>
+                            <div *ngIf="ctrlInitDate.errors['tooEarly']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i>Debe ingresar un valor válido en los
+                              minutos</div>
+                          </div>
+                          <!-- <ngb-timepicker [(ngModel)]="solicitudSala.horaInicio"  id="initDate"
+                            (ngModelChange)="updateTime()" [meridian]="true" locale="locale" style="font-size: 1rem" 
+                            (input)="updateInitDateOnInput()">
+                            </ngb-timepicker> -->
                         </div>
                       </div>
                     </div>
-                  </form>
-                  <div class="form-group">
-                    <ngb-timepicker [(ngModel)]="solicitudSala.horaInicio" (ngModelChange)="updateTime()" [meridian]="true" locale="locale">
-                    </ngb-timepicker>
+                    <div class="col-md-6">
+                      <div class="form-group" style="margin-top: 3.3em; font-size: 1rem">
+
+                        <label for="">Termina</label>
+                        <ngb-timepicker [(ngModel)]="solicitudSala.horaFin" (ngModelChange)="updateTime()" [meridian]="true" (input)="updateFinishDateOnInput()"
+                          #ctrlFinishDate="ngModel" name="ctrlFinishDate" required>
+                        </ngb-timepicker>
+                        <div *ngIf="ctrlFinishDate.valid" class="small form-text text-success">Correcto <i class="fa fa-check" aria-hidden="true"></i> </div>
+                        <div class="small form-text text-danger" *ngIf="!ctrlFinishDate.valid">
+                          <div *ngIf="ctrlFinishDate.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Debe ingresar valores Numericos</div>
+                          <div *ngIf="ctrlFinishDate.errors['tooLate']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i>Debe ingresar un valor válido en las
+                            horas</div>
+                          <div *ngIf="ctrlFinishDate.errors['tooEarly']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i>Debe ingresar un valor válido en los
+                            minutos</div>
+                        </div>
+                        <!-- <ngb-timepicker [(ngModel)]="solicitudSala.horaFin" (ngModelChange)="updateTime()" 
+                            [meridian]="true" locale="locale"
+                            (focusout)="updateFinishDateOnInput()">
+                            </ngb-timepicker> -->
+                      </div>
+                    </div>
+
                   </div>
+
+
+
                   <!-- <mwl-demo-utils-date-time-picker [(ngModel)]="solicitudSala.horaInicio" (ngModelChange)="refresh.next()" locale="locale"
                     placeholder="Fecha Inicio">
                   </mwl-demo-utils-date-time-picker> -->
                 </td>
-                <td>
-                  <!-- <mwl-demo-utils-date-time-picker [(ngModel)]="solicitudSala.horaFin" (ngModelChange)="refresh.next()" placeholder="Fecha Fin">
+                <!--  <td>
+                  <mwl-demo-utils-date-time-picker [(ngModel)]="solicitudSala.horaFin" (ngModelChange)="refresh.next()" placeholder="Fecha Fin">
                   </mwl-demo-utils-date-time-picker> -->
 
-                  <form class="form-inline">
+                <!-- <form class="form-inline">
                     <div class="form-group">
                       <div class="input-group">
                         <input readonly class="form-control" [placeholder]="placeholder" name="date" [(ngModel)]="dateStruct" (ngModelChange)="updateDate()"
@@ -200,13 +247,13 @@
                         </div>
                       </div>
                     </div>
-                  </form>
-                  <div class="form-group">
+                  </form> -->
+                <!-- <div class="form-group">
                     <ngb-timepicker [(ngModel)]="solicitudSala.horaFin" (ngModelChange)="updateTime()" [meridian]="true" locale="locale">
                     </ngb-timepicker>
-                  </div>
+                  </div> 
+                </td>-->
 
-                </td>
                 <td>
                   <div class="control-group form-group">
                     <div class="controls">
@@ -215,9 +262,14 @@
                             <option value="" selected disabled >Seleccione Sala</option>
                                 <option *ngFor="let sala of salas;">{{sala.nombre}}</option>
                               </select>
-                      <small [hidden]="sal.valid || (sal.pristine || sal.touched)">
+
+                      <div *ngIf="sal.valid" class="small form-text text-success" style="font-size:0.9rem">Correcto<i class="fa fa-check" aria-hidden="true"></i></div>
+                      <div class="small form-text text-danger" *ngIf="sal.invalid && (sal.dirty || sal.touched)" style="font-size:0.9rem">
+                        <div *ngIf="sal.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La sala es obligatoria.</div>
+                      </div>
+                      <!-- <small [hidden]="sal.valid || (sal.pristine || sal.touched)">
                         <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La sala es  obligatoria
-                      </small>
+                      </small> -->
                     </div>
                   </div>
 
@@ -225,8 +277,25 @@
                     <div class="controls">
                       <input type="number" class="form-control" #cup="ngModel" name="cup" [(ngModel)]="solicitudSala.cantidadPersonas" placeholder="Capacidad 10"
                         required>
-                      <small *ngIf="cup.invalid && (cup.dirty || cup.touched)">
-                          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La cantidad de personas es obligatoria</small>
+                      <div *ngIf="cup.valid" class="small form-text text-success" style="font-size:0.9rem">Correcto<i class="fa fa-check" aria-hidden="true"></i></div>
+                      <div class="small form-text text-danger" *ngIf="cup.invalid && (cup.dirty || cup.touched)" style="font-size:0.9rem">
+                        <div *ngIf="cup.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La cantidad de personas es obligatoria</div>
+                      </div>
+                      <!-- <small *ngIf="cup.invalid && (cup.dirty || cup.touched)" class="small form-text text-danger">
+                          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La cantidad de personas es obligatoria</small> -->
+                    </div>
+                  </div>
+                  <div class="control-group form-group">
+                    <div class="controls">
+                      <textarea class="form-control" #descp="ngModel" name="descp" [(ngModel)]="solicitudSala.descripcion" placeholder="Motivo por el cuál solicita la sala."
+                        rows="3" required></textarea>
+                      <div *ngIf="descp.valid" class="small form-text text-success" style="font-size:0.9rem"> <i class="fa fa-check" aria-hidden="true"></i>Correcto</div>
+                      <div class="small form-text text-danger" *ngIf="descp.invalid && (descp.dirty || descp.touched)" style="font-size:0.9rem">
+                        <div *ngIf="descp.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> El motivo de la solicitud es obligatoria</div>
+
+                      </div>
+                      <!-- <small *ngIf="descp.invalid && (descp.dirty || descp.touched)">
+                                <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La descripción es obligatoria</small>-->
                     </div>
                   </div>
                   <!-- <input type="text" class="form-control" [(ngModel)]="title" (keyup)="refresh.next()"> -->
@@ -235,7 +304,7 @@
             </tbody>
           </table>
 
-          <div class="row">
+          <!-- <div class="row">
             <div class="control-group form-group col-md-12">
               <div class="controls">
                 <textarea class="form-control" #descp="ngModel" name="descp" [(ngModel)]="solicitudSala.descripcion" placeholder="Motivo por el cuál solicita la sala."
@@ -244,7 +313,7 @@
                         <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La descripción es obligatoria</small>
               </div>
             </div>
-          </div>
+          </div> -->
           <div class="container-fluid">
             <hr>
             <h4 style="color:#0069d9">Lista de Recursos disponibles</h4> <br>
@@ -268,7 +337,7 @@
           </div>
           <hr>
           <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="cerrarModal('#modal-add-new-request')">Cancelar</button>
-          <button id="btn-add-solid" type="submit" class="btn btn-success" data-dismiss="modal" (click)="agregarSolicitud()" [disabled]="!descp.valid || !cup.valid || !sal.valid">Confirmar</button>
+          <button id="btn-add-solid" type="submit" class="btn btn-success" data-dismiss="modal" (click)="agregarSolicitud()" [disabled]="!descp.valid || !cup.valid || !sal.valid ||  !ctrlInitDate.valid">Confirmar</button>
           <!-- (click)="addEvent()"-->
           <br>
         </div>

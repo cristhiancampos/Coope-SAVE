@@ -18,23 +18,23 @@ import * as moment from 'moment';
 
 import { ChangeDetectorRef, forwardRef, Input } from '@angular/core';
 import {
-    getSeconds,
-    getMinutes,
-    getHours,
-    getDate,
-    getMonth,
-    getYear,
-    setSeconds,
-    setMinutes,
-    setHours,
-    setDate,
-    setMonth,
-    setYear
+  getSeconds,
+  getMinutes,
+  getHours,
+  getDate,
+  getMonth,
+  getYear,
+  setSeconds,
+  setMinutes,
+  setHours,
+  setDate,
+  setMonth,
+  setYear
 } from 'date-fns';
 import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DateTimePickerComponent } from "../demo-utils/data-time-picker.component";
-
+import {FormControl} from '@angular/forms';
 
 const colors: any = {
   red: {
@@ -54,7 +54,7 @@ const DATE_TIME_PICKER_CONTROL_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
   useExisting: forwardRef(() => DateTimePickerComponent),
   multi: true,
-  
+
 
 };
 
@@ -66,7 +66,7 @@ const DATE_TIME_PICKER_CONTROL_VALUE_ACCESSOR: any = {
   providers: [ServicioSala, ServicioRecursos, ServicioSolicitudSala, DATE_TIME_PICKER_CONTROL_VALUE_ACCESSOR]
 })
 
-export class SolicitudSalaComponent  implements ControlValueAccessor{
+export class SolicitudSalaComponent implements ControlValueAccessor {
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
   view = 'month';
 
@@ -181,16 +181,16 @@ export class SolicitudSalaComponent  implements ControlValueAccessor{
   currentDate;
 
   @Input() placeholder: string;
-  
-      date: Date;
-  
-      dateStruct: NgbDateStruct;
-  
-      timeStruct: NgbTimeStruct;
-  
-      datePicker: any;
-  
-      private onChangeCallback: (date: Date) => void = () => { };
+
+  date: Date;
+
+  dateStruct: NgbDateStruct;
+
+  timeStruct: NgbTimeStruct;
+
+  datePicker: any;
+
+  private onChangeCallback: (date: Date) => void = () => { };
 
   constructor(
     private modal: NgbModal,
@@ -220,9 +220,11 @@ export class SolicitudSalaComponent  implements ControlValueAccessor{
 
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+    this.solicitudSala.horaInicio = { hour: 7, minute: 0 };
+    this.solicitudSala.horaFin = { hour: 11, minute: 0 };
     this.activeDayIsOpen = false;
     this.verificarFechaSeleccionada(date);
-  
+
 
     // alert(date);
     // if (isSameMonth(date, this.viewDate)) {
@@ -314,12 +316,13 @@ export class SolicitudSalaComponent  implements ControlValueAccessor{
     let recordarValue = JSON.parse(recordar);
     let recursos = JSON.parse(identity);
     if (user != null) {
+      this.solicitudSala.fecha = this.dateStruct;
       this.solicitudSala.usuario = user._id;
       this.solicitudSala.recursos = this.tempRecursos;
       this._servSolicitud.registrarSolicitud(this.solicitudSala).subscribe(
         response => {
           if (!response.message._id) {
-            this.msjError("La Solicitud no pudo ser agregada");
+            this.msjError(response.message);
           } else {
             this.msjExitoso("Solicitud Agregada Exitosamente");
             this.solicitudSala = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
@@ -330,7 +333,7 @@ export class SolicitudSalaComponent  implements ControlValueAccessor{
           var alertMessage = <any>error;
           if (alertMessage != null) {
             var body = JSON.parse(error._body);
-            this.msjError('Solicitud no registrada');
+            this.msjError('Solicitud no registrada r');
           }
         }
       );
@@ -398,10 +401,12 @@ export class SolicitudSalaComponent  implements ControlValueAccessor{
           //fecha parseada del servidor
           var momentDate = moment(this.currentDate, 'YYYY-MM-DD HH:mm:ss');
           let serverDate = momentDate.toDate();
+          alert('Año  ' + userDate.getFullYear() + " mes    " + (userDate.getMonth() + 1) + " dia" + userDate.getDate() + "\n" +
+            '' + 'Año  ' + serverDate.getFullYear() + " mes    " + (serverDate.getMonth() + 1) + " dia" + serverDate.getDate());
 
           if (userDate.getFullYear() < serverDate.getFullYear()
-            || ((userDate.getMonth() + 1) < (serverDate.getMonth() + 1))
-            || userDate.getDate() < serverDate.getDate()) {
+            && ((userDate.getMonth() + 1) < (serverDate.getMonth() + 1))
+            && userDate.getDate() < serverDate.getDate()) {
             this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
           } else {
             // this.solicitudSala.horaInicio = serverDate;//
@@ -421,82 +426,153 @@ export class SolicitudSalaComponent  implements ControlValueAccessor{
     );
 
   }
-
-
   ///////////////////////////////////////////////////TIMPE PICKER///////////////////////////////////////////////////////////////////
   writeValue(date: Date): void {
     this.date = date;
     this.dateStruct = {
-        day: getDate(date),
-        month: getMonth(date) + 1,
-        year: getYear(date)
+      day: getDate(date),
+      month: getMonth(date) + 1,
+      year: getYear(date)
     };
     this.timeStruct = {
-        second: getSeconds(date),
-        minute: getMinutes(date),
-        hour: getHours(date)
+      second: getSeconds(date),
+      minute: getMinutes(date),
+      hour: getHours(date)
     };
     this.cdr.detectChanges();
-}
+  }
 
-registerOnChange(fn: any): void {
+  registerOnChange(fn: any): void {
     this.onChangeCallback = fn;
-}
+  }
 
-registerOnTouched(fn: any): void { }
+  registerOnTouched(fn: any): void { }
 
-updateDate(): void {
-   const newDate: Date = setYear(
-        setMonth(
-            setDate(this.date, this.dateStruct.day),
-            this.dateStruct.month - 1
-        ),
-        this.dateStruct.year
+
+
+  // validar el dataPicker de hora de inicio en el modal de agregar solicitudes
+  ctrlInitDate = new FormControl('', (control: FormControl) => {
+    const value = control.value;
+
+    if (!value) {
+      return null;
+    }
+
+    if (value.hour < 12) {
+      return {tooEarly: true};
+    }
+    if (value.hour > 13) {
+      return {tooLate: true};
+    }
+
+    return null;
+  });
+  // validar el dataPicker de hora de fin en el modal de agregar solicitudes
+  ctrlFinishDate = new FormControl('', (control: FormControl) => {
+    const value = control.value;
+
+    if (!value) {
+      return null;
+    }
+
+    if (value.hour < 12) {
+      return {tooEarly: true};
+    }
+    if (value.hour > 13) {
+      return {tooLate: true};
+    }
+    return null;
+  });
+
+
+  //actualiza la hora de inicio al escribir
+  updateInitDateOnInput(): void {
+
+//     console.log('value');
+//     console.log(this.solicitudSala.horaInicio.hour=='');
+// else{
+
+// }    
+
+    // if (this.solicitudSala.horaInicio == null || this.solicitudSala.horaInicio == undefined) {
+    //   this.solicitudSala.horaInicio = { hour: 0, minute: 0 };
+    // } else {
+
+    //   if (!parseInt(this.solicitudSala.horaInicio.hour) ) {
+    //     console.log('fomato de hora incorrecto'+this.solicitudSala.horaInicio.hour);
+
+    //   // } else if (isNaN(parseInt(this.solicitudSala.horaInicio.minute))) {
+    //   //   console.log('fomato de minuto incorrecto');
+    //   }
+    //   else {
+    //     console.log('hora inicio' + this.solicitudSala.horaInicio);
+    //   }
+    // }
+
+  }
+
+  updateFinishDateOnInput(): void {
+
+    // if (this.solicitudSala.horaFin == null || this.solicitudSala.horaFin == undefined) {
+    //   // alert('la fecha de fin no tiene  formato correcto');
+    //   this.solicitudSala.horaFin = { hour: 0, minute: 0 };
+    // } else {
+    //   //alert('hora inicio'+this.solicitudSala.horaFin);
+    // }
+  }
+
+  updateDate(): void {
+    const newDate: Date = setYear(
+      setMonth(
+        setDate(this.date, this.dateStruct.day),
+        this.dateStruct.month - 1
+      ),
+      this.dateStruct.year
     );
     this.onChangeCallback(newDate);
-  alert(this.date);
-  // this._servSolicitud.fechaActual().subscribe(
-  //   response => {
-  //     if (response.currentDate) {
-  //       this.currentDate = response.currentDate;
-  //       //fecha parseada del servidor
-  //       var momentDate = moment(this.currentDate, 'YYYY-MM-DD HH:mm:ss');
-  //       let serverDate = momentDate.toDate();
+    alert(newDate);
+    // this._servSolicitud.fechaActual().subscribe(
+    //   response => {
+    //     if (response.currentDate) {
+    //       this.currentDate = response.currentDate;
+    //       //fecha parseada del servidor
+    //       var momentDate = moment(this.currentDate, 'YYYY-MM-DD HH:mm:ss');
+    //       let serverDate = momentDate.toDate();
 
-  //       if (this.date.getFullYear() < serverDate.getFullYear()
-  //         || ((this.date.getMonth() + 1) < (serverDate.getMonth() + 1))
-  //         || this.date.getDate() < serverDate.getDate()) {
-  //         this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
-  //       } else {
-  //         // this.solicitudSala.horaInicio = serverDate;//
-  //         // this.solicitudSala.horaFin = new Date();//
-  //         // this.solicitudSala.fecha ;
-  //         this.writeValue(this.date);
-  //       }
-  //     } else {//error
-  //     }
-  //   }, error => {
-  //     var errorMensaje = <any>error;
-  //     if (errorMensaje != null) {
-  //       var body = JSON.parse(error._body);
-  //     }
-  //   }
-  // );
+    //       if (this.date.getFullYear() < serverDate.getFullYear()
+    //         || ((this.date.getMonth() + 1) < (serverDate.getMonth() + 1))
+    //         || this.date.getDate() < serverDate.getDate()) {
+    //         this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
+    //       } else {
+    //         // this.solicitudSala.horaInicio = serverDate;//
+    //         // this.solicitudSala.horaFin = new Date();//
+    //         // this.solicitudSala.fecha ;
+    //         this.writeValue(this.date);
+    //       }
+    //     } else {//error
+    //     }
+    //   }, error => {
+    //     var errorMensaje = <any>error;
+    //     if (errorMensaje != null) {
+    //       var body = JSON.parse(error._body);
+    //     }
+    //   }
+    // );
 
-   
-}
 
-updateTime(): void {
-   // alert('actualizar el tiempo'+this.solicitudSala.fecha);
+  }
+
+  updateTime(): void {
+    // alert('actualizar el tiempo'+this.solicitudSala.fecha);
     const newDate: Date = setHours(
-        setMinutes(
-            setSeconds(this.date, this.timeStruct.second),
-            this.timeStruct.minute
-        ),
-        this.timeStruct.hour
+      setMinutes(
+        setSeconds(this.date, this.timeStruct.second),
+        this.timeStruct.minute
+      ),
+      this.timeStruct.hour
     );
     this.onChangeCallback(newDate);
-}
+  }
 }
 
 
