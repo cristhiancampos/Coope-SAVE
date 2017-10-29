@@ -34,7 +34,7 @@ import {
 import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DateTimePickerComponent } from "../demo-utils/data-time-picker.component";
-import {FormControl} from '@angular/forms';
+import { FormControl } from '@angular/forms';
 
 const colors: any = {
   red: {
@@ -392,30 +392,31 @@ export class SolicitudSalaComponent implements ControlValueAccessor {
       this.tempRecursos = this.tempRecursos.filter(item => item !== _id);
     }
   }
-  //
+  //este método verificaque la fecha seleccionada sea mayor o igual a la fecha del servidor, para poder realizar la solicitud correctamente.
   verificarFechaSeleccionada(userDate: Date) {
     this._servSolicitud.fechaActual().subscribe(
       response => {
         if (response.currentDate) {
           this.currentDate = response.currentDate;
-          //fecha parseada del servidor
           var momentDate = moment(this.currentDate, 'YYYY-MM-DD HH:mm:ss');
           let serverDate = momentDate.toDate();
-          alert('Año  ' + userDate.getFullYear() + " mes    " + (userDate.getMonth() + 1) + " dia" + userDate.getDate() + "\n" +
-            '' + 'Año  ' + serverDate.getFullYear() + " mes    " + (serverDate.getMonth() + 1) + " dia" + serverDate.getDate());
 
-          if (userDate.getFullYear() < serverDate.getFullYear()
-            && ((userDate.getMonth() + 1) < (serverDate.getMonth() + 1))
-            && userDate.getDate() < serverDate.getDate()) {
+          if (userDate.getFullYear() < serverDate.getFullYear()) {
             this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
+          } else if (((userDate.getMonth() + 1) < (serverDate.getMonth() + 1))) {
+            this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
+          } else if (((userDate.getMonth() + 1) == (serverDate.getMonth() + 1))) {
+            if (userDate.getDate() < serverDate.getDate()) {
+              this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
+            } else {
+              this.writeValue(userDate);
+              this.abrirModal('#modal-add-new-request');
+            }
           } else {
-            // this.solicitudSala.horaInicio = serverDate;//
-            // this.solicitudSala.horaFin = new Date();//
-            // this.solicitudSala.fecha ;
             this.writeValue(userDate);
             this.abrirModal('#modal-add-new-request');
           }
-        } else {//error
+        } else {
         }
       }, error => {
         var errorMensaje = <any>error;
@@ -459,10 +460,10 @@ export class SolicitudSalaComponent implements ControlValueAccessor {
     }
 
     if (value.hour < 12) {
-      return {tooEarly: true};
+      return { tooEarly: true };
     }
     if (value.hour > 13) {
-      return {tooLate: true};
+      return { tooLate: true };
     }
 
     return null;
@@ -476,10 +477,10 @@ export class SolicitudSalaComponent implements ControlValueAccessor {
     }
 
     if (value.hour < 12) {
-      return {tooEarly: true};
+      return { tooEarly: true };
     }
     if (value.hour > 13) {
-      return {tooLate: true};
+      return { tooLate: true };
     }
     return null;
   });
@@ -488,11 +489,11 @@ export class SolicitudSalaComponent implements ControlValueAccessor {
   //actualiza la hora de inicio al escribir
   updateInitDateOnInput(): void {
 
-//     console.log('value');
-//     console.log(this.solicitudSala.horaInicio.hour=='');
-// else{
+    //     console.log('value');
+    //     console.log(this.solicitudSala.horaInicio.hour=='');
+    // else{
 
-// }    
+    // }    
 
     // if (this.solicitudSala.horaInicio == null || this.solicitudSala.horaInicio == undefined) {
     //   this.solicitudSala.horaInicio = { hour: 0, minute: 0 };
