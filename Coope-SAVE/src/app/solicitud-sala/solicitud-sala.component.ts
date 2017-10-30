@@ -298,6 +298,26 @@ export class SolicitudSalaComponent implements ControlValueAccessor {
       response => {
         if (response.message) {
           this.recursos = response.message;
+          console.log('recursos hábiles');
+          console.log(this.recursos);
+        } else {//no hay Salas registradas
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+        }
+      }
+    );
+  }
+  obtenerSolicitudes(userDate) {
+    this.solicitudSala.fecha=userDate;
+    this._servSolicitud.obtenerSolicitudes(this.solicitudSala).subscribe(
+      response => {
+        if (response.message) {
+        //  this.recursos = response.message;
+          console.log('solicitudes salas');
+          console.log(response.message);
         } else {//no hay Salas registradas
         }
       }, error => {
@@ -409,10 +429,14 @@ export class SolicitudSalaComponent implements ControlValueAccessor {
             if (userDate.getDate() < serverDate.getDate()) {
               this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
             } else {
+              this.obtenerRecursos();
+              this.obtenerSolicitudes(userDate);
               this.writeValue(userDate);
               this.abrirModal('#modal-add-new-request');
             }
           } else {
+            this.obtenerRecursos();
+            this.obtenerSolicitudes(userDate);
             this.writeValue(userDate);
             this.abrirModal('#modal-add-new-request');
           }

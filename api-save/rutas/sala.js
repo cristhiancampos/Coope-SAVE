@@ -14,5 +14,6 @@ api.get('/obtenerSala/:id',ControladorSala.obtenerSala);
 api.delete('/eliminarSala/:id', ControladorSala.eliminarSala);
 api.put('/modificarSala',ControladorSala.modificarSala);
 api.post('/validarModificacion',ControladorSala.validarModificacion);
+api.put('/modificarHorario',ControladorSala.modificarHorario);
 
 module.exports = api;

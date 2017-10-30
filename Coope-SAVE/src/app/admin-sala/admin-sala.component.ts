@@ -36,6 +36,16 @@ export class AdminSalaComponent implements OnInit {
   disabledSab=true;
   disabledDom=true;
 
+  tempHorarios=[
+    {dia:'Lunes',desde:'',hasta:''},
+    {dia:'Martes',desde:'',hasta:''},
+    {dia:'Miercoles',desde:'',hasta:''},
+    {dia:'Jueves',desde:'',hasta:''},
+    {dia:'Viernes',desde:'',hasta:''},
+    {dia:'Sabado',desde:'',hasta:''},
+    {dia:'Domingo',desde:'null',hasta:'null'}
+  ];
+
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
@@ -43,8 +53,8 @@ export class AdminSalaComponent implements OnInit {
     private _servSala: ServicioSala
   ) {
     this.mostrarModal = false;
-    this.salaEdit = new Sala('', '', '', '', '', '', '', '');
-    this.sala = new Sala('', '', '', '', this.estadoMensaje, '-', '', '');
+    this.salaEdit = new Sala('', '', '', '', '', '',this.tempHorarios, '', '');
+    this.sala = new Sala('', '', '', '', this.estadoMensaje, '-', this.tempHorarios,'', '');
   }
 
   ngOnInit() {
@@ -228,7 +238,7 @@ export class AdminSalaComponent implements OnInit {
           this.msjError("La Sala no pudo ser agregada");
         } else {
           this.msjExitoso("Sala Agregada Exitosamente");
-          this.sala = new Sala('', '', '', '', this.estadoMensaje, '-', '', '');
+          this.sala = new Sala('', '', '', '', this.estadoMensaje, '-',[], '', '');
           this.mostrar(false);
           this.obtenerSalas();
         }
@@ -259,15 +269,7 @@ export class AdminSalaComponent implements OnInit {
     );
   }
 
-  tempHorarios=[
-    {dia:'Lunes',desde:'',hasta:''},
-    {dia:'Martes',desde:'',hasta:''},
-    {dia:'Miercoles',desde:'',hasta:''},
-    {dia:'Jueves',desde:'',hasta:''},
-    {dia:'Viernes',desde:'',hasta:''},
-    {dia:'Sabado',desde:'',hasta:''},
-    {dia:'Domingo',desde:'null',hasta:'null'}
-  ];
+
   obtenerSala(_id: any) {
     this._servSala.obtenerSala(_id).subscribe(
       response => {
@@ -287,7 +289,7 @@ export class AdminSalaComponent implements OnInit {
           } else {
             this.estadoEdicion = false;
           }
-        console.log(this.tempHorarios[0].desde);
+        //console.log(this.tempHorarios[0].desde);
         } else {//No se ha encontrado la Sala
         }
       }, error => {
@@ -307,7 +309,7 @@ export class AdminSalaComponent implements OnInit {
         if (!response.message._id) {
           this.msjError("La Sala no pudo ser Modificada");
         } else {
-          this.salaEdit = new Sala('', '', '', '', '', '-', '', '');
+          this.salaEdit = new Sala('', '', '', '', '', '-', this.tempHorarios,'', '');
           this.obtenerSalas();
           this.cerrarModal('#modalEditSala');
           this.msjExitoso("Sala Modificada Exitosamente");
@@ -324,6 +326,33 @@ export class AdminSalaComponent implements OnInit {
 
   }
 
+  modificarHorario() {
+    console.log(this.tempHorarios);
+    this.salaEdit.estado = this.estadoMensajEdit;
+    this.salaEdit.horario= this.tempHorarios;
+    this._servSala.modificarHorario(this.salaEdit).subscribe(
+      response => {
+
+        if (!response.message._id) {
+          this.msjError("El horario de la ala no pudo ser Modificado");
+        } else {
+          this.salaEdit = new Sala('', '', '', '', '', '-',this.tempHorarios, '', '');
+          this.obtenerSalas();
+          this.cerrarModal('#modalAddSched');
+          this.msjExitoso("Horario de la sala modificado exitosamente");
+        }
+      }, error => {
+        var alertMessage = <any>error;
+        if (alertMessage != null) {
+          var body = JSON.parse(error._body);
+          this.msjError("El horario de la ala no pudo ser Modificado");
+
+        }
+      }
+    );
+
+  }
+
   eliminarSala() {
     this._servSala.eliminarSala(this.salaEdit._id).subscribe(
       response => {
@@ -332,7 +361,7 @@ export class AdminSalaComponent implements OnInit {
           this.msjError("La Sala no pudo ser Eliminada");
         } else {
           this.msjExitoso("Sala Eliminada Exitosamente");
-          this.salaEdit = new Sala('', '', '', '', '', '', '', '');
+          this.salaEdit = new Sala('', '', '', '', '', '', this.tempHorarios,'', '');
           this.obtenerSalas();
         }
       }, error => {
@@ -407,8 +436,6 @@ export class AdminSalaComponent implements OnInit {
       $('body').removeClass('modal-open');
       $('#modalAdminSala').removeClass('show');
       $('#modalAdminSala').css('display', 'none');
-
-
     } else {
       $('body').append('<div class="modal-backdrop fade show" ></div>');
       $('body').addClass('modal-open');

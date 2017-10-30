@@ -8,8 +8,8 @@ var md_auth = require('../middlewares/authenticated');
 
  api.post('/registrarSolicitudSala',ControladorSolicitudSala.agregarSolicitud);
  api.get('/fechaActual',ControladorSolicitudSala.obtenerFechaActual);
+api.post('/obtenerSolicitudesSalas',ControladorSolicitudSala.obtenerSolicitudesSalas);
 // api.post('/validarSala',ControladorSala.validarSala);
-// api.get('/obtenerSalas',ControladorSala.obtenerSalas);
 // api.get('/obtenerSalasHabilitadas',ControladorSala.obtenerSalasHabilitadas);
 // api.get('/obtenerSala/:id',ControladorSala.obtenerSala);
 // api.delete('/eliminarSala/:id', ControladorSala.eliminarSala);

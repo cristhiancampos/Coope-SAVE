@@ -139,10 +139,12 @@ function modificarHorario(req, res) {
 
     var params = req.body;
     var salaId = params._id;
+    var horario = params.horario;
     params.updated_at = new Date();
   
+    console.log(params);
   
-    Sala.findByIdAndUpdate(salaId, params, (err, modificaSala) => {
+     Sala.findByIdAndUpdate(salaId,{ horario:horario}, (err, modificaSala) => {
       if (err) {
   
         res.status(500).send({ message: 'Error al actualizar el horario de la sala' });

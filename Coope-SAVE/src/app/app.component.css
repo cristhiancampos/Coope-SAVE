@@ -9,3 +9,6 @@ footer {
     background-color: transparent; 
      border-color: transparent; 
 }
+button{
+    cursor:pointer;
+  }
