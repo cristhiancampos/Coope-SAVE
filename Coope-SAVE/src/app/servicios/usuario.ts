@@ -179,6 +179,18 @@ export class ServicioUsuario {
         .map(res=>res.json());
 
     }
+
+
+    modificarPerfil(usuario:any)
+    {
+        
+         let json = JSON.stringify(usuario);
+        let params = json; 
+        let headers = new Headers({'Content-Type':'application/json'});
+        return this._http.put(this.url+'modificarPerfil',params,{headers:headers})
+        .map(res=>res.json());
+
+    }
     modificarUsuarioCompleto(usuario:any)
     {
         
