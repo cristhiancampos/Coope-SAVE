@@ -28,6 +28,25 @@ export class AdminVehiculoComponent implements OnInit {
   public estadoEdicion: boolean;
   public estadoMensaje = 'Habilitado';
   public estadoMensajEdit = '';
+  disabledLun=true;
+  disabledMar=true;
+  disabledMie=true;
+  disabledJue=true;
+  disabledVie=true;
+  disabledSab=true;
+  disabledDom=true;
+  tempHorario= {dia:'',desde:'',hasta:''};
+  tempHorarios=[
+    {dia:'Lunes',desde:'',hasta:''},
+    {dia:'Martes',desde:'',hasta:''},
+    {dia:'Miercoles',desde:'',hasta:''},
+    {dia:'Jueves',desde:'',hasta:''},
+    {dia:'Viernes',desde:'',hasta:''},
+    {dia:'Sabado',desde:'',hasta:''},
+    {dia:'Domingo',desde:'null',hasta:'null'}
+  ];
+ 
+
 
   //public existe=true;
   constructor(
@@ -36,13 +55,67 @@ export class AdminVehiculoComponent implements OnInit {
     private _servUsuario: ServicioUsuario,
     private _servVehiculo: ServicioVehiculo
   ) {
-    this.vehiculoEdit = new Vehiculo('', '', '', '', '', '', '', '','','');
-    this.vehiculo = new Vehiculo('', '', '', '', '', '', this.estadoMensaje, '-','','');
+    this.vehiculoEdit = new Vehiculo('', '', '', '', '', '','', '',this.tempHorarios,'','');
+    this.vehiculo = new Vehiculo('', '', '', '', '', '', this.estadoMensaje, '-','','','');
   }
 
   ngOnInit() {
     this.verificarCredenciales();
   }
+
+  changeHorario(event:any,dia:String){
+    if(dia=="Lunes"){
+      if (event.target.checked) {
+        this.disabledLun=!this.disabledLun;
+      } else {
+        this.disabledLun=!this.disabledLun;
+      }
+    }else if(dia=="Martes"){
+      if (event.target.checked) {
+        this.disabledMar=!this.disabledMar;
+      } else {
+        this.disabledMar=!this.disabledMar;
+      }
+    }else if(dia=="Miercoles"){
+      if (event.target.checked) {
+        this.disabledMie=!this.disabledMie;
+      } else {
+        this.disabledMie=!this.disabledMie;
+      }
+     }
+     else if(dia=="Jueves"){
+      if (event.target.checked) {
+        this.disabledJue=!this.disabledJue;
+      } else {
+        this.disabledJue=!this.disabledJue;
+      }
+    }
+    else if(dia=="Viernes"){
+      if (event.target.checked) {
+        this.disabledVie=!this.disabledVie;
+      } else {
+        this.disabledVie=!this.disabledVie;
+      }
+    }
+    else if(dia=="Sabado"){
+      if (event.target.checked) {
+        this.disabledSab=!this.disabledSab;
+      } else {
+        this.disabledSab=!this.disabledSab;
+      }
+    }
+    else if(dia=="Domingo"){
+      if (event.target.checked) {
+        this.disabledDom=!this.disabledDom;
+      } else {
+        this.disabledDom=!this.disabledDom;
+      }
+    }
+    console.log(this.tempHorario);
+  }
+
+
+
 
   verificarCredenciales() {
     this.identity = this._servUsuario.getIndentity();
@@ -135,7 +208,7 @@ export class AdminVehiculoComponent implements OnInit {
           this.msjError("El Vehiculo no pudo ser agregado");
         } else {
           this.msjExitoso("Vehiculo Agregado Exitosamente");
-          this.vehiculo = new Vehiculo('', '', '', '', '', '', this.estadoMensaje, '-','','');
+          this.vehiculo = new Vehiculo('', '', '', '', '', '', this.estadoMensaje, '-',[],'','');
           this.cerrarModal("#modalAdminVehiculo")
           this.obtenerVehiculos();
         }
@@ -204,6 +277,7 @@ export class AdminVehiculoComponent implements OnInit {
           this.vehiculoEdit.kilometraje = response.message[0].kilometraje;
           this.vehiculoEdit.estado = response.message[0].estado;
           this.vehiculoEdit.reporte = response.message[0].reporte;
+          this.tempHorarios= response.message[0].horario;
 
           this.estadoMensajEdit = this.vehiculoEdit.estado;
           if (this.vehiculoEdit.estado == 'Habilitado') {
@@ -230,7 +304,7 @@ export class AdminVehiculoComponent implements OnInit {
         if (!response.message._id) {
           this.msjError("El Vehiculo no pudo ser Modificado");
         } else {
-          this.vehiculoEdit = new Vehiculo('', '', '', '', '', '', '', '-','','');
+          this.vehiculoEdit = new Vehiculo('', '', '', '', '', '', '', '-','','','');
           this.obtenerVehiculos();
           this.cerrarModal('#modalEditVehiculo');
           this.msjExitoso("Vehiculo Modificado Exitosamente");
@@ -279,7 +353,7 @@ export class AdminVehiculoComponent implements OnInit {
           this.msjError("El Vehiculo no pudo ser Eliminado");
         } else {
           this.msjExitoso("Vehiculo Eliminado Exitosamente");
-          this.vehiculoEdit = new Vehiculo('', '', '', '', '', '', '', '','','');
+          this.vehiculoEdit = new Vehiculo('', '', '', '', '', '', '', '','','','');
           this.obtenerVehiculos();
         }
       }, error => {
@@ -292,6 +366,32 @@ export class AdminVehiculoComponent implements OnInit {
     );
   }
 
+  modificarHorario() {
+    console.log(this.tempHorarios);
+    this.vehiculoEdit.estado = this.estadoMensajEdit;
+    this.vehiculoEdit.horario= this.tempHorarios;
+    this._servVehiculo.modificarHorario(this.vehiculoEdit).subscribe(
+      response => {
+
+        if (!response.message._id) {
+          this.msjError("El horario de la ala no pudo ser Modificado");
+        } else {
+          this.vehiculoEdit = new Vehiculo('', '', '', '', '', '-','', '', this.tempHorarios,'','');
+          this.obtenerVehiculos();
+          this.cerrarModal('#modal-AddHorario');
+          this.msjExitoso("Horario de la sala modificado exitosamente");
+        }
+      }, error => {
+        var alertMessage = <any>error;
+        if (alertMessage != null) {
+          var body = JSON.parse(error._body);
+          this.msjError("El horario de la ala no pudo ser Modificado");
+
+        }
+      }
+    );
+
+  }
   msjExitoso(texto: string){
     swal({
       position: 'top',

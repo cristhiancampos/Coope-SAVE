@@ -32,7 +32,7 @@ export class AppComponent implements OnInit {
     private _route: ActivatedRoute,
     private el: ElementRef,
     private _servUsuario: ServicioUsuario,
-    private route: ActivatedRoute
+    //rivate route: ActivatedRoute
   ) {
     this.isSolicitudSala = false;
     this.isRegister = true;

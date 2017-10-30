@@ -184,33 +184,43 @@ export class ModificarUsuarioComponent implements OnInit {
 
 
       modificarUsuarioCompleto() {
-            console.log("Llamo componente");
-            this._servUsuario.modificarUsuarioCompleto(this.usuarioEdit).subscribe(
-              response => {
-        
-                if (!response.message._id) {
-                  this.msjError("El Usuario no pudo ser Modificado");
-                } else {
-                  this.msjExitoso("Usuario Modificado Exitosamente");
-                  this.obtenerUsuario();
-                  localStorage.setItem('identity', response.message);
-                  let identity = localStorage.getItem('identity');
-                  let user = JSON.parse(identity);
-                  if (user != null) {
-                    $('#nav-user').text(user.nombre + ' ' + user.apellidos);
-                  }
-                }
-              }, error => {
-                var alertMessage = <any>error;
-                if (alertMessage != null) {
-                  var body = JSON.parse(error._body);
-                  alert('El Usuario no se pudo modificar');
-        
-                }
-              }
-            );
+        console.log("Llamo componente");
+        this._servUsuario.modificarUsuarioCompleto(this.usuarioEdit).subscribe(
+          response => {
+
+            if (!response.message._id) {
+              this.msjError("El Usuario no pudo ser Modificado");
+            } else {
+              this.msjExitoso("Usuario Modificado Exitosamente");
+              //this.obtenerUsuario();
+              //localStorage.setItem('identity', response.message);
+              //let identity = localStorage.getItem('identity');
+              //let user = JSON.parse(identity);
+              // if (user != null) {
+              //   $('#nav-user').text(user.nombre + ' ' + user.apellidos);
+              // }
+              this.logout();
+              this._router.navigate(['/principal']);
+            }
+          }, error => {
+            var alertMessage = <any>error;
+            if (alertMessage != null) {
+              var body = JSON.parse(error._body);
+              alert('El Usuario no se pudo modificar');
+
+            }
           }
+        );
+      }
   
+      logout() {
+        localStorage.removeItem('identity');
+        localStorage.removeItem('token');
+        localStorage.removeItem('remember');
+        localStorage.clear();
+       
+        // this.abrirModal('#loginModal');
+      }    
   verificarContrasenas(event: any){
     
     if(this.usuarioEdit.contrasena.trim()!=this.confirmaContra.trim()){

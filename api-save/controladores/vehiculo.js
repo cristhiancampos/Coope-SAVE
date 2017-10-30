@@ -139,7 +139,7 @@ function modificarVehiculo(req, res) {
         var params = req.body;
         var vehiculoId = params._id;
         params.updated_at = new Date();
-      
+       
       
         Vehiculo.findByIdAndUpdate(vehiculoId, params, (err, modificarVehiculo) => {
           if (err) {
