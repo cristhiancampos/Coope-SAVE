@@ -10,6 +10,7 @@ var modeloSala = Schema({
   descripcion: String,
   estado: String,
   reporte: String,
+  horario:{},
   created_at: String,
   updated_at: String
 });

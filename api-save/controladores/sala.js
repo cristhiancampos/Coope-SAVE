@@ -11,6 +11,15 @@ function agregarSala(req, res) {
   sala.cupo = params.cupo;
   sala.descripcion = params.descripcion;
   sala.reporte = params.reporte;
+  sala.horario= [
+              {dia:'Lunes',desde:'8',hasta:'21'},
+              {dia:'Martes',desde:'8',hasta:'21'},
+              {dia:'Miercoles',desde:'8',hasta:'21'},
+              {dia:'Jueves',desde:'8',hasta:'21'},
+              {dia:'Viernes',desde:'8',hasta:'21'},
+              {dia:'Sabado',desde:'8',hasta:'21'},
+              {dia:'Domingo',desde:'null',hasta:'null'}
+            ];
   sala.estado = params.estado;
   sala.created_at = new Date();
 
@@ -125,6 +134,31 @@ function modificarSala(req, res) {
   });
 }
 
+
+function modificarHorario(req, res) {
+
+    var params = req.body;
+    var salaId = params._id;
+    params.updated_at = new Date();
+  
+  
+    Sala.findByIdAndUpdate(salaId, params, (err, modificaSala) => {
+      if (err) {
+  
+        res.status(500).send({ message: 'Error al actualizar el horario de la sala' });
+      } else {
+        if (!modificaSala) {
+  
+          res.status(404).send({ message: 'No se ha podido actualizar el horario de la sala' });
+        } else {
+  
+          res.status(200).send({ message: modificaSala });
+        }
+      }
+    });
+  }
+  
+
 function validarModificacion(req, res) {
   var params = req.body;
   var nombre = params.nombre;
@@ -177,5 +211,6 @@ module.exports = {
   eliminarSala,
   modificarSala,
   validarModificacion,
-  obtenerSalasHabilitadas
+  obtenerSalasHabilitadas,
+  modificarHorario
 };

@@ -28,6 +28,13 @@ export class AdminSalaComponent implements OnInit {
   public estadoMensajEdit = '';
   public token;
   public identity;
+  disabledLun=true;
+  disabledMar=true;
+  disabledMie=true;
+  disabledJue=true;
+  disabledVie=true;
+  disabledSab=true;
+  disabledDom=true;
 
   constructor(
     private _route: ActivatedRoute,
@@ -42,6 +49,66 @@ export class AdminSalaComponent implements OnInit {
 
   ngOnInit() {
     this.verificarCredenciales();
+    
+  }
+  // changeRecursos(event: any, _id: any) {
+  //   if (event.target.checked) {
+  //     this.tempRecursos.push(_id);
+  //   } else {
+  //     this.tempRecursos = this.tempRecursos.filter(item => item !== _id);
+  //   }
+  // }
+  tempHorario= {dia:'',desde:'',hasta:''};
+
+  changeHorario(event:any,dia:String){
+    if(dia=="Lunes"){
+      if (event.target.checked) {
+        this.disabledLun=!this.disabledLun;
+      } else {
+        this.disabledLun=!this.disabledLun;
+      }
+    }else if(dia=="Martes"){
+      if (event.target.checked) {
+        this.disabledMar=!this.disabledMar;
+      } else {
+        this.disabledMar=!this.disabledMar;
+      }
+    }else if(dia=="Miercoles"){
+      if (event.target.checked) {
+        this.disabledMie=!this.disabledMie;
+      } else {
+        this.disabledMie=!this.disabledMie;
+      }
+     }
+     else if(dia=="Jueves"){
+      if (event.target.checked) {
+        this.disabledJue=!this.disabledJue;
+      } else {
+        this.disabledJue=!this.disabledJue;
+      }
+    }
+    else if(dia=="Viernes"){
+      if (event.target.checked) {
+        this.disabledVie=!this.disabledVie;
+      } else {
+        this.disabledVie=!this.disabledVie;
+      }
+    }
+    else if(dia=="Sabado"){
+      if (event.target.checked) {
+        this.disabledSab=!this.disabledSab;
+      } else {
+        this.disabledSab=!this.disabledSab;
+      }
+    }
+    else if(dia=="Domingo"){
+      if (event.target.checked) {
+        this.disabledDom=!this.disabledDom;
+      } else {
+        this.disabledDom=!this.disabledDom;
+      }
+    }
+    console.log(this.tempHorario);
   }
 
   verificarCredenciales() {
@@ -192,6 +259,15 @@ export class AdminSalaComponent implements OnInit {
     );
   }
 
+  tempHorarios=[
+    {dia:'Lunes',desde:'',hasta:''},
+    {dia:'Martes',desde:'',hasta:''},
+    {dia:'Miercoles',desde:'',hasta:''},
+    {dia:'Jueves',desde:'',hasta:''},
+    {dia:'Viernes',desde:'',hasta:''},
+    {dia:'Sabado',desde:'',hasta:''},
+    {dia:'Domingo',desde:'null',hasta:'null'}
+  ];
   obtenerSala(_id: any) {
     this._servSala.obtenerSala(_id).subscribe(
       response => {
@@ -202,6 +278,8 @@ export class AdminSalaComponent implements OnInit {
           this.salaEdit.descripcion = response.message[0].descripcion;
           this.salaEdit.estado = response.message[0].estado;
           this.salaEdit.reporte = response.message[0].reporte;
+          this.salaEdit.reporte = response.message[0].reporte;
+          this.tempHorarios = response.message[0].horario;
 
           this.estadoMensajEdit = this.salaEdit.estado;
           if (this.salaEdit.estado == 'Habilitado') {
@@ -209,6 +287,7 @@ export class AdminSalaComponent implements OnInit {
           } else {
             this.estadoEdicion = false;
           }
+        console.log(this.tempHorarios[0].desde);
         } else {//No se ha encontrado la Sala
         }
       }, error => {
