@@ -117,7 +117,7 @@ function verificarCredenciales(req, res) {
   var email = params.correo;
   // console.log(params.correo+'.....'+params.contrasena);
   var password = params.contrasena;
-
+  console.log(params);
   Usuario.findOne({ correo: email, estado: { $ne: "Eliminado" } }, (err, user) => {
     if (err) {
       res.status(500).send({ message: 'Error en la petición' });
@@ -133,7 +133,7 @@ function verificarCredenciales(req, res) {
             res.status(200).send({ user });
           }
         } else {
-          res.status(404).send({ message: 'Credenciales incorrectas' });
+          res.status(404).send({ message: 'Credenciales incorrectas 2' });
         }
       }
     }
@@ -184,6 +184,57 @@ function obtenerUsuario(req, res) {
       }
     }
   });
+}
+
+
+function modificarPerfil(req, res) {
+  var params = req.body;
+  var usuarioId = params._id;
+  params.updated_at = new Date();
+  console.log("controlador");
+  params.updated_at = new Date();
+  Usuario.findByIdAndUpdate(usuarioId,
+    {
+      correo: params.correo,
+      nombre: params.nombre,
+      apellidos: params.apellidos,
+      departamento: params.departamento,
+      rol: params.rol,
+      estado: params.estado,
+      updated_at: params.updated_at
+    }, (err, modificarUsuario) => {
+      if (err) {
+        
+        res.status(500).send({ message: 'Error al actualizar el usuario' });
+      } else {
+        if (!modificarUsuario) {
+          
+          res.status(404).send({ message: 'No se ha podido actualizar el usuario' });
+        } else {
+
+
+          Usuario.find({ _id: usuarioId }, (err, usuario) => {
+            if (err) {
+              
+              res.status(500).send({ message: 'Error en la petición' });
+            } else {
+              if (!usuario) {
+              
+                res.status(404).send({ message: 'No existen usuarios registrados en el sistema' });
+              } else {
+                
+                res.status(200).send({ message: usuario });
+
+              }
+            }
+          });
+        }
+      }
+    });
+
+
+
+
 }
 
 function modificarUsuario(req, res) {
@@ -352,7 +403,8 @@ module.exports = {
   modificarUsuario,
   validarModificacion,
   modificarUsuarioCompleto,
-  validarContrasena
+  validarContrasena,
+  modificarPerfil
 
 };
 

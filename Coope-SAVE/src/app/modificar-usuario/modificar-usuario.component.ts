@@ -23,6 +23,7 @@ export class ModificarUsuarioComponent implements OnInit {
   
   public confirmaContraExist: boolean;
   public validarContrasena;
+  public token;
   public isMacthPass =false;
   public mensajeMacthPass='';
   public estadoMensajEdit: String;
@@ -60,51 +61,30 @@ export class ModificarUsuarioComponent implements OnInit {
     console.log('modificar usuario.ts cargado ...FECHA' + this.date + '.....año' + this.year);
   }
 
-  modificarUsuario() {
+
+  modificarPerfil() {
     
-    
-        this._servUsuario.modificarUsuario(this.usuarioEdit).subscribe(
-          response => {
-    
-            if (!response.message._id) {
-              this.msjError("El Usuario no pudo ser Modificado");
-            } else {
-              this.msjExitoso("Usuario Modificado Exitosamente");
-              localStorage.removeItem('identity');
-              localStorage.setItem('identity', response.message);
-              let identity = localStorage.getItem('identity');
-              let user = JSON.parse(identity);
-              this.obtenerUsuario();
-              if (user != null) {
-                $('#nav-user').text(user.nombre + ' ' + user.apellidos);
-              }
-            }
-          }, error => {
-            var alertMessage = <any>error;
-            if (alertMessage != null) {
-              var body = JSON.parse(error._body);
-              alert('El Usuario no se pudo modificar');
-    
-            }
-          }
-        );
-      }
-      modificarUsuarioCompleto() {
-            console.log("Llamo componente");
-            this._servUsuario.modificarUsuarioCompleto(this.usuarioEdit).subscribe(
+            this._servUsuario.modificarPerfil(this.usuarioEdit).subscribe(
               response => {
-        
-                if (!response.message._id) {
+               
+                if (!response.message[0]._id) {
                   this.msjError("El Usuario no pudo ser Modificado");
                 } else {
                   this.msjExitoso("Usuario Modificado Exitosamente");
-                  this.obtenerUsuario();
-                  localStorage.setItem('identity', response.message);
+                  console.log(response.message);
+                  localStorage.removeItem('identity');
+                  localStorage.setItem('identity',JSON.stringify(response.message));
+                 
                   let identity = localStorage.getItem('identity');
                   let user = JSON.parse(identity);
+                  console.log(user);
                   if (user != null) {
-                    $('#nav-user').text(user.nombre + ' ' + user.apellidos);
+                    $('#nav-user').text(user[0].nombre + ' ' + user[0].apellidos);
+                    
+                  } else {
+                    $('#nav-user').text('');
                   }
+              
                 }
               }, error => {
                 var alertMessage = <any>error;
@@ -116,7 +96,131 @@ export class ModificarUsuarioComponent implements OnInit {
               }
             );
           }
+  modificarUsuario() {
+
+        this._servUsuario.modificarUsuario(this.usuarioEdit).subscribe(
+          response => {
+            console.log(response.message)
+           
+            if (!response.message._id) {
+              this.msjError("El Usuario no pudo ser Modificado");
+            } else {
+              this.msjExitoso("Usuario Modificado Exitosamente");
+              console.log(response.message);
+              localStorage.removeItem('identity');
+              localStorage.setItem('identity',JSON.stringify(response.message));
+              
+              this.verificarCredenciales();
+            }
+          }, error => {
+            var alertMessage = <any>error;
+            if (alertMessage != null) {
+              var body = JSON.parse(error._body);
+              alert('El Usuario no se pudo modificar');
+    
+            }
+          }
+        );
+      }
+
+      verificarCredenciales() {
+        // this.identity = this._servUsuario.getIndentity();
+        let identity = localStorage.getItem('identity');
+        let user = JSON.parse(identity);
+        let recordar = localStorage.getItem('remember');
+        let recordarValue = JSON.parse(recordar);
+        console.log(user);
+        if (user != null) {
+          let usuarioTemp = new Usuario('', '', '', '', '', '', '', '', '', '');
+          usuarioTemp.correo = user.correo;
+          usuarioTemp.contrasena = user.contrasena;
+          // obtener datos de usuario identificado
+          this._servUsuario.verificarCredenciales(usuarioTemp).subscribe(response => {
+            let identity = response.user;
+            this.identity = identity;
+            if (!this.identity._id) {
+              $('#nav-user').text(' ');
+              // this._router.navigate(['/principal']);             
+              
+            } else {
+              //conseguir el token para enviarselo a cada petición
+              this._servUsuario.verificarCredenciales(usuarioTemp, 'true').subscribe(
+                response => {
+                  let token = response.token;
+                  this.token = token;
+                  if (this.token <= 0) {
+                    $('#nav-user').text(' ');
+                    // this._router.navigate(['/principal']);  
+                  } else {
+                    // crear elemento en el localstorage para tener el token disponible
+                    localStorage.setItem('token', token);
+                    let identity = localStorage.getItem('identity');
+                    let user = JSON.parse(identity);
+                    if (user != null) {
+                      $('#nav-user').text(user[0].nombre + ' ' + user[0].apellidos);
+                      alert("identity");
+                      //this._router.navigate(['/principal']);  
+                    } else {
+                      $('#nav-user').text('');
+                    }
+                  }
+                }, error => {
+                  $('#nav-user').text(' ');
+                  //this._router.navigate(['/principal']);  
+                }
+              );
+            }
+          }, error => {
+            $('#nav-user').text(' ');
+            //this._router.navigate(['/principal']);  
+          }
+          );
+        } else {
+          $('#nav-user').text(' ');
+         // this._router.navigate(['/principal']);
+          //this.abrirModal('#loginModal');
+        }
+      }
+
+
+      modificarUsuarioCompleto() {
+        console.log("Llamo componente");
+        this._servUsuario.modificarUsuarioCompleto(this.usuarioEdit).subscribe(
+          response => {
+
+            if (!response.message._id) {
+              this.msjError("El Usuario no pudo ser Modificado");
+            } else {
+              this.msjExitoso("Usuario Modificado Exitosamente");
+              //this.obtenerUsuario();
+              //localStorage.setItem('identity', response.message);
+              //let identity = localStorage.getItem('identity');
+              //let user = JSON.parse(identity);
+              // if (user != null) {
+              //   $('#nav-user').text(user.nombre + ' ' + user.apellidos);
+              // }
+              this.logout();
+              this._router.navigate(['/principal']);
+            }
+          }, error => {
+            var alertMessage = <any>error;
+            if (alertMessage != null) {
+              var body = JSON.parse(error._body);
+              alert('El Usuario no se pudo modificar');
+
+            }
+          }
+        );
+      }
   
+      logout() {
+        localStorage.removeItem('identity');
+        localStorage.removeItem('token');
+        localStorage.removeItem('remember');
+        localStorage.clear();
+       
+        // this.abrirModal('#loginModal');
+      }    
   verificarContrasenas(event: any){
     
     if(this.usuarioEdit.contrasena.trim()!=this.confirmaContra.trim()){

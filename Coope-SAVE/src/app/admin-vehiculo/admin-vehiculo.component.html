@@ -36,7 +36,8 @@
             <th>{{vehiculo.reporte}}</th>
             <th style="text-align: center">
               <button class="btn btn-primary btn-accion" data-toggle="modal" data-target="#modalEditVehiculo"  (click)="obtenerVehiculo(vehiculo._id)"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete" (click)="obtenerVehiculo(vehiculo._id)"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+              <button class="btn btn-success btn-accion" data-toggle="modal" data-target="#modal-AddHorario" (click)="obtenerVehiculo(vehiculo._id)"><i class="fa fa-calendar" aria-hidden="true"></i> </button>
+              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete" (click)="obtenerVehiculo(vehiculo._id)"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>              
             </th>
           </tr>         
         </tbody>
@@ -288,4 +289,228 @@ aria-hidden="true">
       </div>
     </div>
   </div>
+</div>
+
+<!-- Seccion del Modal: agregar horario -->
+<div class="modal fade bd-example-modal-sm " id="modal-AddHorario" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog bd-example-modal-sm " role="document">
+  <div class="modal-content">
+    <div class="modal-header" style="background: #0069d9;color:#fff">
+      <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;Horario de Sala</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal"> 
+        <small aria-hidden="true">&times;</small>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12">
+          <ol class="breadcrumb">
+            <li>
+              <a><img src="assets/img/logo.png" ></a>
+            </li>
+          </ol>
+        </div>
+      </div>
+      <!-- END BREADCRUMB-->
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-12">
+
+            <form #adminVehiculoched="ngForm" (ngSubmit)="modificarHorario()">
+              <div class="row">
+                  <div class="col-md-1"> </div>
+                <div class="col-md-3">
+                    <div class="contrrol-group form-group">
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input"  [checked]="disabledLun" (change)="changeHorario($event,'Lunes')" >
+                            <span class="custom-control-indicator"></span>
+                            <span class="custom-control-description">Lunes</span>
+                          </label> 
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <input type="number" class="form-control"  placeholder="Desde" [disabled]="!disabledLun"
+                    #ldesde="ngModel" name="ldesde" [(ngModel)]="tempHorarios[0].desde" required min="1" max="23" pattern="[0-9]*"> 
+     
+                </div>
+
+                <div class="col-md-1">
+                    :
+                </div>
+                <div class="col-md-3">
+                    <input type="number" class="form-control"  placeholder="Hasta" [disabled]="!disabledLun" 
+                    #lhasta1="ngModel" name="lhasta1" [(ngModel)]="tempHorarios[0].hasta" required min="2" max="24" pattern="[0-9]*">
+                </div>
+                <div class="col-md-1"> </div>
+              </div>
+
+              <div class="row">
+                  <div class="col-md-1"> </div>
+                  <div class="col-md-3">
+                      <div class="contrrol-group form-group">
+                          <label class="custom-control custom-checkbox">
+                              <input type="checkbox" class="custom-control-input" [checked]="disabledMar" (change)="changeHorario($event,'Martes')" >
+                              <span class="custom-control-indicator"></span>
+                              <span class="custom-control-description">Martes</span>
+                            </label> 
+                      </div>
+                  </div>
+                  <div class="col-md-3">
+                      <input type="number" class="form-control"  placeholder="Desde" [disabled]="!disabledMar" 
+                      #mdesde="ngModel" name="mdesde" [(ngModel)]="tempHorarios[1].desde" required min="1" max="23" pattern="[0-9]*"> 
+                  </div>
+  
+                  <div class="col-md-1">
+                      :
+                  </div>
+                  <div class="col-md-3">
+                      <input type="number" class="form-control"  placeholder="Hasta" [disabled]="!disabledMar" 
+                      #mhasta="ngModel" name="mhasta" [(ngModel)]="tempHorarios[1].hasta" required min="2" max="24" pattern="[0-9]*">
+                  </div>
+
+                  <div class="col-md-1"> </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-1"> </div>
+                    <div class="col-md-3">
+                        <div class="contrrol-group form-group">
+                            <label class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" [checked]="disabledMie"  (change)="changeHorario($event,'Miercoles')">
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">Miércoles</span>
+                              </label> 
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" class="form-control"  placeholder="Desde" [disabled]="!disabledMie" 
+                        #midesde="ngModel" name="midesde" [(ngModel)]="tempHorarios[2].desde" required min="1" max="23" pattern="[0-9]*"> 
+                    </div>
+    
+                    <div class="col-md-1">
+                        :
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" class="form-control"  placeholder="Hasta" [disabled]="!disabledMie" 
+                        #mihasta="ngModel" name="mihasta" [(ngModel)]="tempHorarios[2].hasta" required min="2" max="24" pattern="[0-9]*">
+                    </div>
+                    <div class="col-md-1"> </div>
+                  </div>
+
+                  <div class="row">
+                      <div class="col-md-1"> </div>
+                      <div class="col-md-3">
+                          <div class="contrrol-group form-group">
+                              <label class="custom-control custom-checkbox">
+                                  <input type="checkbox" class="custom-control-input" [checked]="disabledJue" (change)="changeHorario($event,'Jueves')"  >
+                                  <span class="custom-control-indicator"></span>
+                                  <span class="custom-control-description">Jueves</span>
+                                </label> 
+                          </div>
+                      </div>
+                      <div class="col-md-3">
+                          <input type="number" class="form-control"  placeholder="Desde" [disabled]="!disabledJue" 
+                          #jdesde="ngModel" name="jdesde" [(ngModel)]="tempHorarios[3].desde" required min="1" max="23" pattern="[0-9]*"> 
+                      </div>
+      
+                      <div class="col-md-1">
+                          :
+                      </div>
+                      <div class="col-md-3">
+                          <input type="number" class="form-control"  placeholder="Hasta" [disabled]="!disabledJue" 
+                          #jhasta="ngModel" name="jhasta" [(ngModel)]="tempHorarios[3].hasta"required min="2" max="24" pattern="[0-9]*">
+                      </div>
+                      <div class="col-md-1"> </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-1"> </div>
+                        <div class="col-md-3">
+                            <div class="contrrol-group form-group">
+                                <label class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" [checked]="disabledVie" (change)="changeHorario($event,'Viernes')"  >
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description">Viernes</span>
+                                  </label> 
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" class="form-control"  placeholder="Desde" [disabled]="!disabledVie" 
+                            #vdesde="ngModel" name="vdesde" [(ngModel)]="tempHorarios[4].desde" required min="1" max="23" pattern="[0-9]*"> 
+                        </div>
+        
+                        <div class="col-md-1">
+                            :
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" class="form-control"  placeholder="Hasta" [disabled]="!disabledVie" 
+                            #vhasta="ngModel" name="vhasta" [(ngModel)]="tempHorarios[4].hasta" required min="2" max="24" pattern="[0-9]*">
+                        </div>
+                        <div class="col-md-1"> </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-1"> </div>
+                          <div class="col-md-3">
+                              <div class="contrrol-group form-group">
+                                  <label class="custom-control custom-checkbox">
+                                      <input type="checkbox" class="custom-control-input" [checked]="disabledSab" (change)="changeHorario($event,'Sabado')" >
+                                      <span class="custom-control-indicator"></span>
+                                      <span class="custom-control-description">Sábado</span>
+                                    </label> 
+                              </div>
+                          </div>
+                          <div class="col-md-3">
+                              <input type="number" class="form-control"  placeholder="Desde" [disabled]="!disabledSab" 
+                              #sdesde="ngModel" name="sdesde" [(ngModel)]="tempHorarios[5].desde" required min="1" max="23" pattern="[0-9]*"> 
+                          </div>
+          
+                          <div class="col-md-1">
+                              :
+                          </div>
+                          <div class="col-md-3">
+                              <input type="number" class="form-control"  placeholder="Hasta" [disabled]="!disabledSab" 
+                              #shasta="ngModel" name="shasta" [(ngModel)]="tempHorarios[5].hasta" required min="2" max="24" pattern="[0-9]*">
+                          </div>
+                          <div class="col-md-1"> </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-1"> </div>
+                            <div class="col-md-3">
+                                <div class="contrrol-group form-group">
+                                    <label class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" [checked]="disabledDom" (change)="changeHorario($event,'Domingo')" >
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">Domingo</span>
+                                      </label> 
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="number" class="form-control"  placeholder="Desde" [disabled]="!disabledDom" 
+                                #ddesde="ngModel" name="ddesde" [(ngModel)]="tempHorarios[6].desde" required min="1" max="23" pattern="[0-9]*"> 
+                            </div>
+            
+                            <div class="col-md-1">
+                                :
+                            </div>
+                            <div class="col-md-3">
+                                <input type="number" class="form-control"  placeholder="Hasta" [disabled]="!disabledDom" 
+                                #shasta="ngModel" name="dhasta" [(ngModel)]="tempHorarios[6].hasta"required min="1" max="24" pattern="[0-9]*">
+                            </div>
+                            <div class="col-md-1"> </div>
+                          </div>
+                          <hr>
+
+              <div style="float: right">
+                <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" >Salir</button>
+                <button id="btn-Edit" type="submit" [disabled]="!adminVehiculoched.form.valid || nombreExistEdit" class="btn btn-success" >Confirmar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 </div>

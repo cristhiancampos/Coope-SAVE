@@ -79,8 +79,16 @@ export class ServicioVehiculo{
         let headers = new Headers({'Content-Type':'application/json'});
         return this._http.put(this.url+'modificarVehiculo',params,{headers:headers})
         .map(res=>res.json());
-
     }
 
+    modificarHorario(vehiculo:any)
+    {
+        
+         let json = JSON.stringify(vehiculo);
+        let params = json; 
+        let headers = new Headers({'Content-Type':'application/json'});
+        return this._http.put(this.url+'modificarHorarioVehiculo',params,{headers:headers})
+        .map(res=>res.json());
+    }
 
 }//Final de el export de clase

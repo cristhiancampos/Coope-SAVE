@@ -15,6 +15,15 @@ function agregarVehiculo(req, res) {
   vehiculo.estado =params.estado;
   vehiculo.reporte = params.reporte;
   vehiculo.created_at = new Date();
+  vehiculo.horario= [
+    {dia:'Lunes',desde:'8',hasta:'21'},
+    {dia:'Martes',desde:'8',hasta:'21'},
+    {dia:'Miercoles',desde:'8',hasta:'21'},
+    {dia:'Jueves',desde:'8',hasta:'21'},
+    {dia:'Viernes',desde:'8',hasta:'21'},
+    {dia:'Sabado',desde:'8',hasta:'21'},
+    {dia:'Domingo',desde:'null',hasta:'null'}
+  ];
 
   if (
     vehiculo.tipo != null && vehiculo.marca != null && vehiculo.placa != null && vehiculo.descripcion != null && vehiculo.kilometraje != null
@@ -125,6 +134,29 @@ function modificarVehiculo(req, res) {
     });
   }
 
+  function modificarHorario(req, res) {
+    
+        var params = req.body;
+        var vehiculoId = params._id;
+        params.updated_at = new Date();
+       
+      
+        Vehiculo.findByIdAndUpdate(vehiculoId, params, (err, modificarVehiculo) => {
+          if (err) {
+      
+            res.status(500).send({ message: 'Error al actualizar el horario  de vehicula' });
+          } else {
+            if (!modificarVehiculo) {
+      
+              res.status(404).send({ message: 'No se ha podido actualizar el horario del vehiculo' });
+            } else {
+      
+              res.status(200).send({ message: modificarVehiculo });
+            }
+          }
+        });
+      }
+
   function validarModificacion(req, res) {
     var params = req.body;
     var placa = params.placa;
@@ -161,5 +193,6 @@ module.exports = {
   obtenerVehiculo,
   eliminarVehiculo,
   modificarVehiculo,
-  validarModificacion
+  validarModificacion,
+  modificarHorario
 };

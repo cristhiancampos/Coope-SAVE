@@ -28,6 +28,8 @@ api.put('/modificarUsuario',ControladorUsuario.modificarUsuario);
 api.put('/modificarUsuarioCompleto',ControladorUsuario.modificarUsuarioCompleto);
 api.post('/validarModificacionUsuario',ControladorUsuario.validarModificacion);
 api.post('/validarContrasena',ControladorUsuario.validarContrasena);
+api.put('/modificarPerfil',ControladorUsuario.modificarPerfil);
+
 
 
 module.exports = api;
