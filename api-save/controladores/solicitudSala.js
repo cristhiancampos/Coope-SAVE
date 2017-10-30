@@ -44,7 +44,27 @@ function agregarSolicitud(req, res) {
 function obtenerFechaActual(req, res) {
   res.status(200).send({ currentDate: new Date() });
 }
+
+function obtenerSolicitudesSalas(req, res) {
+  let foo = new Date(req.body.fecha.toString())
+
+  SolicitudSala.find({},(err,solicitud)=>{
+    if(err){
+      req.status(500).send({mesage:'Error al obtener las solicitudes'});
+    }else{
+      if(!solicitud){
+        res.status(404).send({ message: 'No existen solicitudes para esta fecha' });
+      }else{
+        res.status(200).send({ message: solicitud });
+      }
+    }
+  });
+
+//  console.log(foo.getFullYear()+"-"+(foo.getMonth()+1)+"-"+foo.getDate());
+ // res.status(200).send({ message: new Date() });
+}
 module.exports = {
   agregarSolicitud,
-  obtenerFechaActual
+  obtenerFechaActual,
+  obtenerSolicitudesSalas
 };

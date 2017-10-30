@@ -70,10 +70,13 @@ h3 {
     cursor: pointer; 
   }
  
-  .cal-event {
+  .cal-month-view .cal-event {
     width: 20px;
     height: 20px;
     border-radius: 50%;
     display: inline-block;
     margin: 2px;
+}
+button{
+  cursor:pointer;
 }

@@ -86,4 +86,13 @@ export class ServicioSala{
         .map(res=>res.json());
     }
 
+    modificarHorario(sala)
+    {
+         let json = JSON.stringify(sala);
+        let params = json; 
+        let headers = new Headers({'Content-Type':'application/json'});
+        return this._http.put(this.url+'modificarHorario',params,{headers:headers})
+        .map(res=>res.json());
+    }
+
 }//Final de el export de clase
