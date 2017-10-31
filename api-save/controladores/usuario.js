@@ -170,6 +170,7 @@ function eliminarUsuario(req, res) {
   });
 }
 
+
 function obtenerUsuario(req, res) {
   var userId = req.params.id;
 

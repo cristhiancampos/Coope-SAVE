@@ -44,68 +44,96 @@
           <thead class="thead-default">
             <tr>
               <th class="th-color"><i class="fa fa-list-ol" aria-hidden="true"></i></th>
-              <th class="th-color">Nombre</th>
-              <th class="th-color">Cupo</th>
+              <th class="th-color">Usuario</th>
+              <th class="th-color">Sala</th>
               <th class="th-color">Descripción</th>
-              <th class="th-color">Estado</th>
-              <th class="th-color">Mensaje de Estado</th>
+              <th class="th-color">Fecha</th>
+              <th class="th-color">Hora Inicio</th>
+              <th class="th-color">Hora Final</th>
+              <th class="th-color"># Personas</th>
+              <th class="th-color"> Recursos</th>
               <th class="th-color" style="text-align: center">Acciones</th>
             </tr>
           </thead>
           <tbody style="font-family: 'Times New Roman', Times, serif">
-            <tr>
-              <th scope="row">1</th>
-              <th>Mark</th>
-              <th>Otto</th>
-              <th>@mdo</th>
-              <th>Otto</th>
-              <th>Otto</th>
+            <tr *ngFor= "let sala of solicitudSalas; let i = index">
+              <th scope="row">{{i+1}}</th>
+              <th>{{getNombre(sala.usuario)}}</th>
+              <th>{{sala.sala}}</th>
+              <th>{{sala.descripcion}}</th>
+              <th>{{sala.fecha.year}}</th>
+              <th>{{sala.horaInicio.hour}}:{{sala.horaInicio.minute}}</th>
+              <th>{{sala.horaFin.hour}}: {{sala.horaFin.minute}}</th>
+              <th>{{sala.cantidadPersonas}}</th>
+              <th><button class="btn btn-success btn-accion" data-toggle="modal" (click)="getNombreRecurso(sala)" data-target="#modalRecursos" aria-hidden="true"> <i class="fa fa-tasks" aria-hidden="true"></i></button></th>
+              
               <th style="text-align: center">
                 <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
                 <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
               </th>
             </tr>
+          </tbody>
+        </table>
+      </div>
+      <h5 *ngIf='solicitudSalas ==undefined || solicitudSalas.length==0'>No existen salas registradas en el sistema.<br></h5> 
+      <hr *ngIf='solicitudSalas ==undefined || solicitudSalas.length==0'>
+    </div>
+  </section>
+
+<!-- Sección de modal de Recursos-->
+
+
+<div class="modal fade bd-example-modal-sm " id="modalRecursos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog bd-example-modal-sm " role="document">
+  <div class="modal-content">
+    <div class="modal-header" style="background: #0069d9;color:#fff">
+      <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Recursos Asignados</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal"> 
+        <small aria-hidden="true">&times;</small>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row" style="text-align: center">
+        <table class="table">
+          <thead class="thead-default">
             <tr>
-              <th scope="row">2</th>
-              <th>Jacob</th>
-              <th>Thornton</th>
-              <th>@fat</th>
-              <th>Thornton</th>
-              <th>Otto</th>
-              <th style="text-align: center">
-                <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-                <button class="btn btn-danger btn-accion"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
-              </th>
+              <th class="th-color"><i class="fa fa-list-ol" aria-hidden="true"></i></th>
+              <th class="th-color">Recursos</th>
+              <th class="th-color" style="text-align: center">Acciones</th>
             </tr>
-            <tr>
-              <th scope="row">2</th>
-              <th>Jacob</th>
-              <th>Thornton</th>
-              <th>@fat</th>
-              <th>Thornton</th>
-              <th>Otto</th>
+          </thead>
+          <tbody style="font-family: 'Times New Roman', Times, serif">
+            <tr *ngFor= "let lista of listaNombreRecursos; let i = index">
+              <th scope="row">{{i+1}}</th>
+              <th>{{lista}}</th>
+              
               <th style="text-align: center">
-                <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-                <button class="btn btn-danger btn-accion"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
-              </th>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <th>Jacob</th>
-              <th>Thornton</th>
-              <th>@fat</th>
-              <th>Thornton</th>
-              <th>Otto</th>
-              <th style="text-align: center">
-                <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-                <button class="btn btn-danger btn-accion"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+                <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
               </th>
             </tr>
           </tbody>
         </table>
       </div>
+      <div style="float: right">
+        <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" >Salir</button>
+      </div>
     </div>
-  </section>
+  </div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
   <!-- Sección de vehiculos-->
   <section *ngIf="!sala">
       <br>

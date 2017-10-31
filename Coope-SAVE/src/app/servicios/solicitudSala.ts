@@ -48,6 +48,12 @@ export class ServicioSolicitudSala{
         .map(res=>res.json());
     }
 
+    obtenerTodasSolicitudes(){
+        let headers = new Headers({'Content-Type':'application/json'});
+        return this._http.get(this.url+'obtenerTodasSolicitudes',{headers:headers})
+        .map(res=>res.json());
+    }
+
 /*
     validarSala(nombre)
     {
