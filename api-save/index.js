@@ -6,7 +6,7 @@ var app = require('./app');
 var port = process.env.PORT || 3977;
 //mongoose.Promise = global.Promise; 
 
-mongoose.connect('mongodb://localhost:27017/save-db',(err,res) =>{//172.30.23.152
+mongoose.connect('mongodb://localhost/save-db',(err,res) =>{//172.30.23.152// Conexion remota de mondoDB= mongo --host x.x.x.x --port xxxxx -u myServerAdmin -p password --authenticationDatabase admin
   if(err)
   {
     throw err;

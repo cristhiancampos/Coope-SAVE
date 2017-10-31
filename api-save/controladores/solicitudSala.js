@@ -63,8 +63,25 @@ function obtenerSolicitudesSalas(req, res) {
     }
   });
 }
+
+function obtenerTodasSolicitudes(req, res){
+  SolicitudSala.find({ estado: { $ne: "Eliminado" } }, (err, solicitudSalas) => {
+    if (err) {
+      res.status(500).send({ message: 'Error en la petición' });
+    } else {
+      if (!solicitudSalas) {
+        res.status(404).send({ message: 'No existen Salas registradas en el sistema' });
+      } else {
+        res.status(200).send({ message: solicitudSalas });
+      }
+    }
+  }).sort('number');
+
+}
+
 module.exports = {
   agregarSolicitud,
   obtenerFechaActual,
-  obtenerSolicitudesSalas
+  obtenerSolicitudesSalas,
+  obtenerTodasSolicitudes
 };
