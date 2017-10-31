@@ -311,11 +311,11 @@ export class SolicitudSalaComponent implements ControlValueAccessor {
     );
   }
   obtenerSolicitudes(userDate) {
-    this.solicitudSala.fecha=userDate;
+    this.solicitudSala.fecha = userDate;
     this._servSolicitud.obtenerSolicitudes(this.solicitudSala).subscribe(
       response => {
         if (response.message) {
-        //  this.recursos = response.message;
+          //  this.recursos = response.message;
           console.log('solicitudes salas');
           console.log(response.message);
         } else {//no hay Salas registradas
@@ -588,16 +588,55 @@ export class SolicitudSalaComponent implements ControlValueAccessor {
   }
 
   updateTime(): void {
-    // alert('actualizar el tiempo'+this.solicitudSala.fecha);
-    const newDate: Date = setHours(
-      setMinutes(
-        setSeconds(this.date, this.timeStruct.second),
-        this.timeStruct.minute
-      ),
-      this.timeStruct.hour
-    );
-    this.onChangeCallback(newDate);
+
+   var intevarlo =30;
+    alert('hora inicio' + this.solicitudSala.horaInicio.hour + "\n" + 'hora fin' + this.solicitudSala.horaFin.hour);
+    if (this.solicitudSala.horaInicio.hour == this.solicitudSala.horaFin.hour) {
+      var resultadoRestaMinutos = (this.solicitudSala.horaInicio.minute - this.solicitudSala.horaFin.minute);
+     alert(resultadoRestaMinutos);
+      if (resultadoRestaMinutos < 0) {
+        var sumaHoras = (this.solicitudSala.horaFin.minute + intevarlo);
+        alert('sumar'+sumaHoras);
+        if (sumaHoras > 60) {
+         // this.solicitudSala.horaFin=(this.solicitudSala.horaFin+1);
+          var minRestantes=(sumaHoras-60);
+          alert('minutos restantes'+(minRestantes));
+          alert('sumar a horas y a minutos tambi');
+
+          this.solicitudSala.horaFin.hour=(this.solicitudSala.horaFin.hour+1);
+          this.solicitudSala.horaFin.minute=minRestantes;
+         // alert('validar intervalo');
+        }else if(sumaHoras = 60){
+          alert('sumarle solo 1 hora');
+          this.solicitudSala.horaFin.hour=(this.solicitudSala.horaFin.hour+1);
+        }
+      } else if(resultadoRestaMinutos == 0){
+        this.solicitudSala.horaFin.minute=(this.solicitudSala.horaFin.minute+intevarlo);
+        alert('los minutos son iguales');
+      }else{
+        alert('todo bien');
+      }
+
+    } else if (this.solicitudSala.horaInicio.hour > this.solicitudSala.horaFin.hour) {
+      alert('no puede ser menor la hora final');
+    }
+    else {
+      alert('son diferentes');
+    }
+    alert('hoa final'+this.solicitudSala.horaFin.hour+':'+this.solicitudSala.horaFin.minute);
+    
+    //this.timeStruct.minute=30;
+      const newDate: Date = setHours(
+        setMinutes(
+          setSeconds(this.date, this.timeStruct.second),
+          this.solicitudSala.horaFin.minute 
+        ),
+        this.solicitudSala.horaFin.hour
+      );
+      console.log(newDate);
+      this.onChangeCallback(newDate);
   }
+
 }
 
 

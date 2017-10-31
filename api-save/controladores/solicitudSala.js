@@ -46,22 +46,22 @@ function obtenerFechaActual(req, res) {
 }
 
 function obtenerSolicitudesSalas(req, res) {
-  let foo = new Date(req.body.fecha.toString())
+  let date = new Date(req.body.fecha.toString())
+  let year = date.getFullYear();
+  let month = (date.getMonth() + 1);
+  let day = date.getDate();
 
-  SolicitudSala.find({},(err,solicitud)=>{
-    if(err){
-      req.status(500).send({mesage:'Error al obtener las solicitudes'});
-    }else{
-      if(!solicitud){
+  SolicitudSala.find({ fecha: { year: year, month: month, day: day } }, (err, solicitud) => {
+    if (err) {
+      req.status(500).send({ mesage: 'Error al obtener las solicitudes' });
+    } else {
+      if (!solicitud) {
         res.status(404).send({ message: 'No existen solicitudes para esta fecha' });
-      }else{
+      } else {
         res.status(200).send({ message: solicitud });
       }
     }
   });
-
-//  console.log(foo.getFullYear()+"-"+(foo.getMonth()+1)+"-"+foo.getDate());
- // res.status(200).send({ message: new Date() });
 }
 module.exports = {
   agregarSolicitud,
