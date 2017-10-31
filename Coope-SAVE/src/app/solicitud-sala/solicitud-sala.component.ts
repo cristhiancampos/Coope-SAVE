@@ -33,7 +33,7 @@ import {
 } from 'date-fns';
 import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { DateTimePickerComponent } from "../demo-utils/data-time-picker.component";
+//import { DateTimePickerComponent } from "../demo-utils/data-time-picker.component";
 import { FormControl } from '@angular/forms';
 
 const colors: any = {
@@ -50,23 +50,23 @@ const colors: any = {
     secondary: '#FDF1BA'
   }
 };
-const DATE_TIME_PICKER_CONTROL_VALUE_ACCESSOR: any = {
-  provide: NG_VALUE_ACCESSOR,
-  useExisting: forwardRef(() => DateTimePickerComponent),
-  multi: true,
+// const DATE_TIME_PICKER_CONTROL_VALUE_ACCESSOR: any = {
+//   provide: NG_VALUE_ACCESSOR,
+//   useExisting: forwardRef(() => DateTimePickerComponent),
+//   multi: true,
 
 
-};
+// };
 
 @Component({
   selector: 'app-solicitud-sala',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './solicitud-sala.component.html',
   styleUrls: ['./solicitud-sala.component.css'],
-  providers: [ServicioSala, ServicioRecursos, ServicioSolicitudSala, DATE_TIME_PICKER_CONTROL_VALUE_ACCESSOR]
+  providers: [ServicioSala, ServicioRecursos, ServicioSolicitudSala]
 })
 
-export class SolicitudSalaComponent implements ControlValueAccessor {
+export class SolicitudSalaComponent  {
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
   view = 'month';
 
@@ -222,10 +222,19 @@ export class SolicitudSalaComponent implements ControlValueAccessor {
 
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
-    this.obtenerSolicitudes(date);
+   // this.obtenerSolicitudes(date);
     this.solicitudSala.horaInicio = { hour: 7, minute: 0 };
     this.solicitudSala.horaFin = { hour: 11, minute: 0 };
     this.activeDayIsOpen = false;
+    // this.obtenerSolicitudes(date)
+    // alert('obtuvo las solicitudes'+this.solicitudesdia.length);
+    // if(this.solicitudesdia.length>0){
+    //   alert('obtuvo las solicitudes');
+    //   this.verificarFechaSeleccionada(date);
+    // }else{
+    //   alert('No obtuvo las solicitudes');
+    // }
+    //this.verificarFechaSeleccionada(date);
     this.verificarFechaSeleccionada(date);
     console.log( this.solicitudesdia);
 
@@ -316,6 +325,7 @@ export class SolicitudSalaComponent implements ControlValueAccessor {
 
   
   obtenerSolicitudes(userDate) {
+    alert(userDate);
    // this.solicitudesdia=[];
     this.solicitudSala.fecha = userDate;
     this._servSolicitud.obtenerSolicitudes(this.solicitudSala).subscribe(
@@ -325,13 +335,16 @@ export class SolicitudSalaComponent implements ControlValueAccessor {
           console.log('solicitudes salas');
           //console.log(response.message[0].horaInicio.hour);
           this.solicitudesdia=response.message;
+          return true;
         } else {//no hay Salas registradas
+          return false;
         }
       }, error => {
-        var errorMensaje = <any>error;
-        if (errorMensaje != null) {
-          var body = JSON.parse(error._body);
-        }
+        return false;
+        // var errorMensaje = <any>error;
+        // if (errorMensaje != null) {
+        //   var body = JSON.parse(error._body);
+        // }
       }
     );
   }
@@ -450,16 +463,20 @@ export class SolicitudSalaComponent implements ControlValueAccessor {
             if (userDate.getDate() < serverDate.getDate()) {
               this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
             } else {
-              this.obtenerRecursos();
-              //this.obtenerSolicitudes(userDate);
-              this.writeValue(userDate);
+              //alert('entra aqui 1');
+              //this.obtenerRecursos();
               this.abrirModal('#modal-add-new-request');
+              this.obtenerSolicitudes(userDate);
+              this.writeValue(userDate);
+             
             }
           } else {
-            this.obtenerRecursos();
-            this.obtenerSolicitudes(userDate);
-            this.writeValue(userDate);
+          //  alert('entra aqui 2');
             this.abrirModal('#modal-add-new-request');
+            //this.obtenerRecursos();
+           this.obtenerSolicitudes(userDate);
+            this.writeValue(userDate);
+            
           }
         } else {
         }

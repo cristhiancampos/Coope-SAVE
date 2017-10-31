@@ -6,7 +6,6 @@ import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
-// import { MaterializeModule } from 'angular2-materialize';
 import { SolicitudSalaComponent } from './solicitud-sala/solicitud-sala.component';
 
 
@@ -16,8 +15,6 @@ import { CalendarModule } from 'angular-calendar';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 import {CalendarHeaderComponent} from './demo-utils/calendar-header.component';
-import {DateTimePickerComponent} from './demo-utils/data-time-picker.component';
-
 import * as moment from 'moment';
 import 'moment/locale/es';
 moment.locale('es');
@@ -41,7 +38,6 @@ import { AdminSolicitudComponent } from './admin-solicitud/admin-solicitud.compo
     AppComponent,
     SolicitudSalaComponent,
     CalendarHeaderComponent,
-    DateTimePickerComponent,
     RegistoUsuarioComponent,
     PrincipalComponent,
     ModificarUsuarioComponent,
@@ -56,18 +52,12 @@ import { AdminSolicitudComponent } from './admin-solicitud/admin-solicitud.compo
   ],
   imports: [
     BrowserModule,
-    // MaterializeModule,
     routing,
     HttpModule,
     FormsModule,
     BrowserAnimationsModule,
     CalendarModule.forRoot(),
     NgbModule.forRoot(),
-    // RouterModule.forRoot(
-    //   appRoutes,
-    //   { enableTracing: true } // <-- debugging purposes only
-    // )
-    //DateTimePickerComponent
   ],
   providers: [appRoutingProviders],
 bootstrap: [AppComponent]
