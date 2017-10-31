@@ -1,73 +1,74 @@
+<section>
+  <div class="container-fluid" style="margin-top: 8%; padding: 0 10% 0 10%">
 
-
-<div class="container-fluid" style="margin-top: 8%; padding: 0 10% 0 10%">
-
-  <div class="row" style="text-align: center">
-    <div class="col-md-12">
-      <h2> Admistración Salas de Conferencias</h2>
-      <hr>
-      <button class="btn btn-primary" data-toggle="modal" data-target="#modalAdminSala" style="float: left;margin-bottom: 6px"> <i class="fa fa-plus" aria-hidden="true"></i></button>
-    </div>
-
-  </div>
-
-  <div class="col-md-12">
     <div class="row" style="text-align: center">
-      <table class="table">
-        <thead class="thead-default">
-          <tr>
-            <th class="th-color"><i class="fa fa-list-ol" aria-hidden="true"></i></th>
-            <th class="th-color">Nombre</th>
-            <th class="th-color">Cupo</th>
-            <th class="th-color">Descripción</th>
-            <th class="th-color">Estado</th>
-            <th class="th-color">Mensaje de Estado</th>
-            <th class="th-color" style="text-align: center">Acciones</th>
-          </tr>
-        </thead>
-        <tbody style="font-family: 'Times New Roman', Times, ser  if">
-          <tr *ngFor="let sala of salas; let i = index">
-            <th scope="row">{{i+1}}</th>
-            <th>{{sala.nombre}}</th>
-            <th>{{sala.cupo}}</th>
-            <th>{{sala.descripcion}}</th>
-            <th>{{sala.estado}}</th>
-            <th>{{sala.reporte}}</th>
-            <th style="text-align: center"> 
-              <button class="btn btn-primary btn-accion" data-toggle="modal" data-target="#modalEditSala" (click)="obtenerSala(sala._id)" ><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-success btn-accion" data-toggle="modal" data-target="#modalAddSched" (click)="obtenerSala(sala._id)" ><i class="fa fa-calendar" aria-hidden="true"></i> </button>
-              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete" (click)="obtenerSala(sala._id)"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
-            </th>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <h5 *ngIf='salas ==undefined || salas.length==0'>No existen salas registradas en el sistema.<br></h5> 
-  <hr *ngIf='salas ==undefined || salas.length==0'>
-  </div>
+      <div class="col-md-12">
+        <h2> Admistración Salas de Conferencias</h2>
+        <hr>
+        <button class="btn btn-primary" data-toggle="modal" data-target="#modalAdminSala" style="float: left;margin-bottom: 6px"> <i class="fa fa-plus" aria-hidden="true"></i></button>
+      </div>
 
-  <!-- paginador-->
-  <nav aria-label="Page navigation example">
-    <ul class="pagination">
-      <li class="page-item">
-        <a class="page-link" href="#" aria-label="Previous">
+    </div>
+    <div class="col-md-12">
+      <div class="row" style="text-align: center">
+        <table class="table">
+          <thead class="thead-default">
+            <tr>
+              <th class="th-color"><i class="fa fa-list-ol" aria-hidden="true"></i></th>
+              <th class="th-color">Nombre</th>
+              <th class="th-color">Cupo</th>
+              <th class="th-color">Descripción</th>
+              <th class="th-color">Estado</th>
+              <th class="th-color">Mensaje de Estado</th>
+              <th class="th-color" style="text-align: center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody style="font-family: 'Times New Roman', Times, ser  if">
+            <tr *ngFor="let sala of salas; let i = index">
+              <th scope="row">{{i+1}}</th>
+              <th>{{sala.nombre}}</th>
+              <th>{{sala.cupo}}</th>
+              <th>{{sala.descripcion}}</th>
+              <th>{{sala.estado}}</th>
+              <th>{{sala.reporte}}</th>
+              <th style="text-align: center">
+                <button class="btn btn-primary btn-accion" data-toggle="modal" data-target="#modalEditSala" (click)="obtenerSala(sala._id)"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
+                <button class="btn btn-success btn-accion" data-toggle="modal" data-target="#modalAddSched" (click)="obtenerSala(sala._id)"><i class="fa fa-calendar" aria-hidden="true"></i> </button>
+                <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete" (click)="obtenerSala(sala._id)"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+              </th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <h5 *ngIf='salas ==undefined || salas.length==0'>No existen salas registradas en el sistema.<br></h5>
+      <hr *ngIf='salas ==undefined || salas.length==0'>
+    </div>
+
+    <!-- paginador-->
+    <section>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item">
+            <a class="page-link" href="#" aria-label="Previous">
             <small aria-hidden="true">&laquo;</small>
             <small class="sr-only">Previous</small>
           </a>
-      </li>
-      <li class="page-item"><a class="page-link" href="#">1</a></li>
-      <li class="page-item"><a class="page-link" href="#">2</a></li>
-      <li class="page-item"><a class="page-link" href="#">3</a></li>
-      <li class="page-item">
-        <a class="page-link" href="#" aria-label="Next">
+          </li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item">
+            <a class="page-link" href="#" aria-label="Next">
             <small aria-hidden="true">&raquo;</small>
             <small class="sr-only">Next</small>
           </a>
-      </li>
-    </ul>
-  </nav>
+          </li>
+        </ul>
+      </nav>
+    </section>
 
-</div>
+  </div>
+</section>
 
 <!-- Seccion del Modal: Agregar nueva Sala -->
 <div class="modal fade bd-example-modal-sm " id="modalAdminSala" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -123,7 +124,7 @@
                   </div>
                 </div>
                 <div class="control-group form-group">
-               <div class="controls">
+                  <div class="controls">
                     <ul>
                       <li style="margin-left: -37px;"> <label class="switch">
                           <input type="checkbox" checked (change)="cambiarEstado()">
@@ -137,7 +138,7 @@
                   </div>
                 </div>
                 <div style="float: right">
-                  <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" >Salir</button>
+                  <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal">Salir</button>
                   <button id="btn-add" type="submit" [disabled]="!adminSala.form.valid || nombreExist" class="btn btn-success">Confirmar</button>
                 </div>
               </form>
@@ -154,93 +155,94 @@
 
 <!-- Seccion del Modal: Editar Sala -->
 <div class="modal fade bd-example-modal-sm " id="modalEditSala" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-aria-hidden="true">
-<div class="modal-dialog bd-example-modal-sm " role="document">
-  <div class="modal-content">
-    <div class="modal-header" style="background: #0069d9;color:#fff">
-      <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Editar Sala</h5>
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal"> 
+  aria-hidden="true">
+  <div class="modal-dialog bd-example-modal-sm " role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0069d9;color:#fff">
+        <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Editar Sala</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal"> 
         <small aria-hidden="true">&times;</small>
       </button>
-    </div>
-    <div class="modal-body">
-      <div class="row">
-        <div class="col-md-12">
-          <ol class="breadcrumb">
-            <li>
-              <a><img src="assets/img/logo.png" ></a>
-            </li>
-          </ol>
-        </div>
       </div>
-      <!-- END BREADCRUMB-->
-      <div class="col-md-12">
+      <div class="modal-body">
         <div class="row">
           <div class="col-md-12">
-            <form #adminSalaEdit="ngForm" (ngSubmit)="modificarSala()">
-              <div class="contrrol-group form-group">
-                <div class="controls">
-                  <input id="input-nombre" type="text" class="form-control" #nombreE="ngModel" name="nombreE" [(ngModel)]="salaEdit.nombre" placeholder="Nombre"
-                    required (input)="validarModificacion()">
-                  <small *ngIf="nombreE.invalid && (nombreE.dirty || nombreE.touched)">
-                    <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El nombre es obligatorio</small>
-                  <small *ngIf="nombreExistEdit"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe una Sala con ese nombre</small>
-                  <p class="help-block"></p>
-                </div>
-              </div>
-              <div class="control-group form-group">
-                <div class="controls">
-                  <input type="number" class="form-control" #cupoE="ngModel" name="cupoE" [(ngModel)]="salaEdit.cupo" placeholder="Cupos" required
-                    pattern="[0-9]*">
-                  <small *ngIf="cupoE.invalid && (cupoE.dirty || cupoE.touched)">
-                    <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El Cupo de personas es obligatorio</small>
-                  <p class="help-block"></p>
-                </div>
-              </div>
-              <div class="control-group form-group">
-                <div class="controls">
-                  <textarea class="form-control" #descripcionE="ngModel" name="descripcionE" [(ngModel)]="salaEdit.descripcion" placeholder="Descripción"
-                    rows="3" required></textarea>
-                  <small *ngIf="descripcionE.invalid && (descripcionE.dirty || descripcionE.touched)"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La descripción es obligatoria</small>
-                  <p class="help-block"></p>
-                </div>
-              </div>
-              <div class="control-group form-group">
-                <div class="controls">
-                  <ul>
-                    <li style="margin-left: -37px;"> <label class="switch">
-                        <input type="checkbox" [checked]='estadoEdicion' (change)="cambiarEstadoEdicion($event)">
-                        <small class="slider round"></small>
-                      </label>
-                    </li>
-                    <li>
-                      <label style="float: left;margin-top: -2.3em;">{{estadoMensajEdit}}</label>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div class="control-group form-group">
-                <div class="controls">
+            <ol class="breadcrumb">
+              <li>
+                <a><img src="assets/img/logo.png" ></a>
+              </li>
+            </ol>
+          </div>
+        </div>
+        <!-- END BREADCRUMB-->
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-12">
+              <form #adminSalaEdit="ngForm" (ngSubmit)="modificarSala()">
+                <div class="contrrol-group form-group">
                   <div class="controls">
-                    <textarea class="form-control" #reporte="ngModel" name= "reporte" [(ngModel)]="salaEdit.reporte" placeholder="Reporte algún problema de la sala" rows="3"></textarea>
+                    <input id="input-nombre" type="text" class="form-control" #nombreE="ngModel" name="nombreE" [(ngModel)]="salaEdit.nombre"
+                      placeholder="Nombre" required (input)="validarModificacion()">
+                    <small *ngIf="nombreE.invalid && (nombreE.dirty || nombreE.touched)">
+                    <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El nombre es obligatorio</small>
+                    <small *ngIf="nombreExistEdit"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe una Sala con ese nombre</small>
                     <p class="help-block"></p>
                   </div>
                 </div>
-              </div>
-              <div style="float: right">
-                <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" >Salir</button>
-                <button id="btn-Edit" type="submit" [disabled]="!adminSalaEdit.form.valid || nombreExistEdit" class="btn btn-success" >Confirmar</button>
-              </div>
-            </form>
+                <div class="control-group form-group">
+                  <div class="controls">
+                    <input type="number" class="form-control" #cupoE="ngModel" name="cupoE" [(ngModel)]="salaEdit.cupo" placeholder="Cupos" required
+                      pattern="[0-9]*">
+                    <small *ngIf="cupoE.invalid && (cupoE.dirty || cupoE.touched)">
+                    <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El Cupo de personas es obligatorio</small>
+                    <p class="help-block"></p>
+                  </div>
+                </div>
+                <div class="control-group form-group">
+                  <div class="controls">
+                    <textarea class="form-control" #descripcionE="ngModel" name="descripcionE" [(ngModel)]="salaEdit.descripcion" placeholder="Descripción"
+                      rows="3" required></textarea>
+                    <small *ngIf="descripcionE.invalid && (descripcionE.dirty || descripcionE.touched)"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La descripción es obligatoria</small>
+                    <p class="help-block"></p>
+                  </div>
+                </div>
+                <div class="control-group form-group">
+                  <div class="controls">
+                    <ul>
+                      <li style="margin-left: -37px;"> <label class="switch">
+                        <input type="checkbox" [checked]='estadoEdicion' (change)="cambiarEstadoEdicion($event)">
+                        <small class="slider round"></small>
+                      </label>
+                      </li>
+                      <li>
+                        <label style="float: left;margin-top: -2.3em;">{{estadoMensajEdit}}</label>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="control-group form-group">
+                  <div class="controls">
+                    <div class="controls">
+                      <textarea class="form-control" #reporte="ngModel" name="reporte" [(ngModel)]="salaEdit.reporte" placeholder="Reporte algún problema de la sala"
+                        rows="3"></textarea>
+                      <p class="help-block"></p>
+                    </div>
+                  </div>
+                </div>
+                <div style="float: right">
+                  <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal">Salir</button>
+                  <button id="btn-Edit" type="submit" [disabled]="!adminSalaEdit.form.valid || nombreExistEdit" class="btn btn-success">Confirmar</button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="modal-footer">
-    </div>
+      <div class="modal-footer">
+      </div>
 
+    </div>
   </div>
-</div>
 </div>
 
 <!-- Modal eliminar Sala-->
@@ -266,231 +268,233 @@ aria-hidden="true">
     </div>
   </div>
 </div>
-
-
-
-
-
 <!-- Seccion del Modal: agregar horario -->
 <div class="modal fade bd-example-modal-sm " id="modalAddSched" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-aria-hidden="true">
-<div class="modal-dialog bd-example-modal-sm " role="document">
-  <div class="modal-content">
-    <div class="modal-header" style="background: #0069d9;color:#fff">
-      <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;Horario de Sala</h5>
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal"> 
+  aria-hidden="true">
+  <div class="modal-dialog bd-example-modal-sm " role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0069d9;color:#fff">
+        <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;Horario de Sala</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal"> 
         <small aria-hidden="true">&times;</small>
       </button>
-    </div>
-    <div class="modal-body">
-      <div class="row">
-        <div class="col-md-12">
-          <ol class="breadcrumb">
-            <li>
-              <a><img src="assets/img/logo.png" ></a>
-            </li>
-          </ol>
-        </div>
       </div>
-      <!-- END BREADCRUMB-->
-      <div class="col-md-12">
+      <div class="modal-body">
         <div class="row">
           <div class="col-md-12">
+            <ol class="breadcrumb">
+              <li>
+                <a><img src="assets/img/logo.png" ></a>
+              </li>
+            </ol>
+          </div>
+        </div>
+        <!-- END BREADCRUMB-->
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-12">
 
-            <form #adminSalaSched="ngForm" (ngSubmit)="modificarHorario()">
-              <div class="row">
+              <form #adminSalaSched="ngForm" (ngSubmit)="modificarHorario()">
+                <div class="row">
                   <div class="col-md-1"> </div>
-                <div class="col-md-3">
+                  <div class="col-md-3">
                     <div class="contrrol-group form-group">
-                        <label class="custom-control custom-checkbox">
+                      <label class="custom-control custom-checkbox">
                             <input type="checkbox" class="custom-control-input"  [checked]="disabledLun" (change)="changeHorario($event,'Lunes')" >
                             <span class="custom-control-indicator"></span>
                             <span class="custom-control-description">Lunes</span>
-                          </label> 
+                          </label>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <input type="number" class="form-control"  placeholder="Desde" [disabled]="!disabledLun"
-                    #ldesde="ngModel" name="ldesde" [(ngModel)]="tempHorarios[0].desde" required min="1" max="23" pattern="[0-9]*"> 
-     
-                </div>
+                  </div>
+                  <div class="col-md-3">
+                    <input type="number" class="form-control" placeholder="Desde" [disabled]="!disabledLun" #ldesde="ngModel" name="ldesde" [(ngModel)]="tempHorarios[0].desde"
+                      required min="1" max="23" pattern="[0-9]*">
 
-                <div class="col-md-1">
+                  </div>
+
+                  <div class="col-md-1">
                     :
+                  </div>
+                  <div class="col-md-3">
+                    <input type="number" class="form-control" placeholder="Hasta" [disabled]="!disabledLun" #lhasta="ngModel" name="lhasta" [(ngModel)]="tempHorarios[0].hasta"
+                      required min="2" max="24" pattern="[0-9]*">
+                  </div>
+                  <div class="col-md-1"> </div>
                 </div>
-                <div class="col-md-3">
-                    <input type="number" class="form-control"  placeholder="Hasta" [disabled]="!disabledLun" 
-                    #lhasta="ngModel" name="lhasta" [(ngModel)]="tempHorarios[0].hasta" required min="2" max="24" pattern="[0-9]*">
-                </div>
-                <div class="col-md-1"> </div>
-              </div>
 
-              <div class="row">
+                <div class="row">
                   <div class="col-md-1"> </div>
                   <div class="col-md-3">
-                      <div class="contrrol-group form-group">
-                          <label class="custom-control custom-checkbox">
+                    <div class="contrrol-group form-group">
+                      <label class="custom-control custom-checkbox">
                               <input type="checkbox" class="custom-control-input" [checked]="disabledMar" (change)="changeHorario($event,'Martes')" >
                               <span class="custom-control-indicator"></span>
                               <span class="custom-control-description">Martes</span>
-                            </label> 
-                      </div>
+                            </label>
+                    </div>
                   </div>
                   <div class="col-md-3">
-                      <input type="number" class="form-control"  placeholder="Desde" [disabled]="!disabledMar" 
-                      #mdesde="ngModel" name="mdesde" [(ngModel)]="tempHorarios[1].desde" required min="1" max="23" pattern="[0-9]*"> 
+                    <input type="number" class="form-control" placeholder="Desde" [disabled]="!disabledMar" #mdesde="ngModel" name="mdesde" [(ngModel)]="tempHorarios[1].desde"
+                      required min="1" max="23" pattern="[0-9]*">
                   </div>
-  
+
                   <div class="col-md-1">
-                      :
+                    :
                   </div>
                   <div class="col-md-3">
-                      <input type="number" class="form-control"  placeholder="Hasta" [disabled]="!disabledMar" 
-                      #mhasta="ngModel" name="mhasta" [(ngModel)]="tempHorarios[1].hasta" required min="2" max="24" pattern="[0-9]*">
+                    <input type="number" class="form-control" placeholder="Hasta" [disabled]="!disabledMar" #mhasta="ngModel" name="mhasta" [(ngModel)]="tempHorarios[1].hasta"
+                      required min="2" max="24" pattern="[0-9]*">
                   </div>
 
                   <div class="col-md-1"> </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-md-1"> </div>
-                    <div class="col-md-3">
-                        <div class="contrrol-group form-group">
-                            <label class="custom-control custom-checkbox">
+                  <div class="col-md-1"> </div>
+                  <div class="col-md-3">
+                    <div class="contrrol-group form-group">
+                      <label class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" [checked]="disabledMie"  (change)="changeHorario($event,'Miercoles')">
                                 <span class="custom-control-indicator"></span>
                                 <span class="custom-control-description">Miércoles</span>
-                              </label> 
-                        </div>
+                              </label>
                     </div>
-                    <div class="col-md-3">
-                        <input type="number" class="form-control"  placeholder="Desde" [disabled]="!disabledMie" 
-                        #midesde="ngModel" name="midesde" [(ngModel)]="tempHorarios[2].desde" required min="1" max="23" pattern="[0-9]*"> 
-                    </div>
-    
-                    <div class="col-md-1">
-                        :
-                    </div>
-                    <div class="col-md-3">
-                        <input type="number" class="form-control"  placeholder="Hasta" [disabled]="!disabledMie" 
-                        #mihasta="ngModel" name="mihasta" [(ngModel)]="tempHorarios[2].hasta" required min="2" max="24" pattern="[0-9]*">
-                    </div>
-                    <div class="col-md-1"> </div>
+                  </div>
+                  <div class="col-md-3">
+                    <input type="number" class="form-control" placeholder="Desde" [disabled]="!disabledMie" #midesde="ngModel" name="midesde"
+                      [(ngModel)]="tempHorarios[2].desde" required min="1" max="23" pattern="[0-9]*">
                   </div>
 
-                  <div class="row">
-                      <div class="col-md-1"> </div>
-                      <div class="col-md-3">
-                          <div class="contrrol-group form-group">
-                              <label class="custom-control custom-checkbox">
+                  <div class="col-md-1">
+                    :
+                  </div>
+                  <div class="col-md-3">
+                    <input type="number" class="form-control" placeholder="Hasta" [disabled]="!disabledMie" #mihasta="ngModel" name="mihasta"
+                      [(ngModel)]="tempHorarios[2].hasta" required min="2" max="24" pattern="[0-9]*">
+                  </div>
+                  <div class="col-md-1"> </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-1"> </div>
+                  <div class="col-md-3">
+                    <div class="contrrol-group form-group">
+                      <label class="custom-control custom-checkbox">
                                   <input type="checkbox" class="custom-control-input" [checked]="disabledJue" (change)="changeHorario($event,'Jueves')"  >
                                   <span class="custom-control-indicator"></span>
                                   <span class="custom-control-description">Jueves</span>
-                                </label> 
-                          </div>
-                      </div>
-                      <div class="col-md-3">
-                          <input type="number" class="form-control"  placeholder="Desde" [disabled]="!disabledJue" 
-                          #jdesde="ngModel" name="jdesde" [(ngModel)]="tempHorarios[3].desde" required min="1" max="23" pattern="[0-9]*"> 
-                      </div>
-      
-                      <div class="col-md-1">
-                          :
-                      </div>
-                      <div class="col-md-3">
-                          <input type="number" class="form-control"  placeholder="Hasta" [disabled]="!disabledJue" 
-                          #jhasta="ngModel" name="jhasta" [(ngModel)]="tempHorarios[3].hasta"required min="2" max="24" pattern="[0-9]*">
-                      </div>
-                      <div class="col-md-1"> </div>
+                                </label>
                     </div>
+                  </div>
+                  <div class="col-md-3">
+                    <input type="number" class="form-control" placeholder="Desde" [disabled]="!disabledJue" #jdesde="ngModel" name="jdesde" [(ngModel)]="tempHorarios[3].desde"
+                      required min="1" max="23" pattern="[0-9]*">
+                  </div>
 
-                    <div class="row">
-                        <div class="col-md-1"> </div>
-                        <div class="col-md-3">
-                            <div class="contrrol-group form-group">
-                                <label class="custom-control custom-checkbox">
+                  <div class="col-md-1">
+                    :
+                  </div>
+                  <div class="col-md-3">
+                    <input type="number" class="form-control" placeholder="Hasta" [disabled]="!disabledJue" #jhasta="ngModel" name="jhasta" [(ngModel)]="tempHorarios[3].hasta"
+                      required min="2" max="24" pattern="[0-9]*">
+                  </div>
+                  <div class="col-md-1"> </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-1"> </div>
+                  <div class="col-md-3">
+                    <div class="contrrol-group form-group">
+                      <label class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" [checked]="disabledVie" (change)="changeHorario($event,'Viernes')"  >
                                     <span class="custom-control-indicator"></span>
                                     <span class="custom-control-description">Viernes</span>
-                                  </label> 
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <input type="number" class="form-control"  placeholder="Desde" [disabled]="!disabledVie" 
-                            #vdesde="ngModel" name="vdesde" [(ngModel)]="tempHorarios[4].desde" required min="1" max="23" pattern="[0-9]*"> 
-                        </div>
-        
-                        <div class="col-md-1">
-                            :
-                        </div>
-                        <div class="col-md-3">
-                            <input type="number" class="form-control"  placeholder="Hasta" [disabled]="!disabledVie" 
-                            #vhasta="ngModel" name="vhasta" [(ngModel)]="tempHorarios[4].hasta" required min="2" max="24" pattern="[0-9]*">
-                        </div>
-                        <div class="col-md-1"> </div>
-                      </div>
-                      <div class="row">
-                          <div class="col-md-1"> </div>
-                          <div class="col-md-3">
-                              <div class="contrrol-group form-group">
-                                  <label class="custom-control custom-checkbox">
+                                  </label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <input type="number" class="form-control" placeholder="Desde" [disabled]="!disabledVie" #vdesde="ngModel" name="vdesde" [(ngModel)]="tempHorarios[4].desde"
+                      required min="1" max="23" pattern="[0-9]*">
+                  </div>
+
+                  <div class="col-md-1">
+                    :
+                  </div>
+                  <div class="col-md-3">
+                    <input type="number" class="form-control" placeholder="Hasta" [disabled]="!disabledVie" #vhasta="ngModel" name="vhasta" [(ngModel)]="tempHorarios[4].hasta"
+                      required min="2" max="24" pattern="[0-9]*">
+                  </div>
+                  <div class="col-md-1"> </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-1"> </div>
+                  <div class="col-md-3">
+                    <div class="contrrol-group form-group">
+                      <label class="custom-control custom-checkbox">
                                       <input type="checkbox" class="custom-control-input" [checked]="disabledSab" (change)="changeHorario($event,'Sabado')" >
                                       <span class="custom-control-indicator"></span>
                                       <span class="custom-control-description">Sábado</span>
-                                    </label> 
-                              </div>
-                          </div>
-                          <div class="col-md-3">
-                              <input type="number" class="form-control"  placeholder="Desde" [disabled]="!disabledSab" 
-                              #sdesde="ngModel" name="sdesde" [(ngModel)]="tempHorarios[5].desde" required min="1" max="23" pattern="[0-9]*"> 
-                          </div>
-          
-                          <div class="col-md-1">
-                              :
-                          </div>
-                          <div class="col-md-3">
-                              <input type="number" class="form-control"  placeholder="Hasta" [disabled]="!disabledSab" 
-                              #shasta="ngModel" name="shasta" [(ngModel)]="tempHorarios[5].hasta" required min="2" max="24" pattern="[0-9]*">
-                          </div>
-                          <div class="col-md-1"> </div>
-                        </div>
+                                    </label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <input type="number" class="form-control" placeholder="Desde" [disabled]="!disabledSab" #sdesde="ngModel" name="sdesde" [(ngModel)]="tempHorarios[5].desde"
+                      required min="1" max="23" pattern="[0-9]*">
+                  </div>
 
-                        <div class="row">
-                            <div class="col-md-1"> </div>
-                            <div class="col-md-3">
-                                <div class="contrrol-group form-group">
-                                    <label class="custom-control custom-checkbox">
+                  <div class="col-md-1">
+                    :
+                  </div>
+                  <div class="col-md-3">
+                    <input type="number" class="form-control" placeholder="Hasta" [disabled]="!disabledSab" #shasta="ngModel" name="shasta" [(ngModel)]="tempHorarios[5].hasta"
+                      required min="2" max="24" pattern="[0-9]*">
+                  </div>
+                  <div class="col-md-1"> </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-1"> </div>
+                  <div class="col-md-3">
+                    <div class="contrrol-group form-group">
+                      <label class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" [checked]="disabledDom" (change)="changeHorario($event,'Domingo')" >
                                         <span class="custom-control-indicator"></span>
                                         <span class="custom-control-description">Domingo</span>
-                                      </label> 
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <input type="number" class="form-control"  placeholder="Desde" [disabled]="!disabledDom" 
-                                #ddesde="ngModel" name="ddesde" [(ngModel)]="tempHorarios[6].desde" required min="1" max="23" pattern="[0-9]*"> 
-                            </div>
-            
-                            <div class="col-md-1">
-                                :
-                            </div>
-                            <div class="col-md-3">
-                                <input type="number" class="form-control"  placeholder="Hasta" [disabled]="!disabledDom" 
-                                #shasta="ngModel" name="dhasta" [(ngModel)]="tempHorarios[6].hasta"required min="1" max="24" pattern="[0-9]*">
-                            </div>
-                            <div class="col-md-1"> </div>
-                          </div>
-                          <hr>
+                                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <input type="number" class="form-control" placeholder="Desde" [disabled]="!disabledDom" #ddesde="ngModel" name="ddesde" [(ngModel)]="tempHorarios[6].desde"
+                      required min="1" max="23" pattern="[0-9]*">
+                  </div>
 
-              <div style="float: right">
-                <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" >Salir</button>
-                <button id="btn-Edit" type="submit" [disabled]="!adminSalaSched.form.valid || nombreExistEdit" class="btn btn-success" >Confirmar</button>
-              </div>
-            </form>
+                  <div class="col-md-1">
+                    :
+                  </div>
+                  <div class="col-md-3">
+                    <input type="number" class="form-control" placeholder="Hasta" [disabled]="!disabledDom" #shasta="ngModel" name="dhasta" [(ngModel)]="tempHorarios[6].hasta"
+                      required min="1" max="24" pattern="[0-9]*">
+                  </div>
+                  <div class="col-md-1"> </div>
+                </div>
+                <hr>
+
+                <div style="float: right">
+                  <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal">Salir</button>
+                  <button id="btn-Edit" type="submit" [disabled]="!adminSalaSched.form.valid || nombreExistEdit" class="btn btn-success">Confirmar</button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-</div>
+<section>
+<footer >
+  
+    &copy; Coopesparta R.L.
+
+</footer>
+</section>
