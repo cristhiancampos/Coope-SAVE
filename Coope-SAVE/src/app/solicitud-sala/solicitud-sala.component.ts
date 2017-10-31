@@ -179,6 +179,7 @@ export class SolicitudSalaComponent implements ControlValueAccessor {
   recursos = [];
   tempRecursos = [];
   currentDate;
+  solicitudesdia=[];
 
   @Input() placeholder: string;
 
@@ -200,8 +201,9 @@ export class SolicitudSalaComponent implements ControlValueAccessor {
     private cdr: ChangeDetectorRef
   ) {
     this.solicitudSala = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
-    this.obtenerSalas();
     this.obtenerRecursos();
+    this.obtenerSalas();
+   // this.obtenerSolicitudes(new Date());
 
     // $(document).ready(function(){
     //  // console.log('ready');
@@ -220,11 +222,12 @@ export class SolicitudSalaComponent implements ControlValueAccessor {
 
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+    this.obtenerSolicitudes(date);
     this.solicitudSala.horaInicio = { hour: 7, minute: 0 };
     this.solicitudSala.horaFin = { hour: 11, minute: 0 };
     this.activeDayIsOpen = false;
     this.verificarFechaSeleccionada(date);
-
+    console.log( this.solicitudesdia);
 
     // alert(date);
     // if (isSameMonth(date, this.viewDate)) {
@@ -310,14 +313,18 @@ export class SolicitudSalaComponent implements ControlValueAccessor {
       }
     );
   }
+
+  
   obtenerSolicitudes(userDate) {
+   // this.solicitudesdia=[];
     this.solicitudSala.fecha = userDate;
     this._servSolicitud.obtenerSolicitudes(this.solicitudSala).subscribe(
       response => {
         if (response.message) {
           //  this.recursos = response.message;
           console.log('solicitudes salas');
-          console.log(response.message);
+          //console.log(response.message[0].horaInicio.hour);
+          this.solicitudesdia=response.message;
         } else {//no hay Salas registradas
         }
       }, error => {
@@ -330,35 +337,49 @@ export class SolicitudSalaComponent implements ControlValueAccessor {
   }
 
   agregarSolicitud() {
-    let identity = localStorage.getItem('identity');
-    let user = JSON.parse(identity);
-    let recordar = localStorage.getItem('remember');
-    let recordarValue = JSON.parse(recordar);
-    let recursos = JSON.parse(identity);
-    if (user != null) {
-      this.solicitudSala.fecha = this.dateStruct;
-      this.solicitudSala.usuario = user._id;
-      this.solicitudSala.recursos = this.tempRecursos;
-      this._servSolicitud.registrarSolicitud(this.solicitudSala).subscribe(
-        response => {
-          if (!response.message._id) {
-            this.msjError(response.message);
-          } else {
-            this.msjExitoso("Solicitud Agregada Exitosamente");
-            this.solicitudSala = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
-            this.cerrarModal('#modal-add-new-request');
-            // this.obtenerSalas();
+    var minInicial=((this.solicitudSala.horaInicio.hour*60)+this.solicitudSala.horaInicio.minute);
+    var minFinal=((this.solicitudSala.horaFin.hour*60)+this.solicitudSala.horaFin.minute);
+    if (minFinal-minInicial<=0) {
+      alert('no puede agregar');
+   }else {
+     if(minFinal-minInicial>0 && minFinal-minInicial<30){
+      alert('no puede agregar 2');
+     }
+    else{
+    alert('puede agregar');
+      let identity = localStorage.getItem('identity');
+      let user = JSON.parse(identity);
+      let recordar = localStorage.getItem('remember');
+      let recordarValue = JSON.parse(recordar);
+      let recursos = JSON.parse(identity);
+      if (user != null) {
+        this.solicitudSala.fecha = this.dateStruct;
+        this.solicitudSala.usuario = user._id;
+        this.solicitudSala.recursos = this.tempRecursos;
+        this._servSolicitud.registrarSolicitud(this.solicitudSala).subscribe(
+          response => {
+            if (!response.message._id) {
+              this.msjError(response.message);
+            } else {
+              this.msjExitoso("Solicitud Agregada Exitosamente");
+              this.solicitudSala = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
+              this.cerrarModal('#modal-add-new-request');
+              // this.obtenerSalas();
+            }
+          }, error => {
+            var alertMessage = <any>error;
+            if (alertMessage != null) {
+              var body = JSON.parse(error._body);
+              this.msjError('Solicitud no registrada r');
+            }
           }
-        }, error => {
-          var alertMessage = <any>error;
-          if (alertMessage != null) {
-            var body = JSON.parse(error._body);
-            this.msjError('Solicitud no registrada r');
-          }
-        }
-      );
-    } else {
-      this.msjError('Debe validar sus credenciales');
+        );
+      } else {
+        this.msjError('Debe validar sus credenciales');
+      }
+
+   }
+
     }
 
   }
@@ -430,7 +451,7 @@ export class SolicitudSalaComponent implements ControlValueAccessor {
               this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
             } else {
               this.obtenerRecursos();
-              this.obtenerSolicitudes(userDate);
+              //this.obtenerSolicitudes(userDate);
               this.writeValue(userDate);
               this.abrirModal('#modal-add-new-request');
             }
@@ -555,7 +576,7 @@ export class SolicitudSalaComponent implements ControlValueAccessor {
       this.dateStruct.year
     );
     this.onChangeCallback(newDate);
-    alert(newDate);
+    //alert(newDate);
     // this._servSolicitud.fechaActual().subscribe(
     //   response => {
     //     if (response.currentDate) {
@@ -589,52 +610,106 @@ export class SolicitudSalaComponent implements ControlValueAccessor {
 
   updateTime(): void {
 
-   var intevarlo =30;
-    alert('hora inicio' + this.solicitudSala.horaInicio.hour + "\n" + 'hora fin' + this.solicitudSala.horaFin.hour);
-    if (this.solicitudSala.horaInicio.hour == this.solicitudSala.horaFin.hour) {
-      var resultadoRestaMinutos = (this.solicitudSala.horaInicio.minute - this.solicitudSala.horaFin.minute);
-     alert(resultadoRestaMinutos);
-      if (resultadoRestaMinutos < 0) {
-        var sumaHoras = (this.solicitudSala.horaFin.minute + intevarlo);
-        alert('sumar'+sumaHoras);
-        if (sumaHoras > 60) {
-         // this.solicitudSala.horaFin=(this.solicitudSala.horaFin+1);
-          var minRestantes=(sumaHoras-60);
-          alert('minutos restantes'+(minRestantes));
-          alert('sumar a horas y a minutos tambi');
 
-          this.solicitudSala.horaFin.hour=(this.solicitudSala.horaFin.hour+1);
-          this.solicitudSala.horaFin.minute=minRestantes;
-         // alert('validar intervalo');
-        }else if(sumaHoras = 60){
-          alert('sumarle solo 1 hora');
-          this.solicitudSala.horaFin.hour=(this.solicitudSala.horaFin.hour+1);
-        }
-      } else if(resultadoRestaMinutos == 0){
-        this.solicitudSala.horaFin.minute=(this.solicitudSala.horaFin.minute+intevarlo);
-        alert('los minutos son iguales');
-      }else{
-        alert('todo bien');
-      }
 
-    } else if (this.solicitudSala.horaInicio.hour > this.solicitudSala.horaFin.hour) {
-      alert('no puede ser menor la hora final');
-    }
-    else {
-      alert('son diferentes');
-    }
-    alert('hoa final'+this.solicitudSala.horaFin.hour+':'+this.solicitudSala.horaFin.minute);
-    
+    // var intevarlo = 30;
+    // var hora = 60;
+
+    // if (this.solicitudSala.horaInicio.hour == this.solicitudSala.horaFin.hour) {
+
+    //   if(this.solicitudSala.horaInicio.minute > this.solicitudSala.horaFin.minute){
+    //     this.solicitudSala.horaFin.minute=this.solicitudSala.horaFin.minute-(-this.solicitudSala.horaFin.minute-intevarlo);
+    //     var restaMin = this.solicitudSala.horaInicio.minute - this.solicitudSala.horaFin.minute;
+    //   }
+
+    // else{
+    //   restaMin = this.solicitudSala.horaInicio.minute - this.solicitudSala.horaFin.minute;
+    //   alert('hora es igual'+restaMin);
+
+    //   if (restaMin==0)
+    //   {
+    //     alert('hora y minuto exactamente iguales');
+    //     this.solicitudSala.horaFin.minute=this.solicitudSala.horaFin.minute+intevarlo;
+    //     var resultado =this.solicitudSala.horaFin.minute;
+
+    //     if(resultado==hora){
+    //       this.solicitudSala.horaFin.hour=this.solicitudSala.horaFin.hour+1;
+    //     } else  if(resultado>hora){
+    //       this.solicitudSala.horaFin.hour=this.solicitudSala.horaFin.hour+1;
+    //       this.solicitudSala.horaFin.minute= resultado-hora;
+    //     }else{
+    //       this.solicitudSala.horaFin.minute= resultado;
+    //     }
+    //   }
+    //   else if(restaMin<0)
+    //     {
+    //       var sumaMin = this.solicitudSala.horaFin.minute-(restaMin);
+    //       alert('hora es igual pero minutos no'+sumaMin +'..'+restaMin);
+    //       if(sumaMin>=hora){
+    //         this.solicitudSala.horaFin.hour=this.solicitudSala.horaFin.hour+1;
+    //         this.solicitudSala.horaFin.minute=sumaMin-hora;
+    //       }else{
+    //         this.solicitudSala.horaFin.minute=sumaMin;
+    //       }
+    //     } else if(restaMin>0){
+    //       this.solicitudSala.horaFin.minute=this.solicitudSala.horaFin.minute+intevarlo;
+    //     }
+    //   }
+    //  }
+    // else if(this.solicitudSala.horaInicio.hour < this.solicitudSala.horaFin.hour){
+    //   alert('validar minutos');
+    // }
+    // else if(this.solicitudSala.horaInicio.hour > this.solicitudSala.horaFin.hour){
+    //   alert('validar minutos y sumar hora');
+    // }
+    //sigue validadr más
+
+    //  alert('hora inicio' + this.solicitudSala.horaInicio.hour+':'+this.solicitudSala.horaInicio.minute +
+    //   "\n" + 'hora fin' + this.solicitudSala.horaFin.hour +':'+this.solicitudSala.horaFin.minute);
+    // if (this.solicitudSala.horaInicio.hour == this.solicitudSala.horaFin.hour) {
+    //   var resultadoRestaMinutos = (this.solicitudSala.horaInicio.minute - this.solicitudSala.horaFin.minute);
+    //  alert(resultadoRestaMinutos);
+    //   if (resultadoRestaMinutos < 0) {
+    //     var sumaHoras = (this.solicitudSala.horaFin.minute + intevarlo);
+    //     alert('sumar'+sumaHoras);
+    //     if (sumaHoras > 60) {
+    //      // this.solicitudSala.horaFin=(this.solicitudSala.horaFin+1);
+    //       var minRestantes=(sumaHoras-60);
+    //       alert('minutos restantes'+(minRestantes));
+    //       alert('sumar a horas y a minutos tambi');
+
+    //       this.solicitudSala.horaFin.hour=(this.solicitudSala.horaFin.hour+1);
+    //       this.solicitudSala.horaFin.minute=minRestantes;
+    //      // alert('validar intervalo');
+    //     }else if(sumaHoras = 60){
+    //       alert('sumarle solo 1 hora');
+    //       this.solicitudSala.horaFin.hour=(this.solicitudSala.horaFin.hour+1);
+    //     }
+    //   } else if(resultadoRestaMinutos == 0){
+    //     this.solicitudSala.horaFin.minute=(this.solicitudSala.horaFin.minute+intevarlo);
+    //     alert('los minutos son iguales');
+    //   }else{
+    //     alert('todo bien');
+    //   }
+
+    // } else if (this.solicitudSala.horaInicio.hour > this.solicitudSala.horaFin.hour) {
+    //   alert('no puede ser menor la hora final');
+    // }
+    // else {
+    //   alert('son diferentes');
+    // }
+    // alert('hoa final'+this.solicitudSala.horaFin.hour+':'+this.solicitudSala.horaFin.minute);
+
     //this.timeStruct.minute=30;
-      const newDate: Date = setHours(
-        setMinutes(
-          setSeconds(this.date, this.timeStruct.second),
-          this.solicitudSala.horaFin.minute 
-        ),
-        this.solicitudSala.horaFin.hour
-      );
-      console.log(newDate);
-      this.onChangeCallback(newDate);
+    const newDate: Date = setHours(
+      setMinutes(
+        setSeconds(this.date, this.timeStruct.second),
+        this.solicitudSala.horaFin.minute
+      ),
+      this.solicitudSala.horaFin.hour
+    );
+    console.log(newDate);
+    this.onChangeCallback(newDate);
   }
 
 }
