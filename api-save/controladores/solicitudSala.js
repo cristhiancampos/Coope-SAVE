@@ -103,7 +103,7 @@ function modificarSolicitudSala(req, res) {
         }
       }
     });
-    
+  }
 
     function eliminarSolicitudSala(req, res) {
       var salicitudId = req.params.id;
@@ -131,4 +131,3 @@ module.exports = {
   eliminarSolicitudSala
 }
 
-}
