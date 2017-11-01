@@ -68,7 +68,7 @@
               <th><button   class="btn btn-success btn-accion" [disabled]="sala.recursos==0" data-toggle="modal" (click)="getNombreRecurso(sala)" data-target="#modalRecursos" aria-hidden="true"> <i class="fa fa-tasks" aria-hidden="true"></i></button></th>
               <th style="text-align: center">
                 <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-                <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete-solicitud"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+                <button class="btn btn-danger btn-accion" data-toggle="modal"  (click)="setIdEliminar(sala._id)"data-target="#modal-delete-solicitud"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
               </th>
             </tr>
           </tbody>

@@ -167,25 +167,27 @@ export class AdminSolicitudComponent implements OnInit {
    
   }
 
-  // eliminarSolicitudSala() {
-  //   this._servSolicitudSala.eliminarSolicitudSala(this.idEliminar).subscribe(
-  //     response => {
+  eliminarSolicitudSala() {
 
-  //       if (!response.message._id) {
-  //         this.msjError("La Solicitud no pudo ser Eliminada");
-  //       } else {
-  //         this.msjExitoso("Sala Eliminada Exitosamente");
-  //         this.obtenerSolicitudSalas();
-  //       }
-  //     }, error => {
-  //       var alertMessage = <any>error;
-  //       if (alertMessage != null) {
-  //         var body = JSON.parse(error._body);
-  //         this.msjError("La Solicitud no pudo ser Eliminada");
-  //       }
-  //     }
-  //   );
-  // }
+    console.log(this.idEliminar);
+    this._servSolicitudSala.eliminarSolicitudSala(this.idEliminar).subscribe(
+      response => {
+
+        if (!response.message._id) {
+          this.msjError("La Solicitud no pudo ser Eliminada");
+        } else {
+          this.msjExitoso("Sala Eliminada Exitosamente");
+          this.obtenerSolicitudSalas();
+        }
+      }, error => {
+        var alertMessage = <any>error;
+        if (alertMessage != null) {
+          var body = JSON.parse(error._body);
+          this.msjError("La Solicitud no pudo ser Eliminada");
+        }
+      }
+    );
+  }
 
   setCurrenIndex(index:any){
  this.currenIndex= index
