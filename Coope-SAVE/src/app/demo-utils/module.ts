@@ -11,7 +11,7 @@ import { CalendarHeaderComponent } from './calendar-header.component';
     FormsModule,
     CalendarModule
   ],
-  declarations: [CalendarHeaderComponen],
+  declarations: [CalendarHeaderComponent],
   exports: [CalendarHeaderComponent] 
 })
 export class DemoUtilsModule {}
