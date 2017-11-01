@@ -3,10 +3,10 @@ import * as $ from 'jquery';
 import swal from 'sweetalert2';
 import { ServicioUsuario } from '../servicios/usuario';
 import { ServicioSolicitudSala } from '../servicios/solicitudSala';
-import {ServicioRecursos} from '../servicios/recurso';
+import { ServicioRecursos } from '../servicios/recurso';
 import { Usuario } from '../modelos/usuario';
 import { Recurso } from '../modelos/recursos';
-import { SolicitudSala} from '../modelos/solicitudSala';
+import { SolicitudSala } from '../modelos/solicitudSala';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
 
@@ -14,20 +14,25 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
   selector: 'app-admin-solicitud',
   templateUrl: './admin-solicitud.component.html',
   styleUrls: ['./admin-solicitud.component.css'],
-  providers: [ ServicioRecursos, ServicioSolicitudSala, ServicioUsuario] 
+  providers: [ServicioRecursos, ServicioSolicitudSala, ServicioUsuario]
 })
 export class AdminSolicitudComponent implements OnInit {
 
   private sala = true;// Boolean para controlar que tabla de solicitudes se muestras
   private token;
   private identity;
-  
+
   public solicitudSala: SolicitudSala;
   public solicitudSalaEdit: SolicitudSala;
-  public solicitudSalas= [];
-  public usuariosList= [];
-  public recursosList=[];
-  public listaNombreRecursos= [];
+  public solicitudSalaTemp: SolicitudSala;
+  public indice= [];
+  public codigosRecursosTemp= [];
+  public solicitudSalas = [];
+  public usuariosList = [];
+  public recursosList = [];
+  public listaNombreRecursos = [];
+  public currenIndex;
+  public idEliminar;
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
@@ -44,88 +49,150 @@ export class AdminSolicitudComponent implements OnInit {
     this.obtenerSolicitudSalas();
   }
 
-obtenerSolicitudSalas(){
-  this._servSolicitudSala.obtenerTodasSolicitudes().subscribe(
-    response => {
+  obtenerSolicitudSalas() {
+    this._servSolicitudSala.obtenerTodasSolicitudes().subscribe(
+      response => {
 
-      if (response.message) {        
-        this.solicitudSalas = response.message;
-      } else {//no hay Salas registradas
+        if (response.message) {
+          this.solicitudSalas = response.message;
+        } else {//no hay Salas registradas
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+        }
       }
-    }, error => {
-      var errorMensaje = <any>error;
-      if (errorMensaje != null) {
-        var body = JSON.parse(error._body);
+    );
+  }
+
+  obtenerUsuarios() {
+
+    this._servUsuario.obtenerUsuarios().subscribe(
+      response => {
+        if (response.message) {
+
+          this.usuariosList = response.message;
+        } else {//No hay usuarios registrdos//
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+        }
       }
+    );
+  }
+
+  getNombre(id: any) {
+
+    for (var i = 0; i < this.usuariosList.length; i++) {
+      if (id == this.usuariosList[i]._id) {
+        return this.usuariosList[i].nombre;
+
+      } else { }
     }
-  );
-}
 
-obtenerUsuarios(){
+  }
+  obtenerRecursos() {
 
-  this._servUsuario.obtenerUsuarios().subscribe(
-    response => {
-          if(response.message){
+    this._servRecurso.obtenerRecursos().subscribe(
+      response => {
+        if (response.message) {
 
-            this.usuariosList=  response.message;
-            console.log(this.usuariosList);
-          }else{//No hay usuarios registrdos//
-          }
-          }, error => {
-            var errorMensaje = <any>error;
-            if (errorMensaje != null) {
-              var body = JSON.parse(error._body);
-            }
-          }
-  );
-}
-
-getNombre(id: any){
-  
-      for(var i=0; i< this.usuariosList.length; i++){
-        if(id == this.usuariosList[i]._id){
-          console.log(this.usuariosList[i].nombre);
-          return this.usuariosList[i].nombre;
-
-        }else {}
+          this.recursosList = response.message;    
+        } else {//No hay usuarios registrdos//
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+        }
       }
-  
-}
-obtenerRecursos(){
-  
-  this._servRecurso.obtenerRecursos().subscribe(
-    response => {
-          if(response.message){
+    );
+  }
 
-            this.recursosList=  response.message;
-            console.log(this.recursosList);
-          }else{//No hay usuarios registrdos//
-          }
-          }, error => {
-            var errorMensaje = <any>error;
-            if (errorMensaje != null) {
-              var body = JSON.parse(error._body);
-            }
-          }
-  );
-}
+  getNombreRecurso(id: any) {
 
-getNombreRecurso(id:any){
-
-  let index =id.recursos.length;
-  for(var e=0; e< index;e++)
-  {
-    for( var i=0; i< this.recursosList.length; i++){
-      if(id.recursos[e]== this.recursosList[i]._id){
-        this.listaNombreRecursos[e]= this.recursosList[i].nombre;
-        break;
+    this.listaNombreRecursos= [];
+    this.codigosRecursosTemp= []; 
+    this.solicitudSalaTemp= id;
+    let index = id.recursos.length;
+    for (var e = 0; e < index; e++) {
+      this.indice[e]=[e];
+      for (var i = 0; i < this.recursosList.length; i++) {
+        if (id.recursos[e] == this.recursosList[i]._id) {
+          this.listaNombreRecursos[e] = this.recursosList[i].nombre; 
+          this.codigosRecursosTemp[e]=id.recursos[e];
+          break;
+        }
       }
+
+    }
+   
+    return this.listaNombreRecursos;
+
+  }
+
+  elimarRecursoSoicitud() {
+
+    let index= this.currenIndex;
+    this.solicitudSalaTemp.recursos = this.codigosRecursosTemp;
+      this.listaNombreRecursos.splice(index,1);
+      this.codigosRecursosTemp.splice(index, 1);
+    console.log(this.solicitudSalaTemp);
+    this._servSolicitudSala.modificarSolicitudSala(this.solicitudSalaTemp).subscribe(
+      response => {
+
+        if (!response.message._id) {
+          this.msjError("El Recurso no se pudo Eliminar");
+        } else {
+          this.obtenerSolicitudSalas();
+          this.msjExitoso("Recurso Eliminado Exitosamente");
+        }
+      }, error => {
+        var alertMessage = <any>error;
+        if (alertMessage != null) {
+          var body = JSON.parse(error._body);
+          this.msjError("La Sala no pudo ser Modificada");
+
+        }
+      }
+    );
+
+    if(this.listaNombreRecursos.length <1){
+      this.cerrarModal('#modalRecursos');
+
     }
    
   }
-  return this.listaNombreRecursos;
-  
-}
+
+  // eliminarSolicitudSala() {
+  //   this._servSolicitudSala.eliminarSolicitudSala(this.idEliminar).subscribe(
+  //     response => {
+
+  //       if (!response.message._id) {
+  //         this.msjError("La Solicitud no pudo ser Eliminada");
+  //       } else {
+  //         this.msjExitoso("Sala Eliminada Exitosamente");
+  //         this.obtenerSolicitudSalas();
+  //       }
+  //     }, error => {
+  //       var alertMessage = <any>error;
+  //       if (alertMessage != null) {
+  //         var body = JSON.parse(error._body);
+  //         this.msjError("La Solicitud no pudo ser Eliminada");
+  //       }
+  //     }
+  //   );
+  // }
+
+  setCurrenIndex(index:any){
+ this.currenIndex= index
+  }
+  setIdEliminar(id:any){
+    this.idEliminar= id;
+  }
 
 
 
@@ -196,6 +263,23 @@ getNombreRecurso(id:any){
       this.sala = false;
     }
   }
+  msjExitoso(texto: string){
+    swal({
+      position: 'top',
+      type: 'success',
+      title: texto,
+      showConfirmButton: false,
+      timer: 2500
+    })
+  }
+  
+  msjError(texto: string){
+    swal(
+      'Oops...',
+      texto,
+      'error'
+    )
+  }
 
   cerrarModal(modalId: any) {
     $(".modal-backdrop").remove();
@@ -211,16 +295,16 @@ getNombreRecurso(id:any){
     $(modalId).css('display', 'block');
   }
 
-  estiloBotones(){
+  estiloBotones() {
     $('#bnt-sala').css('background', '#0069d9');
     $('#bnt-vehiculo').css('background', '#eee');
 
-    $('#bnt-sala').click(function(){
+    $('#bnt-sala').click(function () {
       $('#bnt-sala').css('background', '#0069d9');
       $('#bnt-vehiculo').css('background', '#eee');
     });
 
-    $('#bnt-vehiculo').click(function(){
+    $('#bnt-vehiculo').click(function () {
       $('#bnt-vehiculo').css('background', '#0069d9');
       $('#bnt-sala').css('background', '#eee');
     });

@@ -113,3 +113,16 @@ li{
     display: inline-block; list-style-type: none;
   
 }
+
+footer {
+	text-align: center;
+	background-color: #343a40;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 10%;
+	color: white;
+	padding-top: 35px;
+	margin-bottom: 0px;
+	
+	} 

@@ -65,11 +65,10 @@
               <th>{{sala.horaInicio.hour}}:{{sala.horaInicio.minute}}</th>
               <th>{{sala.horaFin.hour}}: {{sala.horaFin.minute}}</th>
               <th>{{sala.cantidadPersonas}}</th>
-              <th><button class="btn btn-success btn-accion" data-toggle="modal" (click)="getNombreRecurso(sala)" data-target="#modalRecursos" aria-hidden="true"> <i class="fa fa-tasks" aria-hidden="true"></i></button></th>
-              
+              <th><button   class="btn btn-success btn-accion" [disabled]="sala.recursos==0" data-toggle="modal" (click)="getNombreRecurso(sala)" data-target="#modalRecursos" aria-hidden="true"> <i class="fa fa-tasks" aria-hidden="true"></i></button></th>
               <th style="text-align: center">
                 <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-                <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+                <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete-solicitud"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
               </th>
             </tr>
           </tbody>
@@ -83,7 +82,7 @@
 <!-- Sección de modal de Recursos-->
 
 
-<div class="modal fade bd-example-modal-sm " id="modalRecursos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div  class="modal fade bd-example-modal-sm " id="modalRecursos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
 aria-hidden="true">
 <div class="modal-dialog bd-example-modal-sm " role="document">
   <div class="modal-content">
@@ -109,7 +108,7 @@ aria-hidden="true">
               <th>{{lista}}</th>
               
               <th style="text-align: center">
-                <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+                <button class="btn btn-danger btn-accion" data-toggle="modal" (click)="setCurrenIndex(i)"  data-target="#modal-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
               </th>
             </tr>
           </tbody>
@@ -236,7 +235,7 @@ aria-hidden="true">
       </ul>
     </nav>
 </div>
-<!-- Modal  eliminar solicitud-->
+<!-- Modal  eliminar Recursosolicitud-->
 <div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -254,8 +253,38 @@ aria-hidden="true">
           <h5>Está seguro que desea eliminar la solicitud? </h5>
           <br>
           <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-default btn-modal-suc" data-dismiss="modal">Confirmar</button>
+          <button type="button" class="btn btn-default btn-modal-suc" (click)="elimarRecursoSoicitud()"  data-dismiss="modal">Confirmar</button>
         </div>
       </div>
     </div>
   </div>
+  <!-- Modal  eliminar solicitud-->
+<div class="modal fade" id="modal-delete-solicitud" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="color: #FFF;background: #0069d9">
+        <h5 class="modal-title" id="exampleModalLabel">Eliminar Solicitud</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-body" style="text-align: center">
+        <span >
+          <i class="fa fa-trash fa-5x" aria-hidden="true" style="color:red"></i> 
+        </span>
+        <br><br>
+        <h5>Está seguro que desea eliminar la solicitud? </h5>
+        <br>
+        <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-default btn-modal-suc" (click)="eliminarSolicitudSala()"  data-dismiss="modal">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<section>
+  <footer >
+    
+      &copy; Coopesparta R.L.
+  
+  </footer>
+  </section>

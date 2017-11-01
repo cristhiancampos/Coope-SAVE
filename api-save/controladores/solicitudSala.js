@@ -80,9 +80,55 @@ function obtenerTodasSolicitudes(req, res){
 
 }
 
+
+function modificarSolicitudSala(req, res) {
+  
+  
+    var params = req.body;
+    var solicitudId = params._id;
+    params.updated_at = new Date();
+  
+  
+    SolicitudSala.findByIdAndUpdate(solicitudId, params, (err, modificarSolicitud) => {
+      if (err) {
+  
+        res.status(500).send({ message: 'Error al actualizar la sala' });
+      } else {
+        if (!modificarSolicitud) {
+  
+          res.status(404).send({ message: 'No se ha podido actualizar la sala' });
+        } else {
+  
+          res.status(200).send({ message: modificarSolicitud });
+        }
+      }
+    });
+    
+
+    function eliminarSolicitudSala(req, res) {
+      var salicitudId = req.params.id;
+      var update = req.body;
+      SolicitudSala.findByIdAndUpdate(salicitudId, { $set: { estado: 'Eliminado' } }, { new: true }, (err, salicitudDeleted) => {
+        if (err) {
+          res.status(500).send({ message: 'Error al eliminar la sala' });
+        } else {
+          if (!salicitudDeleted) {
+            res.status(404).send({ message: 'No se ha podido eliminar la' });
+          } else {
+            res.status(200).send({ message: salicitudDeleted });
+          }
+        }
+      });
+    }
+  
+
 module.exports = {
   agregarSolicitud,
   obtenerFechaActual,
   obtenerSolicitudesSalas,
-  obtenerTodasSolicitudes
-};
+  obtenerTodasSolicitudes,
+  modificarSolicitudSala,
+  eliminarSolicitudSala
+}
+
+}
