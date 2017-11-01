@@ -237,7 +237,8 @@ export class SolicitudSalaComponent implements OnInit {
       this.solicSala = true;
     } else {
       this.solicSala = false;
-      this.obtenerSolicitudes(this.solicitudSala.fecha);
+        this.obtenerSolicitudes(this.solicitudSala.fecha);
+        this.obtenerSolicitudes(this.solicitudSala.fecha);
     }
   }
   
@@ -276,13 +277,13 @@ export class SolicitudSalaComponent implements OnInit {
             if (date.getDate() < serverDate.getDate()) {
               this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
             } else {
-              alert('entra aqui 1');
+             // alert('entra aqui 1');
               this.writeValue(date);
               this.abrirModal('#modal-add-new-request');
              
             }
           } else {
-           alert('entra aqui 2');
+          // alert('entra aqui 2');
            this.writeValue(date);
             this.abrirModal('#modal-add-new-request');            
           }
@@ -290,9 +291,9 @@ export class SolicitudSalaComponent implements OnInit {
         }
       }, error => {
         var errorMensaje = <any>error;
-        if (errorMensaje != null) {
-          var body = JSON.parse(error._body);
-        }
+        // if (errorMensaje != null) {
+        //   var body = JSON.parse(error._body);
+        // }
       }
     );
     // this.prueba(date);
@@ -320,7 +321,7 @@ export class SolicitudSalaComponent implements OnInit {
          if (!response.message) {         
            alert('no hay registros');
          } else {//no hay Salas registradas
-           alert(' hay registros');
+           //alert(' hay registros');
            //console.log('solicitudes salas');
             array = response.message;
            this.solicitudesdia=array;
@@ -348,7 +349,7 @@ export class SolicitudSalaComponent implements OnInit {
               if (userDate.getDate() < serverDate.getDate()) {
                 this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
               } else {
-                alert('entra aqui 1');
+               // alert('entra aqui 1');
                 //this.obtenerRecursos();
 
                  this.abrirModal('#modal-add-new-request');
@@ -357,7 +358,7 @@ export class SolicitudSalaComponent implements OnInit {
                
               }
             } else {
-             alert('entra aqui 2');
+             //alert('entra aqui 2');
 
               this.abrirModal('#modal-add-new-request');
             //   //this.obtenerRecursos();
