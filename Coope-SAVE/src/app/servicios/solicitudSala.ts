@@ -32,14 +32,7 @@ export class ServicioSolicitudSala{
         .map(res=>res.json());
     }
 
-    // obtenerSolicitudes(fecha:any)
-    // { 
-    //     console.log('dfeee servicio');
-    //     console.log(fecha);
-    //     let headers = new Headers({'Content-Type':'application/json'});
-    //     return this._http.get(this.url+'obtenerSolicitudesSalas/'+fecha,{headers:headers})
-    //     .map(res=>res.json());
-    // }
+
     obtenerSolicitudes(fecha:any){
         let json = JSON.stringify(fecha);
         let params = json; 
