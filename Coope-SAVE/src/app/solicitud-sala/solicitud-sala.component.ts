@@ -238,7 +238,7 @@ export class SolicitudSalaComponent implements OnInit {
     } else {
       this.solicSala = false;
         this.obtenerSolicitudes(this.solicitudSala.fecha);
-        this.obtenerSolicitudes(this.solicitudSala.fecha);
+       // this.obtenerSolicitudes(this.solicitudSala.fecha);
     }
   }
   
