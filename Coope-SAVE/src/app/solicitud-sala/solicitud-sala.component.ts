@@ -1,10 +1,12 @@
 
 import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef } from '@angular/core';
-import { startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours,
-  getSeconds,getMinutes,getHours,getDate,getMonth,getYear,setSeconds,setMinutes,setHours,setDate,setMonth,setYear } from 'date-fns';
+import {
+  startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours,
+  getSeconds, getMinutes, getHours, getDate, getMonth, getYear, setSeconds, setMinutes, setHours, setDate, setMonth, setYear
+} from 'date-fns';
 import { Subject } from 'rxjs/Subject';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent} from 'angular-calendar';
+import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent } from 'angular-calendar';
 import * as $ from 'jquery';
 import { Usuario } from '../modelos/usuario';
 import { SolicitudSala } from '../modelos/solicitudSala';
@@ -36,7 +38,7 @@ const colors: any = {
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './solicitud-sala.component.html',
   styleUrls: ['./solicitud-sala.component.css'],
-  providers: [ServicioSolicitudSala,ServicioSala, ServicioRecursos]
+  providers: [ServicioSolicitudSala, ServicioSala, ServicioRecursos]
 })
 
 export class SolicitudSalaComponent implements OnInit {
@@ -64,7 +66,6 @@ export class SolicitudSalaComponent implements OnInit {
       }
     }
   ];
-
 
   refresh: Subject<any> = new Subject();
 
@@ -142,7 +143,7 @@ export class SolicitudSalaComponent implements OnInit {
   activeDayIsOpen = true;
 
   //*********************************************AGREGADOS***************************** */
-  ngOnInit(){
+  ngOnInit() {
     this.estiloBotones();
     console.log('cargó el calendario');
     this.obtenerSolicitudSalas();
@@ -156,13 +157,15 @@ export class SolicitudSalaComponent implements OnInit {
   tempRecursos = [];
   currentDate;
   private solicSala = true;
-  public solicitudesdia=[];
+  public solicitudesdia = [];
 
   @Input() placeholder: string;
   date: Date;
   dateStruct: NgbDateStruct;
   timeStruct: NgbTimeStruct;
   datePicker: any;
+  
+ // dateStruct ={year: 2017, month: 11, day: 8} ;
 
   private onChangeCallback: (date: Date) => void = () => { };
 
@@ -177,6 +180,7 @@ export class SolicitudSalaComponent implements OnInit {
     this.obtenerRecursos();
     this.obtenerSalas();
     this.estiloBotones();
+  //  this.dateStruct ={year:0, month:0, day: 0} ;
   }
   solicitud(num: any) {
     if (num === 1) {
@@ -185,17 +189,17 @@ export class SolicitudSalaComponent implements OnInit {
       this.solicSala = false;
     }
   }
-  
-  estiloBotones(){
+
+  estiloBotones() {
     $('#bnt-lista').css('background', '#0069d9');
     $('#bnt-solicitud').css('background', '#eee');
 
-    $('#bnt-lista').click(function(){
+    $('#bnt-lista').click(function () {
       $('#bnt-lista').css('background', '#0069d9');
       $('#bnt-solicitud').css('background', '#eee');
     });
 
-    $('#bnt-vehiculo').click(function(){
+    $('#bnt-vehiculo').click(function () {
       $('#bnt-solicitud').css('background', '#0069d9');
       $('#bnt-lista').css('background', '#eee');
     });
@@ -206,11 +210,11 @@ export class SolicitudSalaComponent implements OnInit {
     this._servSolicitud.obtenerTodasSolicitudes().subscribe(
       response => {
         if (response.message) {
-          let listaSolicitudes=response.message;
-          this.events=[];
-         for (var index = 0; index < listaSolicitudes.length; index++) {
-           this.addEvent(listaSolicitudes[index]);
-         }  
+          let listaSolicitudes = response.message;
+          this.events = [];
+          for (var index = 0; index < listaSolicitudes.length; index++) {
+            this.addEvent(listaSolicitudes[index],true);
+          }
         } else {//no hay Salas registradas
         }
       }, error => {
@@ -223,10 +227,14 @@ export class SolicitudSalaComponent implements OnInit {
   }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }) {
-    this.solicitudSala.fecha=date;
+    this.solicitudSala.fecha = date;
     this.solicitudSala.horaInicio = { hour: 7, minute: 0 };
     this.solicitudSala.horaFin = { hour: 11, minute: 0 };
     this.activeDayIsOpen = false;
+
+    this.dateStruct ={year: date.getFullYear(), 
+      month:date.getMonth(), day: date.getDate()} ;
+   // this.da
     this._servSolicitud.fechaActual().subscribe(
       response => {
         if (response.currentDate) {
@@ -239,20 +247,20 @@ export class SolicitudSalaComponent implements OnInit {
           } else if (((date.getMonth() + 1) < (serverDate.getMonth() + 1))) {
             this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual 2');
           } else if (((date.getMonth() + 1) == (serverDate.getMonth() + 1))) {
-            if (date.getDate()+1 < serverDate.getDate()) {
-              this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual 3'+date.getDate()+"---"+serverDate.getDate());
+            if (date.getDate() + 1 < serverDate.getDate()) {
+              this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual 3' + date.getDate() + "---" + serverDate.getDate());
             } else {
-             // alert('entra aqui 1');
-             this.obtenerSolicitudes(date);
-             // this.writeValue(date);
+              // alert('entra aqui 1');
+              this.obtenerSolicitudes(date);
+              // this.writeValue(date);
               //this.abrirModal('#modal-add-new-request');
-             
+
             }
           } else {
-          // alert('entra aqui 2');
-          this.obtenerSolicitudes(date);
-           //this.writeValue(date);
-           // this.abrirModal('#modal-add-new-request');            
+            // alert('entra aqui 2');
+            this.obtenerSolicitudes(date);
+            //this.writeValue(date);
+            // this.abrirModal('#modal-add-new-request');            
           }
         } else {
         }
@@ -262,11 +270,11 @@ export class SolicitudSalaComponent implements OnInit {
         //   var body = JSON.parse(error._body);
         // }
       }
-   );
+    );
 
     // this.prueba(date);
     // console.log(this.solicitudesdia);
- 
+
 
     // if (isSameMonth(date, this.viewDate)) {
     //   if (
@@ -282,71 +290,76 @@ export class SolicitudSalaComponent implements OnInit {
   }
   obtenerSolicitudes(userDate) {
     let array;
-     this.solicitudSala.fecha = userDate;
-     this._servSolicitud.obtenerSolicitudes(this.solicitudSala).subscribe(
-       response => {
-         if (!response.message) {         
+    this.solicitudSala.fecha = userDate;
+    this._servSolicitud.obtenerSolicitudes(this.solicitudSala).subscribe(
+      response => {
+        if (!response.message) {
           // alert('no hay registros');
-         } else {//no hay Salas registradas
-           //alert(' hay registros');
-           //console.log('solicitudes salas');
-            array = response.message;
-           this.solicitudesdia=array;
-           this.abrirModal('#modal-add-new-request');
-           //console.log(array);
-         }
-       }, error => {
-       // alert('erro');
-       }
-     );
-   }
-    //este método verificaque la fecha seleccionada sea mayor o igual a la fecha del servidor, para poder realizar la solicitud correctamente.
-    verificarFechaSeleccionada(userDate: Date) {
-      this._servSolicitud.fechaActual().subscribe(
-        response => {
-          if (response.currentDate) {
-            this.currentDate = response.currentDate;
-            var momentDate = moment(this.currentDate, 'YYYY-MM-DD HH:mm:ss');
-            let serverDate = momentDate.toDate();
-  
-            if (userDate.getFullYear() < serverDate.getFullYear()) {
-              this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
-            } else if (((userDate.getMonth() + 1) < (serverDate.getMonth() + 1))) {
-              this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
-            } else if (((userDate.getMonth() + 1) == (serverDate.getMonth() + 1))) {
-              if (userDate.getDate() < serverDate.getDate()) {
-                this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
-              } else {
-               // alert('entra aqui 1');
-                //this.obtenerRecursos();
+        } else {//no hay Salas registradas
+          //alert(' hay registros');
+          //console.log('solicitudes salas');
+          array = response.message;
+          this.solicitudesdia = array;
+          //this.updateDate();
+          // this.dateStruct.year=2017;
+          // this.dateStruct.month=11;
+          // this.dateStruct.day= 16;
+          console.log(this.dateStruct);
+          this.abrirModal('#modal-add-new-request');
+          //console.log(array);
+        }
+      }, error => {
+        // alert('erro');
+      }
+    );
+  }
+  //este método verificaque la fecha seleccionada sea mayor o igual a la fecha del servidor, para poder realizar la solicitud correctamente.
+  verificarFechaSeleccionada(userDate: Date) {
+    this._servSolicitud.fechaActual().subscribe(
+      response => {
+        if (response.currentDate) {
+          this.currentDate = response.currentDate;
+          var momentDate = moment(this.currentDate, 'YYYY-MM-DD HH:mm:ss');
+          let serverDate = momentDate.toDate();
 
-                 //this.abrirModal('#modal-add-new-request');
-               
-                 this.writeValue(userDate);
-                 this.obtenerSolicitudes(userDate);
-               
-              }
+          if (userDate.getFullYear() < serverDate.getFullYear()) {
+            this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
+          } else if (((userDate.getMonth() + 1) < (serverDate.getMonth() + 1))) {
+            this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
+          } else if (((userDate.getMonth() + 1) == (serverDate.getMonth() + 1))) {
+            if (userDate.getDate() < serverDate.getDate()) {
+              this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
             } else {
-             //alert('entra aqui 2');
+              // alert('entra aqui 1');
+              //this.obtenerRecursos();
 
-             this.writeValue(userDate);
-             this.obtenerSolicitudes(userDate);
+              //this.abrirModal('#modal-add-new-request');
+
+              this.writeValue(userDate);
+              this.obtenerSolicitudes(userDate);
+
+            }
+          } else {
+            //alert('entra aqui 2');
+
+            this.writeValue(userDate);
+            this.obtenerSolicitudes(userDate);
             //   //this.obtenerRecursos();
             //  this.obtenerSolicitudes(userDate);
             //   this.writeValue(userDate);
-              
-            }
-          } else {
+
           }
-        }, error => {
-          var errorMensaje = <any>error;
-          if (errorMensaje != null) {
-            var body = JSON.parse(error._body);
-          }
+        } else {
         }
-      );
-  
-    }
+      }, error => {
+        var errorMensaje = <any>error;
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+        }
+      }
+    );
+
+  }
 
   eventTimesChanged({
     event,
@@ -369,27 +382,38 @@ export class SolicitudSalaComponent implements OnInit {
     this.modal.open(this.modalContent, { size: 'lg' });
   }
 
-  addEvent(solicitud): void {
+  addEvent(solicitud,isDragable): void {
+
+
+    ///////////////////////////////////////////////////////////////
     let fechaInicio = new Date();
     fechaInicio.setFullYear(solicitud.fecha.year);
-    fechaInicio.setMonth(solicitud.fecha.month-1);
+    fechaInicio.setMonth(solicitud.fecha.month - 1);
     fechaInicio.setDate(solicitud.fecha.day);
-    //fechaInicio.setHours(solicitud.horaInicio.hour);
-    //fechaInicio.setMinutes(solicitud.horaInicio.minute);
+    fechaInicio.setHours(solicitud.horaInicio.hour);
+    fechaInicio.setMinutes(solicitud.horaInicio.minute);
+
+    let fechaFin = new Date();
+    fechaFin.setFullYear(solicitud.fecha.year);
+    fechaFin.setMonth(solicitud.fecha.month - 1);
+    fechaFin.setDate(solicitud.fecha.day);
+    fechaFin.setHours(solicitud.horaFin.hour);
+    fechaFin.setMinutes(solicitud.horaFin.minute);
     this.events.push({
       title: solicitud.descripcion,
       start: startOfDay(fechaInicio),
-      end: endOfDay(fechaInicio),
+      end: endOfDay(fechaFin),
       color: colors.yellow,
       actions: this.actions,
-      draggable: true,
+      draggable: isDragable,
       resizable: {
         beforeStart: true,
         afterEnd: true
       }
     });
-   this.activeDayIsOpen=false;
+    this.activeDayIsOpen = false;
     this.refresh.next();
+    ////////////////////////////////////////////////////////////////
   }
 
   ///***************************************************METODOS AGREGADOS***********************************
@@ -408,14 +432,11 @@ export class SolicitudSalaComponent implements OnInit {
       }
     );
   }
-
   obtenerRecursos() {
     this._servRecurso.obtenerRecursosHabilitados().subscribe(
       response => {
         if (response.message) {
           this.recursos = response.message;
-          console.log('recursos hábiles');
-          console.log(this.recursos);
         } else {//no hay Salas registradas
         }
       }, error => {
@@ -428,49 +449,49 @@ export class SolicitudSalaComponent implements OnInit {
   }
 
   agregarSolicitud() {
-    var minInicial=((this.solicitudSala.horaInicio.hour*60)+this.solicitudSala.horaInicio.minute);
-    var minFinal=((this.solicitudSala.horaFin.hour*60)+this.solicitudSala.horaFin.minute);
-    if (minFinal-minInicial<=0) {
+    var minInicial = ((this.solicitudSala.horaInicio.hour * 60) + this.solicitudSala.horaInicio.minute);
+    var minFinal = ((this.solicitudSala.horaFin.hour * 60) + this.solicitudSala.horaFin.minute);
+    if (minFinal - minInicial <= 0) {
       //alert('no puede agregar');
-   }else {
-     if(minFinal-minInicial>0 && minFinal-minInicial<30){
-     // alert('no puede agregar 2');
-     }
-    else{
-    //alert('puede agregar');
-      let identity = localStorage.getItem('identity');
-      let user = JSON.parse(identity);
-      let recordar = localStorage.getItem('remember');
-      let recordarValue = JSON.parse(recordar);
-      let recursos = JSON.parse(identity);
-      if (user != null) {
-        this.solicitudSala.fecha = this.dateStruct;
-        this.solicitudSala.usuario = user._id;
-        this.solicitudSala.recursos = this.tempRecursos;
-        this._servSolicitud.registrarSolicitud(this.solicitudSala).subscribe(
-          response => {
-            if (!response.message._id) {
-              this.msjError(response.message);
-            } else {
-              this.msjExitoso("Solicitud Agregada Exitosamente");
-              this.solicitudSala = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
-              this.obtenerSolicitudSalas();
-              this.cerrarModal('#modal-add-new-request');
-              // this.obtenerSalas();
-            }
-          }, error => {
-            var alertMessage = <any>error;
-            if (alertMessage != null) {
-              var body = JSON.parse(error._body);
-              this.msjError('Solicitud no registrada r');
-            }
-          }
-        );
-      } else {
-        this.msjError('Debe validar sus credenciales');
+    } else {
+      if (minFinal - minInicial > 0 && minFinal - minInicial < 30) {
+        // alert('no puede agregar 2');
       }
+      else {
+        //alert('puede agregar');
+        let identity = localStorage.getItem('identity');
+        let user = JSON.parse(identity);
+        let recordar = localStorage.getItem('remember');
+        let recordarValue = JSON.parse(recordar);
+        let recursos = JSON.parse(identity);
+        if (user != null) {
+          this.solicitudSala.fecha = this.dateStruct;
+          this.solicitudSala.usuario = user._id;
+          this.solicitudSala.recursos = this.tempRecursos;
+          this._servSolicitud.registrarSolicitud(this.solicitudSala).subscribe(
+            response => {
+              if (!response.message._id) {
+                this.msjError(response.message);
+              } else {
+                this.msjExitoso("Solicitud Agregada Exitosamente");
+                this.solicitudSala = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
+                this.obtenerSolicitudSalas();
+                this.cerrarModal('#modal-add-new-request');
+                // this.obtenerSalas();
+              }
+            }, error => {
+              var alertMessage = <any>error;
+              if (alertMessage != null) {
+                var body = JSON.parse(error._body);
+                this.msjError('Solicitud no registrada r');
+              }
+            }
+          );
+        } else {
+          this.msjError('Debe validar sus credenciales');
+        }
 
-   }
+      }
 
     }
 
@@ -480,7 +501,7 @@ export class SolicitudSalaComponent implements OnInit {
     $('body').removeClass('modal-open');
     $(modalId).removeClass('show');
     $(modalId).css('display', 'none');
-    this.solicSala=true;
+    this.solicSala = true;
   }
 
   abrirModal(modalId: any) {
@@ -545,9 +566,6 @@ export class SolicitudSalaComponent implements OnInit {
     this.onChangeCallback = fn;
   }
   registerOnTouched(fn: any): void { }
-
-
-
   // validar el dataPicker de hora de inicio en el modal de agregar solicitudes
   ctrlInitDate = new FormControl('', (control: FormControl) => {
     const value = control.value;
@@ -581,8 +599,6 @@ export class SolicitudSalaComponent implements OnInit {
     }
     return null;
   });
-
-
   //actualiza la hora de inicio al escribir
   updateInitDateOnInput(): void {
 
@@ -608,7 +624,6 @@ export class SolicitudSalaComponent implements OnInit {
     // }
 
   }
-
   updateFinishDateOnInput(): void {
 
     // if (this.solicitudSala.horaFin == null || this.solicitudSala.horaFin == undefined) {
@@ -618,8 +633,8 @@ export class SolicitudSalaComponent implements OnInit {
     //   //alert('hora inicio'+this.solicitudSala.horaFin);
     // }
   }
-
   updateDate(): void {
+    console.log(this.dateStruct);
     const newDate: Date = setYear(
       setMonth(
         setDate(this.date, this.dateStruct.day),
@@ -659,7 +674,6 @@ export class SolicitudSalaComponent implements OnInit {
 
 
   }
-
   updateTime(): void {
 
 
