@@ -1,6 +1,7 @@
 
 import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef } from '@angular/core';
-import { startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours } from 'date-fns';
+import { startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours,
+  getSeconds,getMinutes,getHours,getDate,getMonth,getYear,setSeconds,setMinutes,setHours,setDate,setMonth,setYear } from 'date-fns';
 import { Subject } from 'rxjs/Subject';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent} from 'angular-calendar';
@@ -8,25 +9,11 @@ import * as $ from 'jquery';
 import { Usuario } from '../modelos/usuario';
 import { SolicitudSala } from '../modelos/solicitudSala';
 import { ServicioSala } from '../servicios/sala';
-import { ServicioRecursos } from '../servicios/recurso';
 import { ServicioSolicitudSala } from '../servicios/solicitudSala';
+import { ServicioRecursos } from '../servicios/recurso';
 import swal from 'sweetalert2';
 import * as moment from 'moment';
 import { ChangeDetectorRef, forwardRef, Input, OnInit } from '@angular/core';
-import {
-  getSeconds,
-  getMinutes,
-  getHours,
-  getDate,
-  getMonth,
-  getYear,
-  setSeconds,
-  setMinutes,
-  setHours,
-  setDate,
-  setMonth,
-  setYear
-} from 'date-fns';
 import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FormControl } from '@angular/forms';
@@ -44,26 +31,17 @@ const colors: any = {
     secondary: '#FDF1BA'
   }
 };
-// const DATE_TIME_PICKER_CONTROL_VALUE_ACCESSOR: any = {
-//   provide: NG_VALUE_ACCESSOR,
-//   useExisting: forwardRef(() => DateTimePickerComponent),
-//   multi: true,
-
-
-// };
-
 @Component({
   selector: 'app-solicitud-sala',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './solicitud-sala.component.html',
   styleUrls: ['./solicitud-sala.component.css'],
-  providers: [ServicioSala, ServicioRecursos, ServicioSolicitudSala]
+  providers: [ServicioSolicitudSala,ServicioSala, ServicioRecursos]
 })
 
 export class SolicitudSalaComponent implements OnInit {
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
   view = 'month';
-
   viewDate: Date = new Date();
 
   modalData: {
@@ -163,10 +141,9 @@ export class SolicitudSalaComponent implements OnInit {
   locale: string = 'es';
   activeDayIsOpen = true;
 
-
   //*********************************************AGREGADOS***************************** */
   ngOnInit(){
-    //this.estiloBotones();
+    this.estiloBotones();
     console.log('cargó el calendario');
     this.obtenerSolicitudSalas();
   }
@@ -224,14 +201,13 @@ export class SolicitudSalaComponent implements OnInit {
     });
   }
 
+  // obtiene todas las solicitudes
   obtenerSolicitudSalas() {
     this._servSolicitud.obtenerTodasSolicitudes().subscribe(
       response => {
         if (response.message) {
-          this._servSolicitud = response.message;
-          console.log('todas las solicitudes');
-          console.log(response.message);
           let listaSolicitudes=response.message;
+          this.events=[];
          for (var index = 0; index < listaSolicitudes.length; index++) {
            this.addEvent(listaSolicitudes[index]);
          }  
@@ -268,15 +244,15 @@ export class SolicitudSalaComponent implements OnInit {
             } else {
              // alert('entra aqui 1');
              this.obtenerSolicitudes(date);
-              this.writeValue(date);
-              this.abrirModal('#modal-add-new-request');
+             // this.writeValue(date);
+              //this.abrirModal('#modal-add-new-request');
              
             }
           } else {
           // alert('entra aqui 2');
           this.obtenerSolicitudes(date);
-           this.writeValue(date);
-            this.abrirModal('#modal-add-new-request');            
+           //this.writeValue(date);
+           // this.abrirModal('#modal-add-new-request');            
           }
         } else {
         }
@@ -286,7 +262,8 @@ export class SolicitudSalaComponent implements OnInit {
         //   var body = JSON.parse(error._body);
         // }
       }
-    );
+   );
+
     // this.prueba(date);
     // console.log(this.solicitudesdia);
  
@@ -309,7 +286,7 @@ export class SolicitudSalaComponent implements OnInit {
      this._servSolicitud.obtenerSolicitudes(this.solicitudSala).subscribe(
        response => {
          if (!response.message) {         
-           alert('no hay registros');
+          // alert('no hay registros');
          } else {//no hay Salas registradas
            //alert(' hay registros');
            //console.log('solicitudes salas');
@@ -319,7 +296,7 @@ export class SolicitudSalaComponent implements OnInit {
            //console.log(array);
          }
        }, error => {
-        alert('erro');
+       // alert('erro');
        }
      );
    }
@@ -405,13 +382,13 @@ export class SolicitudSalaComponent implements OnInit {
       end: endOfDay(fechaInicio),
       color: colors.yellow,
       actions: this.actions,
-      draggable: false,
+      draggable: true,
       resizable: {
         beforeStart: true,
         afterEnd: true
       }
     });
-   
+   this.activeDayIsOpen=false;
     this.refresh.next();
   }
 
@@ -454,13 +431,13 @@ export class SolicitudSalaComponent implements OnInit {
     var minInicial=((this.solicitudSala.horaInicio.hour*60)+this.solicitudSala.horaInicio.minute);
     var minFinal=((this.solicitudSala.horaFin.hour*60)+this.solicitudSala.horaFin.minute);
     if (minFinal-minInicial<=0) {
-      alert('no puede agregar');
+      //alert('no puede agregar');
    }else {
      if(minFinal-minInicial>0 && minFinal-minInicial<30){
-      alert('no puede agregar 2');
+     // alert('no puede agregar 2');
      }
     else{
-    alert('puede agregar');
+    //alert('puede agregar');
       let identity = localStorage.getItem('identity');
       let user = JSON.parse(identity);
       let recordar = localStorage.getItem('remember');
@@ -477,6 +454,7 @@ export class SolicitudSalaComponent implements OnInit {
             } else {
               this.msjExitoso("Solicitud Agregada Exitosamente");
               this.solicitudSala = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
+              this.obtenerSolicitudSalas();
               this.cerrarModal('#modal-add-new-request');
               // this.obtenerSalas();
             }
