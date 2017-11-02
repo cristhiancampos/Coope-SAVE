@@ -13,7 +13,6 @@ var modeloSolicitudVehiculo = Schema({
     horaRegreso : {} ,
     destino: {},
     descripcion :String,
-    cantidadPersonas :String,
     estado :String,
     acompanantes :{},
     created_at: String,
