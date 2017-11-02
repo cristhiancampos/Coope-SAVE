@@ -31,6 +31,7 @@ import { AdminDepartamentoComponent } from './admin-departamento/admin-departame
 import { AdminUsuarioComponent } from './admin-usuario/admin-usuario.component';
 import { AdminRecursoComponent } from './admin-recurso/admin-recurso.component';
 import { AdminSolicitudComponent } from './admin-solicitud/admin-solicitud.component';
+import { SolicitudVehiculoComponent } from './solicitud-vehiculo/solicitud-vehiculo.component';
 
 
 @NgModule({
@@ -48,6 +49,7 @@ import { AdminSolicitudComponent } from './admin-solicitud/admin-solicitud.compo
     AdminUsuarioComponent,
     AdminRecursoComponent,
     AdminSolicitudComponent,
+    SolicitudVehiculoComponent,
 
   ],
   imports: [

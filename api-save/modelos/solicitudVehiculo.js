@@ -6,7 +6,6 @@ var Schema = mongoose.Schema;
 
 var modeloSolicitudVehiculo = Schema({      
     vehiculo:String,
-    departamento: string,
     usuario:String,
     fecha :{},
     horaSalida:{} ,
@@ -18,4 +17,4 @@ var modeloSolicitudVehiculo = Schema({
     created_at: String,
     updated_at: String
 });
-module.exports = mongoose.model('SolicitudVehiculo',modeloSolicitudSala);
+module.exports = mongoose.model('SolicitudVehiculo',modeloSolicitudVehiculo);

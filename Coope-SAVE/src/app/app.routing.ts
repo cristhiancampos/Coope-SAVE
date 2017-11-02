@@ -12,10 +12,12 @@ import {AdminDepartamentoComponent} from './admin-departamento/admin-departament
 import {AdminUsuarioComponent} from './admin-usuario/admin-usuario.component';
 import {AdminRecursoComponent} from './admin-recurso/admin-recurso.component';
 import {AdminSolicitudComponent} from './admin-solicitud/admin-solicitud.component';
+import { SolicitudVehiculoComponent } from './solicitud-vehiculo/solicitud-vehiculo.component';
 
 
 const appRoutes: Routes = [
     { path: 'solicitudSala', component: SolicitudSalaComponent},
+    { path: 'solicitudVehiculo', component: SolicitudVehiculoComponent},
    { path: '', component: PrincipalComponent},
     { path: 'principal', component: PrincipalComponent},
     { path: 'modificar', component: ModificarUsuarioComponent},

@@ -3,6 +3,7 @@ import * as $ from 'jquery';
 import swal from 'sweetalert2';
 import { ServicioUsuario } from '../servicios/usuario';
 import { ServicioSolicitudSala } from '../servicios/solicitudSala';
+import { ServicioSolicitudVehiculo } from '../servicios/solicitudVehiculo';
 import { ServicioRecursos } from '../servicios/recurso';
 import { Usuario } from '../modelos/usuario';
 import { Recurso } from '../modelos/recursos';
@@ -14,7 +15,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
   selector: 'app-admin-solicitud',
   templateUrl: './admin-solicitud.component.html',
   styleUrls: ['./admin-solicitud.component.css'],
-  providers: [ServicioRecursos, ServicioSolicitudSala, ServicioUsuario]
+  providers: [ServicioRecursos, ServicioSolicitudSala,ServicioSolicitudVehiculo, ServicioUsuario]
 })
 export class AdminSolicitudComponent implements OnInit {
 
@@ -22,6 +23,7 @@ export class AdminSolicitudComponent implements OnInit {
   private token;
   private identity;
 
+  //Variables para solicitud sala
   public solicitudSala: SolicitudSala;
   public solicitudSalaEdit: SolicitudSala;
   public solicitudSalaTemp: SolicitudSala;
@@ -33,12 +35,18 @@ export class AdminSolicitudComponent implements OnInit {
   public listaNombreRecursos = [];
   public currenIndex;
   public idEliminar;
+
+  //Variables para solicitudVehiculos
+
+
+
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
     private _servUsuario: ServicioUsuario,
     private _servRecurso: ServicioRecursos,
-    private _servSolicitudSala: ServicioSolicitudSala
+    private _servSolicitudSala: ServicioSolicitudSala,
+    private _servSolicitudVehiculo: ServicioSolicitudVehiculo
   ) {
   }
 
@@ -49,6 +57,8 @@ export class AdminSolicitudComponent implements OnInit {
     this.obtenerSolicitudSalas();
   }
 
+
+  //********************************************************************Sección Solicitud Sala**********************************************************************//
   obtenerSolicitudSalas() {
     this._servSolicitudSala.obtenerTodasSolicitudes().subscribe(
       response => {
@@ -189,12 +199,59 @@ export class AdminSolicitudComponent implements OnInit {
     );
   }
 
+  //********************************************************************Fin Sección Solicitud Sala**********************************************************************//
+
+  //********************************************************************Sección Solicitud Vehiculo**********************************************************************//
+
+  obtenerSolicitudVehiculo() {
+    this._servSolicitudVehiculo.obtenerTodasSolicitudes().subscribe(
+      response => {
+
+        if (response.message) {
+          this.solicitudSalas = response.message;
+        } else {//no hay Salas registradas
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+        }
+      }
+    );
+  }
+
+
+  eliminarSolicitudVehiculo() {
+
+    console.log(this.idEliminar);
+    this._servSolicitudVehiculo.eliminarSolicitudVehiculo(this.idEliminar).subscribe(
+      response => {
+
+        if (!response.message._id) {
+          this.msjError("La Solicitud no pudo ser Eliminada");
+        } else {
+          this.msjExitoso("Sala Eliminada Exitosamente");
+          this.obtenerSolicitudSalas();
+        }
+      }, error => {
+        var alertMessage = <any>error;
+        if (alertMessage != null) {
+          var body = JSON.parse(error._body);
+          this.msjError("La Solicitud no pudo ser Eliminada");
+        }
+      }
+    );
+  }
+
+
+  //********************************************************************Sección Solicitud Sala**********************************************************************//
   setCurrenIndex(index:any){
  this.currenIndex= index
   }
   setIdEliminar(id:any){
     this.idEliminar= id;
   }
+
 
 
 

@@ -67,7 +67,7 @@ function obtenerSolicitudesvehiculos(req, res) {
 }
 
 function obtenerTodasSolicitudes(req, res){
-  solicitudVehiculo.find({ estado: { $ne: "Eliminado" } }, (err, solicitudVehiculos) => {
+  SolicitudVehiculo.find({ estado: { $ne: "Eliminado" } }, (err, solicitudVehiculos) => {
     if (err) {
       res.status(500).send({ message: 'Error en la petición' });
     } else {
@@ -90,7 +90,7 @@ function modificarsolicitudVehiculo(req, res) {
     params.updated_at = new Date();
   
   
-    solicitudVehiculo.findByIdAndUpdate(solicitudId, params, (err, modificarSolicitud) => {
+    SolicitudVehiculo.findByIdAndUpdate(solicitudId, params, (err, modificarSolicitud) => {
       if (err) {
   
         res.status(500).send({ message: 'Error al actualizar la vehiculo' });
@@ -109,7 +109,7 @@ function modificarsolicitudVehiculo(req, res) {
     function eliminarsolicitudVehiculo(req, res) {
       var salicitudId = req.params.id;
       var update = req.body;
-      solicitudVehiculo.findByIdAndUpdate(salicitudId, { $set: { estado: 'Eliminado' } }, { new: true }, (err, salicitudDeleted) => {
+      SolicitudVehiculo.findByIdAndUpdate(salicitudId, { $set: { estado: 'Eliminado' } }, { new: true }, (err, salicitudDeleted) => {
         if (err) {
           res.status(500).send({ message: 'Error al eliminar la vehiculo' });
         } else {
