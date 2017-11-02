@@ -23,7 +23,7 @@ function agregarSolicitud(req, res) {
     && solicitud.cantidadPersonas != null && solicitud.created_at != null && solicitud.estado != null
   ) {
     //guardar departamento
-    solicitud.save((err, solicitudStored) => {
+    Solicitud.save((err, solicitudStored) => {
       if (err) {
         res.status(500).send({ message: 'Error al registrar Solicitud' });
       } else {
@@ -53,7 +53,7 @@ function obtenerSolicitudesvehiculos(req, res) {
   let day = date.getDate();
   console.log(date);
 
-  solicitudVehiculo.find({ fecha: { year: year, month: month, day: day } }, (err, solicitud) => {
+  SolicitudVehiculo.find({ fecha: { year: year, month: month, day: day } }, (err, solicitud) => {
     if (err) {
       req.status(500).send({ mesage: 'Error al obtener las solicitudes' });
     } else {
