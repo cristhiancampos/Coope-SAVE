@@ -70,8 +70,6 @@
   </mwl-calendar-day-view>
 </div>
 
-<h3>
-
   <!-- Modal  agregar nueva solicitud-->
   <div class="modal fade bd-example-modal-lg" id="modal-add-new-request" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
@@ -247,8 +245,8 @@
                   </div>
                 </div>
                 <hr>
-                <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="cerrarModal('#modal-add-new-request')">Cancelar</button>
-                <button id="btn-add-solid" type="submit" class="btn btn-success" data-dismiss="modal" (click)="agregarSolicitud()" [disabled]="!descp.valid || !cup.valid || !sal.valid ||  !ctrlInitDate.valid">Confirmar</button>
+                <button type="button" class="btn btn-danger"  (click)="cerrarModal('#modal-add-new-request')">Cancelar</button>
+                <button id="btn-add-solid" type="submit" class="btn btn-success" (click)="agregarSolicitud()" [disabled]="!descp.valid || !cup.valid || !sal.valid ||  !ctrlInitDate.valid">Confirmar</button>
 
 
           </section>

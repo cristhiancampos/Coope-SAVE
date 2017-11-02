@@ -110,55 +110,55 @@ export class SolicitudSalaComponent implements OnInit {
     //   title: 'A long event that spans 2 months',
     //   color: colors.blue
     // },
-    {
-      start: addHours(startOfDay(new Date()), 2),
-      end: new Date(),
-      title: 'Reunión semanal',
-      color: colors.yellow,
-      actions: this.actions,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      },
-      draggable: true
-    },
-    {
-      start: addHours(startOfDay(new Date()), 2),
-      end: new Date(),
-      title: 'Junta Administrativa',
-      color: colors.yellow,
-      actions: this.actions,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      },
-      draggable: true
-    },
-    {
-      start: addHours(startOfDay(new Date()), 2),
-      end: new Date(),
-      title: 'Reunión de TI',
-      color: colors.yellow,
-      actions: this.actions,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      },
-      draggable: true
-    }
-    ,
-    {
-      start: addHours(startOfDay(new Date()), 2),
-      end: new Date(),
-      title: 'Reunión de TI',
-      color: colors.yellow,
-      actions: this.actions,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      },
-      draggable: true
-    }
+    // {
+    //   start: addHours(startOfDay(new Date()), 2),
+    //   end: new Date(),
+    //   title: 'Reunión semanal',
+    //   color: colors.yellow,
+    //   actions: this.actions,
+    //   resizable: {
+    //     beforeStart: true,
+    //     afterEnd: true
+    //   },
+    //   draggable: true
+    // },
+    // {
+    //   start: addHours(startOfDay(new Date()), 2),
+    //   end: new Date(),
+    //   title: 'Junta Administrativa',
+    //   color: colors.yellow,
+    //   actions: this.actions,
+    //   resizable: {
+    //     beforeStart: true,
+    //     afterEnd: true
+    //   },
+    //   draggable: true
+    // },
+    // {
+    //   start: addHours(startOfDay(new Date()), 2),
+    //   end: new Date(),
+    //   title: 'Reunión de TI',
+    //   color: colors.yellow,
+    //   actions: this.actions,
+    //   resizable: {
+    //     beforeStart: true,
+    //     afterEnd: true
+    //   },
+    //   draggable: true
+    // }
+    // ,
+    // {
+    //   start: addHours(startOfDay(new Date()), 2),
+    //   end: new Date(),
+    //   title: 'Reunión de TI',
+    //   color: colors.yellow,
+    //   actions: this.actions,
+    //   resizable: {
+    //     beforeStart: true,
+    //     afterEnd: true
+    //   },
+    //   draggable: true
+    // }
   ];
   locale: string = 'es';
   activeDayIsOpen = true;
@@ -168,6 +168,7 @@ export class SolicitudSalaComponent implements OnInit {
   ngOnInit(){
     //this.estiloBotones();
     console.log('cargó el calendario');
+    this.obtenerSolicitudSalas();
   }
   solicitudSala: SolicitudSala;
   title;//
@@ -178,29 +179,12 @@ export class SolicitudSalaComponent implements OnInit {
   tempRecursos = [];
   currentDate;
   private solicSala = true;
-  public solicitudesdia=[
-    //{cantidadPersonas:"10",
-  // created_at:"Wed Nov 01 2017 08:30:20 GMT-0600 (Hora estándar, América Central)",
-  // descripcion:"Reunión mensual",
-  // estado:"Habilitado",
-  // fecha:{day: 1, month: 11, year: 2017},
-  // horaFin:{hour: 11, minute: 0},
-  // horaInicio:{hour: 7, minute: 0},
-  // recursos:["59f0cd0c82d6f4113c87d3ae", "59f0ce1882d6f4113c87d3b0", "59f0cd9b82d6f4113c87d3af"],
-  // sala:"SALA2",
-  // usuario:"59ef8129d2694b05b06c62aa",
-  // _id:"59f9da7ce5eeb71a2029b145"
-//}
-];
+  public solicitudesdia=[];
 
   @Input() placeholder: string;
-
   date: Date;
-
   dateStruct: NgbDateStruct;
-
   timeStruct: NgbTimeStruct;
-
   datePicker: any;
 
   private onChangeCallback: (date: Date) => void = () => { };
@@ -216,29 +200,12 @@ export class SolicitudSalaComponent implements OnInit {
     this.obtenerRecursos();
     this.obtenerSalas();
     this.estiloBotones();
-   // this.obtenerSolicitudes(new Date());
-
-    // $(document).ready(function(){
-    //  // console.log('ready');
-    // 	$(".cal-cell-top").mouseover(function(){
-    //         $(this).css('background','red');
-    //         $(this).css('cursor','not-allowed');
-    //   	});
-
-    // 	$(".cal-cell-top").mouseout(function(){
-    //     $(this).css('background','#FFF');
-    //  	});
-    // });
-    
-
   }
   solicitud(num: any) {
     if (num === 1) {
       this.solicSala = true;
     } else {
       this.solicSala = false;
-        this.obtenerSolicitudes(this.solicitudSala.fecha);
-       // this.obtenerSolicitudes(this.solicitudSala.fecha);
     }
   }
   
@@ -257,6 +224,28 @@ export class SolicitudSalaComponent implements OnInit {
     });
   }
 
+  obtenerSolicitudSalas() {
+    this._servSolicitud.obtenerTodasSolicitudes().subscribe(
+      response => {
+        if (response.message) {
+          this._servSolicitud = response.message;
+          console.log('todas las solicitudes');
+          console.log(response.message);
+          let listaSolicitudes=response.message;
+         for (var index = 0; index < listaSolicitudes.length; index++) {
+           this.addEvent(listaSolicitudes[index]);
+         }  
+        } else {//no hay Salas registradas
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+        }
+      }
+    );
+  }
+
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }) {
     this.solicitudSala.fecha=date;
     this.solicitudSala.horaInicio = { hour: 7, minute: 0 };
@@ -270,20 +259,22 @@ export class SolicitudSalaComponent implements OnInit {
           let serverDate = momentDate.toDate();
 
           if (date.getFullYear() < serverDate.getFullYear()) {
-            this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
+            this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual 1');
           } else if (((date.getMonth() + 1) < (serverDate.getMonth() + 1))) {
-            this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
+            this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual 2');
           } else if (((date.getMonth() + 1) == (serverDate.getMonth() + 1))) {
-            if (date.getDate() < serverDate.getDate()) {
-              this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
+            if (date.getDate()+1 < serverDate.getDate()) {
+              this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual 3'+date.getDate()+"---"+serverDate.getDate());
             } else {
              // alert('entra aqui 1');
+             this.obtenerSolicitudes(date);
               this.writeValue(date);
               this.abrirModal('#modal-add-new-request');
              
             }
           } else {
           // alert('entra aqui 2');
+          this.obtenerSolicitudes(date);
            this.writeValue(date);
             this.abrirModal('#modal-add-new-request');            
           }
@@ -312,7 +303,6 @@ export class SolicitudSalaComponent implements OnInit {
     //   }
     // }
   }
-
   obtenerSolicitudes(userDate) {
     let array;
      this.solicitudSala.fecha = userDate;
@@ -325,6 +315,7 @@ export class SolicitudSalaComponent implements OnInit {
            //console.log('solicitudes salas');
             array = response.message;
            this.solicitudesdia=array;
+           this.abrirModal('#modal-add-new-request');
            //console.log(array);
          }
        }, error => {
@@ -352,15 +343,17 @@ export class SolicitudSalaComponent implements OnInit {
                // alert('entra aqui 1');
                 //this.obtenerRecursos();
 
-                 this.abrirModal('#modal-add-new-request');
-                // this.obtenerSolicitudes(userDate);
-                // this.writeValue(userDate);
+                 //this.abrirModal('#modal-add-new-request');
+               
+                 this.writeValue(userDate);
+                 this.obtenerSolicitudes(userDate);
                
               }
             } else {
              //alert('entra aqui 2');
 
-              this.abrirModal('#modal-add-new-request');
+             this.writeValue(userDate);
+             this.obtenerSolicitudes(userDate);
             //   //this.obtenerRecursos();
             //  this.obtenerSolicitudes(userDate);
             //   this.writeValue(userDate);
@@ -399,18 +392,26 @@ export class SolicitudSalaComponent implements OnInit {
     this.modal.open(this.modalContent, { size: 'lg' });
   }
 
-  addEvent(): void {
+  addEvent(solicitud): void {
+    let fechaInicio = new Date();
+    fechaInicio.setFullYear(solicitud.fecha.year);
+    fechaInicio.setMonth(solicitud.fecha.month-1);
+    fechaInicio.setDate(solicitud.fecha.day);
+    //fechaInicio.setHours(solicitud.horaInicio.hour);
+    //fechaInicio.setMinutes(solicitud.horaInicio.minute);
     this.events.push({
-      title: 'Nuevo Evento',
-      start: startOfDay(new Date()),
-      end: endOfDay(new Date()),
-      color: colors.red,
-      draggable: true,
+      title: solicitud.descripcion,
+      start: startOfDay(fechaInicio),
+      end: endOfDay(fechaInicio),
+      color: colors.yellow,
+      actions: this.actions,
+      draggable: false,
       resizable: {
         beforeStart: true,
         afterEnd: true
       }
     });
+   
     this.refresh.next();
   }
 
@@ -496,12 +497,12 @@ export class SolicitudSalaComponent implements OnInit {
     }
 
   }
-
   cerrarModal(modalId: any) {
     $(".modal-backdrop").remove();
     $('body').removeClass('modal-open');
     $(modalId).removeClass('show');
     $(modalId).css('display', 'none');
+    this.solicSala=true;
   }
 
   abrirModal(modalId: any) {
@@ -562,11 +563,9 @@ export class SolicitudSalaComponent implements OnInit {
     };
     this.cdr.detectChanges();
   }
-
   registerOnChange(fn: any): void {
     this.onChangeCallback = fn;
   }
-
   registerOnTouched(fn: any): void { }
 
 
