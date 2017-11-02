@@ -51,9 +51,9 @@ function obtenerSolicitudesSalas(req, res) {
   let year = date.getFullYear();
   let month = (date.getMonth() + 1);
   let day = date.getDate();
-  console.log(date);
-
-  SolicitudSala.find({ fecha: { year: year, month: month, day: day } }, (err, solicitud) => {
+  //console.log('Año'+year+'Mes'+month+'Día'+day);
+// fecha: { year: year, month: month, day: day }
+  SolicitudSala.find({fecha: { year: year, month: month, day: day }}, (err, solicitud) => {
     if (err) {
       req.status(500).send({ mesage: 'Error al obtener las solicitudes' });
     } else {

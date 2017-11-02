@@ -175,7 +175,7 @@
                             </div>
                           </div>
                         </div>
-                        <div *ngIf="ctrlFinishDate.valid" class="small form-text text-success">Debe eligir un horario correcto <i class="fa fa-check" aria-hidden="true"></i> </div>
+                        <!-- <div *ngIf="ctrlFinishDate.valid" class="small form-text text-success">Debe eligir un horario correcto <i class="fa fa-check" aria-hidden="true"></i> </div> -->
                         
     
                       </div>
@@ -183,10 +183,11 @@
                     <td>
                       <div class="control-group form-group">
                         <div class="controls">
-                          <select #sal="ngModel" name="sal" [(ngModel)]="solicitudSala.sala" class="selectpicker" style="width: 100%;font-size: 1.2rem;min-width: 10em;"
+                          <select #sal="ngModel" name="sal" [(ngModel)]="solicitudSala.sala" 
+                          (change)="setCupoMaximoSala(solicitudSala.sala)" class="selectpicker" style="width: 100%;font-size: 1.2rem;min-width: 10em;"
                             required>  
                                 <option value="" selected disabled >Seleccione Sala</option>
-                                    <option *ngFor="let sala of salas;">{{sala.nombre}}</option>
+                                    <option *ngFor="let sala of salas;" >{{sala.nombre}}</option>
                                   </select>
     
                           <div *ngIf="sal.valid" class="small form-text text-success" style="font-size:0.9rem">Correcto<i class="fa fa-check" aria-hidden="true"></i></div>
@@ -198,18 +199,26 @@
     
                       <div class="control-group form-group">
                         <div class="controls">
-                          <input type="number" class="form-control" #cup="ngModel" name="cup" [(ngModel)]="solicitudSala.cantidadPersonas" placeholder="Capacidad 10"
-                            required>
-                          <div *ngIf="cup.valid" class="small form-text text-success" style="font-size:0.9rem">Correcto<i class="fa fa-check" aria-hidden="true"></i></div>
+                          <input id="inputCup" type="number" class="form-control" #cup="ngModel" name="cup" [(ngModel)]="solicitudSala.cantidadPersonas" 
+                          placeholder="Capacidad {{cupoMaximo}}" required min="1" max="{{cupoMaximo}}" pattern="[0-9]*" 
+                          [disabled]="!cupoMaximo" (keypress)="elimininarNegativos('#inputCup')">
+                          <div *ngIf="cup.valid && cup.value<=cupoMaximo && cup.value>0 " class="small form-text text-success" style="font-size:0.9rem">Correcto<i class="fa fa-check" aria-hidden="true"></i></div>
                           <div class="small form-text text-danger" *ngIf="cup.invalid && (cup.dirty || cup.touched)" style="font-size:0.9rem">
                             <div *ngIf="cup.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La cantidad de personas es obligatoria</div>
                           </div>
+                          <div class="small form-text text-danger" *ngIf="!cup.invalid &&(cup.value>cupoMaximo )" style="font-size:0.9rem">
+                          <div ><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La capacidad máxima de la sala es de {{cupoMaximo}} personas</div>                            
+                        </div>
+                        <div class="small form-text text-danger" *ngIf="cup.valid && cup.value<='0'" style="font-size:0.9rem">
+                          <div ><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La solicitud debe incluir almenos 1 persona</div>                            
+                        </div>
+
                         </div>
                       </div>
                       <div class="control-group form-group">
                         <div class="controls">
                           <textarea class="form-control" #descp="ngModel" name="descp" [(ngModel)]="solicitudSala.descripcion" placeholder="Motivo por el cuál solicita la sala."
-                            rows="3" required></textarea>
+                            rows="3" required maxlength="50"></textarea>
                           <div *ngIf="descp.valid" class="small form-text text-success" style="font-size:0.9rem">Correcto <i class="fa fa-check" aria-hidden="true"></i></div>
                           <div class="small form-text text-danger" *ngIf="descp.invalid && (descp.dirty || descp.touched)" style="font-size:0.9rem">
                             <div *ngIf="descp.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> El motivo de la solicitud es obligatorio</div>
@@ -246,13 +255,14 @@
                 </div>
                 <hr>
                 <button type="button" class="btn btn-danger"  (click)="cerrarModal('#modal-add-new-request')">Cancelar</button>
-                <button id="btn-add-solid" type="submit" class="btn btn-success" (click)="agregarSolicitud()" [disabled]="!descp.valid || !cup.valid || !sal.valid ||  !ctrlInitDate.valid">Confirmar</button>
+                <button id="btn-add-solid" type="submit" class="btn btn-success" (click)="agregarSolicitud()" [disabled]="!descp.valid || !cup.valid || !sal.valid ||  !ctrlInitDate.valid || !horarioValido">Confirmar</button>
 
 
           </section>
           <!-- sección lista-->
           <section *ngIf="!solicSala">
             <br>
+            <h5>Fecha: {{dateStruct.day}}/{{dateStruct.month}}/{{dateStruct.year}}</h5>
               <table class="table table-hover" style="font-size:1rem">
                   <thead>
                     <tr>
