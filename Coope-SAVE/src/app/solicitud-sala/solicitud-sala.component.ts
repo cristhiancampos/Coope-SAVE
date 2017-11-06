@@ -10,9 +10,14 @@ import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent } fr
 import * as $ from 'jquery';
 import { Usuario } from '../modelos/usuario';
 import { SolicitudSala } from '../modelos/solicitudSala';
+import { Departamento } from '../modelos/departamento';
+
 import { ServicioSala } from '../servicios/sala';
 import { ServicioSolicitudSala } from '../servicios/solicitudSala';
 import { ServicioRecursos } from '../servicios/recurso';
+import { ServicioDepartamento } from '../servicios/departamento';
+import { ServicioUsuario } from '../servicios/usuario';
+
 import swal from 'sweetalert2';
 import * as moment from 'moment';
 import { ChangeDetectorRef, forwardRef, Input, OnInit } from '@angular/core';
@@ -38,7 +43,7 @@ const colors: any = {
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './solicitud-sala.component.html',
   styleUrls: ['./solicitud-sala.component.css'],
-  providers: [ServicioSolicitudSala, ServicioSala, ServicioRecursos]
+  providers: [ServicioSolicitudSala, ServicioSala, ServicioRecursos, ServicioDepartamento]
 })
 
 export class SolicitudSalaComponent implements OnInit {
@@ -52,19 +57,19 @@ export class SolicitudSalaComponent implements OnInit {
   };
 
   actions: CalendarEventAction[] = [
-    {
-      label: '<i class="fa fa-fw fa-pencil"></i>',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.handleEvent('Editar', event);
-      }
-    },
-    {
-      label: '<i class="fa fa-fw fa-times"></i>',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.events = this.events.filter(iEvent => iEvent !== event);
-        this.handleEvent('Eliminar', event);
-      }
-    }
+    // {
+    //   label: '<i class="fa fa-fw fa-pencil"></i>',
+    //   onClick: ({ event }: { event: CalendarEvent }): void => {
+    //     this.handleEvent('Editar', event);
+    //   }
+    // },
+    // {
+    //   label: '<i class="fa fa-fw fa-times"></i>',
+    //   onClick: ({ event }: { event: CalendarEvent }): void => {
+    //     this.events = this.events.filter(iEvent => iEvent !== event);
+    //     this.handleEvent('Eliminar', event);
+    //   }
+    // }
   ];
 
   refresh: Subject<any> = new Subject();
@@ -147,12 +152,17 @@ export class SolicitudSalaComponent implements OnInit {
     this.estiloBotones();
     console.log('cargó el calendario');
     this.obtenerSolicitudSalas();
+    // this.obtenerDepartamentos();
+
 
   }
   solicitudSala: SolicitudSala;
   //title;//
   //start;//
   //end;//
+  //departamento: Departamento;
+  private departamentos = [];
+  private usuarios = [];
   salas = [];
   recursos = [];
   tempRecursos = [];
@@ -181,6 +191,8 @@ export class SolicitudSalaComponent implements OnInit {
     private _servSala: ServicioSala,
     private _servRecurso: ServicioRecursos,
     private _servSolicitud: ServicioSolicitudSala,
+    private _servDepartamento: ServicioDepartamento,
+    private _servUsuario: ServicioUsuario,
     private cdr: ChangeDetectorRef
   ) {
     this.solicitudSala = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
@@ -215,24 +227,101 @@ export class SolicitudSalaComponent implements OnInit {
     });
   }
   // obtiene todas las solicitudes solicitudes realizadas
+  tempColor: any = {
+    color: {
+      primary: '#ad2121',
+      secondary: '#FAE3E3'
+    }
+  };
+  tempEnable = false;
   obtenerSolicitudSalas() {
-    this._servSolicitud.obtenerTodasSolicitudes().subscribe(
-      response => {
-        if (response.message) {
-          let listaSolicitudes = response.message;
-          this.events = [];
-          for (var index = 0; index < listaSolicitudes.length; index++) {
-            this.addEvent(listaSolicitudes[index], true);
+    let identity = localStorage.getItem('identity');
+    let user = JSON.parse(identity);
+    if (user != null) {
+      this._servSolicitud.obtenerTodasSolicitudes().subscribe(
+        response => {
+          if (response.message) {
+            let listaSolicitudes = response.message;
+            this.events = [];
+            this._servDepartamento.obtenerDepartamentos().subscribe(
+              response => {
+                if (response.message) {
+                  this.departamentos = response.message;
+                  this._servUsuario.obtenerUsuarios().subscribe(
+                    response => {
+                      if (response.message) {
+                        this.usuarios = response.message;
+                        for (var index = 0; index < listaSolicitudes.length; index++) {
+                          for (var i = 0; i < this.usuarios.length; i++) {
+                            if (listaSolicitudes[index].usuario == this.usuarios[i]._id) {
+                              for (var c = 0; c < this.departamentos.length; c++) {
+                                if (this.usuarios[i].departamento == this.departamentos[c].nombre) {
+                                  this.tempColor = {
+                                    color: {
+                                      primary: this.departamentos[c].color + '',
+                                      secondary: '#FAE3E3'
+                                    }
+                                  };
+                                }
+                              }
+                            }
+                          }
+                          if (user._id == listaSolicitudes[index].usuario) {
+                            this.tempEnable = true;
+                            this.actions=[
+                              {
+                                label: '<i class="fa fa-fw fa-pencil"></i>',
+                                onClick: ({ event }: { event: CalendarEvent }): void => {
+                                  this.handleEvent('Editar', event);
+                                }
+                              },
+                              {
+                                label: '<i class="fa fa-fw fa-times"></i>',
+                                onClick: ({ event }: { event: CalendarEvent }): void => {
+                                  this.events = this.events.filter(iEvent => iEvent !== event);
+                                  this.handleEvent('Eliminar', event);
+                                }
+                              }
+                            ];
+                          
+                          } else {
+                            this.tempEnable = false;
+                            this.actions = [];
+                          }
+                          this.addEvent(listaSolicitudes[index], this.tempEnable);
+                        }
+                      } else {//no hay Usuarios registradas
+                      }
+                    }, error => {
+                      var errorMensaje = <any>error;
+                      if (errorMensaje != null) {
+                        var body = JSON.parse(error._body);
+                      }
+                    }
+                  );
+                } else {//ho hay departamentos registrados
+                }
+              }, error => {
+                var errorMensaje = <any>error;
+                if (errorMensaje != null) {
+                  var body = JSON.parse(error._body);
+                }
+              }
+            );
+
+          } else {//no hay Salas registradas
           }
-        } else {//no hay Salas registradas
+        }, error => {
+          var errorMensaje = <any>error;
+          if (errorMensaje != null) {
+            var body = JSON.parse(error._body);
+          }
         }
-      }, error => {
-        var errorMensaje = <any>error;
-        if (errorMensaje != null) {
-          var body = JSON.parse(error._body);
-        }
-      }
-    );
+      );
+    } else {
+      this.msjError('Debe Verificar sus credenciales');
+    }
+
   }
   //establece el cupo máximo de personas según sala seleccionada
   setCupoMaximoSala(sala) {
@@ -422,7 +511,7 @@ export class SolicitudSalaComponent implements OnInit {
       title: solicitud.descripcion,
       start: startOfDay(fechaInicio),
       end: endOfDay(fechaFin),
-      color: colors.yellow,
+      color: this.tempColor.color,
       actions: this.actions,
       draggable: isDragable,
       resizable: {
@@ -436,6 +525,7 @@ export class SolicitudSalaComponent implements OnInit {
   }
 
   ///***************************************************METODOS AGREGADOS***********************************
+  // obtener la lista de salas disponibles
   obtenerSalas() {
     this._servSala.obtenerSalasHabilitadas().subscribe(
       response => {
@@ -452,6 +542,7 @@ export class SolicitudSalaComponent implements OnInit {
       }
     );
   }
+  //obtener la lista de recursos disponibles
   obtenerRecursos() {
     this._servRecurso.obtenerRecursosHabilitados().subscribe(
       response => {
@@ -467,7 +558,7 @@ export class SolicitudSalaComponent implements OnInit {
       }
     );
   }
-
+  //se agregan solicitudes en la base de datos después de sus debidas validadaciones
   agregarSolicitud() {
     var minInicial = ((this.solicitudSala.horaInicio.hour * 60) + this.solicitudSala.horaInicio.minute);
     var minFinal = ((this.solicitudSala.horaFin.hour * 60) + this.solicitudSala.horaFin.minute);
@@ -550,7 +641,7 @@ export class SolicitudSalaComponent implements OnInit {
                 meridNumIni = meridNumIni + 12;
               }
               agregarValid = false;
-              this.mensajeSolicitudInvalida = "El horario habilitado el día " + dia + " para la sala seleciona, es desde  " + meridNumIni + " " + meridianoInit + " hasta " + meridNumFin + " " + meridianoFin;
+              this.mensajeSolicitudInvalida = "El horario habilitado el día " + dia + " para la sala selecionada, es desde  " + meridNumIni + " " + meridianoInit + " hasta " + meridNumFin + " " + meridianoFin;
               //alert('horamal');
             }
             else {// validar la disponibilidad de horario
@@ -654,6 +745,29 @@ export class SolicitudSalaComponent implements OnInit {
     }
 
   }
+
+  //Obtener departamentos, No está en uso por el momento
+  // obtenerDepartamentos() {
+  //   this._servDepartamento.obtenerDepartamentos().subscribe(
+  //     response => {
+  //       if (response.message) {
+  //         this.departamentos = response.message;
+  //         // console.log('departamentos---');
+  //         // console.log(this.departamentos);
+  //       } else {//ho hay departamentos registrados
+  //       }
+  //     }, error => {
+  //       var errorMensaje = <any>error;
+  //       if (errorMensaje != null) {
+  //         var body = JSON.parse(error._body);
+  //       }
+  //     }
+  //   );
+
+  // }
+
+
+  //encargado de cerrar los modales
   cerrarModal(modalId: any) {
     $(".modal-backdrop").remove();
     $('body').removeClass('modal-open');
@@ -661,7 +775,7 @@ export class SolicitudSalaComponent implements OnInit {
     $(modalId).css('display', 'none');
     this.solicSala = true;
   }
-
+// encargado de abrir los modales
   abrirModal(modalId: any) {
     $('body').append('<div class="modal-backdrop fade show" ></div>');
     $('body').addClass('modal-open');
@@ -802,171 +916,9 @@ export class SolicitudSalaComponent implements OnInit {
       this.dateStruct.year
     );
     this.onChangeCallback(newDate);
-
-    this._servSolicitud.fechaActual().subscribe(
-      response => {
-        if (response.currentDate) {
-          this.currentDate = response.currentDate;
-          var momentDate = moment(this.currentDate, 'YYYY-MM-DD HH:mm:ss');
-          let serverDate = momentDate.toDate();
-
-          if (newDate.getFullYear() < serverDate.getFullYear()) {
-            this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
-            this.solicitudesdia = [];
-          } else if (((newDate.getMonth() + 1) < (serverDate.getMonth() + 1))) {
-            this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
-            this.solicitudesdia = [];
-          } else if (((newDate.getMonth() + 1) == (serverDate.getMonth() + 1))) {
-            if (newDate.getDate() < serverDate.getDate()) {
-              this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
-              this.solicitudesdia = [];
-            } else {
-              // alert('entra aqui 1');
-              this.obtenerSolicitudes(newDate, false);
-              this.writeValue(newDate);
-              //this.abrirModal('#modal-add-new-request');
-
-            }
-          } else {
-            // alert('entra aqui 2');
-            this.obtenerSolicitudes(newDate, false);
-            this.writeValue(newDate);
-            // this.abrirModal('#modal-add-new-request');            
-          }
-        } else {
-        }
-      }, error => {
-        var errorMensaje = <any>error;
-        // if (errorMensaje != null) {
-        //   var body = JSON.parse(error._body);
-        // }
-      }
-    );
-    //this.dayClicked(newDate);
-    //alert(newDate);
-    // this._servSolicitud.fechaActual().subscribe(
-    //   response => {
-    //     if (response.currentDate) {
-    //       this.currentDate = response.currentDate;
-    //       //fecha parseada del servidor
-    //       var momentDate = moment(this.currentDate, 'YYYY-MM-DD HH:mm:ss');
-    //       let serverDate = momentDate.toDate();
-
-    //       if (this.date.getFullYear() < serverDate.getFullYear()
-    //         || ((this.date.getMonth() + 1) < (serverDate.getMonth() + 1))
-    //         || this.date.getDate() < serverDate.getDate()) {
-    //         this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
-    //       } else {
-    //         // this.solicitudSala.horaInicio = serverDate;//
-    //         // this.solicitudSala.horaFin = new Date();//
-    //         // this.solicitudSala.fecha ;
-    //         this.writeValue(this.date);
-    //       }
-    //     } else {//error
-    //     }
-    //   }, error => {
-    //     var errorMensaje = <any>error;
-    //     if (errorMensaje != null) {
-    //       var body = JSON.parse(error._body);
-    //     }
-    //   }
-    // );
-
-
   }
   updateTime(): void {
     this.mensajeSolicitudInvalida = "";
-
-
-    // var intevarlo = 30;
-    // var hora = 60;
-
-    // if (this.solicitudSala.horaInicio.hour == this.solicitudSala.horaFin.hour) {
-
-    //   if(this.solicitudSala.horaInicio.minute > this.solicitudSala.horaFin.minute){
-    //     this.solicitudSala.horaFin.minute=this.solicitudSala.horaFin.minute-(-this.solicitudSala.horaFin.minute-intevarlo);
-    //     var restaMin = this.solicitudSala.horaInicio.minute - this.solicitudSala.horaFin.minute;
-    //   }
-
-    // else{
-    //   restaMin = this.solicitudSala.horaInicio.minute - this.solicitudSala.horaFin.minute;
-    //   alert('hora es igual'+restaMin);
-
-    //   if (restaMin==0)
-    //   {
-    //     alert('hora y minuto exactamente iguales');
-    //     this.solicitudSala.horaFin.minute=this.solicitudSala.horaFin.minute+intevarlo;
-    //     var resultado =this.solicitudSala.horaFin.minute;
-
-    //     if(resultado==hora){
-    //       this.solicitudSala.horaFin.hour=this.solicitudSala.horaFin.hour+1;
-    //     } else  if(resultado>hora){
-    //       this.solicitudSala.horaFin.hour=this.solicitudSala.horaFin.hour+1;
-    //       this.solicitudSala.horaFin.minute= resultado-hora;
-    //     }else{
-    //       this.solicitudSala.horaFin.minute= resultado;
-    //     }
-    //   }
-    //   else if(restaMin<0)
-    //     {
-    //       var sumaMin = this.solicitudSala.horaFin.minute-(restaMin);
-    //       alert('hora es igual pero minutos no'+sumaMin +'..'+restaMin);
-    //       if(sumaMin>=hora){
-    //         this.solicitudSala.horaFin.hour=this.solicitudSala.horaFin.hour+1;
-    //         this.solicitudSala.horaFin.minute=sumaMin-hora;
-    //       }else{
-    //         this.solicitudSala.horaFin.minute=sumaMin;
-    //       }
-    //     } else if(restaMin>0){
-    //       this.solicitudSala.horaFin.minute=this.solicitudSala.horaFin.minute+intevarlo;
-    //     }
-    //   }
-    //  }
-    // else if(this.solicitudSala.horaInicio.hour < this.solicitudSala.horaFin.hour){
-    //   alert('validar minutos');
-    // }
-    // else if(this.solicitudSala.horaInicio.hour > this.solicitudSala.horaFin.hour){
-    //   alert('validar minutos y sumar hora');
-    // }
-    //sigue validadr más
-
-    //  alert('hora inicio' + this.solicitudSala.horaInicio.hour+':'+this.solicitudSala.horaInicio.minute +
-    //   "\n" + 'hora fin' + this.solicitudSala.horaFin.hour +':'+this.solicitudSala.horaFin.minute);
-    // if (this.solicitudSala.horaInicio.hour == this.solicitudSala.horaFin.hour) {
-    //   var resultadoRestaMinutos = (this.solicitudSala.horaInicio.minute - this.solicitudSala.horaFin.minute);
-    //  alert(resultadoRestaMinutos);
-    //   if (resultadoRestaMinutos < 0) {
-    //     var sumaHoras = (this.solicitudSala.horaFin.minute + intevarlo);
-    //     alert('sumar'+sumaHoras);
-    //     if (sumaHoras > 60) {
-    //      // this.solicitudSala.horaFin=(this.solicitudSala.horaFin+1);
-    //       var minRestantes=(sumaHoras-60);
-    //       alert('minutos restantes'+(minRestantes));
-    //       alert('sumar a horas y a minutos tambi');
-
-    //       this.solicitudSala.horaFin.hour=(this.solicitudSala.horaFin.hour+1);
-    //       this.solicitudSala.horaFin.minute=minRestantes;
-    //      // alert('validar intervalo');
-    //     }else if(sumaHoras = 60){
-    //       alert('sumarle solo 1 hora');
-    //       this.solicitudSala.horaFin.hour=(this.solicitudSala.horaFin.hour+1);
-    //     }
-    //   } else if(resultadoRestaMinutos == 0){
-    //     this.solicitudSala.horaFin.minute=(this.solicitudSala.horaFin.minute+intevarlo);
-    //     alert('los minutos son iguales');
-    //   }else{
-    //     alert('todo bien');
-    //   }
-
-    // } else if (this.solicitudSala.horaInicio.hour > this.solicitudSala.horaFin.hour) {
-    //   alert('no puede ser menor la hora final');
-    // }
-    // else {
-    //   alert('son diferentes');
-    // }
-    // alert('hoa final'+this.solicitudSala.horaFin.hour+':'+this.solicitudSala.horaFin.minute);
-
-    //this.timeStruct.minute=30;
     const newDate: Date = setHours(
       setMinutes(
         setSeconds(this.date, this.timeStruct.second),
