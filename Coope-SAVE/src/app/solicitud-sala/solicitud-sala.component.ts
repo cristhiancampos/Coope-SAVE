@@ -515,7 +515,14 @@ export class SolicitudSalaComponent implements OnInit {
           if (horarioDiaSala.desde == null || horarioDiaSala.desde == undefined || horarioDiaSala.desde == "" || horarioDiaSala.desde == "null") {
             this.mensajeSolicitudInvalida = "El día " + dia + " para la sala seleccinada no cuenta con un horario establecido , favor comuniquese con el administrador.";
           } else { // validar el horario del dia selecciona con respecto al horario de la sala
-            if (parseInt(this.solicitudSala.horaInicio.hour) < parseInt(horarioDiaSala.desde) || parseInt(this.solicitudSala.horaFin.hour) > parseInt(horarioDiaSala.hasta)) {
+            
+            let horaEntradaDigit =(parseInt(this.solicitudSala.horaInicio.hour)+((parseInt(this.solicitudSala.horaInicio.minute)/60) ));
+            let horaSalidaDigit=(parseInt(this.solicitudSala.horaFin.hour)+((parseInt(this.solicitudSala.horaFin.minute)/60) ));
+           // console.log('Inicio pantalla '+horaEntradaDigit+'<  Inicio Solicitud'+horarioDiaSala.desde);
+            //console.log('Fin pantalla '+horaSalidaDigit +'> Hasta  Solicitud'+horarioDiaSala.hasta);
+
+            if (horaEntradaDigit< parseInt(horarioDiaSala.desde) ||
+               ( horaSalidaDigit> parseInt(horarioDiaSala.hasta))) {
               let meridianoInit;
               let meridianoFin;
               let meridNumIni;
@@ -541,15 +548,17 @@ export class SolicitudSalaComponent implements OnInit {
               if (meridNumIni == 0) {
                 meridNumIni = meridNumIni + 12;
               }
+              let agregar = false;
               this.mensajeSolicitudInvalida = "El horario habilitado el día " + dia + " para la sala seleciona, es desde  " + meridNumIni + " " + meridianoInit + " hasta " + meridNumFin + " " + meridianoFin;
             }
             else {// validar la disponibilidad de horario
 
               let agregar = false;
               if (this.solicitudesdia == null || this.solicitudesdia == undefined || this.solicitudesdia.length == 0) {
-                //  alert('no hay solicitudes del día, puede agregar');
+                 alert('no hay solicitudes del día, puede agregar');
                 agregar = true;
               } else {
+                alert(agregar);
                 if (this.tempNombreSala == "") {
                   this.mensajeSolicitudInvalida = "Seleccione una Sala";
                 } else {
@@ -639,7 +648,7 @@ export class SolicitudSalaComponent implements OnInit {
                 } else {
                   this.msjError('Debe validar sus credenciales');
                 }
-              }
+               }
 
             }
           }
