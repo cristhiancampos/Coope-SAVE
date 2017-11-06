@@ -196,7 +196,7 @@ export class SolicitudSalaComponent implements OnInit {
       this.solicSala = true;
     } else {
       this.solicSala = false;
-      this.mensajeSolicitudInvalida="";
+      this.mensajeSolicitudInvalida = "";
     }
   }
   //fijar el estilos delos botones, solicitar sala y solicitudes del día en el modal de agregar solicitud
@@ -479,7 +479,7 @@ export class SolicitudSalaComponent implements OnInit {
       }
       else {// validar el horario de la sala
         if (this.date == null) {
-          this.mensajeSolicitudInvalida='Favor seleccione una fecha';
+          this.mensajeSolicitudInvalida = 'Favor seleccione una fecha';
         } else {
           let dia;
           if (this.date.getDay() == 0) {
@@ -547,7 +547,7 @@ export class SolicitudSalaComponent implements OnInit {
 
               let agregar = false;
               if (this.solicitudesdia == null || this.solicitudesdia == undefined || this.solicitudesdia.length == 0) {
-              //  alert('no hay solicitudes del día, puede agregar');
+                //  alert('no hay solicitudes del día, puede agregar');
                 agregar = true;
               } else {
                 if (this.tempNombreSala == "") {
@@ -576,13 +576,13 @@ export class SolicitudSalaComponent implements OnInit {
 
                   //buscar solicitudes entre el rango de horas escojido por el usuario y deteriminar si existen solicitudes
                   let tempArrayVerificacion = [];
-                 // let tempArrayVerificacionNumber = [];
+                  // let tempArrayVerificacionNumber = [];
                   //console.log('...' + minFinal);
                   for (let contador = 0; contador < tempArrayHoraFinal.length; contador++) {
                     let sumatoriaFinal = ((tempArrayHoraFinal[contador].hour * 60) + (tempArrayHoraFinal[contador].minute));
                     let sumatoriaInicial = ((tempArrayHoraInicio[contador].hour * 60) + (tempArrayHoraInicio[contador].minute));
-                    console.log('Min inicial '+minFinal+">="+sumatoriaFinal+'minFinal'+minInicial+'<='+sumatoriaInicial);
-                    if (minFinal >= sumatoriaFinal && minInicial <= sumatoriaFinal) {
+                    console.log('Min inicial ' + minFinal + ">=" + sumatoriaFinal + 'minFinal' + minInicial + '<=' + sumatoriaInicial);
+                    if (minFinal >= sumatoriaFinal && minInicial < sumatoriaFinal) {
                       // console.log("Desde " + sumatoriaInicial + "   hasta" + sumatoriaFinal);
                       tempArrayVerificacion.push(minFinal);
                     }
@@ -590,93 +590,60 @@ export class SolicitudSalaComponent implements OnInit {
 
                   console.log(tempArrayVerificacion);
                   // verificar si se encontraron
-                  if(tempArrayVerificacion.length>0){
-                   // this.mensajeSolicitudInvalida="Ya existe una solicitud para esta sala, con respecto al horario ingresado";
+                  if (tempArrayVerificacion.length > 0) {
+                    // this.mensajeSolicitudInvalida="Ya existe una solicitud para esta sala, con respecto al horario ingresado";
                     agregar = false;
-                  }else{
+                  } else {
                     //alert('puede agregar final');
                     agregar = true;
                   }
-                
+
                   console.log(tempArrayVerificacion);
                   //validar la cantidad de solicitudes que hay
-                  
+
                 }
 
               }
 
-              if(!agregar){
-                this.mensajeSolicitudInvalida="Ya existe una solicitud para esta sala, con el horario ingresado";        
+              if (!agregar) {
+                this.mensajeSolicitudInvalida = "Ya existe una solicitud para esta sala, con el horario ingresado";
               }
-              else{
-                alert('puede agregar su solicitud');                
+              else {// todo correcto , puede agregar la solicitud
+
+                let identity = localStorage.getItem('identity');
+                let user = JSON.parse(identity);
+                let recursos = JSON.parse(identity);
+                if (user != null) {
+                  this.solicitudSala.fecha = this.dateStruct;
+                  this.solicitudSala.usuario = user._id;
+                  this.solicitudSala.recursos = this.tempRecursos;
+                  this._servSolicitud.registrarSolicitud(this.solicitudSala).subscribe(
+                    response => {
+                      if (!response.message._id) {
+                        this.msjError(response.message);
+                      } else {
+                        this.msjExitoso("Solicitud Agregada Exitosamente");
+                        this.solicitudSala = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
+                        this.obtenerSolicitudSalas();
+                        this.cerrarModal('#modal-add-new-request');
+                        // this.obtenerSalas();
+                      }
+                    }, error => {
+                      var alertMessage = <any>error;
+                      if (alertMessage != null) {
+                        var body = JSON.parse(error._body);
+                        this.msjError('Solicitud no registrada');
+                      }
+                    }
+                  );
+                } else {
+                  this.msjError('Debe validar sus credenciales');
+                }
               }
-              // let identity = localStorage.getItem('identity');
-              // let user = JSON.parse(identity);
-              // let recursos = JSON.parse(identity);
-              // if (user != null) {
-              //   this.solicitudSala.fecha = this.dateStruct;
-              //   this.solicitudSala.usuario = user._id;
-              //   this.solicitudSala.recursos = this.tempRecursos;
-              //   this._servSolicitud.registrarSolicitud(this.solicitudSala).subscribe(
-              //     response => {
-              //       if (!response.message._id) {
-              //         this.msjError(response.message);
-              //       } else {
-              //         this.msjExitoso("Solicitud Agregada Exitosamente");
-              //         this.solicitudSala = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
-              //         this.obtenerSolicitudSalas();
-              //         this.cerrarModal('#modal-add-new-request');
-              //         // this.obtenerSalas();
-              //       }
-              //     }, error => {
-              //       var alertMessage = <any>error;
-              //       if (alertMessage != null) {
-              //         var body = JSON.parse(error._body);
-              //         this.msjError('Solicitud no registrada');
-              //       }
-              //     }
-              //   );
-              // } else {
-              //   this.msjError('Debe validar sus credenciales');
-              // }
-              // alert('todo bien');
+
             }
           }
         }
-
-        // let identity = localStorage.getItem('identity');
-        // let user = JSON.parse(identity);
-        // let recordar = localStorage.getItem('remember');
-        // let recordarValue = JSON.parse(recordar);
-        // let recursos = JSON.parse(identity);
-        // if (user != null) {
-        //   this.solicitudSala.fecha = this.dateStruct;
-        //   this.solicitudSala.usuario = user._id;
-        //   this.solicitudSala.recursos = this.tempRecursos;
-        //   this._servSolicitud.registrarSolicitud(this.solicitudSala).subscribe(
-        //     response => {
-        //       if (!response.message._id) {
-        //         this.msjError(response.message);
-        //       } else {
-        //         this.msjExitoso("Solicitud Agregada Exitosamente");
-        //         this.solicitudSala = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
-        //         this.obtenerSolicitudSalas();
-        //         this.cerrarModal('#modal-add-new-request');
-        //         // this.obtenerSalas();
-        //       }
-        //     }, error => {
-        //       var alertMessage = <any>error;
-        //       if (alertMessage != null) {
-        //         var body = JSON.parse(error._body);
-        //         this.msjError('Solicitud no registrada');
-        //       }
-        //     }
-        //   );
-        // } else {
-        //   this.msjError('Debe validar sus credenciales');
-        // }
-
       }
 
     }
