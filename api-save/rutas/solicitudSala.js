@@ -2,7 +2,7 @@
 
 var express = require('express');
 var ControladorSolicitudSala = require('../controladores/solicitudSala');
-
+var ControladorEnviarCorreo = require('../controladores/enviarCorreo');
 var api = express.Router();
 var md_auth = require('../middlewares/authenticated');
 
@@ -12,6 +12,8 @@ api.post('/obtenerSolicitudesSalas',ControladorSolicitudSala.obtenerSolicitudesS
 api.get('/obtenerTodasSolicitudes',ControladorSolicitudSala.obtenerTodasSolicitudes);
  api.put('/modificarSolicitudSala',ControladorSolicitudSala.modificarSolicitudSala);
 api.delete('/eliminarSolicitudSala/:id', ControladorSolicitudSala.eliminarSolicitudSala);
+
+api.get('/enviarCorreo', ControladorEnviarCorreo.sendEmail);
 
 
 

@@ -95,4 +95,11 @@ export class ServicioSala{
         .map(res=>res.json());
     }
 
+    enviarCorreo(sala) {
+        console.log('Llamado en el servicio');
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        return this._http.get(this.url + 'enviarCorreo', { headers: headers })
+            .map(res => res.json());
+    }
+
 }//Final de el export de clase

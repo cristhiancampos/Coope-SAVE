@@ -138,4 +138,6 @@ export class ServicioSolicitudSala {
             .map(res => res.json());
     }
 
+   
+
 }//Final de el export de clas
