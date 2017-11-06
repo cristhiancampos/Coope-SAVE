@@ -147,6 +147,7 @@ export class SolicitudSalaComponent implements OnInit {
     this.estiloBotones();
     console.log('cargó el calendario');
     this.obtenerSolicitudSalas();
+
   }
   solicitudSala: SolicitudSala;
   //title;//
@@ -159,8 +160,12 @@ export class SolicitudSalaComponent implements OnInit {
   private solicSala = true;
   public solicitudesdia = [];
   cupoMaximo;
-  horarioValido=false;
-  formAgregarValido=false;
+  horarioValido = true;//cambiar a false
+  formAgregarValido = true; //cambiar a false
+  mensajeSolicitudInvalida = "";
+  tempHorarioSala = [];
+  minDate: NgbDateStruct;
+  tempNombreSala = "";
 
   @Input() placeholder: string;
   date: Date;
@@ -182,6 +187,7 @@ export class SolicitudSalaComponent implements OnInit {
     this.obtenerRecursos();
     this.obtenerSalas();
     this.estiloBotones();
+    this.minDate = { year: null, month: null, day: null };
 
   }
   //cambia el tab de solicitar salas a lista de solitudes, según día seleccionado, y vicebersa, en el modal de solicitar sala
@@ -190,6 +196,7 @@ export class SolicitudSalaComponent implements OnInit {
       this.solicSala = true;
     } else {
       this.solicSala = false;
+      this.mensajeSolicitudInvalida="";
     }
   }
   //fijar el estilos delos botones, solicitar sala y solicitudes del día en el modal de agregar solicitud
@@ -229,10 +236,14 @@ export class SolicitudSalaComponent implements OnInit {
   }
   //establece el cupo máximo de personas según sala seleccionada
   setCupoMaximoSala(sala) {
+    this.mensajeSolicitudInvalida = "";
+    this.tempHorarioSala = [];
     //let cup=  this.salas.filter(item => nombre =="ANFITEATRO" );
     for (let index = 0; index < this.salas.length; index++) {
       if (this.salas[index].nombre == sala) {
         var cup = this.salas[index].cupo;
+        this.tempHorarioSala = this.salas[index].horario;
+        this.tempNombreSala = sala;
         break;
       }
 
@@ -267,6 +278,10 @@ export class SolicitudSalaComponent implements OnInit {
           this.currentDate = response.currentDate;
           var momentDate = moment(this.currentDate, 'YYYY-MM-DD HH:mm:ss');
           let serverDate = momentDate.toDate();
+
+          this.minDate.year = serverDate.getFullYear();
+          this.minDate.month = (serverDate.getMonth() + 1);
+          this.minDate.day = serverDate.getDate();
 
           if (date.getFullYear() < serverDate.getFullYear()) {
             this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
@@ -426,6 +441,7 @@ export class SolicitudSalaComponent implements OnInit {
       response => {
         if (response.message) {
           this.salas = response.message;
+          //console.log(this.salas);
         } else {//no hay Salas registradas
         }
       }, error => {
@@ -456,44 +472,210 @@ export class SolicitudSalaComponent implements OnInit {
     var minInicial = ((this.solicitudSala.horaInicio.hour * 60) + this.solicitudSala.horaInicio.minute);
     var minFinal = ((this.solicitudSala.horaFin.hour * 60) + this.solicitudSala.horaFin.minute);
     if (minFinal - minInicial <= 0) {
-      //alert('no puede agregar');
+      this.mensajeSolicitudInvalida = "La hora final no debe ser igual o menor a la hora de inicio";
     } else {
       if (minFinal - minInicial > 0 && minFinal - minInicial < 30) {
-        // alert('no puede agregar 2');
+        this.mensajeSolicitudInvalida = "El tiempo mínimo que se puede pedir una sala es de 30 minutos";
       }
-      else {
-        //alert('puede agregar');
-        let identity = localStorage.getItem('identity');
-        let user = JSON.parse(identity);
-        let recordar = localStorage.getItem('remember');
-        let recordarValue = JSON.parse(recordar);
-        let recursos = JSON.parse(identity);
-        if (user != null) {
-          this.solicitudSala.fecha = this.dateStruct;
-          this.solicitudSala.usuario = user._id;
-          this.solicitudSala.recursos = this.tempRecursos;
-          this._servSolicitud.registrarSolicitud(this.solicitudSala).subscribe(
-            response => {
-              if (!response.message._id) {
-                this.msjError(response.message);
-              } else {
-                this.msjExitoso("Solicitud Agregada Exitosamente");
-                this.solicitudSala = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
-                this.obtenerSolicitudSalas();
-                this.cerrarModal('#modal-add-new-request');
-                // this.obtenerSalas();
-              }
-            }, error => {
-              var alertMessage = <any>error;
-              if (alertMessage != null) {
-                var body = JSON.parse(error._body);
-                this.msjError('Solicitud no registrada r');
-              }
-            }
-          );
+      else {// validar el horario de la sala
+        if (this.date == null) {
+          this.mensajeSolicitudInvalida='Favor seleccione una fecha';
         } else {
-          this.msjError('Debe validar sus credenciales');
+          let dia;
+          if (this.date.getDay() == 0) {
+            dia = "Domingo";
+          } else if (this.date.getDay() == 1) {
+            dia = "Lunes";
+
+          } else if (this.date.getDay() == 2) {
+            dia = "Martes";
+
+          } else if (this.date.getDay() == 3) {
+            dia = "Miercoles";
+
+          } else if (this.date.getDay() == 4) {
+            dia = "Jueves";
+
+          } else if (this.date.getDay() == 5) {
+            dia = "Viernes";
+
+          } else if (this.date.getDay() == 6) {
+            dia = "Sabado";
+
+          }
+
+          let horarioDiaSala = { dia: null, desde: null, hasta: null };
+          for (let index = 0; index < this.tempHorarioSala.length; index++) {
+            if (this.tempHorarioSala[index].dia == dia) {
+              horarioDiaSala = this.tempHorarioSala[index];
+              break;
+            }
+          }
+
+          if (horarioDiaSala.desde == null || horarioDiaSala.desde == undefined || horarioDiaSala.desde == "" || horarioDiaSala.desde == "null") {
+            this.mensajeSolicitudInvalida = "El día " + dia + " para la sala seleccinada no cuenta con un horario establecido , favor comuniquese con el administrador.";
+          } else { // validar el horario del dia selecciona con respecto al horario de la sala
+            if (parseInt(this.solicitudSala.horaInicio.hour) < parseInt(horarioDiaSala.desde) || parseInt(this.solicitudSala.horaFin.hour) > parseInt(horarioDiaSala.hasta)) {
+              let meridianoInit;
+              let meridianoFin;
+              let meridNumIni;
+              let meridNumFin;
+              if (parseInt(horarioDiaSala.desde) < 12) {
+                meridianoInit = "AM";
+                meridNumIni = parseInt(horarioDiaSala.desde);
+              } else if (parseInt(horarioDiaSala.desde) >= 12) {
+                meridianoInit = "PM";
+                meridNumIni = (parseInt(horarioDiaSala.desde) - 12);
+              }
+              if (parseInt(horarioDiaSala.hasta) == 24) {
+                meridianoFin = "AM";
+                meridNumFin = (parseInt(horarioDiaSala.hasta) - 12);
+              }
+              if (parseInt(horarioDiaSala.hasta) > 12 && parseInt(horarioDiaSala.hasta) < 24) {
+                meridianoFin = "PM";
+                meridNumFin = (parseInt(horarioDiaSala.hasta) - 12);
+              } else if (parseInt(horarioDiaSala.hasta) < 12) {
+                meridianoFin = "AM";
+                meridNumFin = parseInt(horarioDiaSala.hasta);
+              }
+              if (meridNumIni == 0) {
+                meridNumIni = meridNumIni + 12;
+              }
+              this.mensajeSolicitudInvalida = "El horario habilitado el día " + dia + " para la sala seleciona, es desde  " + meridNumIni + " " + meridianoInit + " hasta " + meridNumFin + " " + meridianoFin;
+            }
+            else {// validar la disponibilidad de horario
+
+              let agregar = false;
+              if (this.solicitudesdia == null || this.solicitudesdia == undefined || this.solicitudesdia.length == 0) {
+              //  alert('no hay solicitudes del día, puede agregar');
+                agregar = true;
+              } else {
+                if (this.tempNombreSala == "") {
+                  this.mensajeSolicitudInvalida = "Seleccione una Sala";
+                } else {
+                  //método burbuja para ordenar las solicitudes de menor a mayor
+                  let k = [];
+                  for (let i = 1; i < this.solicitudesdia.length; i++) {
+                    for (var j = 0; j < (this.solicitudesdia.length - i); j++) {
+                      if (this.solicitudesdia[j].horaInicio.hour > this.solicitudesdia[j + 1].horaInicio.hour) {
+                        k = this.solicitudesdia[j + 1];
+                        this.solicitudesdia[j + 1] = this.solicitudesdia[j];
+                        this.solicitudesdia[j] = k;
+                      }
+                    }
+                  }
+                  //extraer el horario de la solicitudes de la sala seleccionda 
+                  let tempArrayHoraInicio = [];
+                  let tempArrayHoraFinal = [];
+                  for (let indice = 0; indice < this.solicitudesdia.length; indice++) {
+                    if (this.solicitudesdia[indice].sala == this.tempNombreSala) {
+                      tempArrayHoraInicio.push(this.solicitudesdia[indice].horaInicio);
+                      tempArrayHoraFinal.push(this.solicitudesdia[indice].horaFin);
+                    }
+                  }
+
+                  //buscar solicitudes entre el rango de horas escojido por el usuario y deteriminar si existen solicitudes
+                  let tempArrayVerificacion = [];
+                 // let tempArrayVerificacionNumber = [];
+                  //console.log('...' + minFinal);
+                  for (let contador = 0; contador < tempArrayHoraFinal.length; contador++) {
+                    let sumatoriaFinal = ((tempArrayHoraFinal[contador].hour * 60) + (tempArrayHoraFinal[contador].minute));
+                    let sumatoriaInicial = ((tempArrayHoraInicio[contador].hour * 60) + (tempArrayHoraInicio[contador].minute));
+                    console.log('Min inicial '+minFinal+">="+sumatoriaFinal+'minFinal'+minInicial+'<='+sumatoriaInicial);
+                    if (minFinal >= sumatoriaFinal && minInicial <= sumatoriaFinal) {
+                      // console.log("Desde " + sumatoriaInicial + "   hasta" + sumatoriaFinal);
+                      tempArrayVerificacion.push(minFinal);
+                    }
+                  }
+
+                  console.log(tempArrayVerificacion);
+                  // verificar si se encontraron
+                  if(tempArrayVerificacion.length>0){
+                   // this.mensajeSolicitudInvalida="Ya existe una solicitud para esta sala, con respecto al horario ingresado";
+                    agregar = false;
+                  }else{
+                    //alert('puede agregar final');
+                    agregar = true;
+                  }
+                
+                  console.log(tempArrayVerificacion);
+                  //validar la cantidad de solicitudes que hay
+                  
+                }
+
+              }
+
+              if(!agregar){
+                this.mensajeSolicitudInvalida="Ya existe una solicitud para esta sala, con el horario ingresado";        
+              }
+              else{
+                alert('puede agregar su solicitud');                
+              }
+              // let identity = localStorage.getItem('identity');
+              // let user = JSON.parse(identity);
+              // let recursos = JSON.parse(identity);
+              // if (user != null) {
+              //   this.solicitudSala.fecha = this.dateStruct;
+              //   this.solicitudSala.usuario = user._id;
+              //   this.solicitudSala.recursos = this.tempRecursos;
+              //   this._servSolicitud.registrarSolicitud(this.solicitudSala).subscribe(
+              //     response => {
+              //       if (!response.message._id) {
+              //         this.msjError(response.message);
+              //       } else {
+              //         this.msjExitoso("Solicitud Agregada Exitosamente");
+              //         this.solicitudSala = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
+              //         this.obtenerSolicitudSalas();
+              //         this.cerrarModal('#modal-add-new-request');
+              //         // this.obtenerSalas();
+              //       }
+              //     }, error => {
+              //       var alertMessage = <any>error;
+              //       if (alertMessage != null) {
+              //         var body = JSON.parse(error._body);
+              //         this.msjError('Solicitud no registrada');
+              //       }
+              //     }
+              //   );
+              // } else {
+              //   this.msjError('Debe validar sus credenciales');
+              // }
+              // alert('todo bien');
+            }
+          }
         }
+
+        // let identity = localStorage.getItem('identity');
+        // let user = JSON.parse(identity);
+        // let recordar = localStorage.getItem('remember');
+        // let recordarValue = JSON.parse(recordar);
+        // let recursos = JSON.parse(identity);
+        // if (user != null) {
+        //   this.solicitudSala.fecha = this.dateStruct;
+        //   this.solicitudSala.usuario = user._id;
+        //   this.solicitudSala.recursos = this.tempRecursos;
+        //   this._servSolicitud.registrarSolicitud(this.solicitudSala).subscribe(
+        //     response => {
+        //       if (!response.message._id) {
+        //         this.msjError(response.message);
+        //       } else {
+        //         this.msjExitoso("Solicitud Agregada Exitosamente");
+        //         this.solicitudSala = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
+        //         this.obtenerSolicitudSalas();
+        //         this.cerrarModal('#modal-add-new-request');
+        //         // this.obtenerSalas();
+        //       }
+        //     }, error => {
+        //       var alertMessage = <any>error;
+        //       if (alertMessage != null) {
+        //         var body = JSON.parse(error._body);
+        //         this.msjError('Solicitud no registrada');
+        //       }
+        //     }
+        //   );
+        // } else {
+        //   this.msjError('Debe validar sus credenciales');
+        // }
 
       }
 
@@ -638,6 +820,7 @@ export class SolicitudSalaComponent implements OnInit {
     // }
   }
   updateDate(): void {
+    this.mensajeSolicitudInvalida = "";
     console.log(this.dateStruct);
     const newDate: Date = setYear(
       setMonth(
@@ -720,7 +903,7 @@ export class SolicitudSalaComponent implements OnInit {
 
   }
   updateTime(): void {
-
+    this.mensajeSolicitudInvalida = "";
 
 
     // var intevarlo = 30;

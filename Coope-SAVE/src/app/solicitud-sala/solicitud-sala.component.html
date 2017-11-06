@@ -131,15 +131,19 @@
                           <form class="form-inline">
                             <div class="form-group">
                               <div class="input-group">
-                                <input readonly class="form-control" [placeholder]="placeholder" name="date" [(ngModel)]="dateStruct" (ngModelChange)="updateDate()"
-                                  ngbDatepicker #datePicker="ngbDatepicker">
+                                <input id="dataPickerAdd" readonly class="form-control" [placeholder]="placeholder" name="date" [(ngModel)]="dateStruct" (ngModelChange)="updateDate()"
+                                  ngbDatepicker #datePicker="ngbDatepicker" [minDate]="minDate">
                                 <div class="input-group-addon" (click)="datePicker.toggle()">
                                   <i class="fa fa-calendar"></i>
                                 </div>
                               </div>
                             </div>
                           </form>
-    
+    <script>
+    $(function() {
+        $("#dataPickerAdd").datepicker({ minDate: 0 });
+
+        });</script>
                           <div style="font-size: 1rem">
                             <br>
                             <label for="">Inicia</label>
@@ -147,7 +151,7 @@
                               <ngb-timepicker [(ngModel)]="solicitudSala.horaInicio" (ngModelChange)="updateTime()" [meridian]="true" (input)="updateInitDateOnInput()"
                                 #ctrlInitDate="ngModel" name="ctrlInitDate" required>
                               </ngb-timepicker>
-                              <div *ngIf="ctrlInitDate.valid" class="small form-text text-success">Correcto <i class="fa fa-check" aria-hidden="true"></i> </div>
+                              <!-- <div *ngIf="ctrlInitDate.valid" class="small form-text text-success">Correcto <i class="fa fa-check" aria-hidden="true"></i> </div> -->
                               <div class="small form-text text-danger" *ngIf="!ctrlInitDate.valid">
                                 <div *ngIf="ctrlInitDate.errors['required']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar valores Numericos</div>
                                 <div *ngIf="ctrlInitDate.errors['tooLate']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en
@@ -165,7 +169,7 @@
                             <ngb-timepicker [(ngModel)]="solicitudSala.horaFin" (ngModelChange)="updateTime()" [meridian]="true" (input)="updateFinishDateOnInput()"
                               #ctrlFinishDate="ngModel" name="ctrlFinishDate" required>
                             </ngb-timepicker>
-                            <div *ngIf="ctrlFinishDate.valid" class="small form-text text-success">Correcto <i class="fa fa-check" aria-hidden="true"></i> </div>
+                            <!-- <div *ngIf="ctrlFinishDate.valid" class="small form-text text-success">Correcto <i class="fa fa-check" aria-hidden="true"></i> </div> -->
                             <div class="small form-text text-danger" *ngIf="!ctrlFinishDate.valid">
                               <div *ngIf="ctrlFinishDate.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar valores Numericos</div>
                               <div *ngIf="ctrlFinishDate.errors['tooLate']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en las
@@ -174,6 +178,12 @@
                                 minutos</div>
                             </div>
                           </div>
+                        </div>
+
+                        <div class="small form-text text-danger" style="font-size:0.9rem">
+                          <div>&nbsp; &nbsp;&nbsp; &nbsp;
+                            <i *ngIf='mensajeSolicitudInvalida!=""' class="fa fa-exclamation-circle" aria-hidden="true"></i>   {{mensajeSolicitudInvalida}}</div>
+  
                         </div>
                         <!-- <div *ngIf="ctrlFinishDate.valid" class="small form-text text-success">Debe eligir un horario correcto <i class="fa fa-check" aria-hidden="true"></i> </div> -->
                         
@@ -255,7 +265,7 @@
                 </div>
                 <hr>
                 <button type="button" class="btn btn-danger"  (click)="cerrarModal('#modal-add-new-request')">Cancelar</button>
-                <button id="btn-add-solid" type="submit" class="btn btn-success" (click)="agregarSolicitud()" [disabled]="!descp.valid || !cup.valid || !sal.valid ||  !ctrlInitDate.valid || !horarioValido">Confirmar</button>
+                <button id="btn-add-solid" type="submit" class="btn btn-success" (click)="agregarSolicitud()" [disabled]="!descp.valid || !cup.valid || !sal.valid ||  !ctrlInitDate.valid">Confirmar</button>
 
 
           </section>
