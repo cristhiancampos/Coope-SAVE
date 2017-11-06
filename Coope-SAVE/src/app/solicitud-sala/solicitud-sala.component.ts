@@ -515,14 +515,15 @@ export class SolicitudSalaComponent implements OnInit {
           if (horarioDiaSala.desde == null || horarioDiaSala.desde == undefined || horarioDiaSala.desde == "" || horarioDiaSala.desde == "null") {
             this.mensajeSolicitudInvalida = "El día " + dia + " para la sala seleccinada no cuenta con un horario establecido , favor comuniquese con el administrador.";
           } else { // validar el horario del dia selecciona con respecto al horario de la sala
-            
-            let horaEntradaDigit =(parseInt(this.solicitudSala.horaInicio.hour)+((parseInt(this.solicitudSala.horaInicio.minute)/60) ));
-            let horaSalidaDigit=(parseInt(this.solicitudSala.horaFin.hour)+((parseInt(this.solicitudSala.horaFin.minute)/60) ));
-           // console.log('Inicio pantalla '+horaEntradaDigit+'<  Inicio Solicitud'+horarioDiaSala.desde);
+            let agregarValid = false;
+            let agregar = false;
+            let horaEntradaDigit = (parseInt(this.solicitudSala.horaInicio.hour) + ((parseInt(this.solicitudSala.horaInicio.minute) / 60)));
+            let horaSalidaDigit = (parseInt(this.solicitudSala.horaFin.hour) + ((parseInt(this.solicitudSala.horaFin.minute) / 60)));
+            // console.log('Inicio pantalla '+horaEntradaDigit+'<  Inicio Solicitud'+horarioDiaSala.desde);
             //console.log('Fin pantalla '+horaSalidaDigit +'> Hasta  Solicitud'+horarioDiaSala.hasta);
 
-            if (horaEntradaDigit< parseInt(horarioDiaSala.desde) ||
-               ( horaSalidaDigit> parseInt(horarioDiaSala.hasta))) {
+            if (horaEntradaDigit < parseInt(horarioDiaSala.desde) ||
+              (horaSalidaDigit > parseInt(horarioDiaSala.hasta))) {
               let meridianoInit;
               let meridianoFin;
               let meridNumIni;
@@ -548,17 +549,17 @@ export class SolicitudSalaComponent implements OnInit {
               if (meridNumIni == 0) {
                 meridNumIni = meridNumIni + 12;
               }
-              let agregar = false;
+              agregarValid = false;
               this.mensajeSolicitudInvalida = "El horario habilitado el día " + dia + " para la sala seleciona, es desde  " + meridNumIni + " " + meridianoInit + " hasta " + meridNumFin + " " + meridianoFin;
+              //alert('horamal');
             }
             else {// validar la disponibilidad de horario
-
-              let agregar = false;
-              if (this.solicitudesdia == null || this.solicitudesdia == undefined || this.solicitudesdia.length == 0) {
-                 alert('no hay solicitudes del día, puede agregar');
-                agregar = true;
+              //alert('horabien'+this.solicitudesdia.length);
+              if (this.solicitudesdia.length == 0) {//no hay solicitudes del día y el hora escogido es válido
+                agregarValid = true;
               } else {
-                alert(agregar);
+                // alert('entró aqui  valid' +agregarValid);
+                agregarValid = false;
                 if (this.tempNombreSala == "") {
                   this.mensajeSolicitudInvalida = "Seleccione una Sala";
                 } else {
@@ -585,14 +586,11 @@ export class SolicitudSalaComponent implements OnInit {
 
                   //buscar solicitudes entre el rango de horas escojido por el usuario y deteriminar si existen solicitudes
                   let tempArrayVerificacion = [];
-                  // let tempArrayVerificacionNumber = [];
-                  //console.log('...' + minFinal);
                   for (let contador = 0; contador < tempArrayHoraFinal.length; contador++) {
                     let sumatoriaFinal = ((tempArrayHoraFinal[contador].hour * 60) + (tempArrayHoraFinal[contador].minute));
                     let sumatoriaInicial = ((tempArrayHoraInicio[contador].hour * 60) + (tempArrayHoraInicio[contador].minute));
                     console.log('Min inicial ' + minFinal + ">=" + sumatoriaFinal + 'minFinal' + minInicial + '<=' + sumatoriaInicial);
-                    if (minFinal >= sumatoriaFinal && minInicial < sumatoriaFinal) {
-                      // console.log("Desde " + sumatoriaInicial + "   hasta" + sumatoriaFinal);
+                    if (minFinal >= sumatoriaFinal && minInicial <= sumatoriaFinal) {
                       tempArrayVerificacion.push(minFinal);
                     }
                   }
@@ -600,24 +598,20 @@ export class SolicitudSalaComponent implements OnInit {
                   console.log(tempArrayVerificacion);
                   // verificar si se encontraron
                   if (tempArrayVerificacion.length > 0) {
-                    // this.mensajeSolicitudInvalida="Ya existe una solicitud para esta sala, con respecto al horario ingresado";
                     agregar = false;
                   } else {
-                    //alert('puede agregar final');
                     agregar = true;
                   }
-
-                  console.log(tempArrayVerificacion);
-                  //validar la cantidad de solicitudes que hay
-
                 }
 
               }
 
-              if (!agregar) {
+              //alert('agregar'+agregar+'agregar valid'+agregarValid);
+              if (!agregar && !agregarValid) {
                 this.mensajeSolicitudInvalida = "Ya existe una solicitud para esta sala, con el horario ingresado";
               }
-              else {// todo correcto , puede agregar la solicitud
+
+              if (agregar || agregarValid) {// todo correcto , puede agregar la solicitud
 
                 let identity = localStorage.getItem('identity');
                 let user = JSON.parse(identity);
@@ -633,6 +627,7 @@ export class SolicitudSalaComponent implements OnInit {
                       } else {
                         this.msjExitoso("Solicitud Agregada Exitosamente");
                         this.solicitudSala = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
+                        this.obtenerSolicitudes(this.date, false);
                         this.obtenerSolicitudSalas();
                         this.cerrarModal('#modal-add-new-request');
                         // this.obtenerSalas();
@@ -648,7 +643,8 @@ export class SolicitudSalaComponent implements OnInit {
                 } else {
                   this.msjError('Debe validar sus credenciales');
                 }
-               }
+
+              }
 
             }
           }
