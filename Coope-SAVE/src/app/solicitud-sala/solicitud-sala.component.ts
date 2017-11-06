@@ -508,7 +508,7 @@ export class SolicitudSalaComponent implements OnInit {
     fechaFin.setHours(solicitud.horaFin.hour);
     fechaFin.setMinutes(solicitud.horaFin.minute);
     this.events.push({
-      title: solicitud.descripcion,
+      title: solicitud.descripcion +'.       ('+solicitud.horaInicio.hour+':'+solicitud.horaInicio.minute+' - '+solicitud.horaFin.hour+':'+solicitud.horaFin.minute+'  )',
       start: startOfDay(fechaInicio),
       end: endOfDay(fechaFin),
       color: this.tempColor.color,
@@ -782,7 +782,7 @@ export class SolicitudSalaComponent implements OnInit {
     $(modalId).addClass('show');
     $(modalId).css('display', 'block');
   }
-
+  //muestra mensaje existoso
   msjExitoso(texto: string) {
     swal({
       position: 'top',
@@ -792,7 +792,7 @@ export class SolicitudSalaComponent implements OnInit {
       timer: 2500
     })
   }
-
+//muestra mensaje error
   msjError(texto: string) {
     swal(
       'Oops...',
@@ -800,6 +800,7 @@ export class SolicitudSalaComponent implements OnInit {
       'error'
     )
   }
+  //muestra mensaje informátivo
   msInfo(texto: String) {
     swal({
       title: '',
@@ -810,7 +811,7 @@ export class SolicitudSalaComponent implements OnInit {
       confirmButtonText: 'OK'
     })
   }
-
+  //cambia el valor de los check de recursos
   changeRecursos(event: any, _id: any) {
     if (event.target.checked) {
       this.tempRecursos.push(_id);
@@ -818,8 +819,7 @@ export class SolicitudSalaComponent implements OnInit {
       this.tempRecursos = this.tempRecursos.filter(item => item !== _id);
     }
   }
-
-  ///////////////////////////////////////////////////TIMPE PICKER///////////////////////////////////////////////////////////////////
+//sobreescribe el valor dela fecha selecionada
   writeValue(date: Date): void {
     this.date = date;
     this.dateStruct = {
