@@ -138,6 +138,7 @@ export class ServicioSolicitudSala {
             .map(res => res.json());
     }
 
+<<<<<<< Updated upstream
     obtenerSolicitudSala(id: string) {
         let headers = new Headers({
             'Content-Type': 'application/json',
@@ -147,6 +148,6 @@ export class ServicioSolicitudSala {
         return this._http.get(this.url + 'obtenerSolicitudSala/' + id, options)
             .map(res => res.json());
     }
-}
+    
 
 }//Final de el export de clas
