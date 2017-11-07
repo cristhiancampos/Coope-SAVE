@@ -1,25 +1,37 @@
 'use strict'
 
-
-
+var Usuario = require('../modelos/usuario');
+var listaCorreos=[];
+function obtenerUsuarios(req, res) {
+    Usuario.find({$or:[ {'rol':'NOTIFICACIONES'}, {'rol':'ADMINISTRADOR'}],estado: { $ne: "Eliminado" } }, (err, usuarios) => {
+      if (err) {
+        res.status(500).send({ message: 'Error en la petición' });
+      } else {
+        if (!usuarios) {
+          res.status(404).send({ message: 'No existen usuarios registrados en el sistema' });
+        } else {
+            for(let e=0;e< usuarios.length;e++){
+                listaCorreos.push(usuarios[e].correo);
+            }
+          return listaCorreos;
+        }
+      }
+    }).sort('number');
+  }
 
     console.log('Llamado en el controlador');
     var nodemailer = require('nodemailer');
-  
     // email sender function
     exports.sendEmail = function(req, res){
 
         var params = req.body;
-        console.log(params);
         var listaRecurso= ``;
 
         for(var i=0; i< params.recursos.length; i++){
 
-            listaRecurso+= "<h2>"+ params.recursos[i]+"</h2>";
+            listaRecurso+= '<p style="font-size:14px;">'+ params.recursos[i]+'</p>';
         }
-
-        console.log(params);
-            // Definimos el transporter
+        // Definimos el transporter
         var transporter = nodemailer.createTransport({
             host: 'smtp.office365.com', // Office 365 server
             port: 587,     // secure SMTP
@@ -36,7 +48,7 @@
     // Definimos el email
     var mailOptions = {
         from: '" SAVE-COOPESPARTA RL." <notificaciones@coopesparta.fi.cr',
-        to: 'esolis@coopesparta.fi.cr',
+        to: listaCorreos,
         subject: 'Prueba',
         html: `
         <html xmlns="http://www.w3.org/1999/xhtml">
@@ -102,11 +114,12 @@
                       <tr>
                         <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; color:#6e6e6e;">
                         <div style="font-size:22px; text-align: center;"><b> Recursos</b></div>
-                        <div>
-                          <br> `+listaRecurso+`<br>
+                        <div style="font-size:14px;">
+                          <br > `+listaRecurso+`<br>
                         </div></td>
                       </tr>
-                    </table></td>
+                    </table>
+                   </td>
               </tr>
               <tr>
                   <td align="left" valign="top" style="background-color:#fff; padding:10px;" bgcolor="#e4e4e4;">
@@ -129,18 +142,27 @@
         
         `
     };
+
+    obtenerUsuarios();
     // Enviamos el email
-    transporter.sendMail(mailOptions, function(error, info){
-        if (error){
-           
-           return null;
-        console.log(info);
-        } else {
-            console.log("Email sent");
-            res.status(200).jsonp(req.body);
-        }
-    });
+    if(!listaCorreos){
+        console.log("Error en la solicitud");
+    }else{
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error){
+               
+               return null;
+            console.log(info);
+            } else {
+                console.log("Email sent");
+                res.status(200).jsonp(req.body);
+            }
+        });
+    }
+    
     };
+
+
 
 
 
