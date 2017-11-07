@@ -238,23 +238,6 @@ export class AdminSalaComponent implements OnInit {
           this.msjError("La Sala no pudo ser agregada");
         } else {
           this.msjExitoso("Sala Agregada Exitosamente");
-          
-          this._servSala.enviarCorreo(this.sala).subscribe(
-            response => {
-              console.log('Respuesta:' +response);
-              if(!response){
-                console.log('Fallo el envio de correo');
-              }else{
-                console.log('Exito envio de correo');
-              }
-            console.log('Pruebas de enviar correo');
-            }, error=>{
-              console.log('Fallo el envio de correo 3234234');
-            }
-          );
-
-
-
           this.sala = new Sala('', '', '', '', this.estadoMensaje, '-',[], '', '');
           this.mostrar(false);
           this.obtenerSalas();
@@ -463,3 +446,20 @@ export class AdminSalaComponent implements OnInit {
   }
 
 }
+
+
+
+
+// this._servSala.enviarCorreo(this.sala).subscribe(
+//   response => {
+//     console.log('Respuesta:' +response);
+//     if(!response){
+//       console.log('Fallo el envio de correo');
+//     }else{
+//       console.log('Exito envio de correo');
+//     }
+//   console.log('Pruebas de enviar correo');
+//   }, error=>{
+//     console.log('Fallo el envio de correo 3234234');
+//   }
+// );

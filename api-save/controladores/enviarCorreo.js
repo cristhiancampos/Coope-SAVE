@@ -10,6 +10,14 @@
     exports.sendEmail = function(req, res){
 
         var params = req.body;
+        
+        var listaRecurso= ``;
+
+        for(var i=0; i< param.recursos.length; i++){
+
+            listaRecurso+= "<h2>"+ param.recursos[i]+"</h2>";
+        }
+
         console.log(params);
             // Definimos el transporter
         var transporter = nodemailer.createTransport({
@@ -44,43 +52,43 @@
             <br>
             <table width="600" border="0" cellspacing="0" cellpadding="0">
               <tr>
-                <td colspan="2" align="left" valign="top" bgcolor="#2a2a2a" style="background-color:#f5f5f5; padding:10px; font-family:Georgia, 'Times New Roman', Times, serif; color:#202CE0; font-size:60px; text-align: center;"><img src="images/logo.png" alt=""></td>
+                <td colspan="2" align="left" valign="top" bgcolor="#2a2a2a" style="background-color:#f5f5f5; padding:10px; font-family:Georgia, 'Times New Roman', Times, serif; color:#202CE0; font-size:60px; text-align: center;"><img src="http://www.coopesparta.fi.cr/images/logo.png" alt=""></td>
               </tr>
               <tr>
                 <td width="100%" align="center" valign="top" style="padding:12px; background-color:#ffffff;" bgcolor="#ffffff;">
                   <table width="100%" border="0" cellspacing="0" cellpadding="4" style="margin-bottom:20px;">
                     <tr>
                       <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><strong>Usuario</strong></td>
-                      <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+params.nombre+`</b></td>
+                      <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+params.usuario+`</b></td>
                       
                     </tr>
                     
                     <tr>
                         <br>
                         <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#000000;"><b>Sala</b></td>
-                        <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px;"><b style="color: #7E7878">SALA1</b></td>
+                        <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px;"><b style="color: #7E7878">`+params.sala+`</b></td>
                     </tr>
                     <tr>
                         <br>
                         <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#000000;"><b>Motivo</b></td>
-                        <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px;"><b style="color: #7E7878">Reunion importante</b></td>
+                        <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px;"><b style="color: #7E7878">`+params.descripcion+`</b></td>
                     </tr>
                      
                     <tr>
                         <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#000000;"><b>Fecha</b></td>
-                        <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">13/11/92</b></td>
+                        <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+params.fecha+`</b></td>
                     </tr> 
                     <tr>
                         <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#000000;"><b>Hora Inicio</b></td>
-                        <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">8:00 am</b></td>
+                        <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+params.horaInicio+`</b></td>
                     </tr> 
                     <tr>
                         <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#000000;"><b>Hoara Final</b></td>
-                        <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">1:00 pm</b></td>
+                        <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+params.horaFin+`</b></td>
                     </tr> 
                     <tr>
                         <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#000000;"><b>Personas</b></td>
-                        <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px;"><b style="color: #7E7878">5</b></td>
+                        <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px;"><b style="color: #7E7878">`+params.cantidadPersonas+`</b></td>
                     </tr> 
                     
                   </table>
@@ -95,9 +103,7 @@
                         <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; color:#6e6e6e;">
                         <div style="font-size:22px; text-align: center;"><b> Recursos</b></div>
                         <div>
-                          <br>
-                          Impresora
-                          <br>
+                          <br> `+this.listaRecurso+`<br>
                         </div></td>
                       </tr>
                     </table></td>
