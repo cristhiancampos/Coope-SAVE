@@ -1,4 +1,4 @@
-export class solicitudVehiculo{
+export class SolicitudVehiculo{
     constructor(
         public _id:string,        
         public vehiculo: string,

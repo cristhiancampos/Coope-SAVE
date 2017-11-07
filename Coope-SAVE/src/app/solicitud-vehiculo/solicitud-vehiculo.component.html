@@ -1,11 +1,11 @@
-<ng-template #modalContent let-close="close">
+<ng-template #modalContent2 let-close="close">
   <div class="modal-header" style="background: #0069d9;color:#fff">
     <!-- <h5 class="modal-title">Event action occurred</h5>
       <button type="button" class="close" (click)="close()">
         <span aria-hidden="true">&times;</span>
       </button> -->
     <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;{{ modalData?.action }} Solicitud</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal" (click)="close()"> 
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal" > 
         <small aria-hidden="true">&times;</small>
       </button>
   </div>
@@ -19,7 +19,7 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-secondary" (click)="close()">OK</button>
+    <button type="button" class="btn btn-outline-secondary" >OK</button>
   </div>
 </ng-template>
 
