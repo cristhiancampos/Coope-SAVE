@@ -10,12 +10,12 @@
     exports.sendEmail = function(req, res){
 
         var params = req.body;
-        
+        console.log(params);
         var listaRecurso= ``;
 
-        for(var i=0; i< param.recursos.length; i++){
+        for(var i=0; i< params.recursos.length; i++){
 
-            listaRecurso+= "<h2>"+ param.recursos[i]+"</h2>";
+            listaRecurso+= "<h2>"+ params.recursos[i]+"</h2>";
         }
 
         console.log(params);
@@ -76,15 +76,15 @@
                      
                     <tr>
                         <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#000000;"><b>Fecha</b></td>
-                        <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+params.fecha+`</b></td>
+                        <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+params.fecha.day+'/'+params.fecha.month+'/'+params.fecha.year+`</b></td>
                     </tr> 
                     <tr>
                         <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#000000;"><b>Hora Inicio</b></td>
-                        <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+params.horaInicio+`</b></td>
+                        <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+params.horaInicio.hour+':'+params.horaInicio.minute+`</b></td>
                     </tr> 
                     <tr>
-                        <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#000000;"><b>Hoara Final</b></td>
-                        <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+params.horaFin+`</b></td>
+                        <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#000000;"><b>Hora Final</b></td>
+                        <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+params.horaFin.hour+':'+params.horaFin.minute+`</b></td>
                     </tr> 
                     <tr>
                         <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#000000;"><b>Personas</b></td>
@@ -103,7 +103,7 @@
                         <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; color:#6e6e6e;">
                         <div style="font-size:22px; text-align: center;"><b> Recursos</b></div>
                         <div>
-                          <br> `+this.listaRecurso+`<br>
+                          <br> `+listaRecurso+`<br>
                         </div></td>
                       </tr>
                     </table></td>

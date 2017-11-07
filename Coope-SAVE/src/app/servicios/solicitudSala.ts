@@ -150,4 +150,13 @@ export class ServicioSolicitudSala {
     }
     
 
+
+    enviarCorreo(solicitud) {
+        let json = JSON.stringify(solicitud);
+        let params = json;
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        return this._http.post(this.url + 'enviarCorreo', params, { headers: headers })
+            .map(res => res.json());
+    }
+
 }//Final de el export de clas

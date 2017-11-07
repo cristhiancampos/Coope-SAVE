@@ -74,77 +74,7 @@ export class SolicitudSalaComponent implements OnInit {
 
   refresh: Subject<any> = new Subject();
 
-  events: CalendarEvent[] = [
-
-    // {
-    //   start: subDays(startOfDay(new Date()), 1),
-    //   end: addDays(new Date(), 1),
-    //   title: 'A 3 day event',
-    //   color: colors.red,
-    //   actions: this.actions
-    // },
-    // {
-    //   start: startOfDay(new Date()),
-    //   title: 'An event with no end date',
-    //   color: colors.yellow,
-    //   actions: this.actions
-    // },
-    // {
-    //   start: subDays(endOfMonth(new Date()), 3),
-    //   end: addDays(endOfMonth(new Date()), 3),
-    //   title: 'A long event that spans 2 months',
-    //   color: colors.blue
-    // },
-    // {
-    //   start: addHours(startOfDay(new Date()), 2),
-    //   end: new Date(),
-    //   title: 'Reunión semanal',
-    //   color: colors.yellow,
-    //   actions: this.actions,
-    //   resizable: {
-    //     beforeStart: true,
-    //     afterEnd: true
-    //   },
-    //   draggable: true
-    // },
-    // {
-    //   start: addHours(startOfDay(new Date()), 2),
-    //   end: new Date(),
-    //   title: 'Junta Administrativa',
-    //   color: colors.yellow,
-    //   actions: this.actions,
-    //   resizable: {
-    //     beforeStart: true,
-    //     afterEnd: true
-    //   },
-    //   draggable: true
-    // },
-    // {
-    //   start: addHours(startOfDay(new Date()), 2),
-    //   end: new Date(),
-    //   title: 'Reunión de TI',
-    //   color: colors.yellow,
-    //   actions: this.actions,
-    //   resizable: {
-    //     beforeStart: true,
-    //     afterEnd: true
-    //   },
-    //   draggable: true
-    // }
-    // ,
-    // {
-    //   start: addHours(startOfDay(new Date()), 2),
-    //   end: new Date(),
-    //   title: 'Reunión de TI',
-    //   color: colors.yellow,
-    //   actions: this.actions,
-    //   resizable: {
-    //     beforeStart: true,
-    //     afterEnd: true
-    //   },
-    //   draggable: true
-    // }
-  ];
+  events: CalendarEvent[] = [];//Array de eventos
   locale: string = 'es';
   activeDayIsOpen = true;
 
@@ -153,6 +83,7 @@ export class SolicitudSalaComponent implements OnInit {
     this.estiloBotones();
     console.log('cargó el calendario');
     this.obtenerSolicitudSalas();
+    this.obtenerRecursos();
     // this.obtenerDepartamentos();
 
 
@@ -236,7 +167,7 @@ export class SolicitudSalaComponent implements OnInit {
       usuario: null,
       sala: null,
       recursos: [],
-      id:null
+      id: null
     }
   };
   tempEnable = false;
@@ -270,7 +201,7 @@ export class SolicitudSalaComponent implements OnInit {
                                       usuario: listaSolicitudes[index].usuario,
                                       sala: listaSolicitudes[index].sala,
                                       recursos: listaSolicitudes[index].recursos,
-                                      id:listaSolicitudes[index]._id
+                                      id: listaSolicitudes[index]._id
                                     }
                                   };
                                 }
@@ -505,17 +436,17 @@ export class SolicitudSalaComponent implements OnInit {
     this._servUsuario.obtenerUsuario(this.tempColor.usuario).subscribe(
       response => {
         if (response.message[0]._id) {
-          this.tempSolicitud.usuario=response.message[0].nombre+' '+response.message[0].apellidos;
-          this.tempSolicitud.departamento=response.message[0].departamento;
-          this.tempSolicitud.sala=this.tempColor.sala;
+          this.tempSolicitud.usuario = response.message[0].nombre + ' ' + response.message[0].apellidos;
+          this.tempSolicitud.departamento = response.message[0].departamento;
+          this.tempSolicitud.sala = this.tempColor.sala;
           this._servSolicitud.obtenerSolicitudSala(this.tempColor.id).subscribe(
             response => {
               if (response.message) {
-                let solicit=response.message;
-                this.tempSolicitud.fecha= solicit.fecha.day+'/'+solicit.fecha.month+'/'+solicit.fecha.year;
-                this.tempSolicitud.motivo=solicit.descripcion;  
-                this.tempSolicitud.inicio=solicit.horaInicio.hour+':'+solicit.horaInicio.minute;  
-                this.tempSolicitud.fin=solicit.horaFin.hour+':'+solicit.horaFin.minute;               
+                let solicit = response.message;
+                this.tempSolicitud.fecha = solicit.fecha.day + '/' + solicit.fecha.month + '/' + solicit.fecha.year;
+                this.tempSolicitud.motivo = solicit.descripcion;
+                this.tempSolicitud.inicio = solicit.horaInicio.hour + ':' + solicit.horaInicio.minute;
+                this.tempSolicitud.fin = solicit.horaFin.hour + ':' + solicit.horaFin.minute;
                 this.tempEvent = event.actions;
                 if (this.tempEvent.length > 0) {
                   this.tempTitleModal = "Editar";
@@ -533,7 +464,7 @@ export class SolicitudSalaComponent implements OnInit {
               }
             }
           );
-         }
+        }
       }, error => {
         var errorMensaje = <any>error;
         if (errorMensaje != null) {
@@ -769,7 +700,9 @@ export class SolicitudSalaComponent implements OnInit {
                       if (!response.message._id) {
                         this.msjError(response.message);
                       } else {
+                        let solicitud = response.message;
                         this.msjExitoso("Solicitud Agregada Exitosamente");
+                        this.enviarEmail(solicitud);
                         this.solicitudSala = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
                         this.obtenerSolicitudes(this.date, false);
                         this.obtenerSolicitudSalas();
@@ -799,6 +732,42 @@ export class SolicitudSalaComponent implements OnInit {
 
   }
 
+  enviarEmail(solicitud) {
+
+    for (let i = 0; i < this.usuarios.length; i++) {
+
+      if (solicitud.usuario == this.usuarios[i]._id) {
+        solicitud.usuario = this.usuarios[i].nombre + ' ' + this.usuarios[i].apellidos;
+        break;
+      }
+    }
+    let nombreRecursos = [];
+    console.log(this.recursos);
+    for (let z = 0; z < solicitud.recursos.length; z++) {
+      for (let e = 0; e < this.recursos.length; e++) {
+        if (solicitud.recursos[z] == this.recursos[e]._id) {
+          nombreRecursos.push(this.recursos[e].codigoActivo + ' ' + this.recursos[e].nombre);
+        }
+
+      }
+    }
+    solicitud.recursos = nombreRecursos;
+    this._servSolicitud.enviarCorreo(solicitud).subscribe(
+      response => {
+        console.log('Respuesta:' + response);
+        if (!response) {
+          console.log('Fallo el envio de correo');
+        } else {
+          console.log('Exito envio de correo');
+        }
+        console.log('Pruebas de enviar correo');
+      }, error => {
+        console.log('Fallo el envio de correo 3234234');
+      }
+    );
+  }//Fin del metodo EnviarEmail
+
+
   getUsuario(id: any) {
     for (let index = 0; index < this.usuarios.length; index++) {
       if (this.usuarios[index]._id == id) {
@@ -807,27 +776,6 @@ export class SolicitudSalaComponent implements OnInit {
     }
     return '-';
   }
-  //Obtener departamentos, No está en uso por el momento
-  // obtenerDepartamentos() {
-  //   this._servDepartamento.obtenerDepartamentos().subscribe(
-  //     response => {
-  //       if (response.message) {
-  //         this.departamentos = response.message;
-  //         // console.log('departamentos---');
-  //         // console.log(this.departamentos);
-  //       } else {//ho hay departamentos registrados
-  //       }
-  //     }, error => {
-  //       var errorMensaje = <any>error;
-  //       if (errorMensaje != null) {
-  //         var body = JSON.parse(error._body);
-  //       }
-  //     }
-  //   );
-
-  // }
-
-
   //encargado de cerrar los modales
   cerrarModal(modalId: any) {
     $(".modal-backdrop").remove();
