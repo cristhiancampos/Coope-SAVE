@@ -138,7 +138,7 @@ export class ServicioSolicitudSala {
             .map(res => res.json());
     }
 
-<<<<<<< Updated upstream
+
     obtenerSolicitudSala(id: string) {
         let headers = new Headers({
             'Content-Type': 'application/json',
