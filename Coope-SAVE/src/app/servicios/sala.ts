@@ -97,8 +97,10 @@ export class ServicioSala{
 
     enviarCorreo(sala) {
         console.log('Llamado en el servicio');
+        let json = JSON.stringify(sala);
+        let params = json; 
         let headers = new Headers({ 'Content-Type': 'application/json' });
-        return this._http.get(this.url + 'enviarCorreo', { headers: headers })
+        return this._http.post(this.url + 'enviarCorreo', params,{ headers: headers })
             .map(res => res.json());
     }
 
