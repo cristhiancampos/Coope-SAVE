@@ -121,7 +121,20 @@ function modificarSolicitudSala(req, res) {
         }
       });
     }
-  
+    function obtenerSolicitudSala(req, res) {
+      var salicitudId = req.params.id;      
+      SolicitudSala.findById(salicitudId , (err, solicitud) => {
+        if (err) {
+          res.status(500).send({ message: 'Error Solicitud no encontrada' });
+        } else {
+          if (!solicitud) {
+            res.status(404).send({ message: 'No se ha encontrado la solicitud' });
+          } else {
+            res.status(200).send({ message: solicitud});
+          }
+        }
+      });
+    }
 
 module.exports = {
   agregarSolicitud,
@@ -129,6 +142,7 @@ module.exports = {
   obtenerSolicitudesSalas,
   obtenerTodasSolicitudes,
   modificarSolicitudSala,
-  eliminarSolicitudSala
+  eliminarSolicitudSala,
+  obtenerSolicitudSala
 }
 

@@ -138,6 +138,19 @@ export class ServicioSolicitudSala {
             .map(res => res.json());
     }
 
+    obtenerSolicitudSala(id: string) {
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        return this._http.get(this.url + 'obtenerSolicitudSala/'+id, { headers: headers })
+            .map(res => res.json());
+        // let headers = new Headers({
+        //     'Content-Type': 'application/json',
+        //     //'Authorization':token
+        // });
+        // let options = new RequestOptions({ headers: headers });
+        // return this._http.post(this.url + 'obtenerSolicitudSala/' + id, options)
+        //     .map(res => res.json());
+    }
+
    
 
 }//Final de el export de clas

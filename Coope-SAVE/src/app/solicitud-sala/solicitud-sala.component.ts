@@ -235,7 +235,8 @@ export class SolicitudSalaComponent implements OnInit {
       secondary: '#FAE3E3',
       usuario: null,
       sala: null,
-      recursos: []
+      recursos: [],
+      id:null
     }
   };
   tempEnable = false;
@@ -268,7 +269,8 @@ export class SolicitudSalaComponent implements OnInit {
                                       secondary: '#FAE3E3',
                                       usuario: listaSolicitudes[index].usuario,
                                       sala: listaSolicitudes[index].sala,
-                                      recursos: listaSolicitudes[index].recursos
+                                      recursos: listaSolicitudes[index].recursos,
+                                      id:listaSolicitudes[index]._id
                                     }
                                   };
                                 }
@@ -496,7 +498,7 @@ export class SolicitudSalaComponent implements OnInit {
 
   tempEvent: any;
   tempTitleModal = "";
-  tempSolicitud = { usuario: null, departamento: null, fecha: null, motivo: null, inico: null, fin: null, sala: null }
+  tempSolicitud = { usuario: null, departamento: null, fecha: null, motivo: null, inicio: null, fin: null, sala: null }
   //administrador de eventos
   handleEvent(action: string, event: CalendarEvent): void {
     this.tempColor = event.color;
@@ -506,18 +508,32 @@ export class SolicitudSalaComponent implements OnInit {
           this.tempSolicitud.usuario=response.message[0].nombre+' '+response.message[0].apellidos;
           this.tempSolicitud.departamento=response.message[0].departamento;
           this.tempSolicitud.sala=this.tempColor.sala;
-          console.log(response.message[0]);
-          this.tempEvent = event.actions;
-          if (this.tempEvent.length > 0) {
-            this.tempTitleModal = "Editar";
-          } else {
-            this.tempTitleModal = "Detalles de la ";
-          }
-          this.modalData = { event, action };
-          this.modal.open(this.modalContent, { size: 'lg' });
-
-        } else {//No se ha encontrado la Sala
-        }
+          this._servSolicitud.obtenerSolicitudSala(this.tempColor.id).subscribe(
+            response => {
+              if (response.message) {
+                let solicit=response.message;
+                this.tempSolicitud.fecha= solicit.fecha.day+'/'+solicit.fecha.month+'/'+solicit.fecha.year;
+                this.tempSolicitud.motivo=solicit.descripcion;  
+                this.tempSolicitud.inicio=solicit.horaInicio.hour+':'+solicit.horaInicio.minute;  
+                this.tempSolicitud.fin=solicit.horaFin.hour+':'+solicit.horaFin.minute;               
+                this.tempEvent = event.actions;
+                if (this.tempEvent.length > 0) {
+                  this.tempTitleModal = "Editar";
+                } else {
+                  this.tempTitleModal = "Detalles de la ";
+                }
+                this.modalData = { event, action };
+                this.modal.open(this.modalContent, { size: 'lg' });
+              } else {//No se ha encontrado la Sala
+              }
+            }, error => {
+              var errorMensaje = <any>error;
+              if (errorMensaje != null) {
+                var body = JSON.parse(error._body);
+              }
+            }
+          );
+         }
       }, error => {
         var errorMensaje = <any>error;
         if (errorMensaje != null) {
@@ -525,9 +541,6 @@ export class SolicitudSalaComponent implements OnInit {
         }
       }
     );
-    // console.log(event);
-    // console.log(this.listaSolicitudes);
-
   }
 
   //inserta los eventos del en el calendario
