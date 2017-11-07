@@ -75,6 +75,7 @@ export class SolicitudSalaComponent implements OnInit {
   refresh: Subject<any> = new Subject();
 
   events: CalendarEvent[] = [
+
     // {
     //   start: subDays(startOfDay(new Date()), 1),
     //   end: addDays(new Date(), 1),
@@ -176,6 +177,7 @@ export class SolicitudSalaComponent implements OnInit {
   tempHorarioSala = [];
   minDate: NgbDateStruct;
   tempNombreSala = "";
+  listaSolicitudes = [];
 
   @Input() placeholder: string;
   date: Date;
@@ -230,7 +232,10 @@ export class SolicitudSalaComponent implements OnInit {
   tempColor: any = {
     color: {
       primary: '#ad2121',
-      secondary: '#FAE3E3'
+      secondary: '#FAE3E3',
+      usuario: null,
+      sala: null,
+      recursos: []
     }
   };
   tempEnable = false;
@@ -242,6 +247,7 @@ export class SolicitudSalaComponent implements OnInit {
         response => {
           if (response.message) {
             let listaSolicitudes = response.message;
+            this.listaSolicitudes = listaSolicitudes;
             this.events = [];
             this._servDepartamento.obtenerDepartamentos().subscribe(
               response => {
@@ -259,7 +265,10 @@ export class SolicitudSalaComponent implements OnInit {
                                   this.tempColor = {
                                     color: {
                                       primary: this.departamentos[c].color + '',
-                                      secondary: '#FAE3E3'
+                                      secondary: '#FAE3E3',
+                                      usuario: listaSolicitudes[index].usuario,
+                                      sala: listaSolicitudes[index].sala,
+                                      recursos: listaSolicitudes[index].recursos
                                     }
                                   };
                                 }
@@ -268,7 +277,7 @@ export class SolicitudSalaComponent implements OnInit {
                           }
                           if (user._id == listaSolicitudes[index].usuario) {
                             this.tempEnable = true;
-                            this.actions=[
+                            this.actions = [
                               {
                                 label: '<i class="fa fa-fw fa-pencil"></i>',
                                 onClick: ({ event }: { event: CalendarEvent }): void => {
@@ -283,7 +292,7 @@ export class SolicitudSalaComponent implements OnInit {
                                 }
                               }
                             ];
-                          
+
                           } else {
                             this.tempEnable = false;
                             this.actions = [];
@@ -485,10 +494,40 @@ export class SolicitudSalaComponent implements OnInit {
     this.refresh.next();
   }
 
+  tempEvent: any;
+  tempTitleModal = "";
+  tempSolicitud = { usuario: null, departamento: null, fecha: null, motivo: null, inico: null, fin: null, sala: null }
   //administrador de eventos
   handleEvent(action: string, event: CalendarEvent): void {
-    this.modalData = { event, action };
-    this.modal.open(this.modalContent, { size: 'lg' });
+    this.tempColor = event.color;
+    this._servUsuario.obtenerUsuario(this.tempColor.usuario).subscribe(
+      response => {
+        if (response.message[0]._id) {
+          this.tempSolicitud.usuario=response.message[0].nombre+' '+response.message[0].apellidos;
+          this.tempSolicitud.departamento=response.message[0].departamento;
+          this.tempSolicitud.sala=this.tempColor.sala;
+          console.log(response.message[0]);
+          this.tempEvent = event.actions;
+          if (this.tempEvent.length > 0) {
+            this.tempTitleModal = "Editar";
+          } else {
+            this.tempTitleModal = "Detalles de la ";
+          }
+          this.modalData = { event, action };
+          this.modal.open(this.modalContent, { size: 'lg' });
+
+        } else {//No se ha encontrado la Sala
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+        }
+      }
+    );
+    // console.log(event);
+    // console.log(this.listaSolicitudes);
+
   }
 
   //inserta los eventos del en el calendario
@@ -507,8 +546,9 @@ export class SolicitudSalaComponent implements OnInit {
     fechaFin.setDate(solicitud.fecha.day);
     fechaFin.setHours(solicitud.horaFin.hour);
     fechaFin.setMinutes(solicitud.horaFin.minute);
+
     this.events.push({
-      title: solicitud.descripcion +'.       ('+solicitud.horaInicio.hour+':'+solicitud.horaInicio.minute+' - '+solicitud.horaFin.hour+':'+solicitud.horaFin.minute+'  )',
+      title: solicitud.descripcion + '.       ' + solicitud.horaInicio.hour + ':' + solicitud.horaInicio.minute + ' - ' + solicitud.horaFin.hour + ':' + solicitud.horaFin.minute + '  ',
       start: startOfDay(fechaInicio),
       end: endOfDay(fechaFin),
       color: this.tempColor.color,
@@ -516,7 +556,7 @@ export class SolicitudSalaComponent implements OnInit {
       draggable: isDragable,
       resizable: {
         beforeStart: true,
-        afterEnd: true
+        afterEnd: true,
       }
     });
     this.refresh.next();
@@ -746,6 +786,14 @@ export class SolicitudSalaComponent implements OnInit {
 
   }
 
+  getUsuario(id: any) {
+    for (let index = 0; index < this.usuarios.length; index++) {
+      if (this.usuarios[index]._id == id) {
+        return this.usuarios[index].nombre;
+      }
+    }
+    return '-';
+  }
   //Obtener departamentos, No está en uso por el momento
   // obtenerDepartamentos() {
   //   this._servDepartamento.obtenerDepartamentos().subscribe(
@@ -775,7 +823,7 @@ export class SolicitudSalaComponent implements OnInit {
     $(modalId).css('display', 'none');
     this.solicSala = true;
   }
-// encargado de abrir los modales
+  // encargado de abrir los modales
   abrirModal(modalId: any) {
     $('body').append('<div class="modal-backdrop fade show" ></div>');
     $('body').addClass('modal-open');
@@ -792,7 +840,7 @@ export class SolicitudSalaComponent implements OnInit {
       timer: 2500
     })
   }
-//muestra mensaje error
+  //muestra mensaje error
   msjError(texto: string) {
     swal(
       'Oops...',
@@ -819,7 +867,7 @@ export class SolicitudSalaComponent implements OnInit {
       this.tempRecursos = this.tempRecursos.filter(item => item !== _id);
     }
   }
-//sobreescribe el valor dela fecha selecionada
+  //sobreescribe el valor dela fecha selecionada
   writeValue(date: Date): void {
     this.date = date;
     this.dateStruct = {

@@ -4,7 +4,7 @@
       <button type="button" class="close" (click)="close()">
         <span aria-hidden="true">&times;</span>
       </button> -->
-    <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;{{ modalData?.action }} Solicitud</h5>
+    <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;{{tempTitleModal}} Solicitud</h5> <!-- {{ modalData?.action }}-->
     <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal" (click)="close()"> 
         <small aria-hidden="true">&times;</small>
       </button>
@@ -13,13 +13,39 @@
     <div>
       <pre> <a><img src="assets/img/logo.png" ></a> </pre>
     </div>
-    <div>
+
+    <div class="list-group">
+        <a href="javascript:void(0);" class="list-group-item list-group-item-action flex-column align-items-start ">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1"> <i class="fa fa-user" aria-hidden="true"></i> Solicitante</h5>
+            <!-- <small>23/11/2017</small> -->
+          </div>
+          <p class="mb-1"> <strong>Nombre</strong>   {{tempSolicitud.usuario}}</p>
+          <p class="mb-1"> <strong>Departamento</strong>   {{tempSolicitud.departamento}}</p>
+        </a>
+        <a  href="javascript:void(0);" class="list-group-item list-group-item-action flex-column align-items-start">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1"><i class="fa fa-asterisk" aria-hidden="true"></i> Detalles</h5>
+            <!-- <small class="text-muted">23/11/2017</small> -->
+          </div>
+          <p class="mb-1"> <strong>Sala</strong>  {{tempSolicitud.sala}}</p>
+          <p class="mb-1"> <strong>Fecha</strong>   COBROS</p>
+          <p class="mb-1"> <strong>Hora de Inicio</strong>   COBROS</p>
+          <p class="mb-1"> <strong>Hora Final</strong>   COBROS</p>
+          <p class="mb-1"> <strong>Motivo</strong>   COBROS</p>
+        </a>
+      </div>
+
+
+     <!-- <div>
       Evento:
       <pre>{{ modalData?.event | json }}</pre>
-    </div>
+    </div>  -->
+
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-secondary" (click)="close()">OK</button>
+    <button *ngIf="tempEvent.length>0" type="button" class="btn btn-outline-secondary" (click)="close()">Modificar</button>
   </div>
 </ng-template>
 
@@ -70,412 +96,231 @@
   </mwl-calendar-day-view>
 </div>
 
-  <!-- Modal  agregar nueva solicitud-->
-  <div class="modal fade bd-example-modal-lg" id="modal-add-new-request" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header" style="color: #FFF;background: #0069d9">
-          <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar-plus-o" aria-hidden="true"></i> Solicitar Sala</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cerrarModal('#modal-add-new-request')">
+<!-- Modal  agregar nueva solicitud-->
+<div class="modal fade bd-example-modal-lg" id="modal-add-new-request" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="color: #FFF;background: #0069d9">
+        <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar-plus-o" aria-hidden="true"></i> Solicitar Sala</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cerrarModal('#modal-add-new-request')">
             <small aria-hidden="true" style="font-size: 2rem; cursor: pointer">&times;</small>
           </button>
-        </div>
-        <div class="modal-body" style="text-align: center">
+      </div>
+      <div class="modal-body" style="text-align: center">
 
 
-          <div class="row">
-            <div class="col-md-8" style="margin-left: 9%;">
-              <div class="panel with-nav-tabs panel-primary">
-                <div class="panel-heading">
-                  <ul class="nav nav-pills nav-fill nav-tabs">
+        <div class="row">
+          <div class="col-md-8" style="margin-left: 9%;">
+            <div class="panel with-nav-tabs panel-primary">
+              <div class="panel-heading">
+                <ul class="nav nav-pills nav-fill nav-tabs">
 
-                    <li class="nav-item">
-                      <a id="bnt-lista" class="nav-link active" href="#tab1primary" data-toggle="tab" (click)="solicitud(1)" 
-                      style="width: 210px;font-size: 1.3rem;">Solicitar Sala</a>
-                    </li>
-                    <li class="nav-item">
-                      <a id="bnt-solicitud" class="nav-link" href="#tab2primary" data-toggle="tab" (click)="solicitud(2)"
-                      style="width: 210px;font-size: 1.3rem;">Solicitudes del día</a>
-                    </li>
-                  </ul>
-                </div>
-                <div class="panel-body">
-                  <div class="tab-content">
-                    <div class="tab-pane fade in active" id="tab1primary">
-                    </div>
-                    <div class="tab-pane fade" id="tab2primary"></div>
+                  <li class="nav-item">
+                    <a id="bnt-lista" class="nav-link active" href="#tab1primary" data-toggle="tab" (click)="solicitud(1)" style="width: 210px;font-size: 1.3rem;">Solicitar Sala</a>
+                  </li>
+                  <li class="nav-item">
+                    <a id="bnt-solicitud" class="nav-link" href="#tab2primary" data-toggle="tab" (click)="solicitud(2)" style="width: 210px;font-size: 1.3rem;">Solicitudes del día</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="panel-body">
+                <div class="tab-content">
+                  <div class="tab-pane fade in active" id="tab1primary">
                   </div>
+                  <div class="tab-pane fade" id="tab2primary"></div>
                 </div>
               </div>
             </div>
-
           </div>
 
-          <!--sección agregar solicitud-->
-          <section *ngIf="solicSala">
-              <br>
-              <table class="table table-bordered table-responsive">
-                <thead>
-                  <tr>
-                    <th class="th-color">Horario</th>
-    
-                    <th class="th-color">Sala</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      <div class="row">
-                        <div class="col-md-6">
-                          <form class="form-inline">
-                            <div class="form-group">
-                              <div class="input-group">
-                                <input id="dataPickerAdd" readonly class="form-control" [placeholder]="placeholder" name="date" [(ngModel)]="dateStruct" (ngModelChange)="updateDate()"
-                                  ngbDatepicker #datePicker="ngbDatepicker" [minDate]="minDate">
-                                <div class="input-group-addon" (click)="datePicker.toggle()">
-                                  <i class="fa fa-calendar"></i>
-                                </div>
-                              </div>
-                            </div>
-                          </form>
-                          <div style="font-size: 1rem">
-                            <br>
-                            <label for="">Inicia</label>
-                            <div class="form-group">
-                              <ngb-timepicker [(ngModel)]="solicitudSala.horaInicio" (ngModelChange)="updateTime()" [meridian]="true" (input)="updateInitDateOnInput()"
-                                #ctrlInitDate="ngModel" name="ctrlInitDate" required>
-                              </ngb-timepicker>
-                              <!-- <div *ngIf="ctrlInitDate.valid" class="small form-text text-success">Correcto <i class="fa fa-check" aria-hidden="true"></i> </div> -->
-                              <div class="small form-text text-danger" *ngIf="!ctrlInitDate.valid">
-                                <div *ngIf="ctrlInitDate.errors['required']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar valores Numericos</div>
-                                <div *ngIf="ctrlInitDate.errors['tooLate']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en
-                                  las horas</div>
-                                <div *ngIf="ctrlInitDate.errors['tooEarly']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en los
-                                  minutos</div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="form-group" style="margin-top: 3.3em; font-size: 1rem">
-    
-                            <label for="">Termina</label>
-                            <ngb-timepicker [(ngModel)]="solicitudSala.horaFin" (ngModelChange)="updateTime()" [meridian]="true" (input)="updateFinishDateOnInput()"
-                              #ctrlFinishDate="ngModel" name="ctrlFinishDate" required>
-                            </ngb-timepicker>
-                            <!-- <div *ngIf="ctrlFinishDate.valid" class="small form-text text-success">Correcto <i class="fa fa-check" aria-hidden="true"></i> </div> -->
-                            <div class="small form-text text-danger" *ngIf="!ctrlFinishDate.valid">
-                              <div *ngIf="ctrlFinishDate.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar valores Numericos</div>
-                              <div *ngIf="ctrlFinishDate.errors['tooLate']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en las
-                                horas</div>
-                              <div *ngIf="ctrlFinishDate.errors['tooEarly']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en los
-                                minutos</div>
-                            </div>
-                          </div>
-                        </div>
+        </div>
 
-                        <div class="small form-text text-danger" style="font-size:0.9rem">
-                          <div>&nbsp; &nbsp;&nbsp; &nbsp;
-                            <i *ngIf='mensajeSolicitudInvalida!=""' class="fa fa-exclamation-circle" aria-hidden="true"></i>   {{mensajeSolicitudInvalida}}</div>
-  
+        <!--sección agregar solicitud-->
+        <section *ngIf="solicSala">
+          <br>
+          <table class="table table-bordered table-responsive">
+            <thead>
+              <tr>
+                <th class="th-color">Horario</th>
+
+                <th class="th-color">Sala</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <form class="form-inline">
+                        <div class="form-group">
+                          <div class="input-group">
+                            <input id="dataPickerAdd" readonly class="form-control" [placeholder]="placeholder" name="date" [(ngModel)]="dateStruct"
+                              (ngModelChange)="updateDate()" ngbDatepicker #datePicker="ngbDatepicker" [minDate]="minDate">
+                            <div class="input-group-addon" (click)="datePicker.toggle()">
+                              <i class="fa fa-calendar"></i>
+                            </div>
+                          </div>
                         </div>
-                        <!-- <div *ngIf="ctrlFinishDate.valid" class="small form-text text-success">Debe eligir un horario correcto <i class="fa fa-check" aria-hidden="true"></i> </div> -->
-                        
-    
+                      </form>
+                      <div style="font-size: 1rem">
+                        <br>
+                        <label for="">Inicia</label>
+                        <div class="form-group">
+                          <ngb-timepicker [(ngModel)]="solicitudSala.horaInicio" (ngModelChange)="updateTime()" [meridian]="true" (input)="updateInitDateOnInput()"
+                            #ctrlInitDate="ngModel" name="ctrlInitDate" required>
+                          </ngb-timepicker>
+                          <!-- <div *ngIf="ctrlInitDate.valid" class="small form-text text-success">Correcto <i class="fa fa-check" aria-hidden="true"></i> </div> -->
+                          <div class="small form-text text-danger" *ngIf="!ctrlInitDate.valid">
+                            <div *ngIf="ctrlInitDate.errors['required']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar valores Numericos</div>
+                            <div *ngIf="ctrlInitDate.errors['tooLate']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en
+                              las horas</div>
+                            <div *ngIf="ctrlInitDate.errors['tooEarly']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en
+                              los minutos
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    </td>
-                    <td>
-                      <div class="control-group form-group">
-                        <div class="controls">
-                          <select #sal="ngModel" name="sal" [(ngModel)]="solicitudSala.sala" 
-                          (change)="setCupoMaximoSala(solicitudSala.sala)" class="selectpicker" style="width: 100%;font-size: 1.2rem;min-width: 10em;"
-                            required>  
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group" style="margin-top: 3.3em; font-size: 1rem">
+
+                        <label for="">Termina</label>
+                        <ngb-timepicker [(ngModel)]="solicitudSala.horaFin" (ngModelChange)="updateTime()" [meridian]="true" (input)="updateFinishDateOnInput()"
+                          #ctrlFinishDate="ngModel" name="ctrlFinishDate" required>
+                        </ngb-timepicker>
+                        <!-- <div *ngIf="ctrlFinishDate.valid" class="small form-text text-success">Correcto <i class="fa fa-check" aria-hidden="true"></i> </div> -->
+                        <div class="small form-text text-danger" *ngIf="!ctrlFinishDate.valid">
+                          <div *ngIf="ctrlFinishDate.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar valores Numericos</div>
+                          <div *ngIf="ctrlFinishDate.errors['tooLate']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en las
+                            horas
+                          </div>
+                          <div *ngIf="ctrlFinishDate.errors['tooEarly']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en los
+                            minutos
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="small form-text text-danger" style="font-size:0.9rem">
+                      <div>&nbsp; &nbsp;&nbsp; &nbsp;
+                        <i *ngIf='mensajeSolicitudInvalida!=""' class="fa fa-exclamation-circle" aria-hidden="true"></i>                        {{mensajeSolicitudInvalida}}</div>
+
+                    </div>
+                    <!-- <div *ngIf="ctrlFinishDate.valid" class="small form-text text-success">Debe eligir un horario correcto <i class="fa fa-check" aria-hidden="true"></i> </div> -->
+
+
+                  </div>
+                </td>
+                <td>
+                  <div class="control-group form-group">
+                    <div class="controls">
+                      <select #sal="ngModel" name="sal" [(ngModel)]="solicitudSala.sala" (change)="setCupoMaximoSala(solicitudSala.sala)" class="selectpicker"
+                        style="width: 100%;font-size: 1.2rem;min-width: 10em;" required>  
                                 <option value="" selected disabled >Seleccione Sala</option>
                                     <option *ngFor="let sala of salas;" >{{sala.nombre}}</option>
                                   </select>
-    
-                          <!-- <div *ngIf="sal.valid" class="small form-text text-success" style="font-size:0.9rem">Correcto<i class="fa fa-check" aria-hidden="true"></i></div> -->
-                          <div class="small form-text text-danger" *ngIf="sal.invalid && (sal.dirty || sal.touched)" style="font-size:0.9rem">
-                            <div *ngIf="sal.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La sala es obligatoria.</div>
-                          </div>
-                        </div>
-                      </div>
-    
-                      <div class="control-group form-group">
-                        <div class="controls">
-                          <input id="inputCup" type="number" class="form-control" #cup="ngModel" name="cup" [(ngModel)]="solicitudSala.cantidadPersonas" 
-                          placeholder="Capacidad {{cupoMaximo}}" required min="1" max="{{cupoMaximo}}" pattern="[0-9]*" 
-                          [disabled]="!cupoMaximo" (keypress)="elimininarNegativos('#inputCup')">
-                          <!-- <div *ngIf="cup.valid && cup.value<=cupoMaximo && cup.value>0 " class="small form-text text-success" style="font-size:0.9rem">Correcto<i class="fa fa-check" aria-hidden="true"></i></div> -->
-                          <div class="small form-text text-danger" *ngIf="cup.invalid && (cup.dirty || cup.touched)" style="font-size:0.9rem">
-                            <div *ngIf="cup.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La cantidad de personas es obligatoria</div>
-                          </div>
-                          <div class="small form-text text-danger" *ngIf="!cup.invalid &&(cup.value>cupoMaximo )" style="font-size:0.9rem">
-                          <div ><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La capacidad máxima de la sala es de {{cupoMaximo}} personas</div>                            
-                        </div>
-                        <div class="small form-text text-danger" *ngIf="cup.valid && cup.value<='0'" style="font-size:0.9rem">
-                          <div ><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La solicitud debe incluir almenos 1 persona</div>                            
-                        </div>
 
-                        </div>
+                      <!-- <div *ngIf="sal.valid" class="small form-text text-success" style="font-size:0.9rem">Correcto<i class="fa fa-check" aria-hidden="true"></i></div> -->
+                      <div class="small form-text text-danger" *ngIf="sal.invalid && (sal.dirty || sal.touched)" style="font-size:0.9rem">
+                        <div *ngIf="sal.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La sala es obligatoria.</div>
                       </div>
-                      <div class="control-group form-group">
-                        <div class="controls">
-                          <textarea class="form-control" #descp="ngModel" name="descp" [(ngModel)]="solicitudSala.descripcion" placeholder="Motivo por el cuál solicita la sala."
-                            rows="3" required maxlength="50"></textarea>
-                          <!-- <div *ngIf="descp.valid" class="small form-text text-success" style="font-size:0.9rem">Correcto <i class="fa fa-check" aria-hidden="true"></i></div> -->
-                          <div class="small form-text text-danger" *ngIf="descp.invalid && (descp.dirty || descp.touched)" style="font-size:0.9rem">
-                            <div *ngIf="descp.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> El motivo de la solicitud es obligatorio</div>
-    
-                          </div>
-                        </div>
+                    </div>
+                  </div>
+
+                  <div class="control-group form-group">
+                    <div class="controls">
+                      <input id="inputCup" type="number" class="form-control" #cup="ngModel" name="cup" [(ngModel)]="solicitudSala.cantidadPersonas"
+                        placeholder="Capacidad {{cupoMaximo}}" required min="1" max="{{cupoMaximo}}" pattern="[0-9]*" [disabled]="!cupoMaximo"
+                        (keypress)="elimininarNegativos('#inputCup')">
+                      <!-- <div *ngIf="cup.valid && cup.value<=cupoMaximo && cup.value>0 " class="small form-text text-success" style="font-size:0.9rem">Correcto<i class="fa fa-check" aria-hidden="true"></i></div> -->
+                      <div class="small form-text text-danger" *ngIf="cup.invalid && (cup.dirty || cup.touched)" style="font-size:0.9rem">
+                        <div *ngIf="cup.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La cantidad de personas es obligatoria</div>
                       </div>
-                    
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              
-              <div class="container-fluid">
-                  <hr>
-                  <h4 style="color:#0069d9">Lista de Recursos disponibles</h4> <br>
-                  <div class="row">
-                    <div class="col-md-12" style="font-size: 1rem">
-                      <div class="container">
-                        <div class="form-group">
-                          <div class="row col-md-12" style="overflow-y: scroll; height: 100px">
-                            <div class="col-md-6" *ngFor="let recurso of recursos;" style="text-align: left">
-                              <label class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" (change)="changeRecursos($event,recurso._id)" >
-                                <span class="custom-control-indicator"></span>
-                                <span class="custom-control-description">{{recurso.nombre}}</span>
-                              </label>
-                            </div>
-                          </div>
-                        </div>
+                      <div class="small form-text text-danger" *ngIf="!cup.invalid &&(cup.value>cupoMaximo )" style="font-size:0.9rem">
+                        <div><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La capacidad máxima de la sala es de
+                          {{cupoMaximo}} personas</div>
+                      </div>
+                      <div class="small form-text text-danger" *ngIf="cup.valid && cup.value<='0'" style="font-size:0.9rem">
+                        <div><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La solicitud debe incluir almenos 1 persona</div>
+                      </div>
+
+                    </div>
+                  </div>
+                  <div class="control-group form-group">
+                    <div class="controls">
+                      <textarea class="form-control" #descp="ngModel" name="descp" [(ngModel)]="solicitudSala.descripcion" placeholder="Motivo por el cuál solicita la sala."
+                        rows="3" required maxlength="50"></textarea>
+                      <!-- <div *ngIf="descp.valid" class="small form-text text-success" style="font-size:0.9rem">Correcto <i class="fa fa-check" aria-hidden="true"></i></div> -->
+                      <div class="small form-text text-danger" *ngIf="descp.invalid && (descp.dirty || descp.touched)" style="font-size:0.9rem">
+                        <div *ngIf="descp.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> El motivo de la solicitud es obligatorio</div>
+
+                      </div>
+                    </div>
+                  </div>
+
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="container-fluid">
+            <hr>
+            <h4 style="color:#0069d9">Lista de Recursos disponibles</h4> <br>
+            <div class="row">
+              <div class="col-md-12" style="font-size: 1rem">
+                <div class="container">
+                  <div class="form-group">
+                    <div class="row col-md-12" style="overflow-y: scroll; height: 100px">
+                      <div class="col-md-6" *ngFor="let recurso of recursos;" style="text-align: left">
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" (change)="changeRecursos($event,recurso._id)" >
+                            <span class="custom-control-indicator"></span>
+                            <span class="custom-control-description">{{recurso.nombre}}</span>
+                          </label>
                       </div>
                     </div>
                   </div>
                 </div>
-                <hr>
-                <button type="button" class="btn btn-danger"  (click)="cerrarModal('#modal-add-new-request')">Cancelar</button>
-                <button id="btn-add-solid" type="submit" class="btn btn-success" (click)="agregarSolicitud()" [disabled]="!descp.valid || !cup.valid || !sal.valid ||  !ctrlInitDate.valid">Confirmar</button>
-
-
-          </section>
-          <!-- sección lista-->
-          <section *ngIf="!solicSala">
-            <br>
-            <h5>Fecha: {{dateStruct.day}}/{{dateStruct.month}}/{{dateStruct.year}}</h5>
-              <table class="table table-hover" style="font-size:1rem">
-                  <thead>
-                    <tr>
-                      <th scope="col"><i class="fa fa-list-ol" aria-hidden="true"></i></th>
-                      <th scope="col">Motivo</th>
-                      <th scope="col">Horario</th>
-                      <th scope="col">Sala</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let solicitud of solicitudesdia; let i = index">
-                      <th scope="row">{{i+1}}</th>
-                      <th>{{solicitud.descripcion}}</th>
-                      <th>{{solicitud.horaInicio.hour}}:{{solicitud.horaInicio.minute}} - {{solicitud.horaFin.hour}}:{{solicitud.horaFin.minute}}
-                        </th>
-                      <th>{{solicitud.sala}}</th>
-                    </tr>
-                  </tbody>
-                </table>
-          </section>
-
-
-          <!-- <div id="accordion" role="tablist" aria-multiselectable="true">
- 
-            <div class="card">
-              <div class="card-header" role="tab" id="headingOne">
-                <h5 class="mb-0">
-                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                      Lista de solicitudes <i class="fa fa-arrow-down" aria-hidden="true"></i>
-                  </a>
-                </h5>
-              </div>
-          
-              <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
-                <div class="card-block">
-                    
-                  <table class="table table-hover" style="font-size:1rem">
-                    <thead>
-                      <tr>
-                        <th scope="col"><i class="fa fa-list-ol" aria-hidden="true"></i></th>
-                        <th scope="col">Motivo</th>
-                        <th scope="col">Horario</th>
-                        <th scope="col">Sala</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let solicitud of solicitudesdia; let i = index">
-                      <th scope="row">{{i+1}}</th>
-                      <th>{{solicitud.descripcion}}</th>
-                      <th>{{solicitud.horaInicio.hour}}:{{solicitud.horaInicio.minute}} - {{solicitud.horaFin.hour}}:{{solicitud.horaFin.minute}} </th>
-                      <th>{{solicitud.sala}}</th>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
               </div>
             </div>
+          </div>
+          <hr>
+          <button type="button" class="btn btn-danger" (click)="cerrarModal('#modal-add-new-request')">Cancelar</button>
+          <button id="btn-add-solid" type="submit" class="btn btn-success" (click)="agregarSolicitud()" [disabled]="!descp.valid || !cup.valid || !sal.valid ||  !ctrlInitDate.valid">Confirmar</button>
 
-            <div class="card">
-              <div class="card-header" role="tab" id="headingTwo">
-                <h5 class="mb-0">
-                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                    Solicitar una sala <i class="fa fa-arrow-down" aria-hidden="true"></i>
-                  </a>
-                </h5>
-              </div>
-              <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
-                <div class="card-block">
-                  <br>
-                  <table class="table table-bordered table-responsive">
-                    <thead>
-                      <tr>
-                        <th class="th-color">Horario</th>
-        
-                        <th class="th-color">Sala</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <div class="row">
-                            <div class="col-md-6">
-                              <form class="form-inline">
-                                <div class="form-group">
-                                  <div class="input-group">
-                                    <input readonly class="form-control" [placeholder]="placeholder" name="date" [(ngModel)]="dateStruct" (ngModelChange)="updateDate()"
-                                      ngbDatepicker #datePicker="ngbDatepicker">
-                                    <div class="input-group-addon" (click)="datePicker.toggle()">
-                                      <i class="fa fa-calendar"></i>
-                                    </div>
-                                  </div>
-                                </div>
-                              </form>
-        
-                              <div style="font-size: 1rem">
-                                <br>
-                                <label for="">Inicia</label>
-                                <div class="form-group">
-                                  <ngb-timepicker [(ngModel)]="solicitudSala.horaInicio" (ngModelChange)="updateTime()" [meridian]="true" (input)="updateInitDateOnInput()"
-                                    #ctrlInitDate="ngModel" name="ctrlInitDate" required>
-                                  </ngb-timepicker>
-                                  <div *ngIf="ctrlInitDate.valid" class="small form-text text-success">Correcto <i class="fa fa-check" aria-hidden="true"></i> </div>
-                                  <div class="small form-text text-danger" *ngIf="!ctrlInitDate.valid">
-                                    <div *ngIf="ctrlInitDate.errors['required']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar valores Numericos</div>
-                                    <div *ngIf="ctrlInitDate.errors['tooLate']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en
-                                      las horas</div>
-                                    <div *ngIf="ctrlInitDate.errors['tooEarly']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en los
-                                      minutos</div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-md-6">
-                              <div class="form-group" style="margin-top: 3.3em; font-size: 1rem">
-        
-                                <label for="">Termina</label>
-                                <ngb-timepicker [(ngModel)]="solicitudSala.horaFin" (ngModelChange)="updateTime()" [meridian]="true" (input)="updateFinishDateOnInput()"
-                                  #ctrlFinishDate="ngModel" name="ctrlFinishDate" required>
-                                </ngb-timepicker>
-                                <div *ngIf="ctrlFinishDate.valid" class="small form-text text-success">Correcto <i class="fa fa-check" aria-hidden="true"></i> </div>
-                                <div class="small form-text text-danger" *ngIf="!ctrlFinishDate.valid">
-                                  <div *ngIf="ctrlFinishDate.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar valores Numericos</div>
-                                  <div *ngIf="ctrlFinishDate.errors['tooLate']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en las
-                                    horas</div>
-                                  <div *ngIf="ctrlFinishDate.errors['tooEarly']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en los
-                                    minutos</div>
-                                </div>
-                              </div>
-                            </div>
-                            <div *ngIf="ctrlFinishDate.valid" class="small form-text text-success">Debe eligir un horario correcto <i class="fa fa-check" aria-hidden="true"></i> </div>
-                            
-        
-                          </div>
-                        </td>
-                        <td>
-                          <div class="control-group form-group">
-                            <div class="controls">
-                              <select #sal="ngModel" name="sal" [(ngModel)]="solicitudSala.sala" class="selectpicker" style="width: 100%;font-size: 1.2rem;min-width: 10em;"
-                                required>  
-                                    <option value="" selected disabled >Seleccione Sala</option>
-                                        <option *ngFor="let sala of salas;">{{sala.nombre}}</option>
-                                      </select>
-        
-                              <div *ngIf="sal.valid" class="small form-text text-success" style="font-size:0.9rem">Correcto<i class="fa fa-check" aria-hidden="true"></i></div>
-                              <div class="small form-text text-danger" *ngIf="sal.invalid && (sal.dirty || sal.touched)" style="font-size:0.9rem">
-                                <div *ngIf="sal.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La sala es obligatoria.</div>
-                              </div>
-                            </div>
-                          </div>
-        
-                          <div class="control-group form-group">
-                            <div class="controls">
-                              <input type="number" class="form-control" #cup="ngModel" name="cup" [(ngModel)]="solicitudSala.cantidadPersonas" placeholder="Capacidad 10"
-                                required>
-                              <div *ngIf="cup.valid" class="small form-text text-success" style="font-size:0.9rem">Correcto<i class="fa fa-check" aria-hidden="true"></i></div>
-                              <div class="small form-text text-danger" *ngIf="cup.invalid && (cup.dirty || cup.touched)" style="font-size:0.9rem">
-                                <div *ngIf="cup.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La cantidad de personas es obligatoria</div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="control-group form-group">
-                            <div class="controls">
-                              <textarea class="form-control" #descp="ngModel" name="descp" [(ngModel)]="solicitudSala.descripcion" placeholder="Motivo por el cuál solicita la sala."
-                                rows="3" required></textarea>
-                              <div *ngIf="descp.valid" class="small form-text text-success" style="font-size:0.9rem">Correcto <i class="fa fa-check" aria-hidden="true"></i></div>
-                              <div class="small form-text text-danger" *ngIf="descp.invalid && (descp.dirty || descp.touched)" style="font-size:0.9rem">
-                                <div *ngIf="descp.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> El motivo de la solicitud es obligatorio</div>
-        
-                              </div>
-                            </div>
-                          </div>
-                        
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-        
-                  <div class="container-fluid">
-                    <hr>
-                    <h4 style="color:#0069d9">Lista de Recursos disponibles</h4> <br>
-                    <div class="row">
-                      <div class="col-md-12" style="font-size: 1rem">
-                        <div class="container">
-                          <div class="form-group">
-                            <div class="row col-md-12" style="overflow-y: scroll; height: 100px">
-                              <div class="col-md-6" *ngFor="let recurso of recursos;" style="text-align: left">
-                                <label class="custom-control custom-checkbox">
-                                  <input type="checkbox" class="custom-control-input" (change)="changeRecursos($event,recurso._id)" >
-                                  <span class="custom-control-indicator"></span>
-                                  <span class="custom-control-description">{{recurso.nombre}}</span>
-                                </label>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <hr>
-                  <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="cerrarModal('#modal-add-new-request')">Cancelar</button>
-                  <button id="btn-add-solid" type="submit" class="btn btn-success" data-dismiss="modal" (click)="agregarSolicitud()" [disabled]="!descp.valid || !cup.valid || !sal.valid ||  !ctrlInitDate.valid">Confirmar</button>
+        </section>
 
-                </div>
-              </div>
-            </div>
-            
-          </div> -->
-        </div>
+        <!-- sección lista-->
+        <section *ngIf="!solicSala">
+          <br>
+          <h5>Fecha: {{dateStruct.day}}/{{dateStruct.month}}/{{dateStruct.year}}</h5>
+          <table class="table table-hover" style="font-size:1rem">
+            <thead>
+              <tr>
+                <th scope="col"><i class="fa fa-list-ol" aria-hidden="true"></i></th>
+                <th scope="col">Sala</th>
+                <th scope="col">Horario</th>
+                <th scope="col">Motivo</th>
+                <th scope="col">Encargado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let solicitud of solicitudesdia; let i = index">
+                <th scope="row">{{i+1}}</th>
+                <th>{{solicitud.sala}}</th>
+                <th>{{solicitud.horaInicio.hour}}:{{solicitud.horaInicio.minute}} - {{solicitud.horaFin.hour}}:{{solicitud.horaFin.minute}}
+                </th>
+                <th>{{solicitud.descripcion}}</th>
+                <th>{{getUsuario(solicitud.usuario)}}</th>
+              </tr>
+            </tbody>
+          </table>
+          <h6 *ngIf='solicitudesdia ==undefined || solicitudesdia.length==0'>No hay solicitudes realizadas para el día seleccionado.<br></h6>
+          <hr>
+          <button type="button" class="btn btn-danger" (click)="cerrarModal('#modal-add-new-request')">Cancelar</button>
+        </section>
       </div>
     </div>
   </div>
+</div>
