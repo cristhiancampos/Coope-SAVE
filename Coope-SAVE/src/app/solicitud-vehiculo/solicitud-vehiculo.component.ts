@@ -9,6 +9,7 @@ import { Usuario } from '../modelos/usuario';
 import { SolicitudVehiculo } from '../modelos/solicitudVehiculo';
 import { ServicioVehiculo } from '../servicios/vehiculo';
 import { ServicioSolicitudVehiculo } from '../servicios/solicitudVehiculo';
+import { ServicioUsuario } from '../servicios/usuario';
 //import { ServicioRecursos } from '../servicios/recurso';
 import swal from 'sweetalert2';
 import * as moment from 'moment';
@@ -35,7 +36,7 @@ const colors: any = {
   selector: 'app-solicitud-vehiculo',
   templateUrl: './solicitud-vehiculo.component.html',
   styleUrls: ['./solicitud-vehiculo.component.css'],
-  providers: [ServicioSolicitudVehiculo,ServicioVehiculo]  
+  providers: [ServicioSolicitudVehiculo,ServicioVehiculo, ServicioUsuario]  
 })
 export class SolicitudVehiculoComponent implements OnInit {
 
@@ -78,15 +79,21 @@ export class SolicitudVehiculoComponent implements OnInit {
   ngOnInit(){
     this.estiloBotones();
     this.obtenerVehiculos();
+    this.obtenerUsuarios();
     console.log('cargó el calendario de vehiculo');
   } 
   solicitudVehiculo: SolicitudVehiculo;
+  filtroUsuario;
   title;//
   start;//
   end;//
   vehiculos = [];
   recursos = [];
   tempRecursos = [];
+  listaUsuarios=[];
+  nombreUsuarios=[];
+  idUsuarios=[];
+  usuariosAgregados=[];
   currentDate;
   private solicSala = true;
   public solicitudesdia=[];
@@ -103,11 +110,13 @@ export class SolicitudVehiculoComponent implements OnInit {
   constructor(
     private modal: NgbModal,
     private _servVehiculo: ServicioVehiculo,
+    private _servUsuario: ServicioUsuario,
     private _servSolicitud: ServicioSolicitudVehiculo,
     private cdr: ChangeDetectorRef
   ) {
     this.solicitudVehiculo = new SolicitudVehiculo('', '', '', null, null, null, '', '', '', null, '', '');
     this.minDate = { year: null, month: null, day: null };
+    this.filtroUsuario="";
   }
   solicitud(num: any) {
     if (num === 1) {
@@ -174,15 +183,48 @@ export class SolicitudVehiculoComponent implements OnInit {
         //ocurrió un error
       }
     );
-    
-
-
-
-   
   }
+temid;
+
+listaNombres(){
+  for(let w=0; w< this.listaUsuarios.length; w++){
+    this.nombreUsuarios[w]=this.listaUsuarios[w].nombre+' '+this.listaUsuarios[w].apellidos;
+  }
+}
+
+
+getItems(ev: any) {
+  this.listaNombres();
+let val = ev.target.value;
+  if (val && val.trim() != '') {
+    this.nombreUsuarios= this.nombreUsuarios.filter((item) => {
+      return (item.toLowerCase().indexOf(val.toLowerCase()) > -1);
+    })
+  }
+  
+
+
+
+  }
+
+  agregarAcompanates(id: any){
+
+  this.usuariosAgregados.push(this.nombreUsuarios[id]);   
+  this.nombreUsuarios.splice(id,1);
+  //alert(id);
+  }
+
+  eliminarAcompanante(id: any){
+  this.nombreUsuarios.push(this.usuariosAgregados[id]);
+  this.usuariosAgregados.splice(id,1);
+
+  }
+
+
   obtenerSolicitudes(userDate, abrirMod: boolean) {
     let array;
     this.solicitudVehiculo.fecha = userDate;
+    console.log(this.solicitudVehiculo);
     this._servSolicitud.obtenerSolicitudes(this.solicitudVehiculo).subscribe(
       response => {
         if (!response.message) {//no hay registros
@@ -201,6 +243,25 @@ export class SolicitudVehiculoComponent implements OnInit {
     );
    }
 
+   obtenerUsuarios(){
+
+    console.log('llamo metodo llenar usuarios');
+    this._servUsuario.obtenerUsuarios().subscribe(
+      response => {
+        if (response.message) {
+          this.listaUsuarios = response.message;
+          console.log(this.listaUsuarios);
+          this.listaNombres();
+        } else {//no hay Salas registradas
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+        }
+      }
+    );
+   }
    obtenerVehiculos() {
     this._servVehiculo.obtenerVehiculos().subscribe(
       response => {

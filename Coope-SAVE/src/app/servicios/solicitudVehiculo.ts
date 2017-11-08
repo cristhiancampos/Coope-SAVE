@@ -24,7 +24,7 @@ export class ServicioSolicitudVehiculo {
     }
 
      fechaActualVehiculo() {
-         alert("entro al servicio");
+        
          console.log('Servico en fecha Actual');
         let headers = new Headers({ 'Content-Type': 'application/json' });
         return this._http.get(this.url + 'fechaActualServer', { headers: headers })
