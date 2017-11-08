@@ -1,9 +1,9 @@
 'use strict'
 
-var solicitudVehiculo = require('../modelos/solicitudVehiculo');
+var SolicitudVehiculo = require('../modelos/solicitudVehiculo');
 
 function agregarSolicitud(req, res) {
-  var solicitud = new solicitudVehiculo();
+  var solicitudVehiculo = new solicitudVehiculo();
   var params = req.body;
   solicitud.vehiculo= params.usu
   solicitud.vehiculo = params.vehiculo;
@@ -43,7 +43,6 @@ function agregarSolicitud(req, res) {
 
 function obtenerFechaActualVehiculo(req, res) {
   var hoy = new Date();
-  console.log(hoy);
   res.status(200).send({ currentDate: hoy });
 }
 
