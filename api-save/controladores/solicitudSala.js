@@ -53,7 +53,7 @@ function obtenerSolicitudesSalas(req, res) {
   let day = date.getDate();
   //console.log('Año'+year+'Mes'+month+'Día'+day);
 // fecha: { year: year, month: month, day: day }
-  SolicitudSala.find({fecha: { year: year, month: month, day: day }}, (err, solicitud) => {
+  SolicitudSala.find({fecha: { year: year, month: month, day: day },estado: { $ne: "Eliminado" }}, (err, solicitud) => {
     if (err) {
       req.status(500).send({ mesage: 'Error al obtener las solicitudes' });
     } else {

@@ -304,7 +304,6 @@ export class SolicitudSalaComponent implements OnInit {
     // this.da
     this._servSolicitud.fechaActual().subscribe(
       response => {
-
         if (response.currentDate) {
           this.currentDate = response.currentDate;
           var momentDate = moment(this.currentDate, 'YYYY-MM-DD HH:mm:ss');
@@ -544,7 +543,7 @@ export class SolicitudSalaComponent implements OnInit {
   }
   //se agregan solicitudes en la base de datos después de sus debidas validadaciones
   agregarSolicitud() {
-    var minInicial = ((this.solicitudSala.horaInicio.hour * 60) + this.solicitudSala.horaInicio.minute);
+var minInicial = ((this.solicitudSala.horaInicio.hour * 60) + this.solicitudSala.horaInicio.minute);
     var minFinal = ((this.solicitudSala.horaFin.hour * 60) + this.solicitudSala.horaFin.minute);
     if (minFinal - minInicial <= 0) {
       this.mensajeSolicitudInvalida = "La hora final no debe ser igual o menor a la hora de inicio";
@@ -664,13 +663,12 @@ export class SolicitudSalaComponent implements OnInit {
                   for (let contador = 0; contador < tempArrayHoraFinal.length; contador++) {
                     let sumatoriaFinal = ((tempArrayHoraFinal[contador].hour * 60) + (tempArrayHoraFinal[contador].minute));
                     let sumatoriaInicial = ((tempArrayHoraInicio[contador].hour * 60) + (tempArrayHoraInicio[contador].minute));
-                    console.log('Min inicial ' + minFinal + ">=" + sumatoriaFinal + 'minFinal' + minInicial + '<=' + sumatoriaInicial);
-                    if (minFinal >= sumatoriaFinal && minInicial <= sumatoriaFinal) {
+                    if(sumatoriaInicial<=(horaEntradaDigit*60) &&(horaEntradaDigit*60)<sumatoriaFinal) {
                       tempArrayVerificacion.push(minFinal);
+                      break;
                     }
                   }
 
-                  console.log(tempArrayVerificacion);
                   // verificar si se encontraron
                   if (tempArrayVerificacion.length > 0) {
                     agregar = false;
@@ -680,14 +678,11 @@ export class SolicitudSalaComponent implements OnInit {
                 }
 
               }
-
-              //alert('agregar'+agregar+'agregar valid'+agregarValid);
               if (!agregar && !agregarValid) {
                 this.mensajeSolicitudInvalida = "Ya existe una solicitud para esta sala, con el horario ingresado";
               }
 
               if (agregar || agregarValid) {// todo correcto , puede agregar la solicitud
-
                 let identity = localStorage.getItem('identity');
                 let user = JSON.parse(identity);
                 let recursos = JSON.parse(identity);
