@@ -304,6 +304,7 @@ export class SolicitudSalaComponent implements OnInit {
     // this.da
     this._servSolicitud.fechaActual().subscribe(
       response => {
+
         if (response.currentDate) {
           this.currentDate = response.currentDate;
           var momentDate = moment(this.currentDate, 'YYYY-MM-DD HH:mm:ss');

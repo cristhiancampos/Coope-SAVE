@@ -41,8 +41,9 @@ function agregarSolicitud(req, res) {
   }
 }
 
-function obtenerFechaActual(req, res) {
+function obtenerFechaActualVehiculo(req, res) {
   var hoy = new Date();
+  console.log(hoy);
   res.status(200).send({ currentDate: hoy });
 }
 
@@ -125,7 +126,7 @@ function modificarsolicitudVehiculo(req, res) {
 
 module.exports = {
   agregarSolicitud,
-  obtenerFechaActual,
+  obtenerFechaActualVehiculo,
   obtenerSolicitudesvehiculos,
   obtenerTodasSolicitudes,
   modificarsolicitudVehiculo,

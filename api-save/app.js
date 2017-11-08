@@ -9,10 +9,11 @@ var app = express();
 //cargar rutas
 var user_routes = require('./rutas/usuario');
 var sala_routes = require('./rutas/sala');
-var vehiculo_routes = require('./rutas/vehiculos')
-var recurso_routes = require('./rutas/recurso')
-var departamento_routes = require('./rutas/departamento')
-var solicitudSala_routes = require('./rutas/solicitudSala')
+var vehiculo_routes = require('./rutas/vehiculos');
+var recurso_routes = require('./rutas/recurso');
+var departamento_routes = require('./rutas/departamento');
+var solicitudSala_routes = require('./rutas/solicitudSala');
+var solicitudVehiculo_routes = require('./rutas/solicitadVehiculo');
 
 //recibir las peticiones http
 app.use(bodyParser.urlencoded({extended:false}));
@@ -39,6 +40,7 @@ app.use((req,res,next)=>{
  app.use('/api',recurso_routes);
  app.use('/api',departamento_routes);
  app.use('/api',solicitudSala_routes);
+ app.use('/api',solicitudVehiculo_routes);
  
 //exportar modulo
 module.exports = app;
