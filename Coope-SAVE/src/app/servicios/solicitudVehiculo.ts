@@ -8,6 +8,7 @@ import { GLOBAL } from './global';
 
 export class ServicioSolicitudVehiculo {
 
+
     public url: string;//url de la api rest
 
     constructor(private _http: Http) {
@@ -22,7 +23,9 @@ export class ServicioSolicitudVehiculo {
             .map(res => res.json());
     }
 
-     fechaActual() {
+     fechaActualVehiculo() {
+         alert("entro al servicio");
+         console.log('Servico en fecha Actual');
         let headers = new Headers({ 'Content-Type': 'application/json' });
         return this._http.get(this.url + 'fechaActualServer', { headers: headers })
             .map(res => res.json());
@@ -30,6 +33,8 @@ export class ServicioSolicitudVehiculo {
 
 
     obtenerSolicitudes(fecha: any) {
+
+        console.log('Servicio obtener las solicitudes por fecha');
         let json = JSON.stringify(fecha);
         let params = json;
         let headers = new Headers({ 'Content-Type': 'application/json' });

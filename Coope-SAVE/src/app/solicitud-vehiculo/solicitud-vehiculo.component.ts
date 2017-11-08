@@ -77,18 +77,20 @@ export class SolicitudVehiculoComponent implements OnInit {
   //*********************************************AGREGADOS***************************** */
   ngOnInit(){
     this.estiloBotones();
+    this.obtenerVehiculos();
     console.log('cargó el calendario de vehiculo');
   } 
-  //solicitudSala: SolicitudSala;
+  solicitudVehiculo: SolicitudVehiculo;
   title;//
   start;//
   end;//
-  salas = [];
+  vehiculos = [];
   recursos = [];
   tempRecursos = [];
   currentDate;
   private solicSala = true;
   public solicitudesdia=[];
+  minDate: NgbDateStruct;
 
   @Input() placeholder: string;
   date: Date;
@@ -100,14 +102,12 @@ export class SolicitudVehiculoComponent implements OnInit {
 
   constructor(
     private modal: NgbModal,
-    private _servVeiculo: ServicioVehiculo,
+    private _servVehiculo: ServicioVehiculo,
     private _servSolicitud: ServicioSolicitudVehiculo,
     private cdr: ChangeDetectorRef
   ) {
-    //this.solicitudSala = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
-    //this.obtenerRecursos();
-    //this.obtenerSalas();
-    //this.estiloBotones();
+    this.solicitudVehiculo = new SolicitudVehiculo('', '', '', null, null, null, '', '', '', null, '', '');
+    this.minDate = { year: null, month: null, day: null };
   }
   solicitud(num: any) {
     if (num === 1) {
@@ -134,23 +134,89 @@ export class SolicitudVehiculoComponent implements OnInit {
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }) {
    
- alert('hola');
+    this.solicitudVehiculo.fecha = date;
+    this.solicitudVehiculo.horaSalida = { hour: 7, minute: 0 };
+    this.solicitudVehiculo.horaRegreso = { hour: 11, minute: 0 };
+    this.activeDayIsOpen = false;
+   
+    this._servSolicitud.fechaActualVehiculo().subscribe(
+      response => {
 
-    // if (isSameMonth(date, this.viewDate)) {
-    //   if (
-    //     (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
-    //     events.length === 0
-    //   ) {
-    //     this.activeDayIsOpen = false;
-    //   } else {
-    //     this.activeDayIsOpen = true;
-    //     this.viewDate = date;
-    //   }
-    // }
+        if (response.currentDate) {
+          this.currentDate = response.currentDate;
+          var momentDate = moment(this.currentDate, 'YYYY-MM-DD HH:mm:ss');
+          let serverDate = momentDate.toDate();
+
+          this.minDate.year = serverDate.getFullYear();
+          this.minDate.month = (serverDate.getMonth() + 1);
+          this.minDate.day = serverDate.getDate();
+
+          if (date.getFullYear() < serverDate.getFullYear()) {
+            this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
+          } else if (((date.getMonth() + 1) < (serverDate.getMonth() + 1))) {
+            this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
+          } else if (((date.getMonth() + 1) == (serverDate.getMonth() + 1))) {
+            if (date.getDate() < serverDate.getDate()) {
+              this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
+            } else {
+              // alert('entra aqui 1');
+              this.obtenerSolicitudes(date, true);
+              this.writeValue(date);
+            }
+          } else {
+            // alert('entra aqui 2');
+            this.obtenerSolicitudes(date, true);
+            this.writeValue(date);
+          }
+        } else {
+        }
+      }, error => {
+        //ocurrió un error
+      }
+    );
+    
+
+
+
+   
   }
-  obtenerSolicitudes(userDate) {
-
+  obtenerSolicitudes(userDate, abrirMod: boolean) {
+    let array;
+    this.solicitudVehiculo.fecha = userDate;
+    this._servSolicitud.obtenerSolicitudes(this.solicitudVehiculo).subscribe(
+      response => {
+        if (!response.message) {//no hay registros
+        } else {//no hay Salas registradas
+          //console.log('solicitudes salas');
+          array = response.message;
+          this.solicitudesdia = array;
+          console.log(array);
+          if (abrirMod) {
+            this.abrirModal('#modal-add-new-solicitudVehiculo');
+          }
+        }
+      }, error => {
+        // alert('erro');
+      }
+    );
    }
+
+   obtenerVehiculos() {
+    this._servVehiculo.obtenerVehiculos().subscribe(
+      response => {
+        if (response.message) {
+          this.vehiculos = response.message;
+          console.log(this.vehiculos);
+        } else {//no hay Salas registradas
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+        }
+      }
+    );
+  }
     //este método verificaque la fecha seleccionada sea mayor o igual a la fecha del servidor, para poder realizar la solicitud correctamente.
     verificarFechaSeleccionada(userDate: Date) {  
     }
