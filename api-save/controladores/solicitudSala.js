@@ -40,21 +40,19 @@ function agregarSolicitud(req, res) {
     res.status(200).send({ message: 'Debe rellenar todos los campos  requeridos y de la manera correcta.' });
   }
 }
-
 function obtenerFechaActual(req, res) {
   var hoy = new Date();
   res.status(200).send({ currentDate: hoy });
 }
-
 function obtenerSolicitudesSalas(req, res) {
   let date = new Date(req.body.fecha.toString())
   let year = date.getFullYear();
   let month = (date.getMonth() + 1);
   let day = date.getDate();
-  //console.log('Año'+year+'Mes'+month+'Día'+day);
-// fecha: { year: year, month: month, day: day }
-  SolicitudSala.find({fecha: { year: year, month: month, day: day },estado: { $ne: "Eliminado" }}, (err, solicitud) => {
-    if (err) {
+    //console.log('Año'+year+'Mes'+month+'Día'+day);
+  // fecha: { year: year, month: month, day: day }
+   SolicitudSala.find({fecha: { year: year, month: month, day: day },estado: { $ne: "Eliminado" }}, (err, solicitud) => {
+     if (err) {
       req.status(500).send({ mesage: 'Error al obtener las solicitudes' });
     } else {
       if (!solicitud) {
@@ -65,7 +63,6 @@ function obtenerSolicitudesSalas(req, res) {
     }
   });
 }
-
 function obtenerTodasSolicitudes(req, res){
   SolicitudSala.find({ estado: { $ne: "Eliminado" } }, (err, solicitudSalas) => {
     if (err) {
@@ -81,60 +78,92 @@ function obtenerTodasSolicitudes(req, res){
 
 }
 
+// function validarModificacion(req, res) {
+//   var params = req.body;
+//   var nombre = params.nombre;
+//   var id = params._id;
+
+//   Sala.findOne({ _id: id, nombre: nombre, estado: { $ne: "Eliminado" } }, (err, sala) => {
+//     if (err) {
+//       res.status(200).send({ message: null });
+//     } else {
+//       if (!sala) {
+//         Sala.findOne({ nombre: nombre, estado: { $ne: "Eliminado" } }, (err, salaEdit) => {
+//           if (err) {
+//             res.status(200).send({ message: null });
+//           } else {
+//             if (!salaEdit) {
+//               res.status(200).send({ message: null });
+//             }
+//             else {
+//               res.status(200).send({ message: salaEdit });
+//             }
+//           }
+//         })
+//       }
+//       else {
+//         res.status(200).send({ message: null });
+//       }
+//     }
+//   });
+// }
+
+
 
 function modificarSolicitudSala(req, res) {
   
-  
+ 
     var params = req.body;
     var solicitudId = params._id;
+    console.log(params.fecha);
     params.updated_at = new Date();
-  
-  
-    SolicitudSala.findByIdAndUpdate(solicitudId, params, (err, modificarSolicitud) => {
-      if (err) {
-  
-        res.status(500).send({ message: 'Error al actualizar la sala' });
+
+  SolicitudSala.findByIdAndUpdate(solicitudId, params, (err, solicitudModificada) => {
+    if (err) {
+
+      res.status(500).send({ message: 'Error al actualizar la solicitud' });
+    } else {
+      if (!solicitudModificada) {
+
+        res.status(404).send({ message: 'No se ha podido actualizar los datos de la solicitud' });
       } else {
-        if (!modificarSolicitud) {
-  
-          res.status(404).send({ message: 'No se ha podido actualizar la sala' });
+
+        res.status(200).send({ message: solicitudModificada });
+      }
+    }
+  });
+}
+
+function eliminarSolicitudSala(req, res) {
+    var salicitudId = req.params.id;
+    var update = req.body;
+    SolicitudSala.findByIdAndUpdate(salicitudId, { $set: { estado: 'Eliminado' } }, { new: true }, (err, salicitudDeleted) => {
+      if (err) {
+        res.status(500).send({ message: 'Error al eliminar la sala' });
+      } else {
+        if (!salicitudDeleted) {
+          res.status(404).send({ message: 'No se ha podido eliminar la' });
         } else {
-  
-          res.status(200).send({ message: modificarSolicitud });
+          res.status(200).send({ message: salicitudDeleted });
         }
       }
     });
   }
 
-    function eliminarSolicitudSala(req, res) {
-      var salicitudId = req.params.id;
-      var update = req.body;
-      SolicitudSala.findByIdAndUpdate(salicitudId, { $set: { estado: 'Eliminado' } }, { new: true }, (err, salicitudDeleted) => {
-        if (err) {
-          res.status(500).send({ message: 'Error al eliminar la sala' });
-        } else {
-          if (!salicitudDeleted) {
-            res.status(404).send({ message: 'No se ha podido eliminar la' });
-          } else {
-            res.status(200).send({ message: salicitudDeleted });
-          }
-        }
-      });
+function obtenerSolicitudSala(req, res) {
+  var salicitudId = req.params.id;      
+  SolicitudSala.findById(salicitudId , (err, solicitud) => {
+    if (err) {
+      res.status(500).send({ message: 'Error Solicitud no encontrada' });
+    } else {
+      if (!solicitud) {
+        res.status(404).send({ message: 'No se ha encontrado la solicitud' });
+      } else {
+        res.status(200).send({ message: solicitud});
+      }
     }
-    function obtenerSolicitudSala(req, res) {
-      var salicitudId = req.params.id;      
-      SolicitudSala.findById(salicitudId , (err, solicitud) => {
-        if (err) {
-          res.status(500).send({ message: 'Error Solicitud no encontrada' });
-        } else {
-          if (!solicitud) {
-            res.status(404).send({ message: 'No se ha encontrado la solicitud' });
-          } else {
-            res.status(200).send({ message: solicitud});
-          }
-        }
-      });
-    }
+  });
+}
 
 module.exports = {
   agregarSolicitud,

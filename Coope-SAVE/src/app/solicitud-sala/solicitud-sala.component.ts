@@ -21,7 +21,7 @@ import { ServicioUsuario } from '../servicios/usuario';
 import swal from 'sweetalert2';
 import * as moment from 'moment';
 import { ChangeDetectorRef, forwardRef, Input, OnInit } from '@angular/core';
-import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct, NgbTimeStruct, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FormControl } from '@angular/forms';
 const colors: any = {
@@ -92,13 +92,14 @@ export class SolicitudSalaComponent implements OnInit {
   horarioValido = true;//cambiar a false
   formAgregarValido = true; //cambiar a false
   mensajeSolicitudInvalida = "";
+  mensajeSolicitudInvalidaEdit="";
   tempHorarioSala = [];
   minDate: NgbDateStruct;
   tempNombreSala = "";
   listaSolicitudes = [];
-  timeI = {hour: null, minute: null,second:0};
-  timeF = {hour: null, minute: null,second:0};
-  dateUpdate: {year: number, month: number, day:number}
+  timeI = { hour: null, minute: null, second: 0 };
+  timeF = { hour: null, minute: null, second: 0 };
+  dateUpdate= {day: null,month: null,year: null }
 
   @Input() placeholder: string;
   date: Date;
@@ -106,6 +107,7 @@ export class SolicitudSalaComponent implements OnInit {
   timeStruct: NgbTimeStruct;
   datePicker: any;
   model: NgbDateStruct;
+  public mr: NgbModalRef;
 
   private onChangeCallback: (date: Date) => void = () => { };
 
@@ -124,7 +126,7 @@ export class SolicitudSalaComponent implements OnInit {
     this.obtenerRecursos();
     this.obtenerSalas();
     this.estiloBotones();
-    this.minDate = { year: null, month: null, day: null };
+    this.minDate = { day: null,month: null,year: null };
 
   }
   //cambia el tab de solicitar salas a lista de solitudes, según día seleccionado, y vicebersa, en el modal de solicitar sala
@@ -132,7 +134,7 @@ export class SolicitudSalaComponent implements OnInit {
     if (num === 1) {
       this.solicSala = true;
       //this.updateTime();
-      this.timeStruct={second: 0, minute: 12, hour: 10};
+      this.timeStruct = { second: 0, minute: 12, hour: 10 };
       const newDate: Date = setHours(
         setMinutes(
           setSeconds(this.date, this.timeStruct.second),
@@ -305,12 +307,8 @@ export class SolicitudSalaComponent implements OnInit {
     this.solicitudSala.horaFin = { hour: 11, minute: 0 };
     this.activeDayIsOpen = false;
 
-    //this.dateStruct ={year: date.getFullYear(), 
-    // month:date.getMonth()+1, day: date.getDate()} ;
-    // this.da
     this._servSolicitud.fechaActual().subscribe(
       response => {
-
         if (response.currentDate) {
           this.currentDate = response.currentDate;
           var momentDate = moment(this.currentDate, 'YYYY-MM-DD HH:mm:ss');
@@ -319,7 +317,6 @@ export class SolicitudSalaComponent implements OnInit {
           this.minDate.year = serverDate.getFullYear();
           this.minDate.month = (serverDate.getMonth() + 1);
           this.minDate.day = serverDate.getDate();
-
           if (date.getFullYear() < serverDate.getFullYear()) {
             this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
           } else if (((date.getMonth() + 1) < (serverDate.getMonth() + 1))) {
@@ -361,13 +358,15 @@ export class SolicitudSalaComponent implements OnInit {
 
   //obtener las solicitudes según fecha seleccionada 
   obtenerSolicitudes(userDate, abrirMod: boolean) {
+   // console.log('fecha eeee');
+    //console.log(userDate);
     let array;
     this.solicitudSala.fecha = userDate;
     this._servSolicitud.obtenerSolicitudes(this.solicitudSala).subscribe(
       response => {
         if (!response.message) {//no hay registros
         } else {//no hay Salas registradas
-          //console.log('solicitudes salas');
+          console.log('solicitudes salas');
           array = response.message;
           this.solicitudesdia = array;
           console.log(array);
@@ -417,22 +416,25 @@ export class SolicitudSalaComponent implements OnInit {
   }
 
   //administra el evento de cambio de hora en las solicitudes
-  eventTimesChanged({event,newStart,newEnd
+  eventTimesChanged({ event, newStart, newEnd
     }: CalendarEventTimesChangedEvent): void {
-      event.start = newStart;
-      event.end = newEnd;
-      this.solicitudSala.horaInicio = event.start;//
-      this.solicitudSala.horaFin = event.end;//
+    event.start = newStart;
+    event.end = newEnd;
+    this.solicitudSala.horaInicio = event.start;//
+    this.solicitudSala.horaFin = event.end;//
 
-      this.handleEvent('Dropped or resized', event);
-      this.refresh.next();
-    }
+    this.handleEvent('Dropped or resized', event);
+    this.refresh.next();
+  }
+
 
   tempEvent: any;
   tempTitleModal = "";
   tempSolicitud = { usuario: null, departamento: null, fecha: null, motivo: null, inicio: null, fin: null, sala: null }
   //administrador de eventos
   handleEvent(action: string, event: CalendarEvent): void {
+    this.mensajeSolicitudInvalida="";
+    this.mensajeSolicitudInvalidaEdit="";
     this.tempColor = event.color;
     this._servUsuario.obtenerUsuario(this.tempColor.usuario).subscribe(
       response => {
@@ -444,38 +446,71 @@ export class SolicitudSalaComponent implements OnInit {
             response => {
               if (response.message) {
                 let solicit = response.message;
-              //  this.tempSolicitud.fecha = solicit.fecha.day + '/' + solicit.fecha.month + '/' + solicit.fecha.year;
-               // this.tempSolicitud.motivo = solicit.descripcion;
+                this.solicitudSalaEdit = solicit;
+                this.model = { year: solicit.fecha.year, month: solicit.fecha.month, day: solicit.fecha.day };
 
-                this.solicitudSalaEdit=solicit; 
-                this.model = {year: solicit.fecha.year, month: solicit.fecha.month, day: solicit.fecha.day};
+                this.solicitudSalaEdit.fecha.year = this.model.year;
+                this.solicitudSalaEdit.fecha.month = this.model.month;
+                this.solicitudSalaEdit.fecha.day = this.model.day;
 
-                this.solicitudSalaEdit.fecha= this.model;
-                this.timeI.hour=solicit.horaInicio.hour;
-                this.timeI.minute=solicit.horaInicio.minute;
-                this.timeI.second=solicit.horaInicio.second;
+                this.timeI.hour = solicit.horaInicio.hour;
+                this.timeI.minute = solicit.horaInicio.minute;
+                this.timeI.second = solicit.horaInicio.second;
 
-                // this.dateUpdate.year=solicit.fecha.year;
-                // this.dateUpdate.month=solicit.fecha.month;
-                // this.dateUpdate.day=solicit.fecha.day;
+                this.timeF.hour = solicit.horaFin.hour;
+                this.timeF.minute = solicit.horaFin.minute;
+                this.timeF.second = solicit.horaFin.second;
 
-                this.timeF.hour=solicit.horaFin.hour;
-                this.timeF.minute=solicit.horaFin.minute;
-                this.timeF.second=solicit.horaFin.second;
+                this.solicitudSalaEdit.horaInicio = this.timeI;
+                this.solicitudSalaEdit.horaFin = this.timeF;
 
-                this.solicitudSalaEdit.horaInicio=this.timeI;
-                this.solicitudSalaEdit.horaFin=this.timeF;
+                this.solicitudSalaEdit.recursos = solicit.recursos;
 
-                // this.tempSolicitud.inicio = solicit.horaInicio.hour + ':' + solicit.horaInicio.minute;
-                // this.tempSolicitud.fin = solicit.horaFin.hour + ':' + solicit.horaFin.minute;
                 this.tempEvent = event.actions;
                 if (this.tempEvent.length > 0) {
                   this.tempTitleModal = "Editar";
                 } else {
                   this.tempTitleModal = "Detalles de la ";
                 }
+                let date = new Date();
+                date.setFullYear(solicit.fecha.year);
+                date.setMonth(solicit.fecha.month - 1);
+                date.setDate(solicit.fecha.day);
+                this.setCupoMaximoSala(this.solicitudSalaEdit.sala);
+
+                this._servSolicitud.fechaActual().subscribe(
+                  response => {
+
+                    if (response.currentDate) {
+                      this.currentDate = response.currentDate;
+                      var momentDate = moment(this.currentDate, 'YYYY-MM-DD HH:mm:ss');
+                      let serverDate = momentDate.toDate();
+
+                      this.minDate.year = serverDate.getFullYear();
+                      this.minDate.month = (serverDate.getMonth() + 1);
+                      this.minDate.day = serverDate.getDate();
+
+                      if (date.getFullYear() < serverDate.getFullYear()) {
+                        this.tempEvent = [];
+                      } else if (((date.getMonth() + 1) < (serverDate.getMonth() + 1))) {
+                        this.tempEvent = [];
+                      } else if (((date.getMonth() + 1) == (serverDate.getMonth() + 1))) {
+                        if (date.getDate() < serverDate.getDate()) {
+                          this.tempEvent = [];
+                        } else {
+                          // alert('entra aqui 1');
+                        }
+                      } else {
+                        // alert('entra aqui 2');
+                      }
+                    } else {
+                    }
+                  }, error => {
+                    //ocurrió un error
+                  }
+                );
                 this.modalData = { event, action };
-                this.modal.open(this.modalContent, { size: 'lg' });
+              this.mr=  this.modal.open(this.modalContent, { size: 'lg' });
               } else {//No se ha encontrado la Sala
               }
             }, error => {
@@ -565,6 +600,7 @@ export class SolicitudSalaComponent implements OnInit {
   }
   //se agregan solicitudes en la base de datos después de sus debidas validadaciones
   agregarSolicitud() {
+    this.cupoMaximo="";
     var minInicial = ((this.solicitudSala.horaInicio.hour * 60) + this.solicitudSala.horaInicio.minute);
     var minFinal = ((this.solicitudSala.horaFin.hour * 60) + this.solicitudSala.horaFin.minute);
     if (minFinal - minInicial <= 0) {
@@ -685,7 +721,11 @@ export class SolicitudSalaComponent implements OnInit {
                   for (let contador = 0; contador < tempArrayHoraFinal.length; contador++) {
                     let sumatoriaFinal = ((tempArrayHoraFinal[contador].hour * 60) + (tempArrayHoraFinal[contador].minute));
                     let sumatoriaInicial = ((tempArrayHoraInicio[contador].hour * 60) + (tempArrayHoraInicio[contador].minute));
-                    if(sumatoriaInicial<=(horaEntradaDigit*60) &&(horaEntradaDigit*60)<sumatoriaFinal) {
+                    if (sumatoriaInicial <= (horaEntradaDigit * 60) && (horaEntradaDigit * 60) < sumatoriaFinal) {
+                      tempArrayVerificacion.push(minFinal);
+                      break;
+                    }
+                    if (sumatoriaFinal > (horaEntradaDigit * 60) && (horaSalidaDigit * 60) > sumatoriaInicial) {
                       tempArrayVerificacion.push(minFinal);
                       break;
                     }
@@ -718,7 +758,7 @@ export class SolicitudSalaComponent implements OnInit {
                         this.msjError(response.message);
                       } else {
                         let solicitud = response.message;
-                        this.msjExitoso("Solicitud Agregada Exitosamente");
+                        this.msjExitoso("Solicitud egregada exitosamente");
                         this.enviarEmail(solicitud);
                         this.solicitudSala = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
                         this.obtenerSolicitudes(this.date, false);
@@ -749,14 +789,241 @@ export class SolicitudSalaComponent implements OnInit {
 
   }
 
-  modificarSolicitud(){
-    this.solicitudSala.fecha=this.model;
-    this.solicitudSalaEdit.horaInicio=this.timeI;
-    this.solicitudSalaEdit.horaFin=this.timeF;
-    console.log(this.solicitudSalaEdit);
-    alert('modificar');
+  modificarSolicitud() {
+    this.solicitudSalaEdit.fecha = { year: null, month: null, day: null };
+    this.solicitudSalaEdit.horaInicio = this.timeI;
+    this.solicitudSalaEdit.horaFin = this.timeF;
+
+    let dat = new Date();
+    dat.setFullYear(this.model.year);
+    dat.setMonth(this.model.month - 1);
+    dat.setDate(this.model.day);
+
+    this.solicitudSalaEdit.fecha.year = dat.getFullYear();
+    this.solicitudSalaEdit.fecha.month = dat.getMonth() + 1;
+    this.solicitudSalaEdit.fecha.day = dat.getDate();
+
+    let array;
+    //console.log('fecha enviada');
+    //console.log(this.solicitudSalaEdit.fecha );
+  //  this.solicitudSala.fecha.year = dat;
+
+    this.setCupoMaximoSala(this.solicitudSalaEdit.sala);
+    this.solicitudSala.fecha=dat;
+    //alert(dat);
+    this._servSolicitud.obtenerSolicitudes(this.solicitudSala).subscribe(
+      response => {
+        if (!response.message) {//no hay registros
+        } else {//no hay Salas registradas
+          //console.log('solicitudes salas');
+          array = response.message;
+          this.solicitudesdia = array;
+          var minInicial = ((this.solicitudSalaEdit.horaInicio.hour * 60) + this.solicitudSalaEdit.horaInicio.minute);
+          var minFinal = ((this.solicitudSalaEdit.horaFin.hour * 60) + this.solicitudSalaEdit.horaFin.minute);
+          if (minFinal - minInicial <= 0) {
+            this.mensajeSolicitudInvalidaEdit = "La hora final no debe ser igual o menor a la hora de inicio";
+          } else {
+            if (minFinal - minInicial > 0 && minFinal - minInicial < 30) {
+              this.mensajeSolicitudInvalidaEdit = "El tiempo mínimo que se puede pedir una sala es de 30 minutos";
+            }
+            else {// validar el horario de la sala
+              if (dat == null) {
+                this.mensajeSolicitudInvalidaEdit = 'Favor seleccione una fecha';
+              } else {
+                let dia;
+                if (dat.getDay() == 0) {
+                  dia = "Domingo";
+                } else if (dat.getDay() == 1) {
+                  dia = "Lunes";
+
+                } else if (dat.getDay() == 2) {
+                  dia = "Martes";
+
+                } else if (dat.getDay() == 3) {
+                  dia = "Miercoles";
+
+                } else if (dat.getDay() == 4) {
+                  dia = "Jueves";
+
+                } else if (dat.getDay() == 5) {
+                  dia = "Viernes";
+
+                } else if (dat.getDay() == 6) {
+                  dia = "Sabado";
+
+                }
+                //alert(dia);
+                let horarioDiaSala = { dia: null, desde: null, hasta: null };
+                for (let index = 0; index < this.tempHorarioSala.length; index++) {
+                  if (this.tempHorarioSala[index].dia == dia) {
+                    horarioDiaSala = this.tempHorarioSala[index];
+                    break;
+                  }
+                }
+
+                if (horarioDiaSala.desde == null || horarioDiaSala.desde == undefined || horarioDiaSala.desde == "" || horarioDiaSala.desde == "null") {
+                  this.mensajeSolicitudInvalidaEdit = "El día " + dia + " para la sala seleccinada no cuenta con un horario establecido , favor comuniquese con el administrador.";
+                } else { // validar el horario del dia selecciona con respecto al horario de la sala
+                  this.mensajeSolicitudInvalidaEdit="";
+                  let agregarValid = false;
+                  let agregar = false;
+                  let horaEntradaDigit = (parseInt(this.solicitudSalaEdit.horaInicio.hour) + ((parseInt(this.solicitudSalaEdit.horaInicio.minute) / 60)));
+                  let horaSalidaDigit = (parseInt(this.solicitudSalaEdit.horaFin.hour) + ((parseInt(this.solicitudSalaEdit.horaFin.minute) / 60)));
+                  // console.log('Inicio pantalla '+horaEntradaDigit+'<  Inicio Solicitud'+horarioDiaSala.desde);
+                  //console.log('Fin pantalla '+horaSalidaDigit +'> Hasta  Solicitud'+horarioDiaSala.hasta);
+
+                  if (horaEntradaDigit < parseInt(horarioDiaSala.desde) ||
+                    (horaSalidaDigit > parseInt(horarioDiaSala.hasta))) {
+                    let meridianoInit;
+                    let meridianoFin;
+                    let meridNumIni;
+                    let meridNumFin;
+                    if (parseInt(horarioDiaSala.desde) < 12) {
+                      meridianoInit = "AM";
+                      meridNumIni = parseInt(horarioDiaSala.desde);
+                    } else if (parseInt(horarioDiaSala.desde) >= 12) {
+                      meridianoInit = "PM";
+                      meridNumIni = (parseInt(horarioDiaSala.desde) - 12);
+                    }
+                    if (parseInt(horarioDiaSala.hasta) == 24) {
+                      meridianoFin = "AM";
+                      meridNumFin = (parseInt(horarioDiaSala.hasta) - 12);
+                    }
+                    if (parseInt(horarioDiaSala.hasta) > 12 && parseInt(horarioDiaSala.hasta) < 24) {
+                      meridianoFin = "PM";
+                      meridNumFin = (parseInt(horarioDiaSala.hasta) - 12);
+                    } else if (parseInt(horarioDiaSala.hasta) < 12) {
+                      meridianoFin = "AM";
+                      meridNumFin = parseInt(horarioDiaSala.hasta);
+                    }
+                    if (meridNumIni == 0) {
+                      meridNumIni = meridNumIni + 12;
+                    }
+                    agregarValid = false;
+                    this.mensajeSolicitudInvalidaEdit = "El horario habilitado el día " + dia + " para la sala selecionada, es desde  " + meridNumIni + " " + meridianoInit + " hasta " + meridNumFin + " " + meridianoFin;
+                    //alert('horamal');
+                  }
+                  else {// validar la disponibilidad de horario
+
+                 //   alert('horabien'+this.solicitudesdia.length);
+                    if (this.solicitudesdia.length == 0) {//no hay solicitudes del día y el hora escogido es válido
+                      agregarValid = true;
+                    } else {
+                      // alert('entró aqui  valid' +agregarValid);
+                      agregarValid = false;
+                      if (this.tempNombreSala == "") {
+                        this.mensajeSolicitudInvalidaEdit = "Seleccione una Sala";
+                      } else {
+                   //     console.log('solicitudes dia');
+                     //   console.log(this.solicitudesdia);
+                        //buscar la solicitud seleccionada y eleminarla dela lista de solicitudes del día,
+                        // para poder realizar su respectiva modificación en caso de ser el mismos día y se pretenda camibiar solo las horas
+                        for (let conta = 0; conta < this.solicitudesdia.length; conta++) {
+                            if (this.solicitudesdia[conta]._id === this.solicitudSalaEdit._id) {
+                          //    console.log('la econtró');
+                              this.solicitudesdia.splice(conta,1);
+                              break;
+                            }
+                        }
+                        //método burbuja para ordenar las solicitudes de menor a mayor
+                       // console.log(this.solicitudSalaEdit._id);
+                        //console.log(this.solicitudesdia);
+                        let k = [];
+                        for (let i = 1; i < this.solicitudesdia.length; i++) {
+                          for (var j = 0; j < (this.solicitudesdia.length - i); j++) {
+                            if (this.solicitudesdia[j].horaInicio.hour > this.solicitudesdia[j + 1].horaInicio.hour) {
+                              k = this.solicitudesdia[j + 1];
+                              this.solicitudesdia[j + 1] = this.solicitudesdia[j];
+                              this.solicitudesdia[j] = k;
+                            }
+                          }
+                        }
+                        //extraer el horario de la solicitudes de la sala seleccionda 
+                        let tempArrayHoraInicio = [];
+                        let tempArrayHoraFinal = [];
+                        for (let indice = 0; indice < this.solicitudesdia.length; indice++) {
+                          if (this.solicitudesdia[indice].sala == this.tempNombreSala) {
+                            tempArrayHoraInicio.push(this.solicitudesdia[indice].horaInicio);
+                            tempArrayHoraFinal.push(this.solicitudesdia[indice].horaFin);
+                          }
+                        }
+
+                        //buscar solicitudes entre el rango de horas escojido por el usuario y deteriminar si existen solicitudes
+                        let tempArrayVerificacion = [];
+                        for (let contador = 0; contador < tempArrayHoraFinal.length; contador++) {
+                          let sumatoriaFinal = ((tempArrayHoraFinal[contador].hour * 60) + (tempArrayHoraFinal[contador].minute));
+                          let sumatoriaInicial = ((tempArrayHoraInicio[contador].hour * 60) + (tempArrayHoraInicio[contador].minute));
+
+                          if (sumatoriaInicial <= (horaEntradaDigit * 60) && (horaEntradaDigit * 60) < sumatoriaFinal) {
+                            tempArrayVerificacion.push(minFinal);
+                            break;
+                          }
+                          if (sumatoriaFinal > (horaEntradaDigit * 60) && (horaSalidaDigit * 60) > sumatoriaInicial) {
+                            tempArrayVerificacion.push(minFinal);
+                            break;
+                          }
+                        }
+
+                        // verificar si se encontraron
+                        if (tempArrayVerificacion.length > 0) {
+                          agregar = false;
+                        } else {
+                          agregar = true;
+                        }
+                      }
+
+                    }
+                    if (!agregar && !agregarValid) {
+                      this.mensajeSolicitudInvalidaEdit = "Ya existe una solicitud para esta sala, con el mismo horario ingresado";
+                    }
+
+                    if (agregar || agregarValid) {// todo correcto , puede agregar la solicitud
+                      //alert('puede modificar ');
+                      this.dateUpdate.year=this.solicitudSalaEdit.fecha.year;
+                      this.dateUpdate.month=this.solicitudSalaEdit.fecha.month;
+                      this.dateUpdate.day=this.solicitudSalaEdit.fecha.day;
+                      this.solicitudSalaEdit.fecha=this.dateUpdate;
+
+                        this._servSolicitud.modificarSolicitudSala(this.solicitudSalaEdit).subscribe(
+                          response => {
+                            if (!response.message) {
+                              this.msjError(response.message);
+                            } else {
+                              let solicitud = response.message;
+                              this.msjExitoso("Solicitud de sala modificada exitosamente");
+                              console.log(solicitud);
+                             // this.enviarEmail(solicitud);
+                              this.solicitudSalaEdit = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
+                          // this.cupoMaximo="";
+                              this.obtenerSolicitudes(new Date(), false);
+                              this.obtenerSolicitudSalas();
+                              this.mr.close();
+                            }
+                          }, error => {
+                            var alertMessage = <any>error;
+                            if (alertMessage != null) {
+                              var body = JSON.parse(error._body);
+                              this.msjError('Solicitud no registrada');
+                            }
+                          }
+                        );
+                    }
+
+                  }
+                }
+              }
+            }
+
+          }
+        }
+      }, error => {
+        // alert('erro');
+      }
+    );
+
   }
-  enviarEmail(solicitud) {
+
+ enviarEmail(solicitud) {
     for (let i = 0; i < this.usuarios.length; i++) {
 
       if (solicitud.usuario == this.usuarios[i]._id) {
@@ -793,7 +1060,7 @@ export class SolicitudSalaComponent implements OnInit {
   getUsuario(id: any) {
     for (let index = 0; index < this.usuarios.length; index++) {
       if (this.usuarios[index]._id == id) {
-        return this.usuarios[index].nombre+' '+this.usuarios[index].apellidos;
+        return this.usuarios[index].nombre + ' ' + this.usuarios[index].apellidos;
       }
     }
     return '-';
@@ -903,44 +1170,39 @@ export class SolicitudSalaComponent implements OnInit {
     return null;
   });
 
+  // validar el dataPicker de hora de inicio en el modal de actualizar solicitudes
+  timeUpdate = new FormControl('', (control: FormControl) => {
+    const value = control.value;
 
-
-    // validar el dataPicker de hora de inicio en el modal de actualizar solicitudes
-    timeUpdate = new FormControl('', (control: FormControl) => {
-      const value = control.value;
-  
-      if (!value) {
-        return null;
-      }
-  
-      if (value.hour < 12) {
-        return { tooEarly: true };
-      }
-      if (value.hour > 13) {
-        return { tooLate: true };
-      }
-  
+    if (!value) {
       return null;
-    });
+    }
 
-// validar el dataPicker de hora de fin en el modal de agregar solicitudes
-timeUpdateF = new FormControl('', (control: FormControl) => {
-  const value = control.value;
-console.log('hhhh');
-  if (!value) {
+    if (value.hour < 12) {
+      return { tooEarly: true };
+    }
+    if (value.hour > 13) {
+      return { tooLate: true };
+    }
+
     return null;
-  }
+  });
 
-  if (value.hour < 12) {
-    return { tooEarly: true };
-  }
-  if (value.hour > 13) {
-    return { tooLate: true };
-  }
-  return null;
-});
+  // validar el dataPicker de hora de fin en el modal de agregar solicitudes
+  timeUpdateF = new FormControl('', (control: FormControl) => {
+    const value = control.value;
+    if (!value) {
+      return null;
+    }
 
-
+    if (value.hour < 12) {
+      return { tooEarly: true };
+    }
+    if (value.hour > 13) {
+      return { tooLate: true };
+    }
+    return null;
+  });
 
   //actualiza la hora de inicio al escribir
   updateInitDateOnInput(): void {

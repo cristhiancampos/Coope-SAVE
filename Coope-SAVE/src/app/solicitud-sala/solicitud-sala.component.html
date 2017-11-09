@@ -1,4 +1,4 @@
-<ng-template #modalContent let-close="close">
+<ng-template #modalContent let-close="close" id="modalContent">
   <div class="modal-header" style="background: #0069d9;color:#fff">
     <!-- <h5 class="modal-title">Event action occurred</h5>
       <button type="button" class="close" (click)="close()">
@@ -34,7 +34,7 @@
               <div class="col-md-4" style="top: 2em;">
                   <div class="form-group">
                       <div class="input-group">     
-              <select class="btn btn-outline-primary" #salE="ngModel" name="salE" [(ngModel)]="solicitudSalaEdit.sala" (change)="setCupoMaximoSala(solicitudSala.sala)" class="selectpicker"
+              <select class="btn btn-outline-primary" #salE="ngModel" name="salE" [(ngModel)]="solicitudSalaEdit.sala" (change)="setCupoMaximoSala(solicitudSalaEdit.sala)" class="selectpicker"
               style="width: 100%;font-size: 1.2rem;min-width: 10em;" required [disabled]="tempEvent.length<=0">  
                       <option value="" selected disabled >Seleccione Sala</option>
                           <option *ngFor="let sala of salas;" >{{sala.nombre}}</option>
@@ -45,14 +45,14 @@
                 </div>
                 
               <div class="col-md-2" style="top: 2em;">
-                  <strong>Fecha</strong>
+                  <strong>Fecha    </strong>
               </div>
               <div class="col-md-4" style="top: 2em;">
                   <div class="form-group">
                       <div class="input-group">
                         <input class="form-control" placeholder="yyyy-mm-dd"
-                               name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker" [disabled]="tempEvent.length<=0">
-                        <button class="input-group-addon" (click)="d.toggle()" type="button" [disabled]="tempEvent.length<=0">
+                               name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker" [disabled]="true" [minDate]="minDate" required> <!--[disabled]="tempEvent.length<=0" -->
+                        <button class="input-group-addon" (click)="d.toggle()" type="button" [disabled]="tempEvent.length<=0" >
                             <i class="fa fa-calendar" aria-hidden="true"></i>
                         </button>
                       </div>
@@ -60,7 +60,7 @@
                 </div>
             </div> 
 
-          <br>
+          <br><br>
            <div class="row">
             <div class="col-md-2" style="top: 2em;">
                 <strong>Hora Inicio</strong>
@@ -70,14 +70,10 @@
                 <ngb-timepicker #timeUpdate="ngModel" name="timeUpdate" [(ngModel)]="timeI" [meridian]="true" [disabled]="tempEvent.length<=0" required>
                   </ngb-timepicker>               
           
-                <div class="small form-text text-danger" *ngIf="!timeUpdate.valid">
-                  <div *ngIf="timeUpdate.errors['required']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar valores Numericos</div>
-                  <div *ngIf="timeUpdate.errors['tooLate']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en
-                    las horas</div>
-                  <div *ngIf="timeUpdate.errors['tooEarly']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en
-                    los minutos
-                  </div>
-                </div>
+                  <div class="small form-text text-danger" *ngIf="!timeUpdate.valid &&!timeUpdate.disabled">
+                      <div> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar valores Numericos</div>
+                      </div>
+
             </div>
           
               </div>
@@ -89,25 +85,52 @@
               <div class="form-group">
                 <ngb-timepicker #timeUpdateF="ngModel" name="timeUpdateF" [(ngModel)]="timeF" [meridian]="true" [disabled]="tempEvent.length<=0" required></ngb-timepicker>               
                 
-                <div class="small form-text text-danger" *ngIf="!timeUpdateF.valid">
-                    <div *ngIf="timeUpdateF.errors['required']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar valores Numericos</div>
-                    <div *ngIf="timeUpdateF.errors['tooLate']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en
-                      las horas</div>
-                    <div *ngIf="timeUpdateF.errors['tooEarly']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en
-                      los minutos
-                    </div>
-                  </div>
+                <div class="small form-text text-danger" *ngIf="!timeUpdateF.valid  &&!timeUpdateF.disabled">
+                  <div> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar valores Numericos</div>
+                  </div> 
             </div>
 
               </div>
+
+              <div class="small form-text text-danger" style="font-size:0.9rem">
+                  <div>&nbsp; &nbsp;&nbsp; &nbsp;
+                    <i *ngIf='mensajeSolicitudInvalidaEdit!=""' class="fa fa-exclamation-circle" aria-hidden="true"></i>  {{mensajeSolicitudInvalidaEdit}}</div>
+
+                </div>
+
           </div> 
           
         <br>
           <div class="row">
+              <div class="col-md-2">
+                  <strong>Cantidad de Personas</strong>
+              </div>
+              <div class="col-md-3">
+                  <div class="control-group form-group">
+                      <div class="controls">
+                        <input id="inputCupE" type="number" class="form-control" #cupE="ngModel" name="cupE" [(ngModel)]="solicitudSalaEdit.cantidadPersonas"
+                          placeholder="Capacidad {{cupoMaximo}}" required min="1" max="{{cupoMaximo}}" pattern="[0-9]*" [disabled]="tempEvent.length<=0"
+                          (keypress)="elimininarNegativos('#inputCupE')">
+                        <!-- <div *ngIf="cup.valid && cup.value<=cupoMaximo && cup.value>0 " class="small form-text text-success" style="font-size:0.9rem">Correcto<i class="fa fa-check" aria-hidden="true"></i></div> -->
+                        <div class="small form-text text-danger" *ngIf="cupE.invalid && (cupE.dirty || cupE.touched)" style="font-size:0.9rem">
+                          <div *ngIf="cupE.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La cantidad de personas es obligatoria</div>
+                        </div>
+                        <div class="small form-text text-danger" *ngIf="!cupE.invalid && cupE.value>cupoMaximo" style="font-size:0.9rem">
+                          <div><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La capacidad máxima de la sala es de
+                            {{cupoMaximo}} personas</div>
+                        </div>
+                        <div class="small form-text text-danger" *ngIf="cupE.valid && cupE.value<='0'" style="font-size:0.9rem">
+                          <div><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La solicitud debe incluir almenos 1 persona</div>
+                        </div>
+  
+                      </div>
+                    </div>
+              </div>
+
             <div class="col-md-2">
                 <strong>Motivo</strong>
             </div>
-            <div class="col-md-10">
+            <div class="col-md-5">
               
               <!-- <input type="text" value=" {{tempSolicitud.motivo}} lllllllllllllllllllllllllllllllllllllllllllllllllll"> -->
                
@@ -141,7 +164,8 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-secondary" (click)="close()">OK</button>
-    <button *ngIf="tempEvent.length>0" type="button" class="btn btn-outline-secondary" (click)="modificarSolicitud()">Modificar</button>
+    <button *ngIf="tempEvent.length>0" type="button" class="btn btn-outline-secondary"
+       (click)="modificarSolicitud()" [disabled]="!timeUpdateF.valid || !timeUpdate.valid || cupE.value<='0'  || cupE.value>cupoMaximo">Modificar</button>
   </div>
 </ng-template>
 

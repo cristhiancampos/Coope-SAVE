@@ -111,8 +111,7 @@ function eliminarSala(req, res) {
 }
 
 function modificarSala(req, res) {
-
-
+  
   var params = req.body;
   var salaId = params._id;
   params.updated_at = new Date();
@@ -141,8 +140,6 @@ function modificarHorario(req, res) {
     var salaId = params._id;
     var horario = params.horario;
     params.updated_at = new Date();
-  
-    console.log(params);
   
      Sala.findByIdAndUpdate(salaId,{ horario:horario}, (err, modificaSala) => {
       if (err) {

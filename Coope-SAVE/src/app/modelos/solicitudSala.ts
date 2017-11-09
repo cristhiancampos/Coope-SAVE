@@ -3,7 +3,7 @@ export class SolicitudSala{
         public _id:string,        
         public sala:string,
         public usuario:string,
-        public fecha,
+        public fecha:any,
         public horaInicio,
         public horaFin,
         public descripcion :string,
