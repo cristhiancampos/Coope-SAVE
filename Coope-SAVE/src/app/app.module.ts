@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule,Pipe, PipeTransform } from '@angular/core';
 
 import { appRoutingProviders, routing } from './app.routing';
 import { HttpModule } from '@angular/http';
@@ -32,6 +32,7 @@ import { AdminUsuarioComponent } from './admin-usuario/admin-usuario.component';
 import { AdminRecursoComponent } from './admin-recurso/admin-recurso.component';
 import { AdminSolicitudComponent } from './admin-solicitud/admin-solicitud.component';
 import { SolicitudVehiculoComponent } from './solicitud-vehiculo/solicitud-vehiculo.component';
+import {filtrarUsuario} from './solicitud-vehiculo/filtroUsuarios';
 
 
 @NgModule({
@@ -50,6 +51,8 @@ import { SolicitudVehiculoComponent } from './solicitud-vehiculo/solicitud-vehic
     AdminRecursoComponent,
     AdminSolicitudComponent,
     SolicitudVehiculoComponent,
+    filtrarUsuario
+    
 
   ],
   imports: [
@@ -60,6 +63,8 @@ import { SolicitudVehiculoComponent } from './solicitud-vehiculo/solicitud-vehic
     BrowserAnimationsModule,
     CalendarModule.forRoot(),
     NgbModule.forRoot(),
+    
+    
   ],
   providers: [appRoutingProviders],
 bootstrap: [AppComponent]

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef, Pipe, PipeTransform } from '@angular/core';
 import { startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours,
   getSeconds,getMinutes,getHours,getDate,getMonth,getYear,setSeconds,setMinutes,setHours,setDate,setMonth,setYear } from 'date-fns';
 import { Subject } from 'rxjs/Subject';
@@ -17,6 +17,7 @@ import { ChangeDetectorRef, forwardRef, Input, OnInit } from '@angular/core';
 import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FormControl } from '@angular/forms'; 
+import {filtrarUsuario} from './filtroUsuarios';
 const colors: any = {
   red: {
     primary: '#ad2121',
@@ -36,7 +37,12 @@ const colors: any = {
   selector: 'app-solicitud-vehiculo',
   templateUrl: './solicitud-vehiculo.component.html',
   styleUrls: ['./solicitud-vehiculo.component.css'],
-  providers: [ServicioSolicitudVehiculo,ServicioVehiculo, ServicioUsuario]  
+  providers: [ServicioSolicitudVehiculo,ServicioVehiculo, ServicioUsuario, filtrarUsuario],
+  
+  
+  
+  
+
 })
 export class SolicitudVehiculoComponent implements OnInit {
 
@@ -193,10 +199,12 @@ listaNombres(){
 }
 
 
+
 getItems(ev: any) {
   this.listaNombres();
 let val = ev.target.value;
   if (val && val.trim() != '') {
+
     this.nombreUsuarios= this.nombreUsuarios.filter((item) => {
       return (item.toLowerCase().indexOf(val.toLowerCase()) > -1);
     })
@@ -207,16 +215,29 @@ let val = ev.target.value;
 
   }
 
-  agregarAcompanates(id: any){
+  agregarAcompanates(usuario: any){
+    console.log(usuario);
+  this.usuariosAgregados.push(usuario);   
 
-  this.usuariosAgregados.push(this.nombreUsuarios[id]);   
-  this.nombreUsuarios.splice(id,1);
+  for(let i=0;i<this.listaUsuarios.length; i++){
+    if(this.listaUsuarios[i]._id== usuario._id){
+      this.listaUsuarios.splice(i,1);
+      break
+    }
+  }
+  //this.nombreUsuarios.splice(id,1);
   //alert(id);
   }
 
-  eliminarAcompanante(id: any){
-  this.nombreUsuarios.push(this.usuariosAgregados[id]);
-  this.usuariosAgregados.splice(id,1);
+  eliminarAcompanante(usuario: any){
+  this.listaUsuarios.push(usuario);
+  for(let i=0;i<this.usuariosAgregados.length; i++){
+    if(this.usuariosAgregados[i]._id== usuario._id){
+      this.usuariosAgregados.splice(i,1);
+      break
+    }
+  }
+  
 
   }
 
