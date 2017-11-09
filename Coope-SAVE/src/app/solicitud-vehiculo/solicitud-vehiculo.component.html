@@ -255,9 +255,10 @@ aria-hidden="true">
               <div class="col-6" style="margin-left: 20px;">
                 <div class="list-group" id="list-tab" role="tablist">
                   <div class="row col-md-12" style="overflow-y: scroll; height: 200px">
-                  <div class="col-md-12" *ngFor="let usuario of nombreUsuarios; let i=index">
-                  <label class="list-group-item list-group-item-action"  data-toggle="list"role="tab" aria-controls="home" (click)="agregarAcompanates(i)">
-                      <span class="custom-control-description"  >{{usuario}} </span>
+                  <!-- <div class="col-md-12" *ngFor="let usuario of nombreUsuarios; let i=index"> -->
+                      <div class="col-md-12" *ngFor="let usuario of listaUsuarios | filter: filtroUsuario">
+                  <label class="list-group-item list-group-item-action"  data-toggle="list"role="tab" aria-controls="home" (click)="agregarAcompanates(usuario)">
+                      <span class="custom-control-description"  >{{usuario.nombre}} {{usuario.apellidos}} </span>
                       <span class="fa fa-plus" aria-hidden="true" style="float: right"></span>
                   </label>
                 </div>
@@ -268,8 +269,8 @@ aria-hidden="true">
                   <div class="list-group" id="list-tab" role="tablist">
                     <div class="row col-md-12" style="overflow-y: scroll; height: 200px">
                     <div class="col-md-12" *ngFor="let usuarioAgregado of usuariosAgregados; let e = index">
-                    <label class="list-group-item list-group-item-action"  data-toggle="list"role="tab" aria-controls="home" (click)="eliminarAcompanante(e)">                      
-                        <span class="custom-control-description" >{{usuarioAgregado}}</span>
+                    <label class="list-group-item list-group-item-action"  data-toggle="list"role="tab" aria-controls="home" (click)="eliminarAcompanante(usuarioAgregado)">                      
+                        <span class="custom-control-description" >{{usuarioAgregado.nombre}}{{usuarioAgregado.apellidos}}</span>
                         <span class="fa fa-minus" aria-hidden="true" style="float: right"></span> 
                         
                     </label>
