@@ -168,9 +168,9 @@
                 <div class="container">
                   <div class="form-group">
                     <div class="row col-md-12" style="overflow-y: scroll; height: 100px">
-                      <div class="col-md-6" *ngFor="let recurso of recursos;" style="text-align: left">
+                      <div class="col-md-6" *ngFor="let recurso of recursos;let i =index;"  style="text-align: left">
                         <label class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" (change)="changeRecursos($event,recurso._id)" >
+                            <input type="checkbox" class="custom-control-input" [checked]="tempArrayChecked[i]" (change)="changeRecursos($event,recurso._id)" >
                             <span class="custom-control-indicator"></span>
                             <span class="custom-control-description">{{recurso.nombre}}</span>
                           </label>

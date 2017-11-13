@@ -266,7 +266,7 @@ export class SolicitudSalaComponent implements OnInit {
                                   this.actions = [];
                                   this.tempEnable = false;
                                 } else {
-                                  this.tempEnable = true;
+                                  // this.tempEnable = true;
                                 }
                               } else {
                                 // alert('entra aqui 2');
@@ -420,10 +420,10 @@ export class SolicitudSalaComponent implements OnInit {
       response => {
         if (!response.message) {//no hay registros
         } else {//no hay Salas registradas
-         // console.log('solicitudes salas');
+          // console.log('solicitudes salas');
           array = response.message;
           this.solicitudesdia = array;
-         // console.log(array);
+          // console.log(array);
           if (abrirMod) {
             this.abrirModal('#modal-add-new-request');
           }
@@ -481,17 +481,17 @@ export class SolicitudSalaComponent implements OnInit {
     this.refresh.next();
   }
 
+  tempArrayChecked = [];
   esMayor = false;
   tempEvent: any;
   tempTitleModal = "";
   tempSolicitud = { usuario: null, departamento: null, fecha: null, motivo: null, inicio: null, fin: null, sala: null }
   //administrador de eventos
   handleEvent(action: string, event: CalendarEvent): void {
-    //alert('hola');
-    //console.log(action);
-    //console.log(event);
+    this.tempArrayChecked = []
+    this.tempRecursos=[];
+    this.tempEvent=[];
     let fecha = new Date(event.start);
-    console.log(this.model);
     this.model = { year: fecha.getFullYear(), month: fecha.getMonth() + 1, day: fecha.getDate() }
 
     this.mensajeSolicitudInvalida = "";
@@ -526,6 +526,27 @@ export class SolicitudSalaComponent implements OnInit {
                 this.solicitudSalaEdit.horaFin = this.timeF;
 
                 this.solicitudSalaEdit.recursos = solicit.recursos;
+                //  console.log(this.recursos);
+                //console.log(solicit.recursos);
+
+               
+                 // console.log(solicit.recursos[i]);
+                  for (var index = 0; index < this.recursos.length; index++) {
+                    this.tempArrayChecked[index]=false;
+
+                    for (var i = 0; i < solicit.recursos.length; i++) {
+                    if (this.recursos[index]._id == solicit.recursos[i]) {
+                      this.tempArrayChecked[index]=true;  
+                     // console.log(this.recursos[index].nombre);
+                    }
+                    else{
+                      
+                      //console.log(this.recursos[index].nombre);
+                    }
+                  }
+
+
+                }
 
                 this.setCupoMaximoSalaEdit(this.solicitudSalaEdit.sala);
                 this.tempEvent = event.actions;
@@ -550,20 +571,24 @@ export class SolicitudSalaComponent implements OnInit {
                       this.minDate.year = serverDate.getFullYear();
                       this.minDate.month = (serverDate.getMonth() + 1);
                       this.minDate.day = serverDate.getDate();
-
-                      console.log(this.minDate);
-                      if (date.getFullYear() < serverDate.getFullYear() || this.minDate.year < serverDate.getFullYear()) {
+                      console.log('cliente');
+                      console.log(date);
+                      console.log('servidor')
+                      console.log(serverDate);
+                      if (date.getFullYear() < serverDate.getFullYear() ) {
                         this.tempEvent = [];
-                      } else if (((date.getMonth() + 1) < (serverDate.getMonth() + 1)) || (this.minDate.month < (serverDate.getMonth() + 1))) {
+                      } else if (((date.getMonth() + 1) < (serverDate.getMonth() + 1)) ) {
                         this.tempEvent = [];
-                      } else if (((date.getMonth() + 1) == (serverDate.getMonth() + 1)) || (this.minDate.month == (serverDate.getMonth() + 1))) {
+                      } else if (((date.getMonth() + 1) == (serverDate.getMonth() + 1))) {
                         if (date.getDate() < serverDate.getDate() || this.minDate.day < serverDate.getDate()) {
-                          this.tempEvent = [];
+                         this.tempEvent = [];
                         } else {
                           // alert('entra aqui 1');
+                      //    this.tempEvent = event.actions;
                         }
                       } else {
                         // alert('entra aqui 2');
+                       // this.tempEvent = event.actions;
                       }
                     } else {
                     }
@@ -665,7 +690,6 @@ export class SolicitudSalaComponent implements OnInit {
   }
   //se agregan solicitudes en la base de datos después de sus debidas validadaciones
   agregarSolicitud() {
-    this.cupoMaximo = "";
     var minInicial = ((this.solicitudSala.horaInicio.hour * 60) + this.solicitudSala.horaInicio.minute);
     var minFinal = ((this.solicitudSala.horaFin.hour * 60) + this.solicitudSala.horaFin.minute);
     if (minFinal - minInicial <= 0) {
@@ -825,10 +849,12 @@ export class SolicitudSalaComponent implements OnInit {
                         let solicitud = response.message;
                         this.msjExitoso("Solicitud agregada exitosamente");
                         this.enviarEmail(solicitud);
+                        this.cerrarModal('#modal-add-new-request');
                         this.solicitudSala = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
                         this.obtenerSolicitudes(this.date, false);
                         this.obtenerSolicitudSalas();
-                        this.cerrarModal('#modal-add-new-request');
+                        this.obtenerRecursos();
+
                         // this.obtenerSalas();
                       }
                     }, error => {
@@ -1048,7 +1074,7 @@ export class SolicitudSalaComponent implements OnInit {
                       this.dateUpdate.month = this.solicitudSalaEdit.fecha.month;
                       this.dateUpdate.day = this.solicitudSalaEdit.fecha.day;
                       this.solicitudSalaEdit.fecha = this.dateUpdate;
-
+                      this.solicitudSalaEdit.recursos=this.tempRecursos;
                       this._servSolicitud.modificarSolicitudSala(this.solicitudSalaEdit).subscribe(
                         response => {
                           if (!response.message) {
@@ -1361,7 +1387,7 @@ export class SolicitudSalaComponent implements OnInit {
       //this.abrirModal('#loginModal');
     }
   }
-  
+
 
 }
 
