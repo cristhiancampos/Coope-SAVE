@@ -1,4 +1,4 @@
-
+/*
 body {
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
@@ -80,7 +80,7 @@ img { max-width: 100%; }
 
 
 /***** Top content *****/
-
+/*
 .inner-bg {
     padding: 100px 0 170px 0;
 }
@@ -170,7 +170,7 @@ img { max-width: 100%; }
 
 
 /***** Media queries *****/
-
+/*
 @media (min-width: 992px) and (max-width: 1199px) {}
 
 @media (min-width: 768px) and (max-width: 991px) {}

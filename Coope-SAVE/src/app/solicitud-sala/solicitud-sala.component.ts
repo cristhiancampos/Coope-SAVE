@@ -89,6 +89,7 @@ export class SolicitudSalaComponent implements OnInit {
   private solicSala = true;
   public solicitudesdia = [];
   cupoMaximo;
+  cupoMaximoEdit;
   horarioValido = true;//cambiar a false
   formAgregarValido = true; //cambiar a false
   mensajeSolicitudInvalida = "";
@@ -289,6 +290,22 @@ export class SolicitudSalaComponent implements OnInit {
     }
     this.cupoMaximo = cup;
   }
+
+  setCupoMaximoSalaEdit(sala) {
+    this.mensajeSolicitudInvalida = "";
+    this.tempHorarioSala = [];
+    //let cup=  this.salas.filter(item => nombre =="ANFITEATRO" );
+    for (let index = 0; index < this.salas.length; index++) {
+      if (this.salas[index].nombre == sala) {
+        var cup = this.salas[index].cupo;
+        this.tempHorarioSala = this.salas[index].horario;
+        this.tempNombreSala = sala;
+        break;
+      }
+
+    }
+    this.cupoMaximoEdit = cup;
+  }
   //eliminar los números negativos en un input
   elimininarNegativos(inputId) {
     $(inputId).on('keypress', function (e) {
@@ -427,7 +444,7 @@ export class SolicitudSalaComponent implements OnInit {
     this.refresh.next();
   }
 
-
+esMayor=false;
   tempEvent: any;
   tempTitleModal = "";
   tempSolicitud = { usuario: null, departamento: null, fecha: null, motivo: null, inicio: null, fin: null, sala: null }
@@ -466,6 +483,7 @@ export class SolicitudSalaComponent implements OnInit {
 
                 this.solicitudSalaEdit.recursos = solicit.recursos;
 
+                this.setCupoMaximoSalaEdit(this.solicitudSalaEdit.sala);
                 this.tempEvent = event.actions;
                 if (this.tempEvent.length > 0) {
                   this.tempTitleModal = "Editar";
@@ -476,7 +494,6 @@ export class SolicitudSalaComponent implements OnInit {
                 date.setFullYear(solicit.fecha.year);
                 date.setMonth(solicit.fecha.month - 1);
                 date.setDate(solicit.fecha.day);
-                this.setCupoMaximoSala(this.solicitudSalaEdit.sala);
 
                 this._servSolicitud.fechaActual().subscribe(
                   response => {
@@ -758,7 +775,7 @@ export class SolicitudSalaComponent implements OnInit {
                         this.msjError(response.message);
                       } else {
                         let solicitud = response.message;
-                        this.msjExitoso("Solicitud egregada exitosamente");
+                        this.msjExitoso("Solicitud agregada exitosamente");
                         this.enviarEmail(solicitud);
                         this.solicitudSala = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
                         this.obtenerSolicitudes(this.date, false);

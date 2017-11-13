@@ -19,6 +19,7 @@
           <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1"> <i class="fa fa-user" aria-hidden="true"></i> Solicitante</h5>
           </div>
+          <br>
           <p class="mb-1"> <strong>Nombre</strong>   {{tempSolicitud.usuario}}</p>
           <p class="mb-1"> <strong>Departamento</strong>   {{tempSolicitud.departamento}}</p>
         </a>
@@ -109,15 +110,15 @@
                   <div class="control-group form-group">
                       <div class="controls">
                         <input id="inputCupE" type="number" class="form-control" #cupE="ngModel" name="cupE" [(ngModel)]="solicitudSalaEdit.cantidadPersonas"
-                          placeholder="Capacidad {{cupoMaximo}}" required min="1" max="{{cupoMaximo}}" pattern="[0-9]*" [disabled]="tempEvent.length<=0"
+                          placeholder="Capacidad {{cupoMaximoEdit}}" required min="1" max="{{cupoMaximoEdit}}" pattern="[0-9]*" [disabled]="tempEvent.length<=0"
                           (keypress)="elimininarNegativos('#inputCupE')">
                         <!-- <div *ngIf="cup.valid && cup.value<=cupoMaximo && cup.value>0 " class="small form-text text-success" style="font-size:0.9rem">Correcto<i class="fa fa-check" aria-hidden="true"></i></div> -->
                         <div class="small form-text text-danger" *ngIf="cupE.invalid && (cupE.dirty || cupE.touched)" style="font-size:0.9rem">
                           <div *ngIf="cupE.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La cantidad de personas es obligatoria</div>
                         </div>
-                        <div class="small form-text text-danger" *ngIf="!cupE.invalid && cupE.value>cupoMaximo" style="font-size:0.9rem">
-                          <div><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La capacidad máxima de la sala es de
-                            {{cupoMaximo}} personas</div>
+                        <div class="small form-text text-danger" *ngIf="solicitudSalaEdit.cantidadPersonas > cupoMaximoEdit && tempEvent.length>0 && cupE.touched" style="font-size:0.9rem">
+                          <div><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La capacidad máxima de la sala es de 
+                            {{cupoMaximoEdit}} personas</div>
                         </div>
                         <div class="small form-text text-danger" *ngIf="cupE.valid && cupE.value<='0'" style="font-size:0.9rem">
                           <div><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La solicitud debe incluir almenos 1 persona</div>
@@ -151,6 +152,36 @@
           </div>
           <!-- <p class="mb-1"> <strong>Motivo</strong>  
              {{tempSolicitud.motivo}}</p> -->
+        </a>
+
+        <a href="javascript:void(0);" class="list-group-item list-group-item-action flex-column align-items-start " *ngIf="tempEvent.length>0">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1"> <i class="fa fa-desktop" aria-hidden="true"></i> Recursos</h5>
+          </div>
+
+          <div class="container-fluid">
+            <br>
+            <!-- <hr>
+            <h4 style="color:#0069d9">Lista de Recursos disponibles</h4> <br> -->
+            <div class="row">
+              <div class="col-md-12" style="font-size: 1rem">
+                <div class="container">
+                  <div class="form-group">
+                    <div class="row col-md-12" style="overflow-y: scroll; height: 100px">
+                      <div class="col-md-6" *ngFor="let recurso of recursos;" style="text-align: left">
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" (change)="changeRecursos($event,recurso._id)" >
+                            <span class="custom-control-indicator"></span>
+                            <span class="custom-control-description">{{recurso.nombre}}</span>
+                          </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+         
         </a>
       </div>
     </form>
