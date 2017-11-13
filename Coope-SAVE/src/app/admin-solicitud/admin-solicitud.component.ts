@@ -8,6 +8,7 @@ import { ServicioRecursos } from '../servicios/recurso';
 import { Usuario } from '../modelos/usuario';
 import { Recurso } from '../modelos/recursos';
 import { SolicitudSala } from '../modelos/solicitudSala';
+import { SolicitudVehiculo } from '../modelos/solicitudVehiculo';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
 
@@ -15,7 +16,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
   selector: 'app-admin-solicitud',
   templateUrl: './admin-solicitud.component.html',
   styleUrls: ['./admin-solicitud.component.css'],
-  providers: [ServicioRecursos, ServicioSolicitudSala,ServicioSolicitudVehiculo, ServicioUsuario]
+  providers: [ServicioRecursos, ServicioSolicitudSala, ServicioSolicitudVehiculo, ServicioUsuario]
 })
 export class AdminSolicitudComponent implements OnInit {
 
@@ -27,14 +28,18 @@ export class AdminSolicitudComponent implements OnInit {
   public solicitudSala: SolicitudSala;
   public solicitudSalaEdit: SolicitudSala;
   public solicitudSalaTemp: SolicitudSala;
-  public indice= [];
-  public codigosRecursosTemp= [];
+  public solicitudVehiculoTem: SolicitudVehiculo;
+  public indice = [];
+  public codigosRecursosTemp = [];
   public solicitudSalas = [];
+  public solicitudVehiculos = [];
   public usuariosList = [];
   public recursosList = [];
   public listaNombreRecursos = [];
+  public listaNombreAcompanantes = [];
   public currenIndex;
   public idEliminar;
+  public acompananteIndex;
 
   //Variables para solicitudVehiculos
 
@@ -55,6 +60,8 @@ export class AdminSolicitudComponent implements OnInit {
     this.obtenerRecursos();
     this.verificarCredenciales();
     this.obtenerSolicitudSalas();
+    this.obtenerSolicitudVehiculo()
+
   }
 
 
@@ -98,7 +105,7 @@ export class AdminSolicitudComponent implements OnInit {
 
     for (var i = 0; i < this.usuariosList.length; i++) {
       if (id == this.usuariosList[i]._id) {
-        return this.usuariosList[i].nombre;
+        return this.usuariosList[i].nombre+' ' + this.usuariosList[i].apellidos;
 
       } else { }
     }
@@ -110,7 +117,7 @@ export class AdminSolicitudComponent implements OnInit {
       response => {
         if (response.message) {
 
-          this.recursosList = response.message;    
+          this.recursosList = response.message;
         } else {//No hay usuarios registrdos//
         }
       }, error => {
@@ -124,32 +131,33 @@ export class AdminSolicitudComponent implements OnInit {
 
   getNombreRecurso(id: any) {
 
-    this.listaNombreRecursos= [];
-    this.codigosRecursosTemp= []; 
-    this.solicitudSalaTemp= id;
+    this.listaNombreRecursos = [];
+    this.codigosRecursosTemp = [];
+    this.solicitudSalaTemp = id;
     let index = id.recursos.length;
     for (var e = 0; e < index; e++) {
-      this.indice[e]=[e];
+      this.indice[e] = [e];
       for (var i = 0; i < this.recursosList.length; i++) {
         if (id.recursos[e] == this.recursosList[i]._id) {
-          this.listaNombreRecursos[e] = this.recursosList[i].nombre; 
-          this.codigosRecursosTemp[e]=id.recursos[e];
+          this.listaNombreRecursos[e] = this.recursosList[i].nombre;
+          this.codigosRecursosTemp[e] = id.recursos[e];
           break;
         }
       }
 
     }
-   
+
     return this.listaNombreRecursos;
 
   }
 
+
   elimarRecursoSoicitud() {
 
-    let index= this.currenIndex;
+    let index = this.currenIndex;
     this.solicitudSalaTemp.recursos = this.codigosRecursosTemp;
-      this.listaNombreRecursos.splice(index,1);
-      this.codigosRecursosTemp.splice(index, 1);
+    this.listaNombreRecursos.splice(index, 1);
+    this.codigosRecursosTemp.splice(index, 1);
     console.log(this.solicitudSalaTemp);
     this._servSolicitudSala.modificarSolicitudSala(this.solicitudSalaTemp).subscribe(
       response => {
@@ -170,11 +178,11 @@ export class AdminSolicitudComponent implements OnInit {
       }
     );
 
-    if(this.listaNombreRecursos.length <1){
+    if (this.listaNombreRecursos.length < 1) {
       this.cerrarModal('#modalRecursos');
 
     }
-   
+
   }
 
   eliminarSolicitudSala() {
@@ -204,11 +212,14 @@ export class AdminSolicitudComponent implements OnInit {
   //********************************************************************Sección Solicitud Vehiculo**********************************************************************//
 
   obtenerSolicitudVehiculo() {
+    console.log('obtener solicitudes de vehivulo');
     this._servSolicitudVehiculo.obtenerTodasSolicitudes().subscribe(
       response => {
 
         if (response.message) {
-          this.solicitudSalas = response.message;
+          this.solicitudVehiculos = response.message;
+
+          console.log(this.solicitudVehiculos);
         } else {//no hay Salas registradas
         }
       }, error => {
@@ -224,6 +235,7 @@ export class AdminSolicitudComponent implements OnInit {
   eliminarSolicitudVehiculo() {
 
     console.log(this.idEliminar);
+    
     this._servSolicitudVehiculo.eliminarSolicitudVehiculo(this.idEliminar).subscribe(
       response => {
 
@@ -231,7 +243,7 @@ export class AdminSolicitudComponent implements OnInit {
           this.msjError("La Solicitud no pudo ser Eliminada");
         } else {
           this.msjExitoso("Sala Eliminada Exitosamente");
-          this.obtenerSolicitudSalas();
+          this.obtenerSolicitudVehiculo();
         }
       }, error => {
         var alertMessage = <any>error;
@@ -244,12 +256,62 @@ export class AdminSolicitudComponent implements OnInit {
   }
 
 
-  //********************************************************************Sección Solicitud Sala**********************************************************************//
-  setCurrenIndex(index:any){
- this.currenIndex= index
+  getNombreAcompanantes(vehiculo: any) {
+    this.solicitudVehiculoTem = vehiculo;
+
+    console.log(this.solicitudVehiculoTem);
+    for (var e = 0; e < vehiculo.acompanantes.length; e++) {
+      this.listaNombreAcompanantes[e] = vehiculo.acompanantes[e];
+    }
+    return this.listaNombreAcompanantes;
   }
-  setIdEliminar(id:any){
-    this.idEliminar= id;
+
+  elimarAcompanante() {
+
+    let index = this.acompananteIndex;
+
+    this.listaNombreAcompanantes.splice(index, 1);
+    this.solicitudVehiculoTem.acompanantes= this.listaNombreAcompanantes;
+  
+    this._servSolicitudVehiculo.modificarSolicitudVehiculo(this.solicitudVehiculoTem).subscribe(
+      response => {
+
+        if (!response.message._id) {
+          this.msjError("El Recurso no se pudo Eliminar");
+        } else {
+          this.obtenerSolicitudSalas();
+          this.msjExitoso("Recurso Eliminado Exitosamente");
+        }
+      }, error => {
+        var alertMessage = <any>error;
+        if (alertMessage != null) {
+          var body = JSON.parse(error._body);
+          this.msjError("La Sala no pudo ser Modificada");
+
+        }
+      }
+    );
+
+    if (this.listaNombreAcompanantes.length < 1) {
+      this.cerrarModal('#modalAcompanantes');
+
+    }
+
+  }
+
+ 
+
+
+  //********************************************************************Fin Sección Solicitud Vehiculo**********************************************************************//
+  setCurrenIndex(index: any) {
+    this.currenIndex = index
+  }
+  setAcompanantesIndex(index: any) {
+    this.acompananteIndex = index
+  }
+
+  setIdEliminar(id: any) {
+    this.idEliminar = id;
   }
 
 
@@ -322,7 +384,7 @@ export class AdminSolicitudComponent implements OnInit {
       this.sala = false;
     }
   }
-  msjExitoso(texto: string){
+  msjExitoso(texto: string) {
     swal({
       position: 'top',
       type: 'success',
@@ -331,8 +393,8 @@ export class AdminSolicitudComponent implements OnInit {
       timer: 2500
     })
   }
-  
-  msjError(texto: string){
+
+  msjError(texto: string) {
     swal(
       'Oops...',
       texto,

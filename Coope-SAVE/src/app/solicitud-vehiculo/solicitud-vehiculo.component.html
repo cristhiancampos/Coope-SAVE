@@ -162,7 +162,7 @@ aria-hidden="true">
                     <div class="form-group" style="margin-top: 3.3em; font-size: 1rem">
 
                       <label for="">Termina</label>
-                      <ngb-timepicker [(ngModel)]="solicitudVehiculo.horaFin" (ngModelChange)="updateTime()" [meridian]="true" (input)="updateFinishDateOnInput()"
+                      <ngb-timepicker [(ngModel)]="solicitudVehiculo.horaRegreso" (ngModelChange)="updateTime()" [meridian]="true" (input)="updateFinishDateOnInput()"
                         #ctrlFinishDate="ngModel" name="ctrlFinishDate" required>
                       </ngb-timepicker>
                       <!-- <div *ngIf="ctrlFinishDate.valid" class="small form-text text-success">Correcto <i class="fa fa-check" aria-hidden="true"></i> </div> -->
@@ -180,7 +180,7 @@ aria-hidden="true">
 
                   <div class="small form-text text-danger" style="font-size:0.9rem">
                     <div>&nbsp; &nbsp;&nbsp; &nbsp;
-                      <i *ngIf='mensajeSolicitudInvalida!=""' class="fa fa-exclamation-circle" aria-hidden="true"></i>                        {{mensajeSolicitudInvalida}}</div>
+                      <i *ngIf='mensajeSolicitudInvalida!=""' class="fa fa-exclamation-circle" aria-hidden="true"></i>{{mensajeSolicitudInvalida}}</div>
 
                   </div>
                   <!-- <div *ngIf="ctrlFinishDate.valid" class="small form-text text-success">Debe eligir un horario correcto <i class="fa fa-check" aria-hidden="true"></i> </div> -->
@@ -193,9 +193,10 @@ aria-hidden="true">
                   <div class="controls">
                     <select #sal="ngModel" name="sal" [(ngModel)]="solicitudVehiculo.vehiculo" class="selectpicker"
                       style="width: 100%;font-size: 1.2rem;min-width: 10em;" required>  
-                              <option value="" selected disabled >Seleccione Vehiculo</option>
-                                  <option *ngFor="let vehiculo of vehiculos;" >{{vehiculo.tipo}}</option>
-                                </select>
+                              <option value="" selected disabled  (change)="setHorarioVehiculo(vehiculo.placa)" >Seleccione Vehiculo</option>
+                                  <option *ngFor="let vehiculo of vehiculos;" >{{vehiculo.placa}}  </option>
+                              </select>
+
 
                     <!-- <div *ngIf="sal.valid" class="small form-text text-success" style="font-size:0.9rem">Correcto<i class="fa fa-check" aria-hidden="true"></i></div> -->
                     <div class="small form-text text-danger" *ngIf="sal.invalid && (sal.dirty || sal.touched)" style="font-size:0.9rem">
@@ -206,11 +207,11 @@ aria-hidden="true">
 
                 <div class="control-group form-group">
                   <div class="controls">
-                    <input id="inputCup" type="text" class="form-control" #cup="ngModel" name="cup" [(ngModel)]="solicitudVehiculo.destino"
+                    <input id="inputCup" type="text" class="form-control" #destino="ngModel" name="destino" [(ngModel)]="solicitudVehiculo.destino"
                       placeholder="Destino" required min="1">
                     <!-- <div *ngIf="cup.valid && cup.value<=cupoMaximo && cup.value>0 " class="small form-text text-success" style="font-size:0.9rem">Correcto<i class="fa fa-check" aria-hidden="true"></i></div> -->
-                    <div class="small form-text text-danger" *ngIf="cup.invalid && (cup.dirty || cup.touched)" style="font-size:0.9rem">
-                      <div *ngIf="cup.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> El destino es obligatorio</div>
+                    <div class="small form-text text-danger" *ngIf="destino.invalid && (destino.dirty || destino.touched)" style="font-size:0.9rem">
+                      <div *ngIf="destino.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> El destino es obligatorio</div>
                     </div>
                   </div>
                 </div>
@@ -283,7 +284,7 @@ aria-hidden="true">
         </div>
         <hr>
         <button type="button" class="btn btn-danger" (click)="cerrarModal('#modal-add-new-soliscitudVehiculo')">Cancelar</button>
-        <button id="btn-add-solid" type="submit" class="btn btn-success" (click)="agregarSolicitud()" [disabled]="!descp.valid || !cup.valid || !sal.valid ||  !ctrlInitDate.valid">Confirmar</button>
+        <button id="btn-add-solid" type="submit" class="btn btn-success" (click)="agregarSolicitud()" [disabled]="!descp.valid || !destino.valid || !sal.valid ||  !ctrlInitDate.valid">Confirmar</button>
 
       </section>
 

@@ -16,6 +16,7 @@ export class ServicioSolicitudVehiculo {
     }
 
     registrarSolicitud(solicitud) {
+        console.log('Agregar solocitud vehiculo, servicio');
         let json = JSON.stringify(solicitud);
         let params = json;
         let headers = new Headers({ 'Content-Type': 'application/json' });
@@ -62,7 +63,7 @@ export class ServicioSolicitudVehiculo {
             //'Authorization':token
         });
         let options = new RequestOptions({ headers: headers });
-        return this._http.delete(this.url + 'eliminarSolicitudSala/' + id, options)
+        return this._http.delete(this.url + 'eliminarSolicitudVehiculo/' + id, options)
             .map(res => res.json());
     }
 

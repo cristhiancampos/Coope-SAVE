@@ -11,6 +11,6 @@ api.post('/registrarSolicitudVehiculo',ControladorSolicitudVehiculo.agregarSolic
 api.post('/obtenerSolicitudesVehiculos',ControladorSolicitudVehiculo.obtenerSolicitudesvehiculos);
 api.get('/obtenerTodasSolicitudesVehiculos',ControladorSolicitudVehiculo.obtenerTodasSolicitudes);
  api.put('/modificarSolicitudVehiculo',ControladorSolicitudVehiculo.modificarsolicitudVehiculo);
-api.delete('/eliminarSolicitudSala/:id', ControladorSolicitudVehiculo.eliminarsolicitudVehiculo);
+api.delete('/eliminarSolicitudVehiculo/:id', ControladorSolicitudVehiculo.eliminarsolicitudVehiculo);
 
 module.exports = api;
