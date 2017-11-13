@@ -7,6 +7,8 @@ import {
 import { Subject } from 'rxjs/Subject';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent } from 'angular-calendar';
+import { Router, ActivatedRoute, Params } from '@angular/router';
+
 import * as $ from 'jquery';
 import { Usuario } from '../modelos/usuario';
 import { SolicitudSala } from '../modelos/solicitudSala';
@@ -66,6 +68,7 @@ export class SolicitudSalaComponent implements OnInit {
 
   //*********************************************AGREGADOS***************************** */
   ngOnInit() {
+    this.verificarCredenciales();
     this.estiloBotones();
     console.log('cargó el calendario');
     this.obtenerSolicitudSalas();
@@ -93,14 +96,14 @@ export class SolicitudSalaComponent implements OnInit {
   horarioValido = true;//cambiar a false
   formAgregarValido = true; //cambiar a false
   mensajeSolicitudInvalida = "";
-  mensajeSolicitudInvalidaEdit="";
+  mensajeSolicitudInvalidaEdit = "";
   tempHorarioSala = [];
   minDate: NgbDateStruct;
   tempNombreSala = "";
   listaSolicitudes = [];
   timeI = { hour: null, minute: null, second: 0 };
   timeF = { hour: null, minute: null, second: 0 };
-  dateUpdate= {day: null,month: null,year: null }
+  dateUpdate = { day: null, month: null, year: null }
 
   @Input() placeholder: string;
   date: Date;
@@ -120,6 +123,8 @@ export class SolicitudSalaComponent implements OnInit {
     private _servSolicitud: ServicioSolicitudSala,
     private _servDepartamento: ServicioDepartamento,
     private _servUsuario: ServicioUsuario,
+    private _route: ActivatedRoute,
+    private _router: Router,
     private cdr: ChangeDetectorRef
   ) {
     this.solicitudSala = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
@@ -127,7 +132,7 @@ export class SolicitudSalaComponent implements OnInit {
     this.obtenerRecursos();
     this.obtenerSalas();
     this.estiloBotones();
-    this.minDate = { day: null,month: null,year: null };
+    this.minDate = { day: null, month: null, year: null };
 
   }
   //cambia el tab de solicitar salas a lista de solitudes, según día seleccionado, y vicebersa, en el modal de solicitar sala
@@ -184,91 +189,125 @@ export class SolicitudSalaComponent implements OnInit {
     let identity = localStorage.getItem('identity');
     let user = JSON.parse(identity);
     if (user != null) {
-      this._servSolicitud.obtenerTodasSolicitudes().subscribe(
+      this._servSolicitud.fechaActual().subscribe(
         response => {
-          if (response.message) {
-            let listaSolicitudes = response.message;
-            this.listaSolicitudes = listaSolicitudes;
-            this.events = [];
-            this._servDepartamento.obtenerDepartamentos().subscribe(
-              response => {
-                if (response.message) {
-                  this.departamentos = response.message;
-                  this._servUsuario.obtenerUsuarios().subscribe(
-                    response => {
-                      if (response.message) {
-                        this.usuarios = response.message;
-                        for (var index = 0; index < listaSolicitudes.length; index++) {
-                          for (var i = 0; i < this.usuarios.length; i++) {
-                            if (listaSolicitudes[index].usuario == this.usuarios[i]._id) {
-                              for (var c = 0; c < this.departamentos.length; c++) {
-                                if (this.usuarios[i].departamento == this.departamentos[c].nombre) {
-                                  this.tempColor = {
-                                    color: {
-                                      primary: this.departamentos[c].color + '',
-                                      secondary: '#FAE3E3',
-                                      usuario: listaSolicitudes[index].usuario,
-                                      sala: listaSolicitudes[index].sala,
-                                      recursos: listaSolicitudes[index].recursos,
-                                      id: listaSolicitudes[index]._id
+
+          if (response.currentDate) {
+            this.currentDate = response.currentDate;
+            var momentDate = moment(this.currentDate, 'YYYY-MM-DD HH:mm:ss');
+            var serverDate = momentDate.toDate();
+
+          } else {
+          }
+          this._servSolicitud.obtenerTodasSolicitudes().subscribe(
+            response => {
+              if (response.message) {
+                let listaSolicitudes = response.message;
+                this.listaSolicitudes = listaSolicitudes;
+                this.events = [];
+                this._servDepartamento.obtenerDepartamentos().subscribe(
+                  response => {
+                    if (response.message) {
+                      this.departamentos = response.message;
+                      this._servUsuario.obtenerUsuarios().subscribe(
+                        response => {
+                          if (response.message) {
+                            this.usuarios = response.message;
+                            for (var index = 0; index < listaSolicitudes.length; index++) {
+                              for (var i = 0; i < this.usuarios.length; i++) {
+                                if (listaSolicitudes[index].usuario == this.usuarios[i]._id) {
+                                  for (var c = 0; c < this.departamentos.length; c++) {
+                                    if (this.usuarios[i].departamento == this.departamentos[c].nombre) {
+                                      this.tempColor = {
+                                        color: {
+                                          primary: this.departamentos[c].color + '',
+                                          secondary: '#FAE3E3',
+                                          usuario: listaSolicitudes[index].usuario,
+                                          sala: listaSolicitudes[index].sala,
+                                          recursos: listaSolicitudes[index].recursos,
+                                          id: listaSolicitudes[index]._id
+                                        }
+                                      };
                                     }
-                                  };
+                                  }
                                 }
                               }
+                              if (user._id == listaSolicitudes[index].usuario) {
+                                this.tempEnable = true;
+                                this.actions = [
+                                  {
+                                    label: '<i class="fa fa-fw fa-pencil"></i>',
+                                    onClick: ({ event }: { event: CalendarEvent }): void => {
+                                      this.handleEvent('Editar', event);
+                                    }
+                                  },
+                                  {
+                                    label: '<i class="fa fa-fw fa-times"></i>',
+                                    onClick: ({ event }: { event: CalendarEvent }): void => {
+                                      this.events = this.events.filter(iEvent => iEvent !== event);
+                                      this.handleEvent('Eliminar', event);
+                                    }
+                                  }
+                                ];
+
+                              } else {
+                                this.tempEnable = false;
+                                this.actions = [];
+                              }
+                              if (listaSolicitudes[index].fecha.year < serverDate.getFullYear()) {
+                                this.tempEvent = [];
+                                this.actions = [];
+                                this.tempEnable = false;
+                              } else if (listaSolicitudes[index].fecha.month < (serverDate.getMonth() + 1)) {
+                                this.tempEvent = [];
+                                this.actions = [];
+                                this.tempEnable = false;
+                              } else if (listaSolicitudes[index].fecha.month == (serverDate.getMonth() + 1)) {
+                                if (listaSolicitudes[index].fecha.day < serverDate.getDate()) {
+                                  this.tempEvent = [];
+                                  this.actions = [];
+                                  this.tempEnable = false;
+                                } else {
+                                  this.tempEnable = true;
+                                }
+                              } else {
+                                // alert('entra aqui 2');
+                              }
+                              this.addEvent(listaSolicitudes[index], this.tempEnable);
                             }
+                          } else {//no hay Usuarios registradas
                           }
-                          if (user._id == listaSolicitudes[index].usuario) {
-                            this.tempEnable = true;
-                            this.actions = [
-                              {
-                                label: '<i class="fa fa-fw fa-pencil"></i>',
-                                onClick: ({ event }: { event: CalendarEvent }): void => {
-                                  this.handleEvent('Editar', event);
-                                }
-                              },
-                              {
-                                label: '<i class="fa fa-fw fa-times"></i>',
-                                onClick: ({ event }: { event: CalendarEvent }): void => {
-                                  this.events = this.events.filter(iEvent => iEvent !== event);
-                                  this.handleEvent('Eliminar', event);
-                                }
-                              }
-                            ];
-
-                          } else {
-                            this.tempEnable = false;
-                            this.actions = [];
+                        }, error => {
+                          var errorMensaje = <any>error;
+                          if (errorMensaje != null) {
+                            var body = JSON.parse(error._body);
                           }
-                          this.addEvent(listaSolicitudes[index], this.tempEnable);
                         }
-                      } else {//no hay Usuarios registradas
-                      }
-                    }, error => {
-                      var errorMensaje = <any>error;
-                      if (errorMensaje != null) {
-                        var body = JSON.parse(error._body);
-                      }
+                      );
+                    } else {//ho hay departamentos registrados
                     }
-                  );
-                } else {//ho hay departamentos registrados
-                }
-              }, error => {
-                var errorMensaje = <any>error;
-                if (errorMensaje != null) {
-                  var body = JSON.parse(error._body);
-                }
-              }
-            );
+                  }, error => {
+                    var errorMensaje = <any>error;
+                    if (errorMensaje != null) {
+                      var body = JSON.parse(error._body);
+                    }
+                  }
+                );
 
-          } else {//no hay Salas registradas
-          }
+              } else {//no hay Salas registradas
+              }
+            }, error => {
+              var errorMensaje = <any>error;
+              if (errorMensaje != null) {
+                var body = JSON.parse(error._body);
+              }
+            }
+          );
         }, error => {
-          var errorMensaje = <any>error;
-          if (errorMensaje != null) {
-            var body = JSON.parse(error._body);
-          }
+          //ocurrió un error
         }
       );
+
     } else {
       this.msjError('Debe Verificar sus credenciales');
     }
@@ -375,7 +414,7 @@ export class SolicitudSalaComponent implements OnInit {
 
   //obtener las solicitudes según fecha seleccionada 
   obtenerSolicitudes(userDate, abrirMod: boolean) {
-   // console.log('fecha eeee');
+    // console.log('fecha eeee');
     //console.log(userDate);
     let array;
     this.solicitudSala.fecha = userDate;
@@ -383,10 +422,10 @@ export class SolicitudSalaComponent implements OnInit {
       response => {
         if (!response.message) {//no hay registros
         } else {//no hay Salas registradas
-          console.log('solicitudes salas');
+         // console.log('solicitudes salas');
           array = response.message;
           this.solicitudesdia = array;
-          console.log(array);
+         // console.log(array);
           if (abrirMod) {
             this.abrirModal('#modal-add-new-request');
           }
@@ -444,7 +483,7 @@ export class SolicitudSalaComponent implements OnInit {
     this.refresh.next();
   }
 
-esMayor=false;
+  esMayor = false;
   tempEvent: any;
   tempTitleModal = "";
   tempSolicitud = { usuario: null, departamento: null, fecha: null, motivo: null, inicio: null, fin: null, sala: null }
@@ -453,12 +492,12 @@ esMayor=false;
     //alert('hola');
     //console.log(action);
     //console.log(event);
-    let  fecha = new Date(event.start);
+    let fecha = new Date(event.start);
     console.log(this.model);
-    this.model={year: fecha.getFullYear(), month: fecha.getMonth()+1, day: fecha.getDate()}
+    this.model = { year: fecha.getFullYear(), month: fecha.getMonth() + 1, day: fecha.getDate() }
 
-    this.mensajeSolicitudInvalida="";
-    this.mensajeSolicitudInvalidaEdit="";
+    this.mensajeSolicitudInvalida = "";
+    this.mensajeSolicitudInvalidaEdit = "";
     this.tempColor = event.color;
     this._servUsuario.obtenerUsuario(this.tempColor.usuario).subscribe(
       response => {
@@ -471,7 +510,7 @@ esMayor=false;
               if (response.message) {
                 let solicit = response.message;
                 this.solicitudSalaEdit = solicit;
-              //  this.model = { year: solicit.fecha.year, month: solicit.fecha.month, day: solicit.fecha.day };
+                //  this.model = { year: solicit.fecha.year, month: solicit.fecha.month, day: solicit.fecha.day };
 
                 this.solicitudSalaEdit.fecha.year = this.model.year;
                 this.solicitudSalaEdit.fecha.month = this.model.month;
@@ -514,12 +553,13 @@ esMayor=false;
                       this.minDate.month = (serverDate.getMonth() + 1);
                       this.minDate.day = serverDate.getDate();
 
-                      if (date.getFullYear() < serverDate.getFullYear()) {
+                      console.log(this.minDate);
+                      if (date.getFullYear() < serverDate.getFullYear() || this.minDate.year < serverDate.getFullYear()) {
                         this.tempEvent = [];
-                      } else if (((date.getMonth() + 1) < (serverDate.getMonth() + 1))) {
+                      } else if (((date.getMonth() + 1) < (serverDate.getMonth() + 1)) || (this.minDate.month < (serverDate.getMonth() + 1))) {
                         this.tempEvent = [];
-                      } else if (((date.getMonth() + 1) == (serverDate.getMonth() + 1))) {
-                        if (date.getDate() < serverDate.getDate()) {
+                      } else if (((date.getMonth() + 1) == (serverDate.getMonth() + 1)) || (this.minDate.month == (serverDate.getMonth() + 1))) {
+                        if (date.getDate() < serverDate.getDate() || this.minDate.day < serverDate.getDate()) {
                           this.tempEvent = [];
                         } else {
                           // alert('entra aqui 1');
@@ -529,12 +569,15 @@ esMayor=false;
                       }
                     } else {
                     }
+
+                    this.modalData = { event, action };
+                    this.mr = this.modal.open(this.modalContent, { size: 'lg' });
                   }, error => {
                     //ocurrió un error
                   }
                 );
-                this.modalData = { event, action };
-              this.mr=  this.modal.open(this.modalContent, { size: 'lg' });
+                //   this.modalData = { event, action };
+                // this.mr=  this.modal.open(this.modalContent, { size: 'lg' });
               } else {//No se ha encontrado la Sala
               }
             }, error => {
@@ -624,7 +667,7 @@ esMayor=false;
   }
   //se agregan solicitudes en la base de datos después de sus debidas validadaciones
   agregarSolicitud() {
-    this.cupoMaximo="";
+    this.cupoMaximo = "";
     var minInicial = ((this.solicitudSala.horaInicio.hour * 60) + this.solicitudSala.horaInicio.minute);
     var minFinal = ((this.solicitudSala.horaFin.hour * 60) + this.solicitudSala.horaFin.minute);
     if (minFinal - minInicial <= 0) {
@@ -830,10 +873,10 @@ esMayor=false;
     let array;
     //console.log('fecha enviada');
     //console.log(this.solicitudSalaEdit.fecha );
-  //  this.solicitudSala.fecha.year = dat;
+    //  this.solicitudSala.fecha.year = dat;
 
     this.setCupoMaximoSala(this.solicitudSalaEdit.sala);
-    this.solicitudSala.fecha=dat;
+    this.solicitudSala.fecha = dat;
     //alert(dat);
     this._servSolicitud.obtenerSolicitudes(this.solicitudSala).subscribe(
       response => {
@@ -888,7 +931,7 @@ esMayor=false;
                 if (horarioDiaSala.desde == null || horarioDiaSala.desde == undefined || horarioDiaSala.desde == "" || horarioDiaSala.desde == "null") {
                   this.mensajeSolicitudInvalidaEdit = "El día " + dia + " para la sala seleccinada no cuenta con un horario establecido , favor comuniquese con el administrador.";
                 } else { // validar el horario del dia selecciona con respecto al horario de la sala
-                  this.mensajeSolicitudInvalidaEdit="";
+                  this.mensajeSolicitudInvalidaEdit = "";
                   let agregarValid = false;
                   let agregar = false;
                   let horaEntradaDigit = (parseInt(this.solicitudSalaEdit.horaInicio.hour) + ((parseInt(this.solicitudSalaEdit.horaInicio.minute) / 60)));
@@ -929,7 +972,7 @@ esMayor=false;
                   }
                   else {// validar la disponibilidad de horario
 
-                 //   alert('horabien'+this.solicitudesdia.length);
+                    //   alert('horabien'+this.solicitudesdia.length);
                     if (this.solicitudesdia.length == 0) {//no hay solicitudes del día y el hora escogido es válido
                       agregarValid = true;
                     } else {
@@ -938,19 +981,19 @@ esMayor=false;
                       if (this.tempNombreSala == "") {
                         this.mensajeSolicitudInvalidaEdit = "Seleccione una Sala";
                       } else {
-                   //     console.log('solicitudes dia');
-                     //   console.log(this.solicitudesdia);
+                        //     console.log('solicitudes dia');
+                        //   console.log(this.solicitudesdia);
                         //buscar la solicitud seleccionada y eleminarla dela lista de solicitudes del día,
                         // para poder realizar su respectiva modificación en caso de ser el mismos día y se pretenda camibiar solo las horas
                         for (let conta = 0; conta < this.solicitudesdia.length; conta++) {
-                            if (this.solicitudesdia[conta]._id === this.solicitudSalaEdit._id) {
-                          //    console.log('la econtró');
-                              this.solicitudesdia.splice(conta,1);
-                              break;
-                            }
+                          if (this.solicitudesdia[conta]._id === this.solicitudSalaEdit._id) {
+                            //    console.log('la econtró');
+                            this.solicitudesdia.splice(conta, 1);
+                            break;
+                          }
                         }
                         //método burbuja para ordenar las solicitudes de menor a mayor
-                       // console.log(this.solicitudSalaEdit._id);
+                        // console.log(this.solicitudSalaEdit._id);
                         //console.log(this.solicitudesdia);
                         let k = [];
                         for (let i = 1; i < this.solicitudesdia.length; i++) {
@@ -1003,34 +1046,34 @@ esMayor=false;
 
                     if (agregar || agregarValid) {// todo correcto , puede agregar la solicitud
                       //alert('puede modificar ');
-                      this.dateUpdate.year=this.solicitudSalaEdit.fecha.year;
-                      this.dateUpdate.month=this.solicitudSalaEdit.fecha.month;
-                      this.dateUpdate.day=this.solicitudSalaEdit.fecha.day;
-                      this.solicitudSalaEdit.fecha=this.dateUpdate;
+                      this.dateUpdate.year = this.solicitudSalaEdit.fecha.year;
+                      this.dateUpdate.month = this.solicitudSalaEdit.fecha.month;
+                      this.dateUpdate.day = this.solicitudSalaEdit.fecha.day;
+                      this.solicitudSalaEdit.fecha = this.dateUpdate;
 
-                        this._servSolicitud.modificarSolicitudSala(this.solicitudSalaEdit).subscribe(
-                          response => {
-                            if (!response.message) {
-                              this.msjError(response.message);
-                            } else {
-                              let solicitud = response.message;
-                              this.msjExitoso("Solicitud de sala modificada exitosamente");
-                              console.log(solicitud);
-                             // this.enviarEmail(solicitud);
-                              this.solicitudSalaEdit = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
-                          // this.cupoMaximo="";
-                              this.obtenerSolicitudes(new Date(), false);
-                              this.obtenerSolicitudSalas();
-                              this.mr.close();
-                            }
-                          }, error => {
-                            var alertMessage = <any>error;
-                            if (alertMessage != null) {
-                              var body = JSON.parse(error._body);
-                              this.msjError('Solicitud no registrada');
-                            }
+                      this._servSolicitud.modificarSolicitudSala(this.solicitudSalaEdit).subscribe(
+                        response => {
+                          if (!response.message) {
+                            this.msjError(response.message);
+                          } else {
+                            let solicitud = response.message;
+                            this.msjExitoso("Solicitud de sala modificada exitosamente");
+                            console.log(solicitud);
+                            // this.enviarEmail(solicitud);
+                            this.solicitudSalaEdit = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
+                            // this.cupoMaximo="";
+                            this.obtenerSolicitudes(new Date(), false);
+                            this.obtenerSolicitudSalas();
+                            this.mr.close();
                           }
-                        );
+                        }, error => {
+                          var alertMessage = <any>error;
+                          if (alertMessage != null) {
+                            var body = JSON.parse(error._body);
+                            this.msjError('Solicitud no registrada');
+                          }
+                        }
+                      );
                     }
 
                   }
@@ -1047,13 +1090,13 @@ esMayor=false;
 
   }
 
-  cancelarAccion(){
+  cancelarAccion() {
     this.obtenerSolicitudes(new Date(), false);
     this.obtenerSolicitudSalas();
     this.mr.close();
   }
 
- enviarEmail(solicitud) {
+  enviarEmail(solicitud) {
     for (let i = 0; i < this.usuarios.length; i++) {
 
       if (solicitud.usuario == this.usuarios[i]._id) {
@@ -1263,6 +1306,66 @@ esMayor=false;
     console.log(newDate);
     this.onChangeCallback(newDate);
   }
+
+  public token;
+  public identity;
+  verificarCredenciales() {
+    this.identity = this._servUsuario.getIndentity();
+    this.token = this._servUsuario.getToken();
+    let identity = localStorage.getItem('identity');
+    let user = JSON.parse(identity);
+    let recordar = localStorage.getItem('remember');
+    let recordarValue = JSON.parse(recordar);
+    if (user != null) {
+      let usuarioTemp = new Usuario('', '', '', '', '', '', '', '', '', '');
+      usuarioTemp.correo = user.correo;
+      usuarioTemp.contrasena = user.contrasena;
+      // obtener datos de usuario identificado
+      this._servUsuario.verificarCredenciales(usuarioTemp).subscribe(response => {
+        let identity = response.user;
+        this.identity = identity;
+        if (!this.identity._id) {
+          $('#nav-user').text(' ');
+          this.abrirModal('#loginModal');
+        } else {
+          //conseguir el token para enviarselo a cada petición
+          this._servUsuario.verificarCredenciales(usuarioTemp, 'true').subscribe(
+            response => {
+              let token = response.token;
+              this.token = token;
+              if (this.token <= 0) {
+                $('#nav-user').text(' ');
+                this.abrirModal('#loginModal');
+              } else {
+                // crear elemento en el localstorage para tener el token disponible
+                localStorage.setItem('token', token);
+                let identity = localStorage.getItem('identity');
+                let user = JSON.parse(identity);
+                if (user != null) {
+                  $('#nav-user').text(user.nombre + ' ' + user.apellidos);
+                  this.obtenerSalas();
+                } else {
+                  $('#nav-user').text('');
+                }
+              }
+            }, error => {
+              $('#nav-user').text(' ');
+              this.abrirModal('#loginModal');
+            }
+          );
+        }
+      }, error => {
+        $('#nav-user').text(' ');
+        this.abrirModal('#loginModal');
+      }
+      );
+    } else {
+      $('#nav-user').text(' ');
+      this._router.navigate(['/principal']);
+      //this.abrirModal('#loginModal');
+    }
+  }
+  
 
 }
 
