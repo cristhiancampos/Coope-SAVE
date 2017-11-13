@@ -79,10 +79,6 @@ export class SolicitudSalaComponent implements OnInit {
   }
   solicitudSala: SolicitudSala;
   solicitudSalaEdit: SolicitudSala;
-  //title;//
-  //start;//
-  //end;//
-  //departamento: Departamento;
   private departamentos = [];
   private usuarios = [];
   salas = [];
@@ -103,7 +99,9 @@ export class SolicitudSalaComponent implements OnInit {
   listaSolicitudes = [];
   timeI = { hour: null, minute: null, second: 0 };
   timeF = { hour: null, minute: null, second: 0 };
-  dateUpdate = { day: null, month: null, year: null }
+  dateUpdate = { day: null, month: null, year: null };
+  public token;
+  public identity;
 
   @Input() placeholder: string;
   date: Date;
@@ -1307,8 +1305,6 @@ export class SolicitudSalaComponent implements OnInit {
     this.onChangeCallback(newDate);
   }
 
-  public token;
-  public identity;
   verificarCredenciales() {
     this.identity = this._servUsuario.getIndentity();
     this.token = this._servUsuario.getToken();
