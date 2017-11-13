@@ -62,7 +62,7 @@ export class AdminVehiculoComponent implements OnInit {
   ngOnInit() {
     this.verificarCredenciales();
   }
-
+  
   changeHorario(event:any,dia:String){
     if(dia=="Lunes"){
       if (event.target.checked) {

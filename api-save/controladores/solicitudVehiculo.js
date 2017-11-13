@@ -3,8 +3,10 @@
 var SolicitudVehiculo = require('../modelos/solicitudVehiculo');
 
 function agregarSolicitud(req, res) {
-  var solicitudVehiculo = new solicitudVehiculo();
+ 
+  var solicitud = new SolicitudVehiculo();
   var params = req.body;
+  
   solicitud.vehiculo= params.usu
   solicitud.vehiculo = params.vehiculo;
   solicitud.departamento = params.departamento;
@@ -16,7 +18,7 @@ function agregarSolicitud(req, res) {
   solicitud.acompanantes= params.acompanantes;
   solicitud.created_at = new Date();
   solicitud.updated_at = params.updated_at;
-
+  console.log(solicitud);
   if (
     solicitud.vehiculo != null && solicitud.departamento != null && solicitud.fecha != null
     && solicitud.horaSalida != null && solicitud.horaRegreso != null && solicitud.descripcion != null
