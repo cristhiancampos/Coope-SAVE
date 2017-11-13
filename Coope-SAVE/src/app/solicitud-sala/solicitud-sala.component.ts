@@ -487,11 +487,7 @@ export class SolicitudSalaComponent implements OnInit {
   tempSolicitud = { usuario: null, departamento: null, fecha: null, motivo: null, inicio: null, fin: null, sala: null }
   //administrador de eventos
   handleEvent(action: string, event: CalendarEvent): void {
-    //alert('hola');
-    //console.log(action);
-    //console.log(event);
     let fecha = new Date(event.start);
-    console.log(this.model);
     this.model = { year: fecha.getFullYear(), month: fecha.getMonth() + 1, day: fecha.getDate() }
 
     this.mensajeSolicitudInvalida = "";
@@ -665,7 +661,7 @@ export class SolicitudSalaComponent implements OnInit {
   }
   //se agregan solicitudes en la base de datos después de sus debidas validadaciones
   agregarSolicitud() {
-    this.cupoMaximo = "";
+    //this.cupoMaximo = "";
     var minInicial = ((this.solicitudSala.horaInicio.hour * 60) + this.solicitudSala.horaInicio.minute);
     var minFinal = ((this.solicitudSala.horaFin.hour * 60) + this.solicitudSala.horaFin.minute);
     if (minFinal - minInicial <= 0) {
