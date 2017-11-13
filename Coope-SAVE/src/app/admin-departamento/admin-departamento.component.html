@@ -1,9 +1,8 @@
-
 <div class="container-fluid" style="margin-top: 8%; padding: 0 10% 0 10%">
 
   <div class="row" style="text-align: center">
     <div class="col-md-12">
-      <h2> Admistración de Departamentos</h2>
+      <h2> Administración de Departamentos</h2>
       <hr>
       <button class="btn btn-primary" style="float: left;margin-bottom: 6px" data-toggle="modal" data-target="#modalAdminDepa">
          <i class="fa fa-plus" aria-hidden="true"></i></button>
@@ -23,12 +22,12 @@
           </tr>
         </thead>
         <tbody style="font-family: 'Times New Roman', Times, serif">
-          <tr *ngFor="let departamento of departamentos; let i = index">
+          <tr *ngFor="let departamento of departamentos | paginate: {itemsPerPage:5, currentPage: p} let i = index">
             <th scope="row">{{i+1}}</th>
             <th>{{departamento.nombre}}</th>
             <th>
 
-              <hr   [style.background]="departamento.color" style="height: 1.5em;width: 80%;;margin-top: 3%">
+              <hr [style.background]="departamento.color" style="height: 1.5em;width: 80%;;margin-top: 3%">
             </th>
             <th>{{departamento.estado}}</th>
             <th style="text-align: center">
@@ -39,13 +38,16 @@
         </tbody>
       </table>
     </div>
-    <h5 *ngIf='departamentos ==undefined || departamentos.length==0'>No existen departamentos registrados en el sistema.<br></h5> 
+    <h5 *ngIf='departamentos ==undefined || departamentos.length==0'>No existen departamentos registrados en el sistema.<br></h5>
     <hr *ngIf='departamentos ==undefined || departamentos.length==0'>
   </div>
+  <hr>
+  <pagination-controls (pageChange)="p =$event">
 
+  </pagination-controls>
   <!-- paginador-->
-  <nav aria-label="Page navigation example">
-    <ul class="pagination">
+  <!-- <nav aria-label="Page navigation example"> -->
+  <!-- <ul class="pagination">
       <li class="page-item">
         <a class="page-link" href="#" aria-label="Previous">
           <span aria-hidden="true">&laquo;</span>
@@ -61,8 +63,8 @@
           <span class="sr-only">Next</span>
         </a>
       </li>
-    </ul>
-  </nav>
+    </ul> -->
+  <!-- </nav> -->
 
 </div>
 
@@ -119,14 +121,14 @@
               <form #adminDepartamento="ngForm" (ngSubmit)="agregarDepartamento()">
                 <div class="control-group form-group">
                   <div class="controls">
-                    <input id="input-nombre" type="text" class="form-control"  #nombre="ngModel" name= "nombre" [(ngModel)]="departamento.nombre" 
-                    placeholder="Nombre" required (input)="validarDepartamento()" >
-                    <small *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" >
+                    <input id="input-nombre" type="text" class="form-control" #nombre="ngModel" name="nombre" [(ngModel)]="departamento.nombre"
+                      placeholder="Nombre" required (input)="validarDepartamento()">
+                    <small *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
                         <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El nombre es obligatorio
-                    </small> 
+                    </small>
                     <small *ngIf="nombreExist"><i class="fa fa-exclamation-circle" aria-hidden="true">
                       </i> Ya existe un Departamento con ese nombre
-                    </small> 
+                    </small>
                   </div>
                 </div>
 
@@ -137,9 +139,10 @@
                       <label> Color</label>
                     </div>
                     <div class="col-md-10">
-                      <input type="color" class="form-control"  #color="ngModel" name= "color" [(ngModel)]="departamento.color" style="padding: 0px" required>
-                      <span *ngIf="color.invalid && (color.dirty || color.touched)" >
-                          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El color es obligatorio</span> 
+                      <input type="color" class="form-control" #color="ngModel" name="color" [(ngModel)]="departamento.color" style="padding: 0px"
+                        required>
+                      <span *ngIf="color.invalid && (color.dirty || color.touched)">
+                          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El color es obligatorio</span>
                       <p class="help-block"></p>
                     </div>
                   </div>
@@ -153,24 +156,24 @@
                       </label>
                       </li>
                       <li>
-                          <label style="float: left;margin-top: -2.3em;">{{estadoMensaje}}</label>
-                        </li>
-                      
+                        <label style="float: left;margin-top: -2.3em;">{{estadoMensaje}}</label>
+                      </li>
+
                     </ul>
                   </div>
                 </div>
                 <div id="success"></div>
                 <div style="float: right">
-                    <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" (click)="salir()">Salir</button>   
-                    <button id="btn-add" type="submit" [disabled]="!adminDepartamento.form.valid || nombreExist" class="btn btn-success" >Confirmar</button>
-                  </div>
+                  <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" (click)="salir()">Salir</button>
+                  <button id="btn-add" type="submit" [disabled]="!adminDepartamento.form.valid || nombreExist" class="btn btn-success">Confirmar</button>
+                </div>
               </form>
             </div>
           </div>
         </div>
       </div>
       <div class="modal-footer">
-       
+
       </div>
     </div>
   </div>
@@ -179,91 +182,98 @@
 <!-- Modal de editar departamento -->
 
 <div class="modal fade bd-example-modal-sm " id="modalEditDepartamento" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-aria-hidden="true">
-<div class="modal-dialog bd-example-modal-sm " role="document">
-  <div class="modal-content">
-    <div class="modal-header" style="background: #0069d9;color:#fff">
-      <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-briefcase" aria-hidden="true"></i>&nbsp;&nbsp;Editar Departamento</h5>
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cerrarModal('#modalEditDepartamento')"> 
+  aria-hidden="true">
+  <div class="modal-dialog bd-example-modal-sm " role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0069d9;color:#fff">
+        <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-briefcase" aria-hidden="true"></i>&nbsp;&nbsp;Editar Departamento</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cerrarModal('#modalEditDepartamento')"> 
       <span aria-hidden="true">&times;</span>
     </button>
-    </div>
-    <div class="modal-body">
-      <div class="row">
-        <div class="col-md-12">
-          <ol class="breadcrumb">
-            <li>
-              <a><img src="assets/img/logo.png" ></a>
-            </li>
-          </ol>
-        </div>
       </div>
-      <!-- END BREADCRUMB-->
-      <div class="col-md-12">
+      <div class="modal-body">
         <div class="row">
           <div class="col-md-12">
-            <form #adminDepartamentoEdit="ngForm" (ngSubmit)="modificarDepartamento()">
-              <div class="control-group form-group">
-                <div class="controls">
-                  <input id="input-nombre-edit-dep" type="text" class="form-control"  #nombre="ngModel" name= "nombre" [(ngModel)]="departamentoEdit.nombre" 
-                  placeholder="Nombre" required (input)="validarModificacion()" >
-                  <small *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" >
+            <ol class="breadcrumb">
+              <li>
+                <a><img src="assets/img/logo.png" ></a>
+              </li>
+            </ol>
+          </div>
+        </div>
+        <!-- END BREADCRUMB-->
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-12">
+              <form #adminDepartamentoEdit="ngForm" (ngSubmit)="modificarDepartamento()">
+                <div class="control-group form-group">
+                  <div class="controls">
+                    <input id="input-nombre-edit-dep" type="text" class="form-control" #nombre="ngModel" name="nombre" [(ngModel)]="departamentoEdit.nombre"
+                      placeholder="Nombre" required (input)="validarModificacion()">
+                    <small *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
                       <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El nombre es obligatorio
-                  </small> 
-                  <small *ngIf="nombreExistEdit"><i class="fa fa-exclamation-circle" aria-hidden="true">
+                  </small>
+                    <small *ngIf="nombreExistEdit"><i class="fa fa-exclamation-circle" aria-hidden="true">
                     </i> Ya existe un Departamento con ese nombre
-                  </small> 
-                </div>
-              </div>
-
-              <div class="control-group form-group">
-                <div class="row">
-
-                  <div class="col-md-2">
-                    <label> Color</label>
-                  </div>
-                  <div class="col-md-10">
-                    <input type="color" class="form-control"  #color="ngModel" name= "color" [(ngModel)]="departamentoEdit.color" style="padding: 0px" required>
-                    <span *ngIf="color.invalid && (color.dirty || color.touched)" >
-                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El color es obligatorio</span> 
-                    <p class="help-block"></p>
+                  </small>
                   </div>
                 </div>
-              </div>
-              <div class="control-group ">
-                <div class="controls ">
-                  <ul>
-                    <li style="margin-left: -37px;"><label class="switch">
+
+                <div class="control-group form-group">
+                  <div class="row">
+
+                    <div class="col-md-2">
+                      <label> Color</label>
+                    </div>
+                    <div class="col-md-10">
+                      <input type="color" class="form-control" #color="ngModel" name="color" [(ngModel)]="departamentoEdit.color" style="padding: 0px"
+                        required>
+                      <span *ngIf="color.invalid && (color.dirty || color.touched)">
+                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El color es obligatorio</span>
+                      <p class="help-block"></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="control-group ">
+                  <div class="controls ">
+                    <ul>
+                      <li style="margin-left: -37px;"><label class="switch">
                       <input type="checkbox" [checked]='estadoEdicion' (change)="cambiarEstadoEdicion($event)" >
                       <span class="slider round"></span>
                     </label>
-                    </li>
-                    <li>
+                      </li>
+                      <li>
                         <label style="float: left;margin-top: -2.3em;">{{estadoMensajEdit}}</label>
                       </li>
-                    
-                  </ul>
+
+                    </ul>
+                  </div>
                 </div>
-              </div>
-              <div id="success"></div>
-              <div style="float: right">
-                  <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal">Salir</button>   
-                  <button id="btn-add" type="submit" [disabled]="!adminDepartamentoEdit.form.valid || nombreExist" class="btn btn-success" >Confirmar</button>
+                <div id="success"></div>
+                <div style="float: right">
+                  <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal">Salir</button>
+                  <button id="btn-add" type="submit" [disabled]="!adminDepartamentoEdit.form.valid || nombreExist" class="btn btn-success">Confirmar</button>
                 </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
       </div>
+
+
     </div>
-     
-   
   </div>
 </div>
-</div>
-<section>
+
+<!-- <section>
   <footer >
     
       &copy; Coopesparta R.L.
   
   </footer>
-  </section>
+  </section> -->
+
+<section>
+
+
+</section>

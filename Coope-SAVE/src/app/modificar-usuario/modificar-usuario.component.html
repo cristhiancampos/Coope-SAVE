@@ -14,12 +14,14 @@
     <div class="container">
     <div class="row">
       <div id="modificarInformacion" class="col-ms-12 col col-md-5 col-lg-5 ">
+          <h3>Información Personal</h3>
+          <br>
         <!-- modificar Informacion general de usuario -->
         <form #modificarUsuarioPersonal="ngForm" (ngSubmit)="modificarPerfil()">
           <div class="control-group form-group">
             <div class="controls">
               <input id="input-correo-admin-edit" type="text" #correoModificar="ngModel" name="correoModificar" class="form-control" [(ngModel)]="usuarioEdit.correo"
-                placeholder="usuario" autofocus required (input)="validarModificacion()" (onfocus)="!usuarioExistEdit">
+                placeholder="usuario" autofocus required (input)="validarModificacion()" (onfocus)="!usuarioExistEdit" [disabled]="true">
 
               <small *ngIf="correoModificar.touched && correoModificar.value==''"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El correo es obligatorio. </small>
               <small *ngIf="userExistEdit"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe una cuenta con ese correo</small>
@@ -64,6 +66,9 @@
       </div>
       <div id="modificarContrasena" class="col-ms-12 col col-md-5 col-lg-5">
         <!-- modificar Contrasena de usuario -->
+        
+        <h3>Cambio de Contraseña</h3>
+        <br>
         <form #modificarContrasenaActual="ngForm" (ngSubmit)=" modificarUsuarioCompleto()">
 
           <div class="control-group form-group">
@@ -71,7 +76,7 @@
               <!-- Imput de contrasena Actual -->
               <input type="password" class="form-control" #validar="ngModel" name="validar" [(ngModel)]="validarContrasena" placeholder="Contraseña Actual"
                 (input)="contrasenaActual($event)" required>
-              <small *ngIf="!confirmaContraExist"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La Contraseña no coinciden</small>
+              <small *ngIf="!confirmaContraExist && validar.touched "> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La Contraseña no coincide</small>
             </div>
           </div>
           <div class="control-group form-group">
@@ -115,3 +120,9 @@
 
 
 </section>
+
+<!-- <footer >
+    <div class="container">
+      <p class="m-0 text-center text-white">&copy; Coopesparta R.L.</p>
+    </div>
+  </footer> -->

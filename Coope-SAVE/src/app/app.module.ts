@@ -33,6 +33,7 @@ import { AdminRecursoComponent } from './admin-recurso/admin-recurso.component';
 import { AdminSolicitudComponent } from './admin-solicitud/admin-solicitud.component';
 import { SolicitudVehiculoComponent } from './solicitud-vehiculo/solicitud-vehiculo.component';
 import {filtrarUsuario} from './solicitud-vehiculo/filtroUsuarios';
+import {NgxPaginationModule} from 'ngx-pagination';
 
 
 @NgModule({
@@ -63,6 +64,7 @@ import {filtrarUsuario} from './solicitud-vehiculo/filtroUsuarios';
     BrowserAnimationsModule,
     CalendarModule.forRoot(),
     NgbModule.forRoot(),
+    NgxPaginationModule
     
     
   ],

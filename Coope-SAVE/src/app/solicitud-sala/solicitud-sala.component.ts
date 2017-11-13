@@ -69,10 +69,6 @@ export class SolicitudSalaComponent implements OnInit {
   //*********************************************AGREGADOS***************************** */
   ngOnInit() {
     this.verificarCredenciales();
-    this.estiloBotones();
-    console.log('cargó el calendario');
-    this.obtenerSolicitudSalas();
-    this.obtenerRecursos();
     // this.obtenerDepartamentos();
 
 
@@ -307,7 +303,8 @@ export class SolicitudSalaComponent implements OnInit {
       );
 
     } else {
-      this.msjError('Debe Verificar sus credenciales');
+      this._router.navigate(['/principal']);
+     // this.msjError('Debe Verificar sus credenciales');
     }
 
   }
@@ -1348,7 +1345,7 @@ export class SolicitudSalaComponent implements OnInit {
         this.identity = identity;
         if (!this.identity._id) {
           $('#nav-user').text(' ');
-          this.abrirModal('#loginModal');
+          this._router.navigate(['/principal']);
         } else {
           //conseguir el token para enviarselo a cada petición
           this._servUsuario.verificarCredenciales(usuarioTemp, 'true').subscribe(
@@ -1357,7 +1354,7 @@ export class SolicitudSalaComponent implements OnInit {
               this.token = token;
               if (this.token <= 0) {
                 $('#nav-user').text(' ');
-                this.abrirModal('#loginModal');
+                this._router.navigate(['/principal']);
               } else {
                 // crear elemento en el localstorage para tener el token disponible
                 localStorage.setItem('token', token);
@@ -1366,19 +1363,23 @@ export class SolicitudSalaComponent implements OnInit {
                 if (user != null) {
                   $('#nav-user').text(user.nombre + ' ' + user.apellidos);
                   this.obtenerSalas();
+                  this.estiloBotones();
+                  this.obtenerSolicitudSalas();
+                  this.obtenerRecursos();
                 } else {
                   $('#nav-user').text('');
+                  this._router.navigate(['/principal']);
                 }
               }
             }, error => {
               $('#nav-user').text(' ');
-              this.abrirModal('#loginModal');
+              this._router.navigate(['/principal']);
             }
           );
         }
       }, error => {
         $('#nav-user').text(' ');
-        this.abrirModal('#loginModal');
+        this._router.navigate(['/principal']);
       }
       );
     } else {

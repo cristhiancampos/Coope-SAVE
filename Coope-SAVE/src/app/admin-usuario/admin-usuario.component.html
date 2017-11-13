@@ -24,7 +24,7 @@
           </tr>
         </thead>
         <tbody style="font-family: 'Times New Roman', Times, serif">
-          <tr *ngFor="let usuario of usuarios; let i = index">
+          <tr *ngFor="let usuario of usuarios | paginate: {itemsPerPage:5, currentPage: p} let i = index">
             <th scope="row">{{i+1}}</th>
             <th>{{usuario.correo}}</th>
             <th>{{usuario.nombre}}</th>
@@ -46,26 +46,12 @@
   </div>
 
   <!-- paginador-->
-  <nav aria-label="Page navigation example">
-    <ul class="pagination">
-      <li class="page-item">
-        <a class="page-link" href="#" aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
-            <span class="sr-only">Previous</span>
-          </a>
-      </li>
-      <li class="page-item"><a class="page-link" href="#">1</a></li>
-      <li class="page-item"><a class="page-link" href="#">2</a></li>
-      <li class="page-item"><a class="page-link" href="#">3</a></li>
-      <li class="page-item">
-        <a class="page-link" href="#" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-            <span class="sr-only">Next</span>
-          </a>
-      </li>
-    </ul>
-  </nav>
-</div>
+  
+  <hr>
+  <!-- paginador-->
+ <pagination-controls (pageChange)="p =$event">
+
+ </pagination-controls>
 <!-- Modal  eliminar usuario-->
 <div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -207,10 +193,10 @@ aria-hidden="true">
   </div>
 </div>
 </div>
-<section>
+<!-- <section>
 <footer >
   
     &copy; Coopesparta R.L.
 
 </footer>
-</section>
+</section> -->

@@ -22,7 +22,7 @@
           </tr>
         </thead>
         <tbody style="font-family: 'Times New Roman', Times, serif">
-          <tr tr *ngFor="let recurso of recursos; let i = index">
+          <tr tr *ngFor="let recurso of recursos | paginate: {itemsPerPage:5, currentPage: p} let i = index">
             <th scope="row">{{i+1}}</th>
             <th>{{recurso.codigoActivo}}</th>
             <th>{{recurso.nombre}}</th>
@@ -41,27 +41,13 @@
     <hr *ngIf='recursos ==undefined || recursos.length==0'>
   </div>
 
-  <!-- paginador-->
-  <nav aria-label="Page navigation example">
-      <ul class="pagination">
-        <li class="page-item">
-          <a class="page-link" href="#" aria-label="Previous">
-            <small aria-hidden="true">&laquo;</small>
-            <small class="sr-only">Previous</small>
-          </a>
-        </li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item">
-          <a class="page-link" href="#" aria-label="Next">
-            <small aria-hidden="true">&raquo;</small>
-            <small class="sr-only">Next</small>
-          </a>
-        </li>
-      </ul>
-    </nav>
-</div>
+  <hr>
+   <!-- paginador-->
+  <pagination-controls (pageChange)="p =$event">
+
+  </pagination-controls>
+ 
+  
 <!-- Modal  eliminar recurso-->
 <div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -256,10 +242,10 @@ aria-hidden="true">
    </div>
  </div>
  </div>
- <section>
+ <!-- <section>
   <footer >
     
       &copy; Coopesparta R.L.
   
   </footer>
-  </section>
+  </section> -->

@@ -24,7 +24,7 @@
             </tr>
           </thead>
           <tbody style="font-family: 'Times New Roman', Times, ser  if">
-            <tr *ngFor="let sala of salas; let i = index">
+            <tr *ngFor="let sala of salas | paginate: {itemsPerPage:5, currentPage: p} let i = index">
               <th scope="row">{{i+1}}</th>
               <th>{{sala.nombre}}</th>
               <th>{{sala.cupo}}</th>
@@ -45,27 +45,10 @@
     </div>
 
     <!-- paginador-->
-    <section>
-      <nav aria-label="Page navigation example">
-        <ul class="pagination">
-          <li class="page-item">
-            <a class="page-link" href="#" aria-label="Previous">
-            <small aria-hidden="true">&laquo;</small>
-            <small class="sr-only">Previous</small>
-          </a>
-          </li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item">
-            <a class="page-link" href="#" aria-label="Next">
-            <small aria-hidden="true">&raquo;</small>
-            <small class="sr-only">Next</small>
-          </a>
-          </li>
-        </ul>
-      </nav>
-    </section>
+    <hr>
+  <pagination-controls (pageChange)="p =$event">
+      
+        </pagination-controls>
 
   </div>
 </section>

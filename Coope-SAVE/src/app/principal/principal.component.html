@@ -67,24 +67,23 @@
                 <div class="control-group form-group">
                   <div class="controls">
                     <div class="row" style="margin-left:0em;margin-right:0em">
-                    <input id="input-correo" type="text" #correo="ngModel" name="correo" class="form-control col-md-4  " (input)="change($event)" [(ngModel)]="usuario.correo" 
-                    placeholder="usuario" autofocus (input)="validarCorreo()" (focus)="onfocusCorreo()" 
-                    required >
-                    <input type="text" #correoLabel="ngModel" name="correoLabel" class="form-control col-md-8  " [(ngModel)]="dominio" 
-                    placeholder="" disabled 
-                    required  [email]="true">
+                      <input id="input-correo" type="text" #correo="ngModel" name="correo" class="form-control col-md-4  " (input)="change($event)"
+                        [(ngModel)]="usuario.correo" placeholder="usuario" autofocus (input)="validarCorreo()" (focus)="onfocusCorreo()"
+                        required>
+                      <input type="text" #correoLabel="ngModel" name="correoLabel" class="form-control col-md-8  " [(ngModel)]="dominio" placeholder=""
+                        disabled required [email]="true">
                       <!-- <label class="col-md-6" > @coopesparta.fi.cr</label> [email]="true"-->
                     </div>
                     <small *ngIf="correo.touched && correo.value==''"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El correo es obligatorio. </small>
-                     <!-- <small *ngIf="!correo.valid && correo.value!null"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Formato de correo inválido.</small>                      -->
-                    <small *ngIf="userExist"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe una cuenta con ese correo</small>  
+                    <!-- <small *ngIf="!correo.valid && correo.value!null"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Formato de correo inválido.</small>                      -->
+                    <small *ngIf="userExist"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe una cuenta con ese correo</small>
                   </div>
                 </div>
                 <div class="control-group form-group">
                   <div class="controls">
                     <input type="text" class="form-control" #nombre="ngModel" name="nombre" [(ngModel)]="usuario.nombre" placeholder="Nombre"
                       required>
-                      <small [hidden]="nombre.valid || (nombre.pristine && !registerForm.submitted)">
+                    <small [hidden]="nombre.valid || (nombre.pristine && !registerForm.submitted)">
                           <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El nombre es obligatorio
                       </small>
                   </div>
@@ -95,7 +94,7 @@
 
                     <input type="text" class="form-control" #apellidos="ngModel" name="apellidos" [(ngModel)]="usuario.apellidos" placeholder="Apellidos"
                       required maxlength="60">
-                      <small [hidden]="apellidos.valid || (apellidos.pristine && !registerForm.submitted)">
+                    <small [hidden]="apellidos.valid || (apellidos.pristine && !registerForm.submitted)">
                           <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Los apellidos son obligatorios
                       </small>
                   </div>
@@ -103,22 +102,22 @@
 
                 <div class="control-group form-group">
                   <div class="controls">
-                    <select #departamento="ngModel" name="departamento" [(ngModel)]="usuario.departamento" class="selectpicker" 
-                    style="width: 100%;padding: .5rem .75rem;" required  >  
+                    <select #departamento="ngModel" name="departamento" [(ngModel)]="usuario.departamento" class="selectpicker" style="width: 100%;padding: .5rem .75rem;"
+                      required>  
                       <option value="" selected disabled >Departamento</option>
                           <option *ngFor="let depa of departamentos;">{{depa.nombre}}</option>
                         </select>
-                        <small [hidden]="departamento.valid || (departamento.pristine && !registerForm.submitted)">
+                    <small [hidden]="departamento.valid || (departamento.pristine && !registerForm.submitted)">
                             <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El departamento es  obligatorio
                         </small>
                   </div>
                 </div>
                 <div class="control-group form-group">
                   <div class="controls">
-                    <input type="password" class="form-control" #contrasena="ngModel" name="contrasena"
-                     [(ngModel)]="usuario.contrasena" placeholder="Contraseña - min 8 caracteres"
-                      required minlength="8" maxlength="16" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"> <!-- (input)="validarcontra($event)"-->
-                      <small [hidden]="contrasena.valid || (contrasena.pristine && !registerForm.submitted)">
+                    <input type="password" class="form-control" #contrasena="ngModel" name="contrasena" [(ngModel)]="usuario.contrasena" placeholder="Contraseña - min 8 caracteres"
+                      required minlength="8" maxlength="16" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+                    <!-- (input)="validarcontra($event)"-->
+                    <small [hidden]="contrasena.valid || (contrasena.pristine && !registerForm.submitted)">
                           <i class="fa fa-exclamation-circle" aria-hidden="true"></i> 
                            Contraseña obligatoria, debe contener almenos 8 carácteres, mayúsculas, minúsculas, números y carácteres especiales  
                       </small>
@@ -126,23 +125,23 @@
                 </div>
                 <div class="control-group form-group">
                   <div class="controls">
-                    <input id="confirmPass" type="password" class="form-control" #confirmar="ngModel" name="confirmar" [(ngModel)]="confirmaContra" placeholder="Confirmar Contraseña"
-                      required minlength="8" maxlength="16" [disabled]="!contrasena.valid"  (input)="verificarContrasenas($event)">                  
-                     <!-- <small [hidden]="!confirmar.value">
+                    <input id="confirmPass" type="password" class="form-control" #confirmar="ngModel" name="confirmar" [(ngModel)]="confirmaContra"
+                      placeholder="Confirmar Contraseña" required minlength="8" maxlength="16" [disabled]="!contrasena.valid"
+                      (input)="verificarContrasenas($event)">
+                    <!-- <small [hidden]="!confirmar.value">
                         <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Confirmar la contraseña es requerido
                     </small>  -->
                     <small [hidden]='!mensajeMacthPass'>
                         <i class="fa fa-exclamation-circle" aria-hidden="true"></i> {{mensajeMacthPass}}
-                    </small> 
-                  
+                    </small>
+
                   </div>
                 </div>
-                <button type="button"  style="float:left" class="btn btn-defaul btn-modal-suc"  (click)="loginBack()">Ya poseo una cuenta</button>                
-                <button id="btnRegister" type="submit" style="float:right"
-                 [disabled]="!correo.valid || !nombre.valid || !apellidos.valid  ||  !departamento.valid || !contrasena.valid  || !confirmar.valid || userExist || !isMacthPass"
+                <button type="button" style="float:left" class="btn btn-defaul btn-modal-suc" (click)="loginBack()">Ya poseo una cuenta</button>
+                <button id="btnRegister" type="submit" style="float:right" [disabled]="!correo.valid || !nombre.valid || !apellidos.valid  ||  !departamento.valid || !contrasena.valid  || !confirmar.valid || userExist || !isMacthPass"
                   class="btn btn-success">Continuar</button>
               </form>
-              
+
             </div>
           </div>
         </div>
@@ -156,12 +155,95 @@
 </div>
 
 <!-- Modal  Login-->
-<div  class="modal fade bd-example-modal-sm " id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade bd-example-modal-sm " id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog bd-example-modal-sm " role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0069d9;color:#fff">
+        <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-lock"></i>&nbsp;&nbsp;Indentificate</h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-12">
+            <ol class="breadcrumb">
+              <li>
+                <a><img src="assets/img/logo.png" ></a>
+              </li>
+            </ol>
+          </div>
+        </div>
+        <!-- END BREADCRUMB-->
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-12">
+
+              <form #loginForm="ngForm" (ngSubmit)="login()">
+                <!--(focusout)="validarCorreo()"  autofocus  (focus)="onfocusCorreo()"-->
+                <div class="control-group form-group">
+                  <div class="controls">
+                    <input type="email" #correoLogin="ngModel" name="correoLogin" class="form-control" [(ngModel)]="usuario.correo" placeholder="usuario@coopesparta.fi.cr"
+                      required>
+                    <small [hidden]="correoLogin.valid || (correoLogin.pristine && !loginForm.submitted)">
+                      <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Correo requerida
+                  </small>
+                    <!-- <small *ngIf="correo.touched && correo.value==''"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El correo es obligatorio. </small>
+                   <small *ngIf="!correo.valid && correo.value!null"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Formato de correo inválido.</small>                      -->
+                  </div>
+                </div>
+
+                <div class="control-group form-group">
+                  <div class="controls">
+                    <input type="password" class="form-control" #contrasenaLogin="ngModel" name="contrasenaLogin" [(ngModel)]="usuario.contrasena"
+                      placeholder="Contraseña" required (focus)="onfocusCorreo()">
+                    <small [hidden]="contrasenaLogin.valid || (contrasenaLogin.pristine && !loginForm.submitted)">
+                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Contraseña requerida
+                    </small>
+                  </div>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                <input type="checkbox" class="form-check-input"  #recordar="ngModel" name="recordar" [ngModel]="recordarme" 
+                (change)="rememberChangeValue()" >
+                    Recordarme
+                  </label>
+                </div>
+                <small *ngIf="verError">
+                  <i class="fa fa-ban" aria-hidden="true"></i>  {{mensajeError}} <br>
+              </small>
+                <br>
+                <button id="btnLogin" style="width: 100%" type="submit" [disabled]="!loginForm.valid " class="btn btn-success">Ingresar</button>
+                <br> <br>
+
+              </form>
+              <hr>
+              <div  style="text-align:center ; font-size: 1.2rem">
+                <div class="col-md-12">
+                  <a href="javascript:void(0);" id="linkRegister" routerLinkActive="actived" (click)="mostrarRegistrarse()"><i class="fa fa-key" aria-hidden="true"></i> Crear un cuenta</a>
+                </div>
+                <div class="col-md-12" >
+                  <a href="javascript:void(0);" id="linkForgetPass" routerLinkActive="actived" (click)="mostrarRecuperarContrasena()"><i class="fa fa-refresh" aria-hidden="true"></i> ¿Olvidó su contraseña?</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="modal-footer" style="text-align:center">
+        <p>&copy; Coopesparta R.L.</p>
+       <button type="button" class="btn btn-secondary"  style="background: #f00a0a;" (click)="salir()">Salir</button>         
+    </div> -->
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal  forgot pass-->
+<div class="modal fade bd-example-modal-sm " id="forgotModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
 aria-hidden="true">
 <div class="modal-dialog bd-example-modal-sm " role="document">
   <div class="modal-content">
     <div class="modal-header" style="background: #0069d9;color:#fff">
-      <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-lock"></i>&nbsp;&nbsp;Indentificate</h5>
+      <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-lock"></i>&nbsp;&nbsp;Recuperar Contraseña</h5>
     </div>
     <div class="modal-body">
       <div class="row">
@@ -178,62 +260,51 @@ aria-hidden="true">
         <div class="row">
           <div class="col-md-12">
 
-            <form #loginForm="ngForm" (ngSubmit)="login()"> <!--(focusout)="validarCorreo()"  autofocus  (focus)="onfocusCorreo()"-->
+              <p style="color: #000">
+                  <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La nueva contraseña será enviada a su correo  electrónico.
+                   <br>
+                   Favor igresar su correo electrónico para proceder con el cambio de contraseña.
+              </p>
+              <hr>
+            <form #forgotForm="ngForm" (ngSubmit)="login()">
+              <!--(focusout)="validarCorreo()"  autofocus  (focus)="onfocusCorreo()"-->
               <div class="control-group form-group">
                 <div class="controls">
-                  <input type="email" #correoLogin="ngModel" name="correoLogin" class="form-control"
-                   [(ngModel)]="usuario.correo" placeholder="usuario@coopesparta.fi.cr" required >
-                     <small [hidden]="correoLogin.valid || (correoLogin.pristine && !loginForm.submitted)">
-                      <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Correo requerida
-                  </small>
-                  <!-- <small *ngIf="correo.touched && correo.value==''"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El correo es obligatorio. </small>
-                   <small *ngIf="!correo.valid && correo.value!null"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Formato de correo inválido.</small>                      -->
+                  <input type="email" #correoForgot="ngModel" name="correoForgot" class="form-control"
+                  id="input-correoF" [(ngModel)]="forgotPass" placeholder="usuario@coopesparta.fi.cr" required>
+                  <small [hidden]="correoForgot.valid || (correoForgot.pristine && !forgotForm.submitted)">
+                    <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Correo requerido
+                </small>
+                   <small> 
+                     <i  *ngIf="mensajeErrorForgot!=''" class="fa fa-exclamation-circle" aria-hidden="true"></i> {{mensajeErrorForgot}} </small>
                 </div>
               </div>
-
-              <div class="control-group form-group">
-                <div class="controls">
-                  <input type="password" class="form-control" #contrasenaLogin="ngModel" name="contrasenaLogin" [(ngModel)]="usuario.contrasena" placeholder="Contraseña"
-                    required (focus)="onfocusCorreo()" >
-                    <small [hidden]="contrasenaLogin.valid || (contrasenaLogin.pristine && !loginForm.submitted)">
-                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Contraseña requerida
-                    </small>
-                </div>
-              </div>
-              <div class="form-check">
-                <label class="form-check-label">
-                <input type="checkbox" class="form-check-input"  #recordar="ngModel" name="recordar" [ngModel]="recordarme" 
-                (change)="rememberChangeValue()" >
-                    Recordarme
-                  </label>
-              </div>
-              <small *ngIf="verError">
-                  <i class="fa fa-ban" aria-hidden="true"></i>  {{mensajeError}} <br>
-              </small>
-              <br>
-              <button  id="btnLogin" style="width: 100%" type="submit" [disabled]="!loginForm.valid " class="btn btn-success">Ingresar</button>
-              <br> <br> 
-              
+        
+              <button id="btnForgot" style="width: 100%" type="submit" [disabled]="!correoForgot.valid"
+               class="btn btn-success" (click)="validarUsuario()"> Recuperar</button>
             </form>
-            <div class="col-md-12" style="text-align:center">
-                <a  id="linkRegister" routerLinkActive="actived" (click)="mostrarRegistrarse()"><i class="fa fa-key" aria-hidden="true"></i> Crear un cuenta</a>                  
+            
+            <div  style="text-align:center ; font-size: 1.2rem">
+                <hr>
+              <div class="col-md-12">
+                <a href="javascript:void(0);" id="linkRegister" routerLinkActive="actived" (click)="regresar()"><i class="fa fa-chevron-left" aria-hidden="true"></i> Regresar</a>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
     <!-- <div class="modal-footer" style="text-align:center">
-        <p>&copy; Coopesparta R.L.</p>
-       <button type="button" class="btn btn-secondary"  style="background: #f00a0a;" (click)="salir()">Salir</button>         
-    </div> -->
+      <p>&copy; Coopesparta R.L.</p>
+     <button type="button" class="btn btn-secondary"  style="background: #f00a0a;" (click)="salir()">Salir</button>         
+  </div> -->
   </div>
 </div>
 </div>
+<!-- <section>
+  <footer>
 
-<section>
-  <footer >
-    
-      &copy; Coopesparta R.L.
-  
+    &copy; Coopesparta R.L.
+
   </footer>
-  </section>
+</section> -->

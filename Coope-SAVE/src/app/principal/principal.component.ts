@@ -32,6 +32,7 @@ export class PrincipalComponent implements OnInit {
   public isMacthPass =false;
   public mensajeMacthPass='';
   public departamentos=[];
+  forgotPass='';
 
 
   //constructor del componente principal
@@ -306,6 +307,21 @@ export class PrincipalComponent implements OnInit {
     this._router.navigate['/principal'];
   }
 
+  mostrarRecuperarContrasena() {
+    this.forgotPass="";
+   // this.usuario = new Usuario('','','','','','','','','','');
+    this.cerrarModal('#loginModal');
+    this.abrirModal('#forgotModal');
+    this.mmostrar = false;
+    //this._router.navigate['/principal'];
+  }
+  regresar() {
+    this.forgotPass="";
+    this.cerrarModal('#forgotModal');
+    this.abrirModal('#loginModal');
+    this.mmostrar = false;
+    //this._router.navigate['/principal'];
+  }
   //regresar al formulario del login
   loginBack() {
     this.usuario = new Usuario('','','','','','','','','','');
@@ -367,7 +383,34 @@ obtenerDepartamentos() {
 
   }
 
+  userExistForgot = false;
+  mensajeErrorForgot="";
+  validarUsuario() {
+    let user = new Usuario('','','','','','','','','','');;
 
+    console.log(user);
+    user.correo = this.forgotPass.trim();
+    this._servUsuario.getCorreo(user).subscribe(
+      response => {
+        if (response.message) {
+          let co = response.message.correo;;
+          this.userExistForgot=true;
+          $('#input-correoF').css("border-left", "5px solid #a94442");
+        } else {//no existe el corrreo
+          $('#input-correoF').css("border-left", "5px solid #42A948");;
+          this.correo = null;
+          this.userExistForgot = false;
+          this.mensajeErrorForgot="Correo inválido";
+          alert('no existe');
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+        if (errorMensaje != null) {
+          //var body = JSON.parse(error._body);
+        }
+      }
+    );
+  }
 
 
 
@@ -452,3 +495,4 @@ obtenerDepartamentos() {
   // localStorage.clear();
 
 }
+

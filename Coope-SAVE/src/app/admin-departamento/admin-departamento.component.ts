@@ -7,6 +7,7 @@ import swal from 'sweetalert2'
 import { ServicioUsuario } from '../servicios/usuario';
 import { Usuario } from '../modelos/usuario';
 
+
 @Component({
   selector: 'app-admin-departamento',
   templateUrl: './admin-departamento.component.html',

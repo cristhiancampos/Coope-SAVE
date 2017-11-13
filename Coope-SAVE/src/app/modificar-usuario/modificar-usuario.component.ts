@@ -56,6 +56,7 @@ export class ModificarUsuarioComponent implements OnInit {
    
   
   ngOnInit() {
+    this.verificarCredenciales();
     this.obtenerUsuario();
     this.obtenerDepartamentos();
     console.log('modificar usuario.ts cargado ...FECHA' + this.date + '.....año' + this.year);
@@ -124,12 +125,12 @@ export class ModificarUsuarioComponent implements OnInit {
       }
 
       verificarCredenciales() {
-        // this.identity = this._servUsuario.getIndentity();
+        this.identity = this._servUsuario.getIndentity();
+        this.token = this._servUsuario.getToken();
         let identity = localStorage.getItem('identity');
         let user = JSON.parse(identity);
         let recordar = localStorage.getItem('remember');
         let recordarValue = JSON.parse(recordar);
-        console.log(user);
         if (user != null) {
           let usuarioTemp = new Usuario('', '', '', '', '', '', '', '', '', '');
           usuarioTemp.correo = user.correo;
@@ -140,8 +141,7 @@ export class ModificarUsuarioComponent implements OnInit {
             this.identity = identity;
             if (!this.identity._id) {
               $('#nav-user').text(' ');
-              // this._router.navigate(['/principal']);             
-              
+              this._router.navigate(['/principal']);
             } else {
               //conseguir el token para enviarselo a cada petición
               this._servUsuario.verificarCredenciales(usuarioTemp, 'true').subscribe(
@@ -150,34 +150,33 @@ export class ModificarUsuarioComponent implements OnInit {
                   this.token = token;
                   if (this.token <= 0) {
                     $('#nav-user').text(' ');
-                    // this._router.navigate(['/principal']);  
+                    this._router.navigate(['/principal']);
                   } else {
                     // crear elemento en el localstorage para tener el token disponible
                     localStorage.setItem('token', token);
                     let identity = localStorage.getItem('identity');
                     let user = JSON.parse(identity);
                     if (user != null) {
-                      $('#nav-user').text(user[0].nombre + ' ' + user[0].apellidos);
-                      alert("identity");
-                      //this._router.navigate(['/principal']);  
+                      $('#nav-user').text(user.nombre + ' ' + user.apellidos);
                     } else {
                       $('#nav-user').text('');
+                      this._router.navigate(['/principal']);
                     }
                   }
                 }, error => {
                   $('#nav-user').text(' ');
-                  //this._router.navigate(['/principal']);  
+                  this._router.navigate(['/principal']);
                 }
               );
             }
           }, error => {
             $('#nav-user').text(' ');
-            //this._router.navigate(['/principal']);  
+            this._router.navigate(['/principal']);
           }
           );
         } else {
           $('#nav-user').text(' ');
-         // this._router.navigate(['/principal']);
+          this._router.navigate(['/principal']);
           //this.abrirModal('#loginModal');
         }
       }
@@ -368,5 +367,6 @@ export class ModificarUsuarioComponent implements OnInit {
     )
   }
 
+  
 
 }
