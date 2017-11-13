@@ -288,7 +288,7 @@ export class SolicitudSalaComponent implements OnInit {
       }
 
     }
-    this.cupoMaximo = cup;
+    this.cupoMaximo = parseInt(cup);;
   }
 
   setCupoMaximoSalaEdit(sala) {
@@ -304,7 +304,7 @@ export class SolicitudSalaComponent implements OnInit {
       }
 
     }
-    this.cupoMaximoEdit = cup;
+    this.cupoMaximoEdit = parseInt(cup);
   }
   //eliminar los números negativos en un input
   elimininarNegativos(inputId) {
@@ -450,6 +450,13 @@ esMayor=false;
   tempSolicitud = { usuario: null, departamento: null, fecha: null, motivo: null, inicio: null, fin: null, sala: null }
   //administrador de eventos
   handleEvent(action: string, event: CalendarEvent): void {
+    //alert('hola');
+    //console.log(action);
+    //console.log(event);
+    let  fecha = new Date(event.start);
+    console.log(this.model);
+    this.model={year: fecha.getFullYear(), month: fecha.getMonth()+1, day: fecha.getDate()}
+
     this.mensajeSolicitudInvalida="";
     this.mensajeSolicitudInvalidaEdit="";
     this.tempColor = event.color;
@@ -464,7 +471,7 @@ esMayor=false;
               if (response.message) {
                 let solicit = response.message;
                 this.solicitudSalaEdit = solicit;
-                this.model = { year: solicit.fecha.year, month: solicit.fecha.month, day: solicit.fecha.day };
+              //  this.model = { year: solicit.fecha.year, month: solicit.fecha.month, day: solicit.fecha.day };
 
                 this.solicitudSalaEdit.fecha.year = this.model.year;
                 this.solicitudSalaEdit.fecha.month = this.model.month;
@@ -1038,6 +1045,12 @@ esMayor=false;
       }
     );
 
+  }
+
+  cancelarAccion(){
+    this.obtenerSolicitudes(new Date(), false);
+    this.obtenerSolicitudSalas();
+    this.mr.close();
   }
 
  enviarEmail(solicitud) {
