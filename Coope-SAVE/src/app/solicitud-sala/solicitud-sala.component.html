@@ -194,9 +194,9 @@
 
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-secondary" (click)="close()">OK</button>
+    <button type="button" class="btn btn-outline-secondary" (click)="cancelarAccion()">OK</button>
     <button *ngIf="tempEvent.length>0" type="button" class="btn btn-outline-secondary"
-       (click)="modificarSolicitud()" [disabled]="!timeUpdateF.valid || !timeUpdate.valid || cupE.value<='0'  || cupE.value>cupoMaximo">Modificar</button>
+       (click)="modificarSolicitud()" [disabled]="!timeUpdateF.valid || !timeUpdate.valid || cupE.value<='0'  || cupE.value>cupoMaximoEdit">Modificar</button>
   </div>
 </ng-template>
 
