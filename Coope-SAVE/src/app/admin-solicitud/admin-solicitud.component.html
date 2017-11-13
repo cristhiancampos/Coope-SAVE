@@ -68,7 +68,7 @@
               <th><button   class="btn btn-success btn-accion" [disabled]="sala.recursos==0" data-toggle="modal" (click)="getNombreRecurso(sala)" data-target="#modalRecursos" aria-hidden="true"> <i class="fa fa-tasks" aria-hidden="true"></i></button></th>
               <th style="text-align: center">
                 <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-                <button class="btn btn-danger btn-accion" data-toggle="modal"  (click)="setIdEliminar(sala._id)"data-target="#modal-delete-solicitud"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+                <button class="btn btn-danger btn-accion" data-toggle="modal"  (click)="setIdEliminar(sala._id)" data-target="#modal-delete-solicitud"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
               </th>
             </tr>
           </tbody>
@@ -143,39 +143,84 @@ aria-hidden="true">
             <tr>
               <th class="th-color"><i class="fa fa-list-ol" aria-hidden="true"></i></th>
               <th class="th-color">Usuario</th>
-              <th class="th-color">Sala</th>
+              <th class="th-color">Placa</th>
               <th class="th-color">Descripción</th>
               <th class="th-color">Fecha</th>
-              <th class="th-color">Hora Inicio</th>
-              <th class="th-color">Hora Final</th>
-              <th class="th-color"># Personas</th>
-              <th class="th-color"> Recursos</th>
+              <th class="th-color">Hora de Salida</th>
+              <th class="th-color">Hora de Regreso</th>
+              <th class="th-color">Destido</th>
+              <th class="th-color"> Acompañantes</th>
               <th class="th-color" style="text-align: center">Acciones</th>
             </tr>
           </thead>
           <tbody style="font-family: 'Times New Roman', Times, serif">
-            <tr *ngFor= "let sala of solicitudSalas; let i = index">
+            <tr *ngFor= "let vehiculo of solicitudVehiculos; let i = index">
               <th scope="row">{{i+1}}</th>
-              <th>{{getNombre(sala.usuario)}}</th>
-              <th>{{sala.sala}}</th>
-              <th>{{sala.descripcion}}</th>
-              <th>{{sala.fecha.day}}-{{sala.fecha.month}}-{{sala.fecha.year}}</th>
-              <th>{{sala.horaInicio.hour}}:{{sala.horaInicio.minute}}</th>
-              <th>{{sala.horaFin.hour}}: {{sala.horaFin.minute}}</th>
-              <th>{{sala.cantidadPersonas}}</th>
-              <th><button   class="btn btn-success btn-accion" [disabled]="sala.recursos==0" data-toggle="modal" (click)="getNombreRecurso(sala)" data-target="#modalRecursos" aria-hidden="true"> <i class="fa fa-tasks" aria-hidden="true"></i></button></th>
+              <th>{{getNombre(vehiculo.usuario)}}</th>
+              <th>{{vehiculo.vehiculo}}</th>
+              <th>{{vehiculo.descripcion}}</th>
+              <th>{{vehiculo.fecha.day}}-{{vehiculo.fecha.month}}-{{vehiculo.fecha.year}}</th>
+              <th>{{vehiculo.horaSalida.hour}}:{{vehiculo.horaSalida.minute}}</th>
+              <th>{{vehiculo.horaRegreso.hour}}:{{vehiculo.horaRegreso.minute}}</th>
+              <th>{{vehiculo.destino}}</th>
+              <th><button   class="btn btn-success btn-accion" [disabled]="vehiculo.acompanantes==0" data-toggle="modal" (click)="getNombreAcompanantes(vehiculo)" data-target="#modalAcompanantes" aria-hidden="true"> <i class="fa fa-tasks" aria-hidden="true"></i></button></th>
               <th style="text-align: center">
                 <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-                <button class="btn btn-danger btn-accion" data-toggle="modal"  (click)="setIdEliminar(sala._id)"data-target="#modal-delete-solicitud"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+                <button class="btn btn-danger btn-accion" data-toggle="modal"  (click)="setIdEliminar(vehiculo._id)"data-target="#modal-delete-solicitudVehiculo"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
               </th>
             </tr>
           </tbody>
         </table>
       </div>
-      <h5 *ngIf='solicitudSalas ==undefined || solicitudSalas.length==0'>No existen salas registradas en el sistema.<br></h5> 
-      <hr *ngIf='solicitudSalas ==undefined || solicitudSalas.length==0'>
+      <h5 *ngIf='solicitudVehiculos ==undefined || solicitudVehiculos.length==0'>No existen solicitudes de vehiculos registradas en el sistema.<br></h5> 
+      <hr *ngIf='solicitudVehiculos ==undefined || solicitudVehiculos.length==0'>
     </div>
   </section>
+
+<!-- Sección de modal de Acompanantes-->
+
+
+<div  class="modal fade bd-example-modal-sm " id="modalAcompanantes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog bd-example-modal-sm " role="document">
+  <div class="modal-content">
+    <div class="modal-header" style="background: #0069d9;color:#fff">
+      <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Acompañantes Agregados</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal"> 
+        <small aria-hidden="true">&times;</small>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row" style="text-align: center">
+        <table class="table">
+          <thead class="thead-default">
+            <tr>
+              <th class="th-color"><i class="fa fa-list-ol" aria-hidden="true"></i></th>
+              <th class="th-color">Acompañantes</th>
+              <th class="th-color" style="text-align: center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody style="font-family: 'Times New Roman', Times, serif">
+            <tr *ngFor= "let lista of listaNombreAcompanantes; let i = index">
+              <th scope="row">{{i+1}}</th>
+              <th>{{lista.nombre}} {{lista.apellidos}}</th>
+              
+              <th style="text-align: center">
+                <button class="btn btn-danger btn-accion" data-toggle="modal" (click)="setAcompanantesIndex(i)"  data-target="#modal-delete-acompanante"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+              </th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="float: right">
+        <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" >Salir</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
 
 <!-- Sección de modal de Recursos-->
 
@@ -203,6 +248,7 @@ aria-hidden="true">
       </ul>
     </nav>
 </div>
+
 <!-- Modal  eliminar Recursosolicitud-->
 <div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -218,7 +264,7 @@ aria-hidden="true">
             <i class="fa fa-trash fa-5x" aria-hidden="true" style="color:red"></i> 
           </span>
           <br><br>
-          <h5>Está seguro que desea eliminar la solicitud? </h5>
+          <h5>Está seguro que desea eliminar el Recurso? </h5>
           <br>
           <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal">Cancelar</button>
           <button type="button" class="btn btn-default btn-modal-suc" (click)="elimarRecursoSoicitud()"  data-dismiss="modal">Confirmar</button>
@@ -226,6 +272,30 @@ aria-hidden="true">
       </div>
     </div>
   </div>
+
+  <!-- Modal  eliminar Acompanante-->
+<div class="modal fade" id="modal-delete-acompanante" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="color: #FFF;background: #0069d9">
+        <h5 class="modal-title" id="exampleModalLabel">Eliminar Solicitud</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-body" style="text-align: center">
+        <span >
+          <i class="fa fa-trash fa-5x" aria-hidden="true" style="color:red"></i> 
+        </span>
+        <br><br>
+        <h5>Está seguro que desea eliminar el acompanante? </h5>
+        <br>
+        <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-default btn-modal-suc" (click)="elimarAcompanante()"  data-dismiss="modal">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
   <!-- Modal  eliminar solicitud-->
 <div class="modal fade" id="modal-delete-solicitud" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -249,6 +319,30 @@ aria-hidden="true">
     </div>
   </div>
 </div>
+
+  <!-- Modal  eliminar solicitud-->
+  <div class="modal fade" id="modal-delete-solicitudVehiculo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="color: #FFF;background: #0069d9">
+          <h5 class="modal-title" id="exampleModalLabel">Eliminar Solicitud de Vehiculo</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" style="text-align: center">
+          <span >
+            <i class="fa fa-trash fa-5x" aria-hidden="true" style="color:red"></i> 
+          </span>
+          <br><br>
+          <h5>Está seguro que desea eliminar la solicitud de Vehiculo? </h5>
+          <br>
+          <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-default btn-modal-suc" (click)="eliminarSolicitudVehiculo()"  data-dismiss="modal">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 <section>
   <footer >
     

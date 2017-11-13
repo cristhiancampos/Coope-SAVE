@@ -87,6 +87,7 @@ export class SolicitudVehiculoComponent implements OnInit {
     this.estiloBotones();
     this.obtenerVehiculos();
     this.obtenerUsuarios();
+    this.obtenerSolicitudVehiculos();
     console.log('cargó el calendario de vehiculo');
   } 
   private departamentos = [];
@@ -132,6 +133,7 @@ export class SolicitudVehiculoComponent implements OnInit {
     this.solicitudVehiculo = new SolicitudVehiculo('', '', '', null, null, null, '', '', '', null, '', '');
     this.minDate = { year: null, month: null, day: null };
     this.filtroUsuario="";
+  
   }
   solicitud(num: any) {
     if (num === 1) {
@@ -286,19 +288,21 @@ let val = ev.target.value;
               break;
             }
           }
+          
 
           // if (horarioDiaVehiculo.desde == null || horarioDiaVehiculo.desde == undefined || horarioDiaVehiculo.desde == "" || horarioDiaVehiculo.desde == "null") {
-            if (false) {
-            //this.mensajeSolicitudInvalida = "El día " + dia + " para el vehiculo seleccinado no cuenta con un horario establecido , favor comuniquese con el administrador.";
+            
+          //   this.mensajeSolicitudInvalida = "El día " + dia + " para el vehiculo seleccinado no cuenta con un horario establecido , favor comuniquese con el administrador.";
+          if(false){
           } else { // validar el horario del dia selecciona con respecto al horario de la sala
             let agregarValid = false;
             let agregar = false;
-            let horaEntradaDigit = (parseInt(this.solicitudVehiculo.horaSalida.hour) + ((parseInt(this.solicitudVehiculo.horaSalida.minute) / 60)));
             let horaSalidaDigit = (parseInt(this.solicitudVehiculo.horaSalida.hour) + ((parseInt(this.solicitudVehiculo.horaSalida.minute) / 60)));
-            // console.log('Inicio pantalla '+horaEntradaDigit+'<  Inicio Solicitud'+horarioDiaVehiculo.desde);
+            let horaRegresoDigit = (parseInt(this.solicitudVehiculo.horaRegreso.hour) + ((parseInt(this.solicitudVehiculo.horaRegreso.minute) / 60)));
+            // console.log('Inicio pantalla '+horaSalidaDigit+'<  Inicio Solicitud'+horarioDiaVehiculo.desde);
             //console.log('Fin pantalla '+horaSalidaDigit +'> Hasta  Solicitud'+horarioDiaVehiculo.hasta);
 
-            if (horaEntradaDigit < parseInt(horarioDiaVehiculo.desde) ||
+            if (horaSalidaDigit < parseInt(horarioDiaVehiculo.desde) ||
               (horaSalidaDigit > parseInt(horarioDiaVehiculo.hasta))) {
               let meridianoInit;
               let meridianoFin;
@@ -343,7 +347,7 @@ let val = ev.target.value;
                   let k = [];
                   for (let i = 1; i < this.solicitudesdia.length; i++) {
                     for (var j = 0; j < (this.solicitudesdia.length - i); j++) {
-                      if (this.solicitudesdia[j].horaInicio.hour > this.solicitudesdia[j + 1].horaInicio.hour) {
+                      if (this.solicitudesdia[j].horaSalida.hour > this.solicitudesdia[j + 1].horaSalida.hour) {
                         k = this.solicitudesdia[j + 1];
                         this.solicitudesdia[j + 1] = this.solicitudesdia[j];
                         this.solicitudesdia[j] = k;
@@ -355,8 +359,8 @@ let val = ev.target.value;
                   let tempArrayHoraFinal = [];
                   for (let indice = 0; indice < this.solicitudesdia.length; indice++) {
                     if (this.solicitudesdia[indice].vehiculo == this.tempNombreVehiculo) {
-                      tempArrayHoraInicio.push(this.solicitudesdia[indice].horaInicio);
-                      tempArrayHoraFinal.push(this.solicitudesdia[indice].horaFin);
+                      tempArrayHoraInicio.push(this.solicitudesdia[indice].horaSalida);
+                      tempArrayHoraFinal.push(this.solicitudesdia[indice].horaRegreso);
                     }
                   }
 
@@ -365,11 +369,11 @@ let val = ev.target.value;
                   for (let contador = 0; contador < tempArrayHoraFinal.length; contador++) {
                     let sumatoriaFinal = ((tempArrayHoraFinal[contador].hour * 60) + (tempArrayHoraFinal[contador].minute));
                     let sumatoriaInicial = ((tempArrayHoraInicio[contador].hour * 60) + (tempArrayHoraInicio[contador].minute));
-                    if (sumatoriaInicial <= (horaEntradaDigit * 60) && (horaEntradaDigit * 60) < sumatoriaFinal) {
+                    if (sumatoriaInicial <= (horaSalidaDigit * 60) && (horaSalidaDigit * 60) < sumatoriaFinal) {
                       tempArrayVerificacion.push(minFinal);
                       break;
                     }
-                    if (sumatoriaFinal > (horaEntradaDigit * 60) && (horaSalidaDigit * 60) > sumatoriaInicial) {
+                    if (sumatoriaFinal > (horaSalidaDigit * 60) && (horaSalidaDigit * 60) > sumatoriaInicial) {
                       tempArrayVerificacion.push(minFinal);
                       break;
                     }
@@ -396,8 +400,9 @@ let val = ev.target.value;
                   this.solicitudVehiculo.fecha = this.dateStruct;
                   this.solicitudVehiculo.usuario = user._id;
                   this.solicitudVehiculo.acompanantes = this.usuariosAgregados;
-                  let regreso= {second: this.solicitudVehiculo.horaRegreso.second, minute: this.solicitudVehiculo.horaRegreso.minute, hour: this.solicitudVehiculo.horaRegreso.hour   };
-                  this.solicitudVehiculo.horaRegreso= regreso;
+                  //let regreso= {minute: this.solicitudVehiculo.horaRegreso.minute, hour: this.solicitudVehiculo.horaRegreso.hour   };
+                  //this.solicitudVehiculo.horaRegreso= regreso;
+                  console.log(SolicitudVehiculo);
                   this._servSolicitud.registrarSolicitud(this.solicitudVehiculo).subscribe(
                     response => {
                       if (!response.message._id) {
@@ -541,6 +546,21 @@ let val = ev.target.value;
 
   }
 
+  setHorarioVehiculo(placa) {
+    alert(placa);
+    this.mensajeSolicitudInvalida = "";
+    this.tempHorarioVehiculo = []
+    for (let index = 0; index < this.vehiculos.length; index++) {
+      if (this.vehiculos[index].placa == placa) {
+        this.tempHorarioVehiculo = this.vehiculos[index].horario;
+        break;
+      }
+
+    }
+
+    
+  }
+
   obtenerSolicitudes(userDate, abrirMod: boolean) {
     let array;
     this.solicitudVehiculo.fecha = userDate;
@@ -624,18 +644,18 @@ let val = ev.target.value;
     fechaInicio.setFullYear(solicitud.fecha.year);
     fechaInicio.setMonth(solicitud.fecha.month - 1);
     fechaInicio.setDate(solicitud.fecha.day);
-    fechaInicio.setHours(solicitud.horaInicio.hour);
-    fechaInicio.setMinutes(solicitud.horaInicio.minute);
+    fechaInicio.setHours(solicitud.horaSalida.hour);
+    fechaInicio.setMinutes(solicitud.horaSalida.minute);
 
     let fechaFin = new Date();
     fechaFin.setFullYear(solicitud.fecha.year);
     fechaFin.setMonth(solicitud.fecha.month - 1);
     fechaFin.setDate(solicitud.fecha.day);
-    fechaFin.setHours(solicitud.horaFin.hour);
-    fechaFin.setMinutes(solicitud.horaFin.minute);
+    fechaFin.setHours(solicitud.horaRegreso.hour);
+    fechaFin.setMinutes(solicitud.horaRegreso.minute);
 
     this.events.push({
-      title: solicitud.descripcion + '.       ' + solicitud.horaInicio.hour + ':' + solicitud.horaInicio.minute + ' - ' + solicitud.horaFin.hour + ':' + solicitud.horaFin.minute + '  ',
+      title: solicitud.descripcion + '.       ' + solicitud.horaSalida.hour + ':' + solicitud.horaSalida.minute + ' - ' + solicitud.horaRegreso.hour + ':' + solicitud.horaRegreso.minute + '  ',
       start: startOfDay(fechaInicio),
       end: endOfDay(fechaFin),
       color: this.tempColor.color,
@@ -756,8 +776,6 @@ let val = ev.target.value;
 
   //actualiza la hora de inicio al escribir
   updateInitDateOnInput(): void {
-
-
   }
 
   updateFinishDateOnInput(): void {
@@ -776,5 +794,15 @@ let val = ev.target.value;
   }
 
   updateTime(): void {
+    this.mensajeSolicitudInvalida = "";
+    const newDate: Date = setHours(
+      setMinutes(
+        setSeconds(this.date, this.timeStruct.second),
+        this.solicitudVehiculo.horaRegreso.minute
+      ),
+      this.solicitudVehiculo.horaRegreso.hour
+    );
+    console.log(newDate);
+    this.onChangeCallback(newDate);
   }
 }

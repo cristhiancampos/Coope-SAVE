@@ -7,25 +7,27 @@ function agregarSolicitud(req, res) {
   var solicitud = new SolicitudVehiculo();
   var params = req.body;
   
-  solicitud.vehiculo= params.usu
+  //let hora= {minute: params.horaRegreso.minute, hour: params.horaRegreso.hour};
+  solicitud.usuario= params.usuario,
   solicitud.vehiculo = params.vehiculo;
   solicitud.departamento = params.departamento;
   solicitud.fecha = params.fecha;
-  solicitud.horaSalida = params.horaSalida;
-  solicitud.horaRegreso = params.horaRegreso;
+  solicitud.horaSalida = {second: 0,  minute: params.horaSalida.minute, hour: params.horaSalida.hour};
+  solicitud.horaRegreso= {second: 0,  minute: params.horaRegreso.minute, hour: params.horaRegreso.hour};
   solicitud.descripcion = params.descripcion;
   solicitud.estado = 'Habilitado';
   solicitud.acompanantes= params.acompanantes;
   solicitud.created_at = new Date();
   solicitud.updated_at = params.updated_at;
+  solicitud.destino = params.destino;
   console.log(solicitud);
   if (
-    solicitud.vehiculo != null && solicitud.departamento != null && solicitud.fecha != null
+    solicitud.vehiculo != null  && solicitud.fecha != null
     && solicitud.horaSalida != null && solicitud.horaRegreso != null && solicitud.descripcion != null
-    && solicitud.cantidadPersonas != null && solicitud.created_at != null && solicitud.estado != null
+    && solicitud.created_at != null && solicitud.estado != null
   ) {
     //guardar departamento
-    Solicitud.save((err, solicitudStored) => {
+    solicitud.save((err, solicitudStored) => {
       if (err) {
         res.status(500).send({ message: 'Error al registrar Solicitud' });
       } else {
