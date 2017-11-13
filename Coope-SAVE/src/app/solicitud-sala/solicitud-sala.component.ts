@@ -266,7 +266,7 @@ export class SolicitudSalaComponent implements OnInit {
                                   this.actions = [];
                                   this.tempEnable = false;
                                 } else {
-                                  this.tempEnable = true;
+                                 // this.tempEnable = true;
                                 }
                               } else {
                                 // alert('entra aqui 2');
@@ -825,10 +825,12 @@ export class SolicitudSalaComponent implements OnInit {
                         let solicitud = response.message;
                         this.msjExitoso("Solicitud agregada exitosamente");
                         this.enviarEmail(solicitud);
+                        this.cerrarModal('#modal-add-new-request');
                         this.solicitudSala = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
                         this.obtenerSolicitudes(this.date, false);
                         this.obtenerSolicitudSalas();
-                        this.cerrarModal('#modal-add-new-request');
+                        this.obtenerRecursos();
+                       
                         // this.obtenerSalas();
                       }
                     }, error => {
