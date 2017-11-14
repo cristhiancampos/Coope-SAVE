@@ -11,7 +11,7 @@
               <a  id="bnt-sala" class="nav-link active" href="#tab1primary" data-toggle="tab" (click)="solicitud(1)" >Salas</a>
             </li>
             <li class="nav-item">
-              <a id="bnt-vehiculo" class="nav-link" href="#tab2primary" data-toggle="tab" (click)="solicitud(2)">Vehiculos</a>
+              <a id="bnt-vehiculo" class="nav-link" href="#tab2primary" data-toggle="tab" (click)="solicitud(2)">Vehículos</a>
             </li>
           </ul>
         </div>
@@ -32,7 +32,7 @@
     <br>
     <div class="row" style="text-align: center">
       <div class="col-md-12">
-        <h2> Admistración - Solicitudes de Salas</h2>
+        <h2> Administración - Solicitudes de Salas</h2>
         <hr>
         <!-- <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="float: left;margin-bottom: 6px"> <i class="fa fa-plus" aria-hidden="true"></i></button> -->
       </div>
@@ -74,6 +74,7 @@
           </tbody>
         </table>
       </div>
+      <hr *ngIf='solicitudSalas ==undefined || solicitudSalas.length>0'>
       <h5 *ngIf='solicitudSalas ==undefined || solicitudSalas.length==0'>No existen salas registradas en el sistema.<br></h5> 
       <hr *ngIf='solicitudSalas ==undefined || solicitudSalas.length==0'>
     </div>
@@ -134,7 +135,7 @@ aria-hidden="true">
       <br>
     <div class="row" style="text-align: center">
       <div class="col-md-12">
-        <h2> Admistración - Solicitudes de Vehiculos</h2>
+        <h2> Administración - Solicitudes de Vehiculos</h2>
         <hr>
         <!-- <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="float: left;margin-bottom: 6px"> <i class="fa fa-plus" aria-hidden="true"></i></button> -->
       </div>
@@ -177,6 +178,7 @@ aria-hidden="true">
           </tbody>
         </table>
       </div>
+      <hr *ngIf='solicitudVehiculos ==undefined || solicitudVehiculos.length>0'>
       <h5 *ngIf='solicitudVehiculos ==undefined || solicitudVehiculos.length==0'>No existen solicitudes de vehiculos registradas en el sistema.<br></h5> 
       <hr *ngIf='solicitudVehiculos ==undefined || solicitudVehiculos.length==0'>
     </div>
@@ -335,10 +337,15 @@ aria-hidden="true">
       </div>
     </div>
   </div>
+
+  <br>
+  <br> <br>
+</div>
 <section>
   <footer >
     
       &copy; Coopesparta R.L.
   
   </footer>
-  </section>
+  </section> 
+

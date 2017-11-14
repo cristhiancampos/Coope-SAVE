@@ -26,18 +26,46 @@
 .th-color{
     color:#0082c8;
     }
+	table{
+		font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; 
+		font-size: 1.2rem; 
+	  }
+	  
+	  tr{
+		font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; 
+		font-size: 1.2rem; 
+	  }
+	  a{
+		font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; 
+		font-size: 1.2rem; 
+	  }
 	
-	
+	  /* #bnt-sala{
+		  width: 120px;
+	  }*/
+	  #bnt-vehiculo{
+		width: 130px;
+		
+	} 
+	footer{
+		font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; 
+		font-size: 1.2rem; 
+	}
+	pagination-controls{
+		font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; 
+		font-size: 1.2rem; 
+	}
 footer {
 	text-align: center;
-	background-color: #343a40;
-	position: absolute;
+	margin-top: 20%;
+	position: fixed;
 	bottom: 0;
 	width: 100%;
-	height: 10%;
-	color: white;
-	padding-top: 35px;
-	margin-bottom: 0px;
+	height: 60px;
+	padding-bottom: 16px;
+	background: #343a40;
+	z-index:2000;
+	color: #ffffff;
 	
 	
 	} 
