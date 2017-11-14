@@ -127,9 +127,6 @@ export class SolicitudSalaComponent implements OnInit {
     this.obtenerSalas();
     this.estiloBotones();
     this.minDate = { day: null, month: null, year: null };
-    $('#modalContent').on('hidden.bs.modal', function () {
-     alert('se cerró');
-  })
 
   }
   //cambia el tab de solicitar salas a lista de solitudes, según día seleccionado, y vicebersa, en el modal de solicitar sala
@@ -307,7 +304,7 @@ export class SolicitudSalaComponent implements OnInit {
 
     } else {
       this._router.navigate(['/principal']);
-     // this.msjError('Debe Verificar sus credenciales');
+      // this.msjError('Debe Verificar sus credenciales');
     }
 
   }
@@ -486,149 +483,155 @@ export class SolicitudSalaComponent implements OnInit {
   tempEvent: any;
   tempTitleModal = "";
   tempSolicitud = { usuario: null, departamento: null, fecha: null, motivo: null, inicio: null, fin: null, sala: null }
+  eliminar = false;
   //administrador de eventos
   handleEvent(action: string, event: CalendarEvent): void {
 
-    if(action=="Eliminar"){
-      this.abrirModal('#modal-deleteSoli');
-     // console.log(event.color);
-     // console.log(this.tempColor.color.id);
-     //this.eliminarSolicitud(this.tempColor);
-      //alert('eliminar una solicitud');
+    if (action == "Eliminar") {
+      let _id = this.tempColor.color.id;
+      let salir = false;
+      let eliminar = false;
+      if (_id == "" || _id == "undefined" || _id == null) {
+        this.msjError("La Solicitud no pudo ser eliminada");
+      } else {
+        this.eliminar = true;
+        this.mr = this.modal.open(this.modalContent, { size: 'lg' });
+
+      }
     }
-    else{
-    this.tempArrayChecked = []
-    this.tempRecursos=[];
-    this.tempEvent=[];
-    let fecha = new Date(event.start);
-    this.model = { year: fecha.getFullYear(), month: fecha.getMonth() + 1, day: fecha.getDate() }
+    else {
+      this.tempArrayChecked = []
+      this.tempRecursos = [];
+      this.tempEvent = [];
+      let fecha = new Date(event.start);
+      this.model = { year: fecha.getFullYear(), month: fecha.getMonth() + 1, day: fecha.getDate() }
 
-    this.mensajeSolicitudInvalida = "";
-    this.mensajeSolicitudInvalidaEdit = "";
-    this.tempColor = event.color;
-    this._servUsuario.obtenerUsuario(this.tempColor.usuario).subscribe(
-      response => {
-        if (response.message[0]._id) {
-          this.tempSolicitud.usuario = response.message[0].nombre + ' ' + response.message[0].apellidos;
-          this.tempSolicitud.departamento = response.message[0].departamento;
-          this.tempSolicitud.sala = this.tempColor.sala;
-          this._servSolicitud.obtenerSolicitudSala(this.tempColor.id).subscribe(
-            response => {
-              if (response.message) {
-                let solicit = response.message;
-                this.solicitudSalaEdit = solicit;
-                //  this.model = { year: solicit.fecha.year, month: solicit.fecha.month, day: solicit.fecha.day };
+      this.mensajeSolicitudInvalida = "";
+      this.mensajeSolicitudInvalidaEdit = "";
+      this.tempColor = event.color;
+      this._servUsuario.obtenerUsuario(this.tempColor.usuario).subscribe(
+        response => {
+          if (response.message[0]._id) {
+            this.tempSolicitud.usuario = response.message[0].nombre + ' ' + response.message[0].apellidos;
+            this.tempSolicitud.departamento = response.message[0].departamento;
+            this.tempSolicitud.sala = this.tempColor.sala;
+            this._servSolicitud.obtenerSolicitudSala(this.tempColor.id).subscribe(
+              response => {
+                if (response.message) {
+                  let solicit = response.message;
+                  this.solicitudSalaEdit = solicit;
+                  //  this.model = { year: solicit.fecha.year, month: solicit.fecha.month, day: solicit.fecha.day };
 
-                this.solicitudSalaEdit.fecha.year = this.model.year;
-                this.solicitudSalaEdit.fecha.month = this.model.month;
-                this.solicitudSalaEdit.fecha.day = this.model.day;
+                  this.solicitudSalaEdit.fecha.year = this.model.year;
+                  this.solicitudSalaEdit.fecha.month = this.model.month;
+                  this.solicitudSalaEdit.fecha.day = this.model.day;
 
-                this.timeI.hour = solicit.horaInicio.hour;
-                this.timeI.minute = solicit.horaInicio.minute;
-                this.timeI.second = solicit.horaInicio.second;
+                  this.timeI.hour = solicit.horaInicio.hour;
+                  this.timeI.minute = solicit.horaInicio.minute;
+                  this.timeI.second = solicit.horaInicio.second;
 
-                this.timeF.hour = solicit.horaFin.hour;
-                this.timeF.minute = solicit.horaFin.minute;
-                this.timeF.second = solicit.horaFin.second;
+                  this.timeF.hour = solicit.horaFin.hour;
+                  this.timeF.minute = solicit.horaFin.minute;
+                  this.timeF.second = solicit.horaFin.second;
 
-                this.solicitudSalaEdit.horaInicio = this.timeI;
-                this.solicitudSalaEdit.horaFin = this.timeF;
+                  this.solicitudSalaEdit.horaInicio = this.timeI;
+                  this.solicitudSalaEdit.horaFin = this.timeF;
 
-                this.solicitudSalaEdit.recursos = solicit.recursos;
-                //  console.log(this.recursos);
-                //console.log(solicit.recursos);
+                  this.solicitudSalaEdit.recursos = solicit.recursos;
+                  //  console.log(this.recursos);
+                  //console.log(solicit.recursos);
 
-               
-                 // console.log(solicit.recursos[i]);
+
+                  // console.log(solicit.recursos[i]);
                   for (var index = 0; index < this.recursos.length; index++) {
-                    this.tempArrayChecked[index]=false;
+                    this.tempArrayChecked[index] = false;
 
                     for (var i = 0; i < solicit.recursos.length; i++) {
-                    if (this.recursos[index]._id == solicit.recursos[i]) {
-                      this.tempArrayChecked[index]=true;  
-                     // console.log(this.recursos[index].nombre);
+                      if (this.recursos[index]._id == solicit.recursos[i]) {
+                        this.tempArrayChecked[index] = true;
+                        // console.log(this.recursos[index].nombre);
+                      }
+                      else {
+
+                        //console.log(this.recursos[index].nombre);
+                      }
                     }
-                    else{
-                      
-                      //console.log(this.recursos[index].nombre);
-                    }
+
+
                   }
 
+                  this.setCupoMaximoSalaEdit(this.solicitudSalaEdit.sala);
+                  this.tempEvent = event.actions;
+                  if (this.tempEvent.length > 0) {
+                    this.tempTitleModal = "Editar";
+                  } else {
+                    this.tempTitleModal = "Detalles de la ";
+                  }
+                  let date = new Date();
+                  date.setFullYear(solicit.fecha.year);
+                  date.setMonth(solicit.fecha.month - 1);
+                  date.setDate(solicit.fecha.day);
 
-                }
+                  this._servSolicitud.fechaActual().subscribe(
+                    response => {
 
-                this.setCupoMaximoSalaEdit(this.solicitudSalaEdit.sala);
-                this.tempEvent = event.actions;
-                if (this.tempEvent.length > 0) {
-                  this.tempTitleModal = "Editar";
-                } else {
-                  this.tempTitleModal = "Detalles de la ";
-                }
-                let date = new Date();
-                date.setFullYear(solicit.fecha.year);
-                date.setMonth(solicit.fecha.month - 1);
-                date.setDate(solicit.fecha.day);
+                      if (response.currentDate) {
+                        this.currentDate = response.currentDate;
+                        var momentDate = moment(this.currentDate, 'YYYY-MM-DD HH:mm:ss');
+                        let serverDate = momentDate.toDate();
 
-                this._servSolicitud.fechaActual().subscribe(
-                  response => {
-
-                    if (response.currentDate) {
-                      this.currentDate = response.currentDate;
-                      var momentDate = moment(this.currentDate, 'YYYY-MM-DD HH:mm:ss');
-                      let serverDate = momentDate.toDate();
-
-                      this.minDate.year = serverDate.getFullYear();
-                      this.minDate.month = (serverDate.getMonth() + 1);
-                      this.minDate.day = serverDate.getDate();
-                      // console.log('cliente');
-                      // console.log(date);
-                      // console.log('servidor')
-                      // console.log(serverDate);
-                      if (date.getFullYear() < serverDate.getFullYear() ) {
-                        this.tempEvent = [];
-                      } else if (((date.getMonth() + 1) < (serverDate.getMonth() + 1)) ) {
-                        this.tempEvent = [];
-                      } else if (((date.getMonth() + 1) == (serverDate.getMonth() + 1))) {
-                        if (date.getDate() < serverDate.getDate() || this.minDate.day < serverDate.getDate()) {
-                         this.tempEvent = [];
+                        this.minDate.year = serverDate.getFullYear();
+                        this.minDate.month = (serverDate.getMonth() + 1);
+                        this.minDate.day = serverDate.getDate();
+                        // console.log('cliente');
+                        // console.log(date);
+                        // console.log('servidor')
+                        // console.log(serverDate);
+                        if (date.getFullYear() < serverDate.getFullYear()) {
+                          this.tempEvent = [];
+                        } else if (((date.getMonth() + 1) < (serverDate.getMonth() + 1))) {
+                          this.tempEvent = [];
+                        } else if (((date.getMonth() + 1) == (serverDate.getMonth() + 1))) {
+                          if (date.getDate() < serverDate.getDate() || this.minDate.day < serverDate.getDate()) {
+                            this.tempEvent = [];
+                          } else {
+                            // alert('entra aqui 1');
+                            //    this.tempEvent = event.actions;
+                          }
                         } else {
-                          // alert('entra aqui 1');
-                      //    this.tempEvent = event.actions;
+                          // alert('entra aqui 2');
+                          // this.tempEvent = event.actions;
                         }
                       } else {
-                        // alert('entra aqui 2');
-                       // this.tempEvent = event.actions;
                       }
-                    } else {
+
+                      this.modalData = { event, action };
+                      this.mr = this.modal.open(this.modalContent, { size: 'lg' });
+                    }, error => {
+                      //ocurrió un error
                     }
-
-                    this.modalData = { event, action };
-                    this.mr = this.modal.open(this.modalContent, { size: 'lg' });
-                  }, error => {
-                    //ocurrió un error
-                  }
-                );
-                //   this.modalData = { event, action };
-                // this.mr=  this.modal.open(this.modalContent, { size: 'lg' });
-              } else {//No se ha encontrado la Sala
+                  );
+                  //   this.modalData = { event, action };
+                  // this.mr=  this.modal.open(this.modalContent, { size: 'lg' });
+                } else {//No se ha encontrado la Sala
+                }
+              }, error => {
+                var errorMensaje = <any>error;
+                if (errorMensaje != null) {
+                  var body = JSON.parse(error._body);
+                }
               }
-            }, error => {
-              var errorMensaje = <any>error;
-              if (errorMensaje != null) {
-                var body = JSON.parse(error._body);
-              }
-            }
-          );
+            );
+          }
+        }, error => {
+          var errorMensaje = <any>error;
+          if (errorMensaje != null) {
+            var body = JSON.parse(error._body);
+          }
         }
-      }, error => {
-        var errorMensaje = <any>error;
-        if (errorMensaje != null) {
-          var body = JSON.parse(error._body);
-        }
-      }
-    );
+      );
 
-  }
+    }
   }
 
   //inserta los eventos del en el calendario
@@ -1085,7 +1088,7 @@ export class SolicitudSalaComponent implements OnInit {
                       this.dateUpdate.month = this.solicitudSalaEdit.fecha.month;
                       this.dateUpdate.day = this.solicitudSalaEdit.fecha.day;
                       this.solicitudSalaEdit.fecha = this.dateUpdate;
-                      this.solicitudSalaEdit.recursos=this.tempRecursos;
+                      this.solicitudSalaEdit.recursos = this.tempRecursos;
                       this._servSolicitud.modificarSolicitudSala(this.solicitudSalaEdit).subscribe(
                         response => {
                           if (!response.message) {
@@ -1124,9 +1127,28 @@ export class SolicitudSalaComponent implements OnInit {
     );
 
   }
-  eliminarSolicitud(solicitud:any){
-    alert('ID :'+ solicitud._id);
-    }
+  eliminarSolicitud() {
+    //console.log(this.idEliminar);
+    this._servSolicitud.eliminarSolicitudSala(this.tempColor.color.id).subscribe(
+      response => {
+
+        if (!response.message._id) {
+          this.msjError("La Solicitud no pudo ser Eliminada");
+        } else {
+          this.msjExitoso("Sala eliminada exitosamente");
+          this.mr.close();
+          this.eliminar = false;
+          this.obtenerSolicitudSalas();
+        }
+      }, error => {
+        var alertMessage = <any>error;
+        if (alertMessage != null) {
+          var body = JSON.parse(error._body);
+          this.msjError("La Solicitud no pudo ser Eliminada");
+        }
+      }
+    );
+  }
 
   cancelarAccion() {
     this.obtenerSolicitudes(new Date(), false);
