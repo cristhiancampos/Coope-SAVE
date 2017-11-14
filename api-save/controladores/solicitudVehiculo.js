@@ -125,6 +125,23 @@ function modificarsolicitudVehiculo(req, res) {
         }
       });
     }
+
+    
+function obtenerSolicitudVehiculo(req, res){
+  var solicitudId = req.params.id;      
+  
+  SolicitudVehiculo.findById(solicitudId , (err, solicitud) => {
+    if (err) {
+      res.status(500).send({ message: 'Error Solicitud no encontrada' });
+    } else {
+      if (!solicitud) {
+        res.status(404).send({ message: 'No se ha encontrado la solicitud' });
+      } else {
+        res.status(200).send({ message: solicitud});
+      }
+    }
+  });
+}    
   
 
 module.exports = {
@@ -133,6 +150,7 @@ module.exports = {
   obtenerSolicitudesvehiculos,
   obtenerTodasSolicitudes,
   modificarsolicitudVehiculo,
-  eliminarsolicitudVehiculo
+  eliminarsolicitudVehiculo,
+  obtenerSolicitudVehiculo
 }
 

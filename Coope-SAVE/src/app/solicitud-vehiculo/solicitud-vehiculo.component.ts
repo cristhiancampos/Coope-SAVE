@@ -14,12 +14,13 @@ import { ServicioUsuario } from '../servicios/usuario';
 import swal from 'sweetalert2';
 import * as moment from 'moment';
 import { ChangeDetectorRef, forwardRef, Input, OnInit } from '@angular/core';
-import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct, NgbTimeStruct, NgbModalRef  } from '@ng-bootstrap/ng-bootstrap';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FormControl } from '@angular/forms'; 
 import {filtrarUsuario} from './filtroUsuarios';
 import { ServicioDepartamento } from '../servicios/departamento';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+
 const colors: any = {
   red: {
     primary: '#ad2121',
@@ -95,6 +96,7 @@ export class SolicitudVehiculoComponent implements OnInit {
   private departamentos = [];
   private usuarios = [];
   solicitudVehiculo: SolicitudVehiculo;
+  solicitudVehiculoEdit: SolicitudVehiculo;
   filtroUsuario;
   title;//
   start;//
@@ -117,6 +119,8 @@ export class SolicitudVehiculoComponent implements OnInit {
   listaSolicitudes = [];
   public p=1;
   tempEvent: any;
+  timeI = { hour: null, minute: null, second: 0 };
+  timeF = { hour: null, minute: null, second: 0 };
   
 
   @Input() placeholder: string;
@@ -124,6 +128,8 @@ export class SolicitudVehiculoComponent implements OnInit {
   dateStruct: NgbDateStruct;
   timeStruct: NgbTimeStruct;
   datePicker: any;
+  public mr: NgbModalRef;
+  model: NgbDateStruct;
 
   private onChangeCallback: (date: Date) => void = () => { };
 
@@ -137,6 +143,8 @@ export class SolicitudVehiculoComponent implements OnInit {
     private _router: Router,
   ) {
     this.solicitudVehiculo = new SolicitudVehiculo('', '', '', null, null, null, '', '', '', null, '', '');
+    this.solicitudVehiculoEdit = new SolicitudVehiculo('', '', '', null, null, null, '', '', '', null, '', '');
+    
     this.minDate = { year: null, month: null, day: null };
     this.filtroUsuario="";
   
@@ -462,7 +470,7 @@ let val = ev.target.value;
       primary: '#ad2121',
       secondary: '#FAE3E3',
       usuario: null,
-      sala: null,
+      vehiculo: null,
       recursos: [],
       id: null
     }
@@ -507,7 +515,7 @@ let val = ev.target.value;
                                           primary: this.departamentos[c].color + '',
                                           secondary: '#FAE3E3',
                                           usuario: listaSolicitudes[index].usuario,
-                                          sala: listaSolicitudes[index].sala,
+                                          vehiculo: listaSolicitudes[index].vehiculo,
                                           recursos: listaSolicitudes[index].recursos,
                                           id: listaSolicitudes[index]._id
                                         }
@@ -699,9 +707,157 @@ let val = ev.target.value;
     this.refresh.next();
   }
 
+
+  tempArrayChecked = [];
+  esMayor = false; 
+  tempTitleModal = "";
+  tempSolicitud = { usuario: null, departamento: null, fecha: null, motivo: null, inicio: null, fin: null, vehiculo: null }
+  eliminar = false;
   handleEvent(action: string, event: CalendarEvent): void {
-    this.modalData = { event, action };
-    this.modal.open(this.modalContent2, { size: 'lg' });
+   
+
+
+    if (action == "Eliminar") {
+      let _id = this.tempColor.color.id;
+      let salir = false;
+      let eliminar = false;
+      if (_id == "" || _id == "undefined" || _id == null) {
+        this.msjError("La Solicitud no pudo ser eliminada");
+      } else {
+        this.eliminar = true;
+        this.mr = this.modal.open(this.modalContent2, { size: 'lg' });
+
+      }
+    }
+    else {
+      this.tempArrayChecked = []
+      this.tempAcompanantes = [];
+      this.tempEvent = [];
+      let fecha = new Date(event.start);
+      this.model = { year: fecha.getFullYear(), month: fecha.getMonth() + 1, day: fecha.getDate() }
+
+      this.mensajeSolicitudInvalida = "";
+      this.mensajeSolicitudInvalidaEdit = "";
+      this.tempColor = event.color;
+      this._servUsuario.obtenerUsuario(this.tempColor.usuario).subscribe(
+        response => {
+          if (response.message[0]._id) {
+            this.tempSolicitud.usuario = response.message[0].nombre + ' ' + response.message[0].apellidos;
+            this.tempSolicitud.departamento = response.message[0].departamento;
+            this.tempSolicitud.vehiculo = this.tempColor.vehiculo;
+            console.log(this.tempColor.id);
+            this._servSolicitud.obtenerSolicitudVehiculo(this.tempColor.id).subscribe(
+              response => {
+                if (response.message) {
+                  let solicit = response.message;
+                  this.solicitudVehiculoEdit = solicit;
+                  //  this.model = { year: solicit.fecha.year, month: solicit.fecha.month, day: solicit.fecha.day };
+
+                  this.solicitudVehiculoEdit.fecha.year = this.model.year;
+                  this.solicitudVehiculoEdit.fecha.month = this.model.month;
+                  this.solicitudVehiculoEdit.fecha.day = this.model.day;
+
+                  this.timeI.hour = solicit.horaSalida.hour;
+                  this.timeI.minute = solicit.horaSalida.minute;
+                  this.timeI.second = solicit.horaSalida.second;
+
+                  this.timeF.hour = solicit.horaRegreso.hour;
+                  this.timeF.minute = solicit.horaRegreso.minute;
+                  this.timeF.second = solicit.horaRegreso.second;
+
+                  this.solicitudVehiculoEdit.horaSalida = this.timeI;
+                  this.solicitudVehiculoEdit.horaRegreso = this.timeF;
+
+                  this.solicitudVehiculoEdit.acompanantes = solicit.acompanantes;
+                  //  console.log(this.recursos);
+                  //console.log(solicit.recursos);
+
+
+                  // console.log(solicit.recursos[i]);
+                  // for (var index = 0; index < this.recursos.length; index++) {
+                  //   this.tempArrayChecked[index] = false;
+
+                  //   for (var i = 0; i < solicit.recursos.length; i++) {
+                  //     if (this.recursos[index]._id == solicit.recursos[i]) {
+                  //       this.tempArrayChecked[index] = true;
+                  //       // console.log(this.recursos[index].nombre);
+                  //     }
+                  //     else {
+
+                  //       //console.log(this.recursos[index].nombre);
+                  //     }
+                  //   }
+
+
+                  // }
+
+                 
+                  let date = new Date();
+                  date.setFullYear(solicit.fecha.year);
+                  date.setMonth(solicit.fecha.month - 1);
+                  date.setDate(solicit.fecha.day);
+
+                  this._servSolicitud.fechaActual().subscribe(
+                    response => {
+
+                      if (response.currentDate) {
+                        this.currentDate = response.currentDate;
+                        var momentDate = moment(this.currentDate, 'YYYY-MM-DD HH:mm:ss');
+                        let serverDate = momentDate.toDate();
+
+                        this.minDate.year = serverDate.getFullYear();
+                        this.minDate.month = (serverDate.getMonth() + 1);
+                        this.minDate.day = serverDate.getDate();
+                        // console.log('cliente');
+                        // console.log(date);
+                        // console.log('servidor')
+                        // console.log(serverDate);
+                        if (date.getFullYear() < serverDate.getFullYear()) {
+                          this.tempEvent = [];
+                        } else if (((date.getMonth() + 1) < (serverDate.getMonth() + 1))) {
+                          this.tempEvent = [];
+                        } else if (((date.getMonth() + 1) == (serverDate.getMonth() + 1))) {
+                          if (date.getDate() < serverDate.getDate() || this.minDate.day < serverDate.getDate()) {
+                            this.tempEvent = [];
+                          } else {
+                            // alert('entra aqui 1');
+                            //    this.tempEvent = event.actions;
+                          }
+                        } else {
+                          // alert('entra aqui 2');
+                          // this.tempEvent = event.actions;
+                        }
+                      } else {
+                      }
+
+                      this.modalData = { event, action };
+                      this.mr = this.modal.open(this.modalContent2, { size: 'lg' });
+                    }, error => {
+                      //ocurrió un error
+                    }
+                  );
+                  //   this.modalData = { event, action };
+                  // this.mr=  this.modal.open(this.modalContent, { size: 'lg' });
+                } else {//No se ha encontrado la Sala
+                }
+              }, error => {
+                var errorMensaje = <any>error;
+                if (errorMensaje != null) {
+                  var body = JSON.parse(error._body);
+                }
+              }
+            );
+          }
+        }, error => {
+          var errorMensaje = <any>error;
+          if (errorMensaje != null) {
+            var body = JSON.parse(error._body);
+          }
+        }
+      );
+
+    }
+
   }
 
   addEvent(solicitud, isDragable): void {
