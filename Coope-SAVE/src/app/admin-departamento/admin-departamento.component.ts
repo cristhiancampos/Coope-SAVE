@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild, TemplateRef } from '@angular/core';
 import * as $ from 'jquery';
 import { ServicioDepartamento } from '../servicios/departamento';
 import { Router, ActivatedRoute, Params } from '@angular/router';
@@ -6,6 +6,9 @@ import { Departamento } from '../modelos/departamento';
 import swal from 'sweetalert2'
 import { ServicioUsuario } from '../servicios/usuario';
 import { Usuario } from '../modelos/usuario';
+
+import {NgbModalRef,NgbModal,ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+
 
 
 @Component({
@@ -15,6 +18,9 @@ import { Usuario } from '../modelos/usuario';
   providers: [ServicioDepartamento]
 })
 export class AdminDepartamentoComponent implements OnInit {
+  @ViewChild('modalAgregarDepartamento') modalAgregarDepartamento: TemplateRef<any>;
+  @ViewChild('modalMofificarDepartamento') modalMofificarDepartamento: TemplateRef<any>;
+  public mr: NgbModalRef;
 
   public departamento: Departamento;
   public departamentoEdit: Departamento;
@@ -30,18 +36,44 @@ export class AdminDepartamentoComponent implements OnInit {
   public estadoEdicion: boolean;
   public estadoMensaje = 'Habilitado';
   public estadoMensajEdit = '';
-
+  closeResult: string;
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
     private _servUsuario: ServicioUsuario,
-    private _servDepartamento: ServicioDepartamento
+    private _servDepartamento: ServicioDepartamento,
+    private modal: NgbModal
   ) {
     this.mostralModal = false;
     this.departamentoEdit = new Departamento('', '', '', '','','');
     this.departamento = new Departamento('', '', '', this.estadoMensaje,'','');
   }
+abrir(modal){
 
+  //  this.mr= this.modal.open(modalAgregarDepartamento).result.then((result) => {
+  //     this.closeResult = `Closed with: ${result}`;
+  //   }, (reason) => {
+  //     this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+  //   });
+  
+  this.mr = this.modal.open(modal);
+
+}
+
+private getDismissReason(reason: any): string {
+  if (reason === ModalDismissReasons.ESC) {
+    return 'by pressing ESC';
+  } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+    return 'by clicking on a backdrop';
+  } else {
+    return  `with: ${reason}`;
+  }
+}
+
+cerrar(){
+  this.mr.close();
+
+}
   ngOnInit() {
     //this.obtenerDepartamentos();
     this.verificarCredenciales();
@@ -135,7 +167,8 @@ export class AdminDepartamentoComponent implements OnInit {
           alert('Error al registrar la departamento');
         } else {
          //alert('Departamento registrado exitosamente');
-          this.cerrarModal('#modalAdminDepa');
+         this.cerrar();
+          //this.cerrarModal('#modalAdminDepa');
           this.msjExitoso("Departamento Agregado Exitosamente");
           this.departamento = new Departamento('', '', '', this.estadoMensaje,'','');
           this.obtenerDepartamentos();
@@ -190,7 +223,7 @@ export class AdminDepartamentoComponent implements OnInit {
 
   }
 
-  obtenerDepartamento(_id: any) {
+  obtenerDepartamento(_id: any,accion:any) {
     this._servDepartamento.obtenerDepartamento(_id).subscribe(
       response => {
         if (response.message[0]._id) {
@@ -205,6 +238,8 @@ export class AdminDepartamentoComponent implements OnInit {
           } else {
             this.estadoEdicion = false;
           }
+          if(accion==1){this.mr = this.modal.open(this.modalMofificarDepartamento);}
+          
         } else {//No se ha encontrado el departamento
         }
       }, error => {
@@ -225,7 +260,8 @@ export class AdminDepartamentoComponent implements OnInit {
         } else {
           this.departamentoEdit = new Departamento('', '', '', '', '', '');
           this.obtenerDepartamentos();
-          this.cerrarModal('#modalEditDepartamento');
+          this.mr.close();
+         // this.cerrarModal('#modalEditDepartamento');
           this.msjExitoso("Departamento modificado Exitosamente");
         }
       }, error => {
