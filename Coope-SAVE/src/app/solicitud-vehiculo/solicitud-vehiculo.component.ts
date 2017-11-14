@@ -113,6 +113,8 @@ export class SolicitudVehiculoComponent implements OnInit {
   tempHorarioVehiculo = [];
   tempNombreVehiculo = "";
   listaSolicitudes = [];
+  public p=1;
+  
 
   @Input() placeholder: string;
   date: Date;
@@ -223,17 +225,15 @@ let val = ev.target.value;
   agregarAcompanates(usuario: any){
     console.log(usuario);
   this.usuariosAgregados.push(usuario);   
-
+    this.filtroUsuario= "";
   for(let i=0;i<this.listaUsuarios.length; i++){
     if(this.listaUsuarios[i]._id== usuario._id){
       this.listaUsuarios.splice(i,1);
       break
     }
   }
-  //this.nombreUsuarios.splice(id,1);
-  //alert(id);
+ 
   }
-
   eliminarAcompanante(usuario: any){
   this.listaUsuarios.push(usuario);
   for(let i=0;i<this.usuariosAgregados.length; i++){
@@ -290,10 +290,10 @@ let val = ev.target.value;
           }
           
 
-          // if (horarioDiaVehiculo.desde == null || horarioDiaVehiculo.desde == undefined || horarioDiaVehiculo.desde == "" || horarioDiaVehiculo.desde == "null") {
+          if (horarioDiaVehiculo.desde == null || horarioDiaVehiculo.desde == undefined || horarioDiaVehiculo.desde == "" || horarioDiaVehiculo.desde == "null") {
             
-          //   this.mensajeSolicitudInvalida = "El día " + dia + " para el vehiculo seleccinado no cuenta con un horario establecido , favor comuniquese con el administrador.";
-          if(false){
+            this.mensajeSolicitudInvalida = "El día " + dia + " para el vehiculo seleccinado no cuenta con un horario establecido , favor comuniquese con el administrador.";
+         
           } else { // validar el horario del dia selecciona con respecto al horario de la sala
             let agregarValid = false;
             let agregar = false;
@@ -335,14 +335,20 @@ let val = ev.target.value;
             }
             else {// validar la disponibilidad de horario
               //alert('horabien'+this.solicitudesdia.length);
+             
               if (this.solicitudesdia.length == 0) {//no hay solicitudes del día y el hora escogido es válido
                 agregarValid = true;
+                
               } else {
                 // alert('entró aqui  valid' +agregarValid);
+               
                 agregarValid = false;
+                this.tempNombreVehiculo= this.solicitudVehiculo.vehiculo;
                 if (this.tempNombreVehiculo == "") {
                   this.mensajeSolicitudInvalida = "Seleccione un Vehiculo";
+                  
                 } else {
+                
                   //método burbuja para ordenar las solicitudes de menor a mayor
                   let k = [];
                   for (let i = 1; i < this.solicitudesdia.length; i++) {
@@ -354,6 +360,8 @@ let val = ev.target.value;
                       }
                     }
                   }
+                  console.log('vector. solicitud del dia');
+                  console.log(this.solicitudesdia);
                   //extraer el horario de la solicitudes del vehiculo seleccionado
                   let tempArrayHoraInicio = [];
                   let tempArrayHoraFinal = [];
@@ -363,6 +371,7 @@ let val = ev.target.value;
                       tempArrayHoraFinal.push(this.solicitudesdia[indice].horaRegreso);
                     }
                   }
+
 
                   //buscar solicitudes entre el rango de horas escojido por el usuario y deteriminar si existen solicitudes
                   let tempArrayVerificacion = [];
@@ -375,13 +384,17 @@ let val = ev.target.value;
                     }
                     if (sumatoriaFinal > (horaSalidaDigit * 60) && (horaSalidaDigit * 60) > sumatoriaInicial) {
                       tempArrayVerificacion.push(minFinal);
+                      console.log('Array de verificacion');
+                      console.log(tempArrayVerificacion);
                       break;
                     }
                   }
+                 
 
                   // verificar si se encontraron
                   if (tempArrayVerificacion.length > 0) {
                     agregar = false;
+                    
                   } else {
                     agregar = true;
                   }
@@ -547,7 +560,7 @@ let val = ev.target.value;
   }
 
   setHorarioVehiculo(placa) {
-    alert(placa);
+    
     this.mensajeSolicitudInvalida = "";
     this.tempHorarioVehiculo = []
     for (let index = 0; index < this.vehiculos.length; index++) {
@@ -557,8 +570,20 @@ let val = ev.target.value;
       }
 
     }
+  }
+  getUsuario(id: any) {
+    for (let index = 0; index < this.usuarios.length; index++) {
+      if (this.usuarios[index]._id == id) {
+        return this.usuarios[index].nombre + ' ' + this.usuarios[index].apellidos;
+      }
+    }
+    return '-';
+  }
 
-    
+  vehiculoSeleccionado(p: any){
+    this.p= p;
+    this.setHorarioVehiculo(this.vehiculos[p-1].placa)
+    this.solicitudVehiculo.vehiculo= this.vehiculos[p-1].placa;
   }
 
   obtenerSolicitudes(userDate, abrirMod: boolean) {
@@ -572,7 +597,6 @@ let val = ev.target.value;
           //console.log('solicitudes salas');
           array = response.message;
           this.solicitudesdia = array;
-          console.log(array);
           if (abrirMod) {
             this.abrirModal('#modal-add-new-solicitudVehiculo');
           }

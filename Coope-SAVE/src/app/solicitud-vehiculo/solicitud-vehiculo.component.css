@@ -96,3 +96,14 @@ border-color:#ccc;
   border:0;
   background:transparent;
 }
+
+#carVehiculo {
+  width: 238px;
+  height: 130px;
+  MARGIN-LEFT: -35%;
+  text-align: center;
+}
+
+#pagionadorVehiculos{
+  font-size: 12px
+}
