@@ -5,7 +5,7 @@
         <span aria-hidden="true">&times;</span>
       </button> -->
     <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;{{ modalData?.action }} Solicitud</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal" > 
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal"> 
         <small aria-hidden="true">&times;</small>
       </button>
   </div>
@@ -19,7 +19,7 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-secondary" >OK</button>
+    <button type="button" class="btn btn-outline-secondary">OK</button>
   </div>
 </ng-template>
 
@@ -74,250 +74,258 @@
 
 <!-- Modal  agregar nueva solicitud-->
 <div class="modal fade bd-example-modal-lg" id="modal-add-new-solicitudVehiculo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-aria-hidden="true">
-<div class="modal-dialog modal-lg" role="document">
-  <div class="modal-content">
-    <div class="modal-header" style="color: #FFF;background: #0069d9">
-      <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar-plus-o" aria-hidden="true"></i> Solicitar Sala</h5>
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cerrarModal('#modal-add-new-solicitudVehiculo')">
+  aria-hidden="true" style="width: 100%; height: 100%;">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="color: #FFF;background: #0069d9">
+        <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar-plus-o" aria-hidden="true"></i> Solicitar Vehiculo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cerrarModal('#modal-add-new-solicitudVehiculo')">
           <small aria-hidden="true" style="font-size: 2rem; cursor: pointer">&times;</small>
         </button>
-    </div>
-    <div class="modal-body" style="text-align: center">
+      </div>
+      <div class="modal-body" style="text-align: center">
 
 
-      <div class="row">
-        <div class="col-md-8" style="margin-left: 9%;">
-          <div class="panel with-nav-tabs panel-primary">
-            <div class="panel-heading">
-              <ul class="nav nav-pills nav-fill nav-tabs">
+        <div class="row">
+          <div class="col-md-8" style="margin: auto">
+            <div class="panel with-nav-tabs panel-primary">
+              <div class="panel-heading">
+                <ul class="nav nav-pills nav-fill nav-tabs" style="text-align: center;">
 
-                <li class="nav-item">
-                  <a id="bnt-lista" class="nav-link active" href="#tab1primary" data-toggle="tab" (click)="solicitud(1)" style="width: 210px;font-size: 1.3rem;">Solicitar Sala</a>
-                </li>
-                <li class="nav-item">
-                  <a id="bnt-solicitud" class="nav-link" href="#tab2primary" data-toggle="tab" (click)="solicitud(2)" style="width: 210px;font-size: 1.3rem;">Solicitudes del día</a>
-                </li>
-              </ul>
-            </div>
-            <div class="panel-body">
-              <div class="tab-content">
-                <div class="tab-pane fade in active" id="tab1primary">
+                  <li class="nav-item">
+                    <a id="bnt-lista" class="nav-link active" href="#tab1primary" data-toggle="tab" (click)="solicitud(1)" style="width: 210px;font-size: 1.3rem;margin-left: 25px;">Solicitar Sala</a>
+                  </li>
+                  <li class="nav-item">
+                    <a id="bnt-solicitud" class="nav-link" href="#tab2primary" data-toggle="tab" (click)="solicitud(2)" style="width: 210px;font-size: 1.3rem;">Solicitudes del día</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="panel-body">
+                <div class="tab-content">
+                  <div class="tab-pane fade in active" id="tab1primary">
+                  </div>
+                  <div class="tab-pane fade" id="tab2primary"></div>
                 </div>
-                <div class="tab-pane fade" id="tab2primary"></div>
               </div>
             </div>
           </div>
+
         </div>
 
-      </div>
+        <!--sección agregar solicitud-->
+        <section *ngIf="solicSala">
+          <br>
+          <table class="table table-bordered table-responsive">
+            <thead>
+              <tr>
+                <th class="th-color">Horario</th>
 
-      <!--sección agregar solicitud-->
-      <section *ngIf="solicSala">
-        <br>
-        <table class="table table-bordered table-responsive">
-          <thead>
-            <tr>
-              <th class="th-color">Horario</th>
-
-              <th class="th-color">Sala</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <div class="row">
-                  <div class="col-md-6">
-                    <form class="form-inline">
-                      <div class="form-group">
-                        <div class="input-group">
-                          <input id="dataPickerAdd" readonly class="form-control" [placeholder]="placeholder" name="date" [(ngModel)]="dateStruct"
-                            (ngModelChange)="updateDate()" ngbDatepicker #datePicker="ngbDatepicker" [minDate]="minDate">
-                          <div class="input-group-addon" (click)="datePicker.toggle()">
-                            <i class="fa fa-calendar"></i>
+                <th class="th-color">Vehiculo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <form class="form-inline">
+                        <div class="form-group">
+                          <div class="input-group">
+                            <input id="dataPickerAdd" readonly class="form-control" [placeholder]="placeholder" name="date" [(ngModel)]="dateStruct"
+                              (ngModelChange)="updateDate()" ngbDatepicker #datePicker="ngbDatepicker" [minDate]="minDate">
+                            <div class="input-group-addon" (click)="datePicker.toggle()">
+                              <i class="fa fa-calendar"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                      <div style="font-size: 1rem">
+                        <br>
+                        <label for="">Inicia</label>
+                        <div class="form-group">
+                          <ngb-timepicker [(ngModel)]="solicitudVehiculo.horaSalida" (ngModelChange)="updateTime()" [meridian]="true" (input)="updateInitDateOnInput()"
+                            #ctrlInitDate="ngModel" name="ctrlInitDate" required>
+                          </ngb-timepicker>
+                          <!-- <div *ngIf="ctrlInitDate.valid" class="small form-text text-success">Correcto <i class="fa fa-check" aria-hidden="true"></i> </div> -->
+                          <div class="small form-text text-danger" *ngIf="!ctrlInitDate.valid">
+                            <div *ngIf="ctrlInitDate.errors['required']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar valores Numericos</div>
+                            <div *ngIf="ctrlInitDate.errors['tooLate']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en
+                              las horas</div>
+                            <div *ngIf="ctrlInitDate.errors['tooEarly']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en
+                              los minutos
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </form>
-                    <div style="font-size: 1rem">
-                      <br>
-                      <label for="">Inicia</label>
-                      <div class="form-group">
-                        <ngb-timepicker [(ngModel)]="solicitudVehiculo.horaSalida" (ngModelChange)="updateTime()" [meridian]="true" (input)="updateInitDateOnInput()"
-                          #ctrlInitDate="ngModel" name="ctrlInitDate" required>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group" style="margin-top: 3.3em; font-size: 1rem">
+
+                        <label for="">Termina</label>
+                        <ngb-timepicker [(ngModel)]="solicitudVehiculo.horaRegreso" (ngModelChange)="updateTime()" [meridian]="true" (input)="updateFinishDateOnInput()"
+                          #ctrlFinishDate="ngModel" name="ctrlFinishDate" required>
                         </ngb-timepicker>
-                        <!-- <div *ngIf="ctrlInitDate.valid" class="small form-text text-success">Correcto <i class="fa fa-check" aria-hidden="true"></i> </div> -->
-                        <div class="small form-text text-danger" *ngIf="!ctrlInitDate.valid">
-                          <div *ngIf="ctrlInitDate.errors['required']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar valores Numericos</div>
-                          <div *ngIf="ctrlInitDate.errors['tooLate']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en
-                            las horas</div>
-                          <div *ngIf="ctrlInitDate.errors['tooEarly']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en
-                            los minutos
+                        <!-- <div *ngIf="ctrlFinishDate.valid" class="small form-text text-success">Correcto <i class="fa fa-check" aria-hidden="true"></i> </div> -->
+                        <div class="small form-text text-danger" *ngIf="!ctrlFinishDate.valid">
+                          <div *ngIf="ctrlFinishDate.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar valores Numericos</div>
+                          <div *ngIf="ctrlFinishDate.errors['tooLate']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en las
+                            horas
+                          </div>
+                          <div *ngIf="ctrlFinishDate.errors['tooEarly']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en los
+                            minutos
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group" style="margin-top: 3.3em; font-size: 1rem">
 
-                      <label for="">Termina</label>
-                      <ngb-timepicker [(ngModel)]="solicitudVehiculo.horaRegreso" (ngModelChange)="updateTime()" [meridian]="true" (input)="updateFinishDateOnInput()"
-                        #ctrlFinishDate="ngModel" name="ctrlFinishDate" required>
-                      </ngb-timepicker>
-                      <!-- <div *ngIf="ctrlFinishDate.valid" class="small form-text text-success">Correcto <i class="fa fa-check" aria-hidden="true"></i> </div> -->
-                      <div class="small form-text text-danger" *ngIf="!ctrlFinishDate.valid">
-                        <div *ngIf="ctrlFinishDate.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar valores Numericos</div>
-                        <div *ngIf="ctrlFinishDate.errors['tooLate']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en las
-                          horas
-                        </div>
-                        <div *ngIf="ctrlFinishDate.errors['tooEarly']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en los
-                          minutos
-                        </div>
+                    <div class="small form-text text-danger" style="font-size:0.9rem">
+                      <div>&nbsp; &nbsp;&nbsp; &nbsp;
+                        <i *ngIf='mensajeSolicitudInvalida!=""' class="fa fa-exclamation-circle" aria-hidden="true"></i>{{mensajeSolicitudInvalida}}</div>
+
+                    </div>
+                    <!-- <div *ngIf="ctrlFinishDate.valid" class="small form-text text-success">Debe eligir un horario correcto <i class="fa fa-check" aria-hidden="true"></i> </div> -->
+
+
+                  </div>
+                </td>
+                <td>
+                  <div class="control-group from-group">
+                    <div class="control">
+                      <ul style="list-style:none;" *ngFor="let vehiculo of vehiculos  | paginate: {itemsPerPage:1, currentPage: p} let i = index">
+                        <li>
+                          <div class="row">
+                            <div class="col-sm-4">
+                              <div class="card" id="carVehiculo">
+                                <div class="card-block" style="margin-top:10px;">
+                                  <p>Placa: {{vehiculo.placa}}</p>
+                                  <p>Tipo: {{vehiculo.tipo}}</p>
+                                  <p>Marca: {{vehiculo.marca}}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
+                      <!-- paginador-->
+                      <div id="pagionadorVehiculos">
+                        <pagination-controls (pageChange)="vehiculoSeleccionado($event)"></pagination-controls>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="control-group form-group">
+                    <div class="controls">
+                      <input id="inputCup" type="text" class="form-control" #destino="ngModel" name="destino" [(ngModel)]="solicitudVehiculo.destino"
+                        placeholder="Destino" required min="1">
+                      <!-- <div *ngIf="cup.valid && cup.value<=cupoMaximo && cup.value>0 " class="small form-text text-success" style="font-size:0.9rem">Correcto<i class="fa fa-check" aria-hidden="true"></i></div> -->
+                      <div class="small form-text text-danger" *ngIf="destino.invalid && (destino.dirty || destino.touched)" style="font-size:0.9rem">
+                        <div *ngIf="destino.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> El destino es obligatorio</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="control-group form-group">
+                    <div class="controls">
+                      <textarea class="form-control" #descp="ngModel" name="descp" [(ngModel)]="solicitudVehiculo.descripcion" placeholder="Motivo de la gira."
+                        rows="3" required maxlength="50"></textarea>
+                      <!-- <div *ngIf="descp.valid" class="small form-text text-success" style="font-size:0.9rem">Correcto <i class="fa fa-check" aria-hidden="true"></i></div> -->
+                      <div class="small form-text text-danger" *ngIf="descp.invalid && (descp.dirty || descp.touched)" style="font-size:0.9rem">
+                        <div *ngIf="descp.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> El motivo de la gira</div>
+
                       </div>
                     </div>
                   </div>
 
-                  <div class="small form-text text-danger" style="font-size:0.9rem">
-                    <div>&nbsp; &nbsp;&nbsp; &nbsp;
-                      <i *ngIf='mensajeSolicitudInvalida!=""' class="fa fa-exclamation-circle" aria-hidden="true"></i>{{mensajeSolicitudInvalida}}</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
-                  </div>
-                  <!-- <div *ngIf="ctrlFinishDate.valid" class="small form-text text-success">Debe eligir un horario correcto <i class="fa fa-check" aria-hidden="true"></i> </div> -->
-
-
-                </div>
-              </td>
-              <td>
-                <div class="control-group form-group">
-                  <div class="controls">
-                    <select #sal="ngModel" name="sal" [(ngModel)]="solicitudVehiculo.vehiculo" class="selectpicker"
-                      style="width: 100%;font-size: 1.2rem;min-width: 10em;" required>  
-                              <option value="" selected disabled  (change)="setHorarioVehiculo(vehiculo.placa)" >Seleccione Vehiculo</option>
-                                  <option *ngFor="let vehiculo of vehiculos;" >{{vehiculo.placa}}  </option>
-                              </select>
-
-
-                    <!-- <div *ngIf="sal.valid" class="small form-text text-success" style="font-size:0.9rem">Correcto<i class="fa fa-check" aria-hidden="true"></i></div> -->
-                    <div class="small form-text text-danger" *ngIf="sal.invalid && (sal.dirty || sal.touched)" style="font-size:0.9rem">
-                      <div *ngIf="sal.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La sala es obligatoria.</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="control-group form-group">
-                  <div class="controls">
-                    <input id="inputCup" type="text" class="form-control" #destino="ngModel" name="destino" [(ngModel)]="solicitudVehiculo.destino"
-                      placeholder="Destino" required min="1">
-                    <!-- <div *ngIf="cup.valid && cup.value<=cupoMaximo && cup.value>0 " class="small form-text text-success" style="font-size:0.9rem">Correcto<i class="fa fa-check" aria-hidden="true"></i></div> -->
-                    <div class="small form-text text-danger" *ngIf="destino.invalid && (destino.dirty || destino.touched)" style="font-size:0.9rem">
-                      <div *ngIf="destino.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> El destino es obligatorio</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="control-group form-group">
-                  <div class="controls">
-                    <textarea class="form-control" #descp="ngModel" name="descp" [(ngModel)]="solicitudVehiculo.descripcion" placeholder="Motivo de la gira."
-                      rows="3" required maxlength="50"></textarea>
-                    <!-- <div *ngIf="descp.valid" class="small form-text text-success" style="font-size:0.9rem">Correcto <i class="fa fa-check" aria-hidden="true"></i></div> -->
-                    <div class="small form-text text-danger" *ngIf="descp.invalid && (descp.dirty || descp.touched)" style="font-size:0.9rem">
-                      <div *ngIf="descp.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> El motivo de la gira</div>
-
-                    </div>
-                  </div>
-                </div>
-
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div class="container-fluid" >
-          <hr>
-          <h4 style="color:#0069d9">Acompañantes</h4> <br>
+          <div class="container-fluid">
+            <hr>
+            <h4 style="color:#0069d9">Acompañantes</h4> <br>
             <div class="container">
               <div class="row">
-                    <div class="col-sm-12 col-sm-offset-3" style="margin-bottom: 30px;">
-                        <div id="imaginary_container"> 
-                            <div class="input-group stylish-input-group">
-                                <input type="text" class="form-control"  #filtro="ngModel" [(ngModel)]="filtroUsuario" name="filtro" placeholder="Search" (input)="getItems($event)" >
-                                <span class="input-group-addon">
+                <div class="col-sm-12 col-sm-offset-3" style="margin-bottom: 30px;">
+                  <div id="imaginary_container">
+                    <div class="input-group stylish-input-group">
+                      <input type="text" class="form-control" #filtro="ngModel" [(ngModel)]="filtroUsuario" name="filtro" placeholder="Buscar Usuario"
+                        (input)="getItems($event)" id="filtroUsuario" [value]="filtroUsuario">
+                      <span class="input-group-addon">
                                     <button type="submit">
                                         <span class="fa fa-search" aria-hidden="true"></span>
-                                    </button>  
-                                </span>
-                            </div>
-                        </div>
+                      </button>
+                      </span>
                     </div>
+                  </div>
+                </div>
               </div>
             </div>
-          <div class="row">
-            <div class="row"></div>
+            <div class="row">
+              <div class="row"></div>
               <div class="col-6" style="margin-left: 20px;">
                 <div class="list-group" id="list-tab" role="tablist">
-                  <div class="row col-md-12" style="overflow-y: scroll; height: 200px">
-                  <!-- <div class="col-md-12" *ngFor="let usuario of nombreUsuarios; let i=index"> -->
-                      <div class="col-md-12" *ngFor="let usuario of listaUsuarios | filter: filtroUsuario">
-                  <label class="list-group-item list-group-item-action"  data-toggle="list"role="tab" aria-controls="home" (click)="agregarAcompanates(usuario)">
+                  <div class="row col-md-12" style="overflow-y: scroll; height: 150px">
+                    
+                    <div class="col-md-12" *ngFor="let usuario of listaUsuarios | filter: filtroUsuario">
+                      <label class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="home" (click)="agregarAcompanates(usuario)">
                       <span class="custom-control-description"  >{{usuario.nombre}} {{usuario.apellidos}} </span>
                       <span class="fa fa-plus" aria-hidden="true" style="float: right"></span>
                   </label>
-                </div>
-              </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="col-6">
-                  <div class="list-group" id="list-tab" role="tablist">
-                    <div class="row col-md-12" style="overflow-y: scroll; height: 200px">
+                <div class="list-group" id="list-tab" role="tablist">
+                  <div class="row col-md-12" style="overflow-y: scroll; height: 150px">
                     <div class="col-md-12" *ngFor="let usuarioAgregado of usuariosAgregados; let e = index">
-                    <label class="list-group-item list-group-item-action"  data-toggle="list"role="tab" aria-controls="home" (click)="eliminarAcompanante(usuarioAgregado)">                      
+                      <label class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="home" (click)="eliminarAcompanante(usuarioAgregado)">                      
                         <span class="custom-control-description" >{{usuarioAgregado.nombre}}{{usuarioAgregado.apellidos}}</span>
                         <span class="fa fa-minus" aria-hidden="true" style="float: right"></span> 
                         
                     </label>
+                    </div>
                   </div>
                 </div>
-                  </div>
-                </div>
-           
+              </div>
+
+            </div>
           </div>
-        </div>
-        <hr>
-        <button type="button" class="btn btn-danger" (click)="cerrarModal('#modal-add-new-soliscitudVehiculo')">Cancelar</button>
-        <button id="btn-add-solid" type="submit" class="btn btn-success" (click)="agregarSolicitud()" [disabled]="!descp.valid || !destino.valid || !sal.valid ||  !ctrlInitDate.valid">Confirmar</button>
+          <hr>
+          <button type="button" class="btn btn-danger" (click)="cerrarModal('#modal-add-new-soliscitudVehiculo')">Cancelar</button>
+          <button id="btn-add-solid" type="submit" class="btn btn-success" (click)="agregarSolicitud()" [disabled]="!descp.valid || !destino.valid" >Confirmar</button>
+          
+        </section>
 
-      </section>
-
-      <!-- sección lista-->
-      <section *ngIf="!solicSala">
-        <br>
-        <h5>Fecha: {{dateStruct.day}}/{{dateStruct.month}}/{{dateStruct.year}}</h5>
-        <table class="table table-hover" style="font-size:1rem">
-          <thead>
-            <tr>
-              <th scope="col"><i class="fa fa-list-ol" aria-hidden="true"></i></th>
-              <th scope="col">Sala</th>
-              <th scope="col">Horario</th>
-              <th scope="col">Motivo</th>
-              <th scope="col">Encargado</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let solicitud of solicitudesdia; let i = index">
-              <th scope="row">{{i+1}}</th>
-              <th>{{solicitud.sala}}</th>
-              <th>{{solicitud.horaInicio.hour}}:{{solicitud.horaInicio.minute}} - {{solicitud.horaFin.hour}}:{{solicitud.horaFin.minute}}
-              </th>
-              <th>{{solicitud.descripcion}}</th>
-              <th>{{getUsuario(solicitud.usuario)}}</th>
-            </tr>
-          </tbody>
-        </table>
-        <h6 *ngIf='solicitudesdia ==undefined || solicitudesdia.length==0'>No hay solicitudes realizadas para el día seleccionado.<br></h6>
-        <hr>
-        <button type="button" class="btn btn-danger" (click)="cerrarModal('#modal-add-new-request')">Cancelar</button>
-      </section>
+        <!-- sección lista-->
+        <section *ngIf="!solicSala">
+          <br>
+          <h5>Fecha: {{dateStruct.day}}/{{dateStruct.month}}/{{dateStruct.year}}</h5>
+          <table class="table table-hover" style="font-size:1rem">
+            <thead>
+              <tr>
+                <th scope="col"><i class="fa fa-list-ol" aria-hidden="true"></i></th>
+                <th scope="col">Sala</th>
+                <th scope="col">Horario</th>
+                <th scope="col">Motivo</th>
+                <th scope="col">Encargado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let solicitud of solicitudesdia; let i = index">
+                <th scope="row">{{i+1}}</th>
+                <th>{{solicitud.vehiculo}}</th>
+                <th>{{solicitud.horaSalida.hour}}:{{solicitud.horaSalida.minute}} - {{solicitud.horaRegreso.hour}}:{{solicitud.horaRegreso.minute}}
+                </th>
+                <th>{{solicitud.descripcion}}</th>
+                <th>{{getUsuario(solicitud.usuario)}}</th>
+              </tr>
+            </tbody>
+          </table>
+          <h6 *ngIf='solicitudesdia ==undefined || solicitudesdia.length==0'>No hay solicitudes realizadas para el día seleccionado.<br></h6>
+          <hr>
+          <button type="button" class="btn btn-danger" (click)="cerrarModal('#modal-add-new-request')">Cancelar</button>
+        </section>
+      </div>
     </div>
   </div>
-</div>
 </div>
