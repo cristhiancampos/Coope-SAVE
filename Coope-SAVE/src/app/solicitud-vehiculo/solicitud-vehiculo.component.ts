@@ -431,7 +431,7 @@ let val = ev.target.value;
                         this.solicitudVehiculo = new SolicitudVehiculo('', '', '', null, null, null, '', '', '', null, '', '');
                         this.obtenerSolicitudes(this.date, false);
                         this.obtenerSolicitudVehiculos();
-                        this.cerrarModal('#modal-add-new-request');
+                        this.cerrarModal('#modal-add-new-solicitudVehiculo');
                         // this.obtenerSalas();
                       }
                     }, error => {
