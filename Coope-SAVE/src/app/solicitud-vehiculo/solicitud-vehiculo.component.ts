@@ -19,6 +19,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FormControl } from '@angular/forms'; 
 import {filtrarUsuario} from './filtroUsuarios';
 import { ServicioDepartamento } from '../servicios/departamento';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 const colors: any = {
   red: {
     primary: '#ad2121',
@@ -86,6 +87,7 @@ export class SolicitudVehiculoComponent implements OnInit {
   ngOnInit(){
     this.estiloBotones();
     this.obtenerVehiculos();
+   
     this.obtenerUsuarios();
     this.obtenerSolicitudVehiculos();
     console.log('cargó el calendario de vehiculo');
@@ -114,6 +116,7 @@ export class SolicitudVehiculoComponent implements OnInit {
   tempNombreVehiculo = "";
   listaSolicitudes = [];
   public p=1;
+  tempEvent: any;
   
 
   @Input() placeholder: string;
@@ -130,7 +133,8 @@ export class SolicitudVehiculoComponent implements OnInit {
     private _servUsuario: ServicioUsuario,
     private _servSolicitud: ServicioSolicitudVehiculo,
     private _servDepartamento: ServicioDepartamento,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private _router: Router,
   ) {
     this.solicitudVehiculo = new SolicitudVehiculo('', '', '', null, null, null, '', '', '', null, '', '');
     this.minDate = { year: null, month: null, day: null };
@@ -463,98 +467,134 @@ let val = ev.target.value;
       id: null
     }
   };
+  
   tempEnable = false;
   obtenerSolicitudVehiculos() {
     let identity = localStorage.getItem('identity');
     let user = JSON.parse(identity);
     if (user != null) {
-      this._servSolicitud.obtenerTodasSolicitudes().subscribe(
+      this._servSolicitud.fechaActual().subscribe(
         response => {
-          if (response.message) {
-            let listaSolicitudes = response.message;
-            this.listaSolicitudes = listaSolicitudes;
-            this.events = [];
-            this._servDepartamento.obtenerDepartamentos().subscribe(
-              response => {
-                if (response.message) {
-                  this.departamentos = response.message;
-                  this._servUsuario.obtenerUsuarios().subscribe(
-                    response => {
-                      if (response.message) {
-                        this.usuarios = response.message;
-                        for (var index = 0; index < listaSolicitudes.length; index++) {
-                          for (var i = 0; i < this.usuarios.length; i++) {
-                            if (listaSolicitudes[index].usuario == this.usuarios[i]._id) {
-                              for (var c = 0; c < this.departamentos.length; c++) {
-                                if (this.usuarios[i].departamento == this.departamentos[c].nombre) {
-                                  this.tempColor = {
-                                    color: {
-                                      primary: this.departamentos[c].color + '',
-                                      secondary: '#FAE3E3',
-                                      usuario: listaSolicitudes[index].usuario,
-                                      sala: listaSolicitudes[index].sala,
-                                      recursos: listaSolicitudes[index].recursos,
-                                      id: listaSolicitudes[index]._id
+
+          if (response.currentDate) {
+            this.currentDate = response.currentDate;
+            var momentDate = moment(this.currentDate, 'YYYY-MM-DD HH:mm:ss');
+            var serverDate = momentDate.toDate();
+
+          } else {
+          }
+          this._servSolicitud.obtenerTodasSolicitudes().subscribe(
+            response => {
+              if (response.message) {
+                let listaSolicitudes = response.message;
+                this.listaSolicitudes = listaSolicitudes;
+                this.events = [];
+                this._servDepartamento.obtenerDepartamentos().subscribe(
+                  response => {
+                    if (response.message) {
+                      this.departamentos = response.message;
+                      this._servUsuario.obtenerUsuarios().subscribe(
+                        response => {
+                          if (response.message) {
+                            this.usuarios = response.message;
+                            for (var index = 0; index < listaSolicitudes.length; index++) {
+                              for (var i = 0; i < this.usuarios.length; i++) {
+                                if (listaSolicitudes[index].usuario == this.usuarios[i]._id) {
+                                  for (var c = 0; c < this.departamentos.length; c++) {
+                                    if (this.usuarios[i].departamento == this.departamentos[c].nombre) {
+                                      this.tempColor = {
+                                        color: {
+                                          primary: this.departamentos[c].color + '',
+                                          secondary: '#FAE3E3',
+                                          usuario: listaSolicitudes[index].usuario,
+                                          sala: listaSolicitudes[index].sala,
+                                          recursos: listaSolicitudes[index].recursos,
+                                          id: listaSolicitudes[index]._id
+                                        }
+                                      };
                                     }
-                                  };
+                                  }
                                 }
                               }
+                              if (user._id == listaSolicitudes[index].usuario) {
+                                this.tempEnable = true;
+                                this.actions = [
+                                  {
+                                    label: '<i class="fa fa-fw fa-pencil"></i>',
+                                    onClick: ({ event }: { event: CalendarEvent }): void => {
+                                      this.handleEvent('Editar', event);
+                                    }
+                                  },
+                                  {
+                                    label: '<i class="fa fa-fw fa-times"></i>',
+                                    onClick: ({ event }: { event: CalendarEvent }): void => {
+                                      this.events = this.events.filter(iEvent => iEvent !== event);
+                                      this.handleEvent('Eliminar', event);
+                                    }
+                                  }
+                                ];
+
+                              } else {
+                                this.tempEnable = false;
+                                this.actions = [];
+                              }
+                              if (listaSolicitudes[index].fecha.year < serverDate.getFullYear()) {
+                                this.tempEvent = [];
+                                this.actions = [];
+                                this.tempEnable = false;
+                              } else if (listaSolicitudes[index].fecha.month < (serverDate.getMonth() + 1)) {
+                                this.tempEvent = [];
+                                this.actions = [];
+                                this.tempEnable = false;
+                              } else if (listaSolicitudes[index].fecha.month == (serverDate.getMonth() + 1)) {
+                                if (listaSolicitudes[index].fecha.day < serverDate.getDate()) {
+                                  this.tempEvent = [];
+                                  this.actions = [];
+                                  this.tempEnable = false;
+                                } else {
+                                  // this.tempEnable = true;
+                                }
+                              } else {
+                                // alert('entra aqui 2');
+                              }
+                              this.addEvent(listaSolicitudes[index], this.tempEnable);
                             }
+                          } else {//no hay Usuarios registradas
                           }
-                          if (user._id == listaSolicitudes[index].usuario) {
-                            this.tempEnable = true;
-                            this.actions = [
-                              {
-                                label: '<i class="fa fa-fw fa-pencil"></i>',
-                                onClick: ({ event }: { event: CalendarEvent }): void => {
-                                  this.handleEvent('Editar', event);
-                                }
-                              },
-                              {
-                                label: '<i class="fa fa-fw fa-times"></i>',
-                                onClick: ({ event }: { event: CalendarEvent }): void => {
-                                  this.events = this.events.filter(iEvent => iEvent !== event);
-                                  this.handleEvent('Eliminar', event);
-                                }
-                              }
-                            ];
-
-                          } else {
-                            this.tempEnable = false;
-                            this.actions = [];
+                        }, error => {
+                          var errorMensaje = <any>error;
+                          if (errorMensaje != null) {
+                            var body = JSON.parse(error._body);
                           }
-                          this.addEvent(listaSolicitudes[index], this.tempEnable);
                         }
-                      } else {//no hay Usuarios registradas
-                      }
-                    }, error => {
-                      var errorMensaje = <any>error;
-                      if (errorMensaje != null) {
-                        var body = JSON.parse(error._body);
-                      }
+                      );
+                    } else {//ho hay departamentos registrados
                     }
-                  );
-                } else {//ho hay departamentos registrados
-                }
-              }, error => {
-                var errorMensaje = <any>error;
-                if (errorMensaje != null) {
-                  var body = JSON.parse(error._body);
-                }
-              }
-            );
+                  }, error => {
+                    var errorMensaje = <any>error;
+                    if (errorMensaje != null) {
+                      var body = JSON.parse(error._body);
+                    }
+                  }
+                );
 
-          } else {//no hay Salas registradas
-          }
+              } else {//no hay Salas registradas
+              }
+            }, error => {
+              var errorMensaje = <any>error;
+              if (errorMensaje != null) {
+                var body = JSON.parse(error._body);
+              }
+            }
+          );
         }, error => {
-          var errorMensaje = <any>error;
-          if (errorMensaje != null) {
-            var body = JSON.parse(error._body);
-          }
+          //ocurrió un error
         }
       );
+
     } else {
-      this.msjError('Debe Verificar sus credenciales');
+      this._router.navigate(['/principal']);
+     // this.msjError('Debe Verificar sus credenciales');
     }
 
   }
@@ -630,6 +670,8 @@ let val = ev.target.value;
       response => {
         if (response.message) {
           this.vehiculos = response.message;
+          this.setHorarioVehiculo(this.vehiculos[0].placa);
+          this.solicitudVehiculo.vehiculo= this.vehiculos[0].placa;
           console.log(this.vehiculos);
         } else {//no hay Salas registradas
         }
