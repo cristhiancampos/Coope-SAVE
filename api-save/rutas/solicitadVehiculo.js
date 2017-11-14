@@ -12,5 +12,7 @@ api.post('/obtenerSolicitudesVehiculos',ControladorSolicitudVehiculo.obtenerSoli
 api.get('/obtenerTodasSolicitudesVehiculos',ControladorSolicitudVehiculo.obtenerTodasSolicitudes);
  api.put('/modificarSolicitudVehiculo',ControladorSolicitudVehiculo.modificarsolicitudVehiculo);
 api.delete('/eliminarSolicitudVehiculo/:id', ControladorSolicitudVehiculo.eliminarsolicitudVehiculo);
+api.get('/obtenerSolicitudVehiculo/:id',ControladorSolicitudVehiculo.obtenerSolicitudVehiculo);
+
 
 module.exports = api;
