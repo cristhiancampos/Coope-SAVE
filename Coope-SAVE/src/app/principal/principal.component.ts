@@ -267,15 +267,6 @@ export class PrincipalComponent implements OnInit {
               $('#nav-user').text(' ');
               this.abrirModal('#loginModal');
               this.mmostrar = false;
-              // var errorMensaje = <any>error;
-              // if (errorMensaje != null) {
-              //   var body = JSON.parse(error._body);
-              //   this.mensajeError = body.message;
-              //  // this.verError = true;
-              //   // $('#nav-user').text(' ');
-              //   // this.abrirModal('#loginModal');
-              //   // this.mmostrar = false;
-              // }
             }
           );
         }
@@ -284,11 +275,6 @@ export class PrincipalComponent implements OnInit {
         $('#nav-user').text(' ');
         this.abrirModal('#loginModal');
         this.mmostrar = false;
-        // var errorMensaje = <any>error;
-        // if (errorMensaje != null) {
-        //   var body = JSON.parse(error._body);
-        //   this.mensajeError = body.message;
-        // }
       }
       );
     } else {
@@ -383,12 +369,20 @@ obtenerDepartamentos() {
 
   }
 
+  msInfo(texto: String) {
+    swal({
+      title: '',
+      type: 'info',
+      html: texto + '',
+      showCloseButton: true,
+      focusConfirm: false,
+      confirmButtonText: 'OK'
+    })
+  }
   userExistForgot = false;
   mensajeErrorForgot="";
   validarUsuario() {
     let user = new Usuario('','','','','','','','','','');;
-
-    console.log(user);
     user.correo = this.forgotPass.trim();
     this._servUsuario.getCorreo(user).subscribe(
       response => {
@@ -396,23 +390,76 @@ obtenerDepartamentos() {
           let co = response.message.correo;;
           this.userExistForgot=true;
           $('#input-correoF').css("border-left", "5px solid #a94442");
+          user.contrasena=this.generatePassword();
+          user._id=response.message._id
+          alert(user.contrasena);
+
+          this.recuperarContrasena(user);
         } else {//no existe el corrreo
-          $('#input-correoF').css("border-left", "5px solid #42A948");;
+          $('#input-correoF').css("border-left", "5px solid #42A948");
           this.correo = null;
           this.userExistForgot = false;
           this.mensajeErrorForgot="Correo inválido";
-          alert('no existe');
         }
       }, error => {
         var errorMensaje = <any>error;
         if (errorMensaje != null) {
+          this.mensajeErrorForgot="Correo inválido";
           //var body = JSON.parse(error._body);
         }
       }
     );
   }
 
+  generatePassword() {
+    var length = 8,
+        charset = "!@#DEF34qrst56GHI$%^cdefg&*()_+|}{[TUV0op1278WXYZ]\:;?><,./-=abhijklmnuvwxyzABCJKLMNOPQRS9",
+        retVal = "";
+    for (var i = 0, n = charset.length; i < length; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * n));
+    }
+    return retVal;
+}
 
+  recuperarContrasena(user:any) {
+    console.log(user);
+
+    this._servUsuario.modificarUsuarioCompleto(user).subscribe(
+      response => {
+
+        if (!response.message._id) {
+          this.msjError("El Usuario no pudo ser Modificado");
+        } else {
+          this.enviarContrasena(user);
+         // this.msInfo('Su nueva contraseña ha sido enviada via correo electrónico a '+user.correo);          
+         // this._router.navigate(['/principal']);
+        }
+      }, error => {
+        var alertMessage = <any>error;
+        if (alertMessage != null) {
+         // var body = JSON.parse(error._body);
+          //alert('El Usuario no se pudo modificar');
+
+        }
+      }
+    );
+  }
+  enviarContrasena(user:any) {
+    this._servUsuario.enviarContrasena(user).subscribe(
+      response => {
+        console.log('Respuesta:' + response);
+        if (!response) {
+          console.log('Fallo el envio de correo');
+          this.msjError('Falló la recuperación de contraseña ');
+        } else {
+          this.msInfo('Su nueva contraseña ha sido enviada via correo electrónico a '+user.correo);          
+          this._router.navigate(['/principal']);
+        }
+      }, error => {
+        console.log('Fallo el envio de correo');
+      }
+    );
+  }//Fin del metodo EnviarEmail
 
   
  /* validarcontra(event: any) {

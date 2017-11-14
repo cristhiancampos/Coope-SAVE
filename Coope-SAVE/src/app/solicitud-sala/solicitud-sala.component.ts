@@ -127,6 +127,9 @@ export class SolicitudSalaComponent implements OnInit {
     this.obtenerSalas();
     this.estiloBotones();
     this.minDate = { day: null, month: null, year: null };
+    $('#modalContent').on('hidden.bs.modal', function () {
+     alert('se cerró');
+  })
 
   }
   //cambia el tab de solicitar salas a lista de solitudes, según día seleccionado, y vicebersa, en el modal de solicitar sala
@@ -485,6 +488,15 @@ export class SolicitudSalaComponent implements OnInit {
   tempSolicitud = { usuario: null, departamento: null, fecha: null, motivo: null, inicio: null, fin: null, sala: null }
   //administrador de eventos
   handleEvent(action: string, event: CalendarEvent): void {
+
+    if(action=="Eliminar"){
+      this.abrirModal('#modal-deleteSoli');
+     // console.log(event.color);
+     // console.log(this.tempColor.color.id);
+     //this.eliminarSolicitud(this.tempColor);
+      //alert('eliminar una solicitud');
+    }
+    else{
     this.tempArrayChecked = []
     this.tempRecursos=[];
     this.tempEvent=[];
@@ -568,10 +580,10 @@ export class SolicitudSalaComponent implements OnInit {
                       this.minDate.year = serverDate.getFullYear();
                       this.minDate.month = (serverDate.getMonth() + 1);
                       this.minDate.day = serverDate.getDate();
-                      console.log('cliente');
-                      console.log(date);
-                      console.log('servidor')
-                      console.log(serverDate);
+                      // console.log('cliente');
+                      // console.log(date);
+                      // console.log('servidor')
+                      // console.log(serverDate);
                       if (date.getFullYear() < serverDate.getFullYear() ) {
                         this.tempEvent = [];
                       } else if (((date.getMonth() + 1) < (serverDate.getMonth() + 1)) ) {
@@ -615,6 +627,8 @@ export class SolicitudSalaComponent implements OnInit {
         }
       }
     );
+
+  }
   }
 
   //inserta los eventos del en el calendario
@@ -1110,6 +1124,9 @@ export class SolicitudSalaComponent implements OnInit {
     );
 
   }
+  eliminarSolicitud(solicitud:any){
+    alert('ID :'+ solicitud._id);
+    }
 
   cancelarAccion() {
     this.obtenerSolicitudes(new Date(), false);

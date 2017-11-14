@@ -263,25 +263,25 @@ aria-hidden="true">
               <p style="color: #000">
                   <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La nueva contraseña será enviada a su correo  electrónico.
                    <br>
-                   Favor igresar su correo electrónico para proceder con el cambio de contraseña.
+                   Favor ingresar su correo electrónico para proceder con el cambio de contraseña.
               </p>
               <hr>
-            <form #forgotForm="ngForm" (ngSubmit)="login()">
+            <form #forgotForm="ngForm" (ngSubmit)="validarUsuario()">
               <!--(focusout)="validarCorreo()"  autofocus  (focus)="onfocusCorreo()"-->
               <div class="control-group form-group">
                 <div class="controls">
-                  <input type="email" #correoForgot="ngModel" name="correoForgot" class="form-control"
-                  id="input-correoF" [(ngModel)]="forgotPass" placeholder="usuario@coopesparta.fi.cr" required>
+                  <input type="email" #correoForgot="ngModel" name="correoForgot" class="form-control" (input)="mensajeErrorForgot=''"
+                  id="input-correoF" [(ngModel)]="forgotPass" placeholder="usuario@coopesparta.fi.cr" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
                   <small [hidden]="correoForgot.valid || (correoForgot.pristine && !forgotForm.submitted)">
-                    <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Correo requerido
+                    <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Correo requerido, asegurese que el formato del correo sea el correcto.
                 </small>
-                   <small> 
-                     <i  *ngIf="mensajeErrorForgot!=''" class="fa fa-exclamation-circle" aria-hidden="true"></i> {{mensajeErrorForgot}} </small>
+                   <small *ngIf="mensajeErrorForgot"> 
+                     <i   class="fa fa-exclamation-circle" aria-hidden="true"></i> {{mensajeErrorForgot}} </small>
                 </div>
               </div>
         
               <button id="btnForgot" style="width: 100%" type="submit" [disabled]="!correoForgot.valid"
-               class="btn btn-success" (click)="validarUsuario()"> Recuperar</button>
+               class="btn btn-success" > Recuperar</button> <!-- (click)="validarUsuario()"-->
             </form>
             
             <div  style="text-align:center ; font-size: 1.2rem">

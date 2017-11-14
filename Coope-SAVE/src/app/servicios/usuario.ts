@@ -209,5 +209,12 @@ export class ServicioUsuario {
         .map(res=>res.json());
     }
 
+    enviarContrasena(user) {
+        let json = JSON.stringify(user);
+        let params = json;
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        return this._http.post(this.url + 'enviarContrasena', params, { headers: headers })
+            .map(res => res.json());
+    }
 
 }
