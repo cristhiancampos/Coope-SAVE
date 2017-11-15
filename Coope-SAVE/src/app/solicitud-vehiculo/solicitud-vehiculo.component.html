@@ -1,202 +1,233 @@
 <ng-template #modalContent2 let-close="close" id="modalContent2">
-    <div class="modal-header" style="background: #0069d9;color:#fff">
-      <!-- <h5 class="modal-title">Event action occurred</h5>
+  <div class="modal-header" style="background: #0069d9;color:#fff">
+    <!-- <h5 class="modal-title">Event action occurred</h5>
         <button type="button" class="close" (click)="close()">
           <span aria-hidden="true">&times;</span>
         </button> -->
-      <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;{{tempTitleModal}} Solicitud</h5> <!-- {{ modalData?.action }}-->
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal" (click)="close()"> 
+    <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;{{tempTitleModal}} Solicitud</h5>
+    <!-- {{ modalData?.action }}-->
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal" (click)="close()"> 
           <small aria-hidden="true">&times;</small>
         </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <pre> <a><img src="assets/img/logo.png" ></a> </pre>
     </div>
-    <div class="modal-body">
-      <div>
-        <pre> <a><img src="assets/img/logo.png" ></a> </pre>
-      </div>
-  <form>
+    <form>
       <div class="list-group">
-          <a href="javascript:void(0);" class="list-group-item list-group-item-action flex-column align-items-start ">
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1"> <i class="fa fa-user" aria-hidden="true"></i> Solicitante</h5>
-            </div>
-            <br>
-            <p class="mb-1"> <strong>Nombre</strong>   {{solicitudVehiculoEdit.usuario}}</p>
-            <p class="mb-1"> <strong>Departamento</strong>   coqitos</p>
-          </a>
-          <a  href="javascript:void(0);" class="list-group-item list-group-item-action flex-column align-items-start">
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1"><i class="fa fa-asterisk" aria-hidden="true"></i> Detalles</h5>
-            </div>
-            
-            <div class="row">
-                <div class="col-md-2" style="top: 2em;">
-                    <strong>Sala</strong>
-                </div>
-                <div class="col-md-4" style="top: 2em;">
-                    <div class="form-group">
-                        <div class="input-group">     
-                <select class="btn btn-outline-primary" #salE="ngModel" name="salE" [(ngModel)]="solicitudVehiculoEdit.vehiculo"  class="selectpicker"
-                style="width: 100%;font-size: 1.2rem;min-width: 10em;" required [disabled]="tempEvent.length<=0">  
-                        <option value="" selected disabled >Seleccione Sala</option>
-                            <option *ngFor="let vehiculo of vehiculos;" >{{solicitudVehiculoEdit.vehiculo}}</option>
-                          </select> 
-    
+        <a href="javascript:void(0);" class="list-group-item list-group-item-action flex-column align-items-start ">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1"> <i class="fa fa-user" aria-hidden="true"></i> Solicitante</h5>
+          </div>
+          <br>
+          <p class="mb-1"> <strong>Nombre</strong> {{tempSolicitud.usuario}}</p>
+          <p class="mb-1"> <strong>Departamento</strong> {{tempSolicitud.departamento}}</p>
+        </a>
+        <a href="javascript:void(0);" class="list-group-item list-group-item-action flex-column align-items-start">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1"><i class="fa fa-asterisk" aria-hidden="true"></i> Detalles</h5>
+          </div>
+
+          <div class="row">
+
+            <div class="control-group from-group"  >
+              <div class="control">
+
+                <ul style="list-style:none;" *ngFor="let vehiculo of vehiculos  | paginate: {itemsPerPage:1, currentPage: nuevoVehiculo} let i = index">
+                  <li>
+                    <div class="row">
+                      <div class="col-sm-4">
+                        <div class="card" id="carVehiculo">
+                          <div class="card-block" style="margin-top:10px;">
+                            <p>Placa: {{vehiculo.placa}}</p>
+                            <p>Tipo: {{vehiculo.tipo}}</p>
+                            <p>Marca: {{vehiculo.marca}}</p>
+                          </div>
                         </div>
                       </div>
-                  </div>
-                  
-                <div class="col-md-2" style="top: 2em;">
-                    <strong>Fecha    </strong>
+                    </div>
+                  </li>
+                </ul>
+                <!-- paginador-->
+                <div id="pagionadorVehiculos" style="margin-left: -17%" *ngIf="!tempEvent.length<=0">
+                  <pagination-controls (pageChange)="vehiculoSeleccionadoEditar($event)"></pagination-controls>
                 </div>
-                <div class="col-md-4" style="top: 2em;">
-                    <div class="form-group">
-                        <div class="input-group">
-                          <input class="form-control" placeholder="yyyy-mm-dd"
-                                 name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker" [disabled]="true" [minDate]="minDate" required> <!--[disabled]="tempEvent.length<=0" -->
-                          <button class="input-group-addon" (click)="d.toggle()" type="button" [disabled]="tempEvent.length<=0" >
+              </div>
+            </div>
+
+
+            <div class="col-md-2" style="top: 2em;">
+              <strong>Fecha    </strong>
+            </div>
+            <div class="col-md-4" style="top: 2em;">
+              <div class="form-group">
+                <div class="input-group">
+                  <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker" [disabled]="true"
+                    [minDate]="minDate" required>
+                  <!--[disabled]="tempEvent.length<=0" -->
+                  <button class="input-group-addon" (click)="d.toggle()" type="button" [disabled]="tempEvent.length<=0">
                               <i class="fa fa-calendar" aria-hidden="true"></i>
                           </button>
-                        </div>
-                      </div>
-                  </div>
-              </div> 
-  
-            <br><br>
-             <div class="row">
-              <div class="col-md-2" style="top: 2em;">
-                  <strong>Hora Inicio</strong>
+                </div>
               </div>
-              <div class="col-md-4">
+            </div>
+          </div>
+
+          <br><br>
+          <div class="row">
+            <div class="col-md-2" style="top: 2em;">
+              <strong>Hora Inicio</strong>
+            </div>
+            <div class="col-md-4">
               <div class="form-group">
-                  <ngb-timepicker #timeUpdate="ngModel" name="timeUpdate" [(ngModel)]="timeI" [meridian]="true" [disabled]="tempEvent.length<=0" required>
-                    </ngb-timepicker>               
-            
-                    <div class="small form-text text-danger" *ngIf="!timeUpdate.valid &&!timeUpdate.disabled">
-                        <div> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar valores Numericos</div>
-                        </div>
-  
-              </div>
-            
+                <ngb-timepicker #timeUpdate="ngModel" name="timeUpdate" [(ngModel)]="timeI" [meridian]="true" [disabled]="tempEvent.length<=0"
+                  required>
+                </ngb-timepicker>
+
+                <div class="small form-text text-danger" *ngIf="!timeUpdate.valid &&!timeUpdate.disabled">
+                  <div> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar valores Numericos</div>
                 </div>
-              <div class="col-md-2" style="top: 2em;">
-                  <strong>Hora Final</strong>
+
               </div>
-              <div class="col-md-4">
-                
-                <div class="form-group">
-                  <ngb-timepicker #timeUpdateF="ngModel" name="timeUpdateF" [(ngModel)]="timeF" [meridian]="true" [disabled]="tempEvent.length<=0" required></ngb-timepicker>               
-                  
-                  <div class="small form-text text-danger" *ngIf="!timeUpdateF.valid  &&!timeUpdateF.disabled">
-                    <div> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar valores Numericos</div>
-                    </div> 
-              </div>
-  
+
+            </div>
+            <div class="col-md-2" style="top: 2em;">
+              <strong>Hora Final</strong>
+            </div>
+            <div class="col-md-4">
+
+              <div class="form-group">
+                <ngb-timepicker #timeUpdateF="ngModel" name="timeUpdateF" [(ngModel)]="timeF" [meridian]="true" [disabled]="tempEvent.length<=0"
+                  required></ngb-timepicker>
+
+                <div class="small form-text text-danger" *ngIf="!timeUpdateF.valid  &&!timeUpdateF.disabled">
+                  <div> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar valores Numericos</div>
                 </div>
-  
-                <div class="small form-text text-danger" style="font-size:0.9rem">
-                    <div>&nbsp; &nbsp;&nbsp; &nbsp;
-                      <i *ngIf='mensajeSolicitudInvalidaEdit!=""' class="fa fa-exclamation-circle" aria-hidden="true"></i>  {{mensajeSolicitudInvalidaEdit}}</div>
-  
-                  </div>
-  
-            </div> 
-            
+              </div>
+
+            </div>
+
+            <div class="small form-text text-danger" style="font-size:0.9rem">
+              <div>&nbsp; &nbsp;&nbsp; &nbsp;
+                <i *ngIf='mensajeSolicitudInvalidaEdit!=""' class="fa fa-exclamation-circle" aria-hidden="true"></i> {{mensajeSolicitudInvalidaEdit}}</div>
+
+            </div>
+
+          </div>
+
           <br>
-            <div class="row">
-                <div class="col-md-2">
-                    <strong>Motivo</strong>
+          <div class="row">
+            <div class="col-md-2">
+              <strong>Destino</strong>
+            </div>
+            <div class="col-md-3">
+              <div class="control-group form-group">
+                <div class="controls">
+                  <input id="inputCupE" type="text" class="form-control" #cupE="ngModel" name="cupE" [(ngModel)]="solicitudVehiculoEdit.destino"
+                    placeholder="Motivo de la gira" required min="1"  [disabled]="tempEvent.length<=0">
+                  <!-- <div *ngIf="cup.valid && cup.value<=cupoMaximo && cup.value>0 " class="small form-text text-success" style="font-size:0.9rem">Correcto<i class="fa fa-check" aria-hidden="true"></i></div> -->
+                  <div class="small form-text text-danger" *ngIf="cupE.invalid && (cupE.dirty || cupE.touched)" style="font-size:0.9rem">
+                    <div *ngIf="cupE.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> El destino de la gira es obligatoria</div>
+                  </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="control-group form-group">
-                        <div class="controls">
-                          <input id="inputCupE" type="text" class="form-control" #cupE="ngModel" name="cupE" [(ngModel)]="solicitudVehiculoEdit.destino"
-                            placeholder="Motivo de la gira" required min="1" [disabled]=""                            >
-                          <!-- <div *ngIf="cup.valid && cup.value<=cupoMaximo && cup.value>0 " class="small form-text text-success" style="font-size:0.9rem">Correcto<i class="fa fa-check" aria-hidden="true"></i></div> -->
-                          <div class="small form-text text-danger" *ngIf="cupE.invalid && (cupE.dirty || cupE.touched)" style="font-size:0.9rem">
-                            <div *ngIf="cupE.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> El motivo de la gira es obligatoria</div>
-                          </div>
-                        
-                          
-    
-                        </div>
-                      </div>
-                </div>
-  
-              <div class="col-md-2">
-                  <strong>Motivo</strong>
               </div>
-              <div class="col-md-5">
-                
-                <!-- <input type="text" value=" {{tempSolicitud.motivo}} lllllllllllllllllllllllllllllllllllllllllllllllllll"> -->
-                 
-                <div class="control-group form-group">
-                    <div class="controls">
-                      <textarea class="form-control" #descpE="ngModel" name="descpE" [(ngModel)]="solicitudVehiculoEdit.descripcion" placeholder="Motivo por el cuál solicita la sala."
-                        rows="2" required maxlength="50" [disabled]="tempEvent.length<=0"></textarea>
-                      <!-- <div *ngIf="descp.valid" class="small form-text text-success" style="font-size:0.9rem">Correcto <i class="fa fa-check" aria-hidden="true"></i></div> -->
-                      <div class="small form-text text-danger" *ngIf="descpE.invalid && (descpE.dirty || descpE.touched)" style="font-size:0.9rem">
-                        <div *ngIf="descpE.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> El motivo de la giraes obligatorio</div>
-  
+            </div>
+            <div class="col-md-2">
+              <strong>Motivo</strong>
+            </div>
+            <div class="col-md-5">
+              <div class="control-group form-group">
+                <div class="controls">
+                  <textarea class="form-control" #descpE="ngModel" name="descpE" [(ngModel)]="solicitudVehiculoEdit.descripcion" placeholder="Motivo por el cuál solicita la sala."
+                    rows="2" required maxlength="50" [disabled]="tempEvent.length<=0"></textarea>
+                  <!-- <div *ngIf="descp.valid" class="small form-text text-success" style="font-size:0.9rem">Correcto <i class="fa fa-check" aria-hidden="true"></i></div> -->
+                  <div class="small form-text text-danger" *ngIf="descpE.invalid && (descpE.dirty || descpE.touched)" style="font-size:0.9rem">
+                    <div *ngIf="descpE.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> El motivo de la giraes obligatorio</div>
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- //////////////////////////////////////////////////Acompañantes/////////////////////////////////////////////////////////////// -->
+          <div class="container-fluid">
+              <hr>
+              <h4 style="color:#0069d9">Acompañantes</h4> <br>
+              <div class="container">
+                <div class="row">
+                  <div class="col-sm-12 col-sm-offset-3" style="margin-bottom: 30px;">
+                    <div id="imaginary_container">
+                      <div class="input-group stylish-input-group">
+                        <input type="text" class="form-control" #filtro="ngModel" [(ngModel)]="filtroUsuario" name="filtro" placeholder="Buscar Usuario"
+                          (input)="getItems($event)" id="filtroUsuario" [value]="filtroUsuario">
+                        <span class="input-group-addon">
+                                      <button type="submit">
+                                          <span class="fa fa-search" aria-hidden="true"></span>
+                        </button>
+                        </span>
                       </div>
                     </div>
                   </div>
-  
-                  </div>
-  
-            </div>
-            <!-- <p class="mb-1"> <strong>Motivo</strong>  
-               {{tempSolicitud.motivo}}</p> -->
-          </a>
-  
-          <a href="javascript:void(0);" class="list-group-item list-group-item-action flex-column align-items-start " *ngIf="tempEvent.length>0">
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1"> <i class="fa fa-desktop" aria-hidden="true"></i> Recursos</h5>
-            </div>
-  
-            <div class="container-fluid">
-              <br>
-              <!-- <hr>
-              <h4 style="color:#0069d9">Lista de Recursos disponibles</h4> <br> -->
+                </div>
+              </div>
               <div class="row">
-                <div class="col-md-12" style="font-size: 1rem">
-                  <div class="container">
-                    <div class="form-group">
-                      <div class="row col-md-12" style="overflow-y: scroll; height: 100px">
-                        <div class="col-md-6" *ngFor="let acompanantes of tempAcompanantes;let i =index;"  style="text-align: left">
-                          <label class="custom-control custom-checkbox">
-                              
-                              <span class="custom-control-indicator"></span>
-                              <span class="custom-control-description">{{recurso.nombre}}</span>
-                            </label>
-                        </div>
+                <div class="row"></div>
+                <div class="col-6" style="margin-left: 20px;">
+                  <div class="list-group" id="list-tab" role="tablist">
+                    <div class="row col-md-12" style="overflow-y: scroll; height: 150px">
+  
+                      <div class="col-md-12" *ngFor="let usuario of listaUsuarios | filter: filtroUsuario">
+                        <label class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="home" (click)="agregarAcompanates(usuario)">
+                        <span class="custom-control-description"  >{{usuario.nombre}} {{usuario.apellidos}} </span>
+                        <span class="fa fa-plus" aria-hidden="true" style="float: right"></span>
+                    </label>
                       </div>
                     </div>
                   </div>
                 </div>
+                <div class="col-6">
+                  <div class="list-group" id="list-tab" role="tablist">
+                    <div class="row col-md-12" style="overflow-y: scroll; height: 150px">
+                      <div class="col-md-12" *ngFor="let usuarioAgregado of usuariosAgregados; let e = index">
+                        <label class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="home" (click)="eliminarAcompanante(usuarioAgregado)">                      
+                          <span class="custom-control-description" >{{usuarioAgregado.nombre}}{{usuarioAgregado.apellidos}}</span>
+                          <span class="fa fa-minus" aria-hidden="true" style="float: right"></span> 
+                          
+                      </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+  
               </div>
             </div>
-           
-          </a>
-        </div>
-      </form>
-  
-  
-       <!-- <div>
+
+
+        </a>
+
+
+      </div>
+    </form>
+
+
+    <!-- <div>
         Evento:
         <pre>{{ modalData?.event | json }}</pre>
       </div>  -->
-  
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-outline-secondary" (click)="cancelarAccion()">OK</button>
-      <button *ngIf="tempEvent.length>0" type="button" class="btn btn-outline-secondary"
-         (click)="modificarSolicitud()" [disabled]="!timeUpdateF.valid || !timeUpdate.valid || cupE.value<='0'  || cupE.value>cupoMaximoEdit || eliminar">Modificar
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="cancelarAccion()">OK</button>
+    <button *ngIf="tempEvent.length>0" type="button" class="btn btn-outline-secondary" (click)="modificarSolicitud(solicitudVehiculoEdit)" [disabled]="!timeUpdateF.valid || !timeUpdate.valid || cupE.value<='0'  || cupE.value>cupoMaximoEdit || eliminar">Modificar
         </button>
-        <button *ngIf="eliminar" type="button" class="btn btn-outline-secondary"
-            (click)="eliminarSolicitud()" >Eliminar
+    <button *ngIf="eliminar" type="button" class="btn btn-outline-secondary" (click)="eliminarSolicitud()">Eliminar
            </button>
-    </div>
-  </ng-template>
+  </div>
+</ng-template>
 
 
 <!-- <ng-template #modalContent2 let-close="close">
@@ -462,7 +493,7 @@
               <div class="col-6" style="margin-left: 20px;">
                 <div class="list-group" id="list-tab" role="tablist">
                   <div class="row col-md-12" style="overflow-y: scroll; height: 150px">
-                    
+
                     <div class="col-md-12" *ngFor="let usuario of listaUsuarios | filter: filtroUsuario">
                       <label class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="home" (click)="agregarAcompanates(usuario)">
                       <span class="custom-control-description"  >{{usuario.nombre}} {{usuario.apellidos}} </span>
@@ -490,8 +521,8 @@
           </div>
           <hr>
           <button type="button" class="btn btn-danger" (click)="cerrarModal('#modal-add-new-soliscitudVehiculo')">Cancelar</button>
-          <button id="btn-add-solid" type="submit" class="btn btn-success" (click)="agregarSolicitud()" [disabled]="!descp.valid || !destino.valid" >Confirmar</button>
-          
+          <button id="btn-add-solid" type="submit" class="btn btn-success" (click)="agregarSolicitud()" [disabled]="!descp.valid || !destino.valid">Confirmar</button>
+
         </section>
 
         <!-- sección lista-->
