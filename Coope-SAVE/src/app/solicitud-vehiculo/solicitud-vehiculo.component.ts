@@ -50,6 +50,8 @@ const colors: any = {
 export class SolicitudVehiculoComponent implements OnInit {
 
   @ViewChild('modalContent2') modalContent2: TemplateRef<any>;
+  @ViewChild('modalDeleteSolicitudVehiculo') modalDeleteSolicitudVehiculo: TemplateRef<any>;
+  
   view = 'month';
   viewDate: Date = new Date();
 
@@ -176,7 +178,9 @@ export class SolicitudVehiculoComponent implements OnInit {
   }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }) {
-   
+    
+    this.obtenerUsuarios();
+    this.usuariosAgregados=[];
     this.solicitudVehiculo.fecha = date;
     this.solicitudVehiculo.horaSalida = { hour: 7, minute: 0 };
     this.solicitudVehiculo.horaRegreso = { hour: 11, minute: 0 };
@@ -260,7 +264,8 @@ let val = ev.target.value;
   }
 
   agregarSolicitud() {
-   
+    
+
     var minInicial = ((this.solicitudVehiculo.horaSalida.hour * 60) + this.solicitudVehiculo.horaSalida.minute);
     var minFinal = ((this.solicitudVehiculo.horaRegreso.hour * 60) + this.solicitudVehiculo.horaRegreso.minute);
     if (minFinal - minInicial <= 0) {
@@ -973,7 +978,7 @@ let val = ev.target.value;
    
 
     if (action == "Eliminar") {
-     
+      this.eliminarSolicitud();
     }
     else {
       this.tempArrayChecked = []
@@ -1004,6 +1009,8 @@ let val = ev.target.value;
                 }
               }
             }
+           
+            
            
             
             for(let i=0;i< this.vehiculos.length; i++){
@@ -1162,6 +1169,42 @@ let val = ev.target.value;
     this.refresh.next();
     this.activeDayIsOpen = true;
     ////////////////////////////////////////////////////////////////
+  }
+
+  eliminarSolicitud() {
+    if (this.solicitudVehiculoEdit._id == null || this.solicitudVehiculoEdit._id == "" || this.solicitudVehiculoEdit._id == undefined) {
+      this.msjError('La solicitud no puede ser eliminada');
+
+    } else {
+      if (this.mr) {
+        this.mr.close();
+      }
+
+      this.mr = this.modal.open(this.modalDeleteSolicitudVehiculo);
+    }
+
+  }
+
+  //llamado al servicio que eliminar solicitud de sala
+  confirmEliminar() {
+    this._servSolicitud.eliminarSolicitudVehiculo(this.solicitudVehiculoEdit._id).subscribe(
+      response => {
+
+        if (!response.message._id) {
+          this.msjError("La Solicitud no pudo ser eliminada");
+        } else {
+          this.msjExitoso("Solicitud eliminada exitosamente");
+          this.mr.close();
+          this.obtenerSolicitudVehiculos();
+        }
+      }, error => {
+        var alertMessage = <any>error;
+        if (alertMessage != null) {
+          var body = JSON.parse(error._body);
+          this.msjError("La Solicitud no pudo ser eliminada");
+        }
+      }
+    );
   }
 
 

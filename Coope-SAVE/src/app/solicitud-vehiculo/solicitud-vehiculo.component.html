@@ -224,7 +224,7 @@
     <button type="button" class="btn btn-outline-secondary" (click)="cancelarAccion()">OK</button>
     <button *ngIf="tempEvent.length>0" type="button" class="btn btn-outline-secondary" (click)="modificarSolicitud(solicitudVehiculoEdit)" [disabled]="!timeUpdateF.valid || !timeUpdate.valid || cupE.value<='0'  || cupE.value>cupoMaximoEdit || eliminar">Modificar
         </button>
-    <button *ngIf="eliminar" type="button" class="btn btn-outline-secondary" (click)="eliminarSolicitud()">Eliminar
+    <button *ngIf="tempEvent.length>0" type="button" class="btn btn-outline-secondary" (click)="eliminarSolicitud()">Eliminar
            </button>
   </div>
 </ng-template>
@@ -558,3 +558,23 @@
     </div>
   </div>
 </div>
+
+  <!-- Modal  eliminar solicitud-->
+  <ng-template #modalDeleteSolicitudVehiculo>
+      <div class="modal-header" style="color: #FFF;background: #0069d9">
+        <h5 class="modal-title" id="exampleModalLabel">Eliminar Solicitud</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="text-align: center">
+        <span>
+        <i class="fa fa-trash fa-5x" aria-hidden="true" style="color:red"></i> 
+      </span>
+        <br><br>
+        <h5>¿Está seguro que desea eliminar la solicitud? </h5>
+        <br>
+        <button type="button" class="btn btn-default btn-modal-can" (click)="cancelarAccion()">Cancelar</button>
+        <button type="button" class="btn btn-default btn-modal-suc" (click)="confirmEliminar()">Confirmar</button>
+      </div>
+    </ng-template>
