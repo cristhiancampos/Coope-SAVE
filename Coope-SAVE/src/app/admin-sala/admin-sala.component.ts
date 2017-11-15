@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component,OnInit,ViewChild, TemplateRef } from '@angular/core';
 import * as $ from 'jquery';
 import { ServicioSala } from '../servicios/sala';
 import { Router, ActivatedRoute, Params } from '@angular/router';
@@ -7,6 +7,9 @@ import swal from 'sweetalert2';
 import { ServicioUsuario } from '../servicios/usuario';
 import { Usuario } from '../modelos/usuario';
 
+import {NgbModalRef,NgbModal,ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+
+
 @Component({
   selector: 'app-admin-sala',
   templateUrl: './admin-sala.component.html',
@@ -14,6 +17,10 @@ import { Usuario } from '../modelos/usuario';
   providers: [ServicioSala]
 })
 export class AdminSalaComponent implements OnInit {
+  @ViewChild('modalAgregarSala') modalAgregarSala: TemplateRef<any>;
+  @ViewChild('modalMofificarSala') modalMofificarSala: TemplateRef<any>;
+  @ViewChild('modalHorarioSala') modalHorarioSala: TemplateRef<any>;
+  public mr: NgbModalRef;
 
   public sala: Sala;
   public salaEdit: Sala;
@@ -50,7 +57,8 @@ export class AdminSalaComponent implements OnInit {
     private _route: ActivatedRoute,
     private _router: Router,
     private _servUsuario: ServicioUsuario,
-    private _servSala: ServicioSala
+    private _servSala: ServicioSala,
+    private modal: NgbModal
   ) {
     this.mostrarModal = false;
     this.salaEdit = new Sala('', '', '', '', '', '',this.tempHorarios, '', '');
@@ -60,6 +68,15 @@ export class AdminSalaComponent implements OnInit {
   ngOnInit() {
     this.verificarCredenciales();
     
+  }
+  abrir(modal){
+    
+    this.mr = this.modal.open(modal);
+  
+  }
+  cerrar(){
+    this.mr.close();
+  
   }
   // changeRecursos(event: any, _id: any) {
   //   if (event.target.checked) {
@@ -138,7 +155,7 @@ export class AdminSalaComponent implements OnInit {
         this.identity = identity;
         if (!this.identity._id) {
           $('#nav-user').text(' ');
-          this.abrirModal('#loginModal');
+          this._router.navigate(['/principal']);
         } else {
           //conseguir el token para enviarselo a cada petición
           this._servUsuario.verificarCredenciales(usuarioTemp, 'true').subscribe(
@@ -147,7 +164,7 @@ export class AdminSalaComponent implements OnInit {
               this.token = token;
               if (this.token <= 0) {
                 $('#nav-user').text(' ');
-                this.abrirModal('#loginModal');
+                this._router.navigate(['/principal']);
               } else {
                 // crear elemento en el localstorage para tener el token disponible
                 localStorage.setItem('token', token);
@@ -162,13 +179,13 @@ export class AdminSalaComponent implements OnInit {
               }
             }, error => {
               $('#nav-user').text(' ');
-              this.abrirModal('#loginModal');
+              this._router.navigate(['/principal']);
             }
           );
         }
       }, error => {
         $('#nav-user').text(' ');
-        this.abrirModal('#loginModal');
+        this._router.navigate(['/principal']);
       }
       );
     } else {
@@ -237,16 +254,16 @@ export class AdminSalaComponent implements OnInit {
         if (!response.sala._id) {
           this.msjError("La Sala no pudo ser agregada");
         } else {
-          this.msjExitoso("Sala Agregada Exitosamente");
+          this.msjExitoso("Sala agregada exitosamente");
           this.sala = new Sala('', '', '', '', this.estadoMensaje, '-',[], '', '');
-          this.mostrar(false);
+          this.cerrar();
+         // this.mostrar(false);
           this.obtenerSalas();
         }
       }, error => {
         var alertMessage = <any>error;
         if (alertMessage != null) {
-          var body = JSON.parse(error._body);
-          alert('Sala no registrado');
+          this.msjError("La Sala no pudo ser agregada");
         }
       }
     );
@@ -262,15 +279,12 @@ export class AdminSalaComponent implements OnInit {
         }
       }, error => {
         var errorMensaje = <any>error;
-        if (errorMensaje != null) {
-          var body = JSON.parse(error._body);
-        }
       }
     );
   }
 
 
-  obtenerSala(_id: any) {
+  obtenerSala(_id: any,accion:any) {
     this._servSala.obtenerSala(_id).subscribe(
       response => {
         if (response.message[0]._id) {
@@ -289,13 +303,15 @@ export class AdminSalaComponent implements OnInit {
           } else {
             this.estadoEdicion = false;
           }
-        //console.log(this.tempHorarios[0].desde);
+
+          if(accion==1){this.mr = this.modal.open(this.modalMofificarSala);}
+          if(accion==3){this.mr = this.modal.open(this.modalHorarioSala);}
         } else {//No se ha encontrado la Sala
         }
       }, error => {
         var errorMensaje = <any>error;
         if (errorMensaje != null) {
-          var body = JSON.parse(error._body);
+         // var body = JSON.parse(error._body);
         }
       }
     );
@@ -307,18 +323,18 @@ export class AdminSalaComponent implements OnInit {
       response => {
 
         if (!response.message._id) {
-          this.msjError("La Sala no pudo ser Modificada");
+          this.msjError("La Sala no pudo ser modificada");
         } else {
           this.salaEdit = new Sala('', '', '', '', '', '-', this.tempHorarios,'', '');
           this.obtenerSalas();
-          this.cerrarModal('#modalEditSala');
-          this.msjExitoso("Sala Modificada Exitosamente");
+          this.cerrar();
+          this.msjExitoso("Sala modificada exitosamente");
         }
       }, error => {
         var alertMessage = <any>error;
         if (alertMessage != null) {
           var body = JSON.parse(error._body);
-          this.msjError("La Sala no pudo ser Modificada");
+          this.msjError("La Sala no pudo ser modificada");
 
         }
       }
@@ -334,18 +350,17 @@ export class AdminSalaComponent implements OnInit {
       response => {
 
         if (!response.message._id) {
-          this.msjError("El horario de la ala no pudo ser Modificado");
+          this.msjError("El horario de la  salano pudo ser modificado");
         } else {
           this.salaEdit = new Sala('', '', '', '', '', '-',this.tempHorarios, '', '');
           this.obtenerSalas();
-          this.cerrarModal('#modalAddSched');
+          this.cerrar();
           this.msjExitoso("Horario de la sala modificado exitosamente");
         }
       }, error => {
         var alertMessage = <any>error;
         if (alertMessage != null) {
-          var body = JSON.parse(error._body);
-          this.msjError("El horario de la ala no pudo ser Modificado");
+          this.msjError("El horario de la  sala no pudo ser nodificado");
 
         }
       }
@@ -360,15 +375,14 @@ export class AdminSalaComponent implements OnInit {
         if (!response.message._id) {
           this.msjError("La Sala no pudo ser Eliminada");
         } else {
-          this.msjExitoso("Sala Eliminada Exitosamente");
+          this.msjExitoso("Sala eliminada exitosamente");
           this.salaEdit = new Sala('', '', '', '', '', '', this.tempHorarios,'', '');
           this.obtenerSalas();
         }
       }, error => {
         var alertMessage = <any>error;
         if (alertMessage != null) {
-          var body = JSON.parse(error._body);
-          this.msjError("La Sala no pudo ser Eliminada");
+          this.msjError("La Sala no pudo ser eliminada");
         }
       }
     );
@@ -416,34 +430,34 @@ export class AdminSalaComponent implements OnInit {
     )
   }
 
-  cerrarModal(modalId: any) {
-    $(".modal-backdrop").remove();
-    $('body').removeClass('modal-open');
-    $(modalId).removeClass('show');
-    $(modalId).css('display', 'none');
-  }
-  //abrir modal
-  abrirModal(modalId: any) {
-    $('body').append('<div class="modal-backdrop fade show" ></div>');
-    $('body').addClass('modal-open');
-    $(modalId).addClass('show');
-    $(modalId).css('display', 'block');
-  }
+  // cerrarModal(modalId: any) {
+  //   $(".modal-backdrop").remove();
+  //   $('body').removeClass('modal-open');
+  //   $(modalId).removeClass('show');
+  //   $(modalId).css('display', 'none');
+  // }
+  // //abrir modal
+  // abrirModal(modalId: any) {
+  //   $('body').append('<div class="modal-backdrop fade show" ></div>');
+  //   $('body').addClass('modal-open');
+  //   $(modalId).addClass('show');
+  //   $(modalId).css('display', 'block');
+  // }
 
-  mostrar(opcion: boolean) {
-    if (!opcion) {
-      $(".modal-backdrop").remove();
-      $('body').removeClass('modal-open');
-      $('#modalAdminSala').removeClass('show');
-      $('#modalAdminSala').css('display', 'none');
-    } else {
-      $('body').append('<div class="modal-backdrop fade show" ></div>');
-      $('body').addClass('modal-open');
-      $('#modalAdminSala').addClass('show');
-      $('#modalAdminSala').css('display', 'block');
-    }
+  // mostrar(opcion: boolean) {
+  //   if (!opcion) {
+  //     $(".modal-backdrop").remove();
+  //     $('body').removeClass('modal-open');
+  //     $('#modalAdminSala').removeClass('show');
+  //     $('#modalAdminSala').css('display', 'none');
+  //   } else {
+  //     $('body').append('<div class="modal-backdrop fade show" ></div>');
+  //     $('body').addClass('modal-open');
+  //     $('#modalAdminSala').addClass('show');
+  //     $('#modalAdminSala').css('display', 'block');
+  //   }
 
-  }
+  // }
 
 }
 

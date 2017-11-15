@@ -3,7 +3,7 @@ import * as $ from 'jquery';
 import { ServicioDepartamento } from '../servicios/departamento';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Departamento } from '../modelos/departamento';
-import swal from 'sweetalert2'
+import swal from 'sweetalert2';
 import { ServicioUsuario } from '../servicios/usuario';
 import { Usuario } from '../modelos/usuario';
 
@@ -49,12 +49,6 @@ export class AdminDepartamentoComponent implements OnInit {
     this.departamento = new Departamento('', '', '', this.estadoMensaje,'','');
   }
 abrir(modal){
-
-  //  this.mr= this.modal.open(modalAgregarDepartamento).result.then((result) => {
-  //     this.closeResult = `Closed with: ${result}`;
-  //   }, (reason) => {
-  //     this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-  //   });
   
   this.mr = this.modal.open(modal);
 

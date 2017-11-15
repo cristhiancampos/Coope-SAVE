@@ -3,9 +3,9 @@
 
     <div class="row" style="text-align: center">
       <div class="col-md-12">
-        <h2> Admistración Salas de Conferencias</h2>
+        <h2> Administración Salas de Conferencias</h2>
         <hr>
-        <button class="btn btn-primary" data-toggle="modal" data-target="#modalAdminSala" style="float: left;margin-bottom: 6px"> <i class="fa fa-plus" aria-hidden="true"></i></button>
+        <button class="btn btn-primary" (click)="abrir(modalAgregarSala)" style="float: left;margin-bottom: 6px"> <i class="fa fa-plus" aria-hidden="true"></i></button>
       </div>
 
     </div>
@@ -32,9 +32,9 @@
               <th>{{sala.estado}}</th>
               <th>{{sala.reporte}}</th>
               <th style="text-align: center">
-                <button class="btn btn-primary btn-accion" data-toggle="modal" data-target="#modalEditSala" (click)="obtenerSala(sala._id)"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-                <button class="btn btn-success btn-accion" data-toggle="modal" data-target="#modalAddSched" (click)="obtenerSala(sala._id)"><i class="fa fa-calendar" aria-hidden="true"></i> </button>
-                <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete" (click)="obtenerSala(sala._id)"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+                <button class="btn btn-primary btn-accion"  (click)="obtenerSala(sala._id,1)"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
+                <button class="btn btn-success btn-accion" (click)="obtenerSala(sala._id,3)"><i class="fa fa-calendar" aria-hidden="true"></i> </button>
+                <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"   (click)="obtenerSala(sala._id,2)"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
               </th>
             </tr>
           </tbody>
@@ -54,13 +54,10 @@
 </section>
 
 <!-- Seccion del Modal: Agregar nueva Sala -->
-<div class="modal fade bd-example-modal-sm " id="modalAdminSala" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog bd-example-modal-sm " role="document">
-    <div class="modal-content">
+<ng-template  #modalAgregarSala let-c="close" let-d="dismiss">
       <div class="modal-header" style="background: #0069d9;color:#fff">
         <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Agregar Sala</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"> 
+        <button type="button" class="close"  aria-label="Close" (click)="c('Close click')"> 
           <small aria-hidden="true">&times;</small>
         </button>
       </div>
@@ -121,7 +118,7 @@
                   </div>
                 </div>
                 <div style="float: right">
-                  <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal">Salir</button>
+                  <button type="button" class="btn btn-default btn-modal-can" (click)="c('Close click')">Salir</button>
                   <button id="btn-add" type="submit" [disabled]="!adminSala.form.valid || nombreExist" class="btn btn-success">Confirmar</button>
                 </div>
               </form>
@@ -131,19 +128,13 @@
       </div>
       <div class="modal-footer">
       </div>
-
-    </div>
-  </div>
-</div>
+    </ng-template>
 
 <!-- Seccion del Modal: Editar Sala -->
-<div class="modal fade bd-example-modal-sm " id="modalEditSala" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog bd-example-modal-sm " role="document">
-    <div class="modal-content">
+<ng-template  #modalMofificarSala let-c="close" let-d="dismiss">
       <div class="modal-header" style="background: #0069d9;color:#fff">
         <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Editar Sala</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal"> 
+        <button type="button" class="close" aria-label="Close" (click)="c('Close click')"> 
         <small aria-hidden="true">&times;</small>
       </button>
       </div>
@@ -213,7 +204,7 @@
                   </div>
                 </div>
                 <div style="float: right">
-                  <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal">Salir</button>
+                  <button type="button" class="btn btn-default btn-modal-can" (click)="c('Close click')">Salir</button>
                   <button id="btn-Edit" type="submit" [disabled]="!adminSalaEdit.form.valid || nombreExistEdit" class="btn btn-success">Confirmar</button>
                 </div>
               </form>
@@ -224,10 +215,7 @@
       <div class="modal-footer">
       </div>
 
-    </div>
-  </div>
-</div>
-
+</ng-template>
 <!-- Modal eliminar Sala-->
 <div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -251,14 +239,12 @@
     </div>
   </div>
 </div>
+
 <!-- Seccion del Modal: agregar horario -->
-<div class="modal fade bd-example-modal-sm " id="modalAddSched" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog bd-example-modal-sm " role="document">
-    <div class="modal-content">
+<ng-template  #modalHorarioSala let-c="close" let-d="dismiss">
       <div class="modal-header" style="background: #0069d9;color:#fff">
         <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;Horario de Sala</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal"> 
+        <button type="button" class="close" (click)="c('Close click')"> 
         <small aria-hidden="true">&times;</small>
       </button>
       </div>
@@ -463,25 +449,20 @@
                 <hr>
 
                 <div style="float: right">
-                  <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal">Salir</button>
+                  <button type="button" class="btn btn-default btn-modal-can" (click)="c('Close click')">Salir</button>
                   <button id="btn-Edit" type="submit" [disabled]="!adminSalaSched.form.valid || nombreExistEdit" class="btn btn-success">Confirmar</button>
                 </div>
               </form>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
+   </div>
+</ng-template>
+
 <br><br><br>
 <section>
 
    
-
-
-
-
  <footer >
   
     &copy; Coopesparta R.L.
