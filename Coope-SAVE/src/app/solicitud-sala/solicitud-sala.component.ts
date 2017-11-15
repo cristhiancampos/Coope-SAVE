@@ -50,6 +50,7 @@ const colors: any = {
 
 export class SolicitudSalaComponent implements OnInit {
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
+  @ViewChild('modalDeleteSolicitudSala') modalDeleteSolicitudSala: TemplateRef<any>;
   view = 'month';
   viewDate: Date = new Date();
 
@@ -98,6 +99,22 @@ export class SolicitudSalaComponent implements OnInit {
   dateUpdate = { day: null, month: null, year: null };
   public token;
   public identity;
+  tempArrayChecked = [];
+  esMayor = false;
+  tempEvent: any;
+  tempTitleModal = "";
+  tempSolicitud = { usuario: null, departamento: null, fecha: null, motivo: null, inicio: null, fin: null, sala: null };
+  tempColor: any = {
+    color: {
+      primary: '#ad2121',
+      secondary: '#FAE3E3',
+      usuario: null,
+      sala: null,
+      recursos: [],
+      id: null
+    }
+  };
+  tempEnable = false;
 
   @Input() placeholder: string;
   date: Date;
@@ -168,17 +185,6 @@ export class SolicitudSalaComponent implements OnInit {
     });
   }
   // obtiene todas las solicitudes solicitudes realizadas
-  tempColor: any = {
-    color: {
-      primary: '#ad2121',
-      secondary: '#FAE3E3',
-      usuario: null,
-      sala: null,
-      recursos: [],
-      id: null
-    }
-  };
-  tempEnable = false;
   obtenerSolicitudSalas() {
     let identity = localStorage.getItem('identity');
     let user = JSON.parse(identity);
@@ -238,7 +244,7 @@ export class SolicitudSalaComponent implements OnInit {
                                   {
                                     label: '<i class="fa fa-fw fa-times"></i>',
                                     onClick: ({ event }: { event: CalendarEvent }): void => {
-                                      this.events = this.events.filter(iEvent => iEvent !== event);
+                                    //  this.events = this.events.filter(iEvent => iEvent !== event);
                                       this.handleEvent('Eliminar', event);
                                     }
                                   }
@@ -409,18 +415,14 @@ export class SolicitudSalaComponent implements OnInit {
 
   //obtener las solicitudes según fecha seleccionada 
   obtenerSolicitudes(userDate, abrirMod: boolean) {
-    // console.log('fecha eeee');
-    //console.log(userDate);
     let array;
     this.solicitudSala.fecha = userDate;
     this._servSolicitud.obtenerSolicitudes(this.solicitudSala).subscribe(
       response => {
         if (!response.message) {//no hay registros
         } else {//no hay Salas registradas
-          // console.log('solicitudes salas');
           array = response.message;
           this.solicitudesdia = array;
-          // console.log(array);
           if (abrirMod) {
             this.abrirModal('#modal-add-new-request');
           }
@@ -478,26 +480,12 @@ export class SolicitudSalaComponent implements OnInit {
     this.refresh.next();
   }
 
-  tempArrayChecked = [];
-  esMayor = false;
-  tempEvent: any;
-  tempTitleModal = "";
-  tempSolicitud = { usuario: null, departamento: null, fecha: null, motivo: null, inicio: null, fin: null, sala: null }
-  eliminar = false;
-  //administrador de eventos
+  
   handleEvent(action: string, event: CalendarEvent): void {
-
+    this.tempColor = event.color;
+    this.solicitudSalaEdit._id = this.tempColor.id;
     if (action == "Eliminar") {
-      let _id = this.tempColor.color.id;
-      let salir = false;
-      let eliminar = false;
-      if (_id == "" || _id == "undefined" || _id == null) {
-        this.msjError("La Solicitud no pudo ser eliminada");
-      } else {
-        this.eliminar = true;
-        this.mr = this.modal.open(this.modalContent, { size: 'lg' });
-
-      }
+      this.eliminarSolicitud();
     }
     else {
       this.tempArrayChecked = []
@@ -1127,35 +1115,51 @@ export class SolicitudSalaComponent implements OnInit {
     );
 
   }
+  // verificaciones previa antes de eliminar
   eliminarSolicitud() {
-    //console.log(this.idEliminar);
-    this._servSolicitud.eliminarSolicitudSala(this.tempColor.color.id).subscribe(
+    if (this.solicitudSalaEdit._id == null || this.solicitudSalaEdit._id == "" || this.solicitudSalaEdit._id == undefined) {
+      this.msjError('La solicitud no puede ser eliminada');
+
+    } else {
+      if (this.mr) {
+        this.mr.close();
+      }
+
+      this.mr = this.modal.open(this.modalDeleteSolicitudSala);
+    }
+
+  }
+  //llamado al servicio que eliminar solicitud de sala
+  confirmEliminar() {
+    this._servSolicitud.eliminarSolicitudSala(this.solicitudSalaEdit._id).subscribe(
       response => {
 
         if (!response.message._id) {
-          this.msjError("La Solicitud no pudo ser Eliminada");
+          this.msjError("La Solicitud no pudo ser eliminada");
         } else {
-          this.msjExitoso("Sala eliminada exitosamente");
+          this.msjExitoso("Solicitud eliminada exitosamente");
           this.mr.close();
-          this.eliminar = false;
           this.obtenerSolicitudSalas();
         }
       }, error => {
         var alertMessage = <any>error;
         if (alertMessage != null) {
           var body = JSON.parse(error._body);
-          this.msjError("La Solicitud no pudo ser Eliminada");
+          this.msjError("La Solicitud no pudo ser eliminada");
         }
       }
     );
   }
 
+  // encargado de cargar todas las sooicitudes y cerrar el modal cuando se cancela una acción
   cancelarAccion() {
     this.obtenerSolicitudes(new Date(), false);
     this.obtenerSolicitudSalas();
     this.mr.close();
+    this.activeDayIsOpen = true;
   }
 
+  //encargado de enviar correo cuando se realiza una nueva solicitud
   enviarEmail(solicitud) {
     for (let i = 0; i < this.usuarios.length; i++) {
 
@@ -1165,7 +1169,6 @@ export class SolicitudSalaComponent implements OnInit {
       }
     }
     let nombreRecursos = [];
-    console.log(this.recursos);
     for (let z = 0; z < solicitud.recursos.length; z++) {
       for (let e = 0; e < this.recursos.length; e++) {
         if (solicitud.recursos[z] == this.recursos[e]._id) {
@@ -1188,7 +1191,7 @@ export class SolicitudSalaComponent implements OnInit {
         console.log('Fallo el envio de correo 3234234');
       }
     );
-  }//Fin del metodo EnviarEmail
+  }
 
   getUsuario(id: any) {
     for (let index = 0; index < this.usuarios.length; index++) {

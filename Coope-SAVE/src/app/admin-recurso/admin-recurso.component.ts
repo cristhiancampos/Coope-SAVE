@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild, TemplateRef} from '@angular/core';
 import * as $ from 'jquery';
 import { ServicioRecursos } from '../servicios/recurso';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import {NgbModalRef,NgbModal,ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { Recurso } from '../modelos/recursos';
 import swal from 'sweetalert2';
 import { ServicioUsuario } from '../servicios/usuario';
@@ -13,6 +14,9 @@ import { Usuario } from '../modelos/usuario';
   providers: [ServicioRecursos]
 })
 export class AdminRecursoComponent implements OnInit {
+  @ViewChild('modalAgregarRecurso') modalAgregarRecurso: TemplateRef<any>;
+  @ViewChild('modalMofificarRecurso') modalMofificarRecurso: TemplateRef<any>;
+  public mr: NgbModalRef;
 
   public recurso: Recurso;
   public recursoEdit: Recurso;
@@ -29,7 +33,8 @@ export class AdminRecursoComponent implements OnInit {
     private _route: ActivatedRoute,
     private _router: Router,
     private _servUsuario: ServicioUsuario,
-    private _servRecurso: ServicioRecursos
+    private _servRecurso: ServicioRecursos,
+    private modal: NgbModal
   ) {
     this.recurso = new Recurso('', '', '', '', this.estadoMensaje, '','','');
     this.recursoEdit = new Recurso('', '', '', '', '', '','','');
@@ -38,7 +43,15 @@ export class AdminRecursoComponent implements OnInit {
   ngOnInit() {
    this.verificarCredenciales();
   }
-
+  abrir(modal){
+    
+    this.mr = this.modal.open(modal);
+  
+  }
+  cerrar(){
+    this.mr.close();
+  
+  }
   verificarCredenciales() {
     this.identity = this._servUsuario.getIndentity();
     this.token = this._servUsuario.getToken();
@@ -56,7 +69,7 @@ export class AdminRecursoComponent implements OnInit {
         this.identity = identity;
         if (!this.identity._id) {
           $('#nav-user').text(' ');
-          this.abrirModal('#loginModal');
+          this._router.navigate(['/principal']);
         } else {
           //conseguir el token para enviarselo a cada petición
           this._servUsuario.verificarCredenciales(usuarioTemp, 'true').subscribe(
@@ -65,7 +78,7 @@ export class AdminRecursoComponent implements OnInit {
               this.token = token;
               if (this.token <= 0) {
                 $('#nav-user').text(' ');
-                this.abrirModal('#loginModal');
+                this._router.navigate(['/principal']);
               } else {
                 // crear elemento en el localstorage para tener el token disponible
                 localStorage.setItem('token', token);
@@ -80,13 +93,13 @@ export class AdminRecursoComponent implements OnInit {
               }
             }, error => {
               $('#nav-user').text(' ');
-              this.abrirModal('#loginModal');
+              this._router.navigate(['/principal']);
             }
           );
         }
       }, error => {
         $('#nav-user').text(' ');
-        this.abrirModal('#loginModal');
+        this._router.navigate(['/principal']);
       }
       );
     } else {
@@ -128,14 +141,14 @@ export class AdminRecursoComponent implements OnInit {
           this.msjError("El recurso no pudo ser agregado");
         } else {
           this.recurso = new Recurso('', '', '', '', this.estadoMensaje, '','','');
-          this.cerrarModal("#modalAdminRecurso");
+          this.cerrar();
           this.msjExitoso("Recurso Agregado Exitosamente");
           this.obtenerRecursos();
         }
       }, error => {
         var alertMessage = <any>error;
         if (alertMessage != null) {
-          var body = JSON.parse(error._body);
+          this.msjError("El recurso no pudo ser agregado");
         }
       }
     );
@@ -158,10 +171,11 @@ export class AdminRecursoComponent implements OnInit {
         var errorMensaje = <any>error;
 
         if (errorMensaje != null) {
-          var body = JSON.parse(error._body);
+          //var body = JSON.parse(error._body);
         }
       }
     );
+    
   }
 
   obtenerRecursos() {
@@ -180,7 +194,7 @@ export class AdminRecursoComponent implements OnInit {
     );
   }
 
-  obtenerRecurso(_id: any) {
+  obtenerRecurso(_id: any,accion:any) {
     this._servRecurso.obtenerRecurso(_id).subscribe(
       response => {
         if (response.message[0]._id) {
@@ -197,12 +211,14 @@ export class AdminRecursoComponent implements OnInit {
           } else {
             this.estadoEdicion = false;
           }
+
+          if(accion==1){this.mr = this.modal.open(this.modalMofificarRecurso);}
         } else {//no se encontró el recurso
         }
       }, error => {
         var errorMensaje = <any>error;
         if (errorMensaje != null) {
-          var body = JSON.parse(error._body);
+          //var body = JSON.parse(error._body);
         }
       }
     );
@@ -216,19 +232,18 @@ export class AdminRecursoComponent implements OnInit {
       response => {
 
         if (!response.message._id) {
-          this.msjError("El recurso no pudo ser Mofificado");
+          this.msjError("El recurso no pudo ser mofificado");
         } else {
           this.recursoEdit = new Recurso('', '', '', '', '', '-', '', '');
           this.obtenerRecursos();
-          this.cerrarModal('#modalAdminRecursoEdit');
-          this.msjExitoso("Recurso Modificado Exitosamente");
+          this.cerrar();
+          this.msjExitoso("Recurso modificado exitosamente");
         }
       }, error => {
         var alertMessage = <any>error;
         if (alertMessage != null) {
           var body = JSON.parse(error._body);
-          alert('Sala no se pudo modificar');
-
+          this.msjError("El recurso no pudo ser mofificado");
         }
       }
     );
@@ -239,9 +254,9 @@ export class AdminRecursoComponent implements OnInit {
       response => {
 
         if (!response.message._id) {
-          this.msjError("El recurso no pudo ser Eliminado");
+          this.msjError("El recurso no pudo ser eliminado");
         } else {
-          this.msjExitoso("Recurso eliminado Exitosamente");
+          this.msjExitoso("Recurso eliminado exitosamente");
           this.recursoEdit = new Recurso('', '', '', '', '', '-','','');
           this.obtenerRecursos();
         }
@@ -249,7 +264,7 @@ export class AdminRecursoComponent implements OnInit {
         var alertMessage = <any>error;
         if (alertMessage != null) {
           var body = JSON.parse(error._body);
-          alert('Sala no eliminada');
+          this.msjError("El recurso no pudo ser eliminado");
         }
       }
     );
@@ -258,7 +273,6 @@ export class AdminRecursoComponent implements OnInit {
   validarModificacion() {
     let placa = this.recursoEdit.codigoActivo.trim().toUpperCase();
     this.recursoEdit.codigoActivo = placa;
-
     this._servRecurso.validarModificacion(this.recursoEdit).subscribe(
       response => {
         if (response.message) {
@@ -275,7 +289,7 @@ export class AdminRecursoComponent implements OnInit {
         var errorMensaje = <any>error;
 
         if (errorMensaje != null) {
-          var body = JSON.parse(error._body);
+          //var body = JSON.parse(error._body);
         }
       }
     );
@@ -299,18 +313,18 @@ export class AdminRecursoComponent implements OnInit {
     )
   }
 
-  cerrarModal(modalId: any) {
-    $(".modal-backdrop").remove();
-    $('body').removeClass('modal-open');
-    $(modalId).removeClass('show');
-    $(modalId).css('display', 'none');
-  }
-  //abrir modal
-  abrirModal(modalId: any) {
-    $('body').append('<div class="modal-backdrop fade show" ></div>');
-    $('body').addClass('modal-open');
-    $(modalId).addClass('show');
-    $(modalId).css('display', 'block');
-  }
+  // cerrarModal(modalId: any) {
+  //   $(".modal-backdrop").remove();
+  //   $('body').removeClass('modal-open');
+  //   $(modalId).removeClass('show');
+  //   $(modalId).css('display', 'none');
+  // }
+  // //abrir modal
+  // abrirModal(modalId: any) {
+  //   $('body').append('<div class="modal-backdrop fade show" ></div>');
+  //   $('body').addClass('modal-open');
+  //   $(modalId).addClass('show');
+  //   $(modalId).css('display', 'block');
+  // }
 
 }

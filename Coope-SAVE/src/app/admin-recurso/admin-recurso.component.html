@@ -4,7 +4,7 @@
     <div class="col-md-12">
       <h2> Admistración de Recursos</h2>
       <hr>
-      <button class="btn btn-primary" data-toggle="modal" data-target="#modalAdminRecurso" style="float: left;margin-bottom: 6px"> <i class="fa fa-plus" aria-hidden="true"></i></button>      
+      <button class="btn btn-primary"  style="float: left;margin-bottom: 6px" (click)="abrir(modalAgregarRecurso)"> <i class="fa fa-plus" aria-hidden="true"></i></button>      
     </div>
   </div>
 
@@ -29,8 +29,8 @@
             <th>{{recurso.descripcion}}</th>
             <th>{{recurso.estado}}</th>
             <th style="text-align: center">
-              <button class="btn btn-primary btn-accion" data-toggle="modal" data-target="#modalAdminRecursoEdit" (click)="obtenerRecurso(recurso._id)"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete" (click)="obtenerRecurso(recurso._id)"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+              <button class="btn btn-primary btn-accion" data-toggle="modal" data-target="#modalAdminRecursoEdit" (click)="obtenerRecurso(recurso._id,1)"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
+              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete" (click)="obtenerRecurso(recurso._id,2)"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
             </th>
           </tr>
          
@@ -75,13 +75,10 @@
   </div>
 
   <!-- Seccion del Modal: Agregar nuevo Recurso-->
-<div class="modal fade bd-example-modal-sm " id="modalAdminRecurso" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-aria-hidden="true">
-<div class="modal-dialog bd-example-modal-sm " role="document">
-  <div class="modal-content">
+  <ng-template #modalAgregarRecurso let-c="close" let-d="dismiss">
     <div class="modal-header" style="background: #0069d9;color:#fff">
       <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-laptop" aria-hidden="true"></i>&nbsp;&nbsp;Agregar Recurso</h5>
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close"> 
+      <button type="button" class="close"  aria-label="Close"  (click)="c('Close click')"> 
         <small aria-hidden="true">&times;</small>
       </button>
     </div>
@@ -113,7 +110,7 @@ aria-hidden="true">
                 <div class="controls">
                   <input id="input-codigo" type="text" class="form-control" #codigo="ngModel" name= "codigo" [(ngModel)]="recurso.codigoActivo"
                    placeholder="Código del Activo" required (input)="validarRecurso()">
-                   <small *ngIf="codigo.invalid && (codigo.dirty || codigo.touched)">
+                   <small *ngIf="!codigo.valid && (codigo.dirty || codigo.touched)">
                       <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El código del activo es obligatorio
                     </small>
                     <small *ngIf="codRecursosExist"><i class="fa fa-exclamation-circle" aria-hidden="true">
@@ -145,7 +142,7 @@ aria-hidden="true">
                 </div>
               </div>
               <div style="float: right">
-              <button type="button" class="btn btn-default btn-modal-can" style="margin-bottom: 0;" data-dismiss="modal" (click)="salir()">Salir</button>   
+              <button type="button" class="btn btn-default btn-modal-can" style="margin-bottom: 0;" data-dismiss="modal" (click)="c('Close click')">Salir</button>   
               <button id="btn-add" type="submit" [disabled]="!adminRecurso.form.valid || codRecursosExist" class="btn btn-success" >Confirmar</button>
             </div>
             </form>
@@ -156,18 +153,13 @@ aria-hidden="true">
     <div class="modal-footer"> 
     </div>
     
-  </div>
-</div>
-</div>
+  </ng-template>
 
  <!-- Seccion del Modal:Editar Recurso-->
- <div class="modal fade bd-example-modal-sm " id="modalAdminRecursoEdit" tabindex="-1" role="dialog" aria-labelledby="modalAdminRecursoEdit"
- aria-hidden="true">
- <div class="modal-dialog bd-example-modal-sm " role="document">
-   <div class="modal-content">
+ <ng-template #modalMofificarRecurso let-c="close" let-d="dismiss">
      <div class="modal-header" style="background: #0069d9;color:#fff">
        <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-laptop" aria-hidden="true"></i>&nbsp;&nbsp;Modificar Recurso</h5>
-       <button type="button" class="close" data-dismiss="modal" aria-label="Close"> 
+       <button type="button" class="close"  aria-label="Close" (click)="c('Close click')"> 
          <small aria-hidden="true">&times;</small>
        </button>
      </div>
@@ -231,7 +223,7 @@ aria-hidden="true">
                  </div>
                </div>
                <div style="float: right">
-               <button type="button" class="btn btn-default btn-modal-can" style="margin-bottom: 0;" data-dismiss="modal" (click)="salir()">Salir</button>   
+               <button type="button" class="btn btn-default btn-modal-can" style="margin-bottom: 0;" (click)="c('Close click')">Salir</button>   
                <button id="btn-add" type="submit" [disabled]="!adminRecursoEdit.form.valid || codRecursosExist" class="btn btn-success" >Confirmar</button>
              </div>
              </form>
@@ -239,9 +231,7 @@ aria-hidden="true">
          </div>
        </div>
      </div> 
-   </div>
- </div>
- </div>
+</ng-template>
 </div><br><br><br>
  <section>
   <footer >
