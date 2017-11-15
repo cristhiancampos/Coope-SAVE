@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild, TemplateRef } from '@angular/core';
 import * as $ from 'jquery';
 import { ServicioUsuario } from '../servicios/usuario';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Usuario } from '../modelos/usuario';
 import { ServicioDepartamento } from '../servicios/departamento';
 import swal from 'sweetalert2';
+
+import {NgbModalRef,NgbModal,ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
@@ -14,6 +16,8 @@ import swal from 'sweetalert2';
   providers: [ServicioUsuario, ServicioDepartamento]
 })
 export class AdminUsuarioComponent implements OnInit {
+  @ViewChild('modalModificarUsuario') modalModificarUsuario: TemplateRef<any>;
+  public mr: NgbModalRef;
 
   public usuario: Usuario;
   public usuarioEdit: Usuario;
@@ -35,6 +39,7 @@ export class AdminUsuarioComponent implements OnInit {
     private _router: Router,
     private _servUsuario: ServicioUsuario,
     private _servDepa: ServicioDepartamento,
+    private modal: NgbModal
     
   ) {
     this.mostrarModal = false;
@@ -44,6 +49,16 @@ export class AdminUsuarioComponent implements OnInit {
 
   ngOnInit() {
     this.verificarCredenciales();
+  }
+
+  abrir(modal){
+    
+    this.mr = this.modal.open(modal);
+  
+  }
+  cerrar(){
+    this.mr.close();
+  
   }
 
   verificarCredenciales() {
@@ -63,7 +78,7 @@ export class AdminUsuarioComponent implements OnInit {
         this.identity = identity;
         if (!this.identity._id) {
           $('#nav-user').text(' ');
-          this.abrirModal('#loginModal');
+          this._router.navigate(['/principal']);
         } else {
           //conseguir el token para enviarselo a cada petición
           this._servUsuario.verificarCredenciales(usuarioTemp, 'true').subscribe(
@@ -72,7 +87,7 @@ export class AdminUsuarioComponent implements OnInit {
               this.token = token;
               if (this.token <= 0) {
                 $('#nav-user').text(' ');
-                this.abrirModal('#loginModal');
+                this._router.navigate(['/principal']);
               } else {
                 // crear elemento en el localstorage para tener el token disponible
                 localStorage.setItem('token', token);
@@ -89,13 +104,13 @@ export class AdminUsuarioComponent implements OnInit {
               }
             }, error => {
               $('#nav-user').text(' ');
-              this.abrirModal('#loginModal');
+              this._router.navigate(['/principal']);
             }
           );
         }
       }, error => {
         $('#nav-user').text(' ');
-        this.abrirModal('#loginModal');
+        this._router.navigate(['/principal']);
       }
       );
     } else {
@@ -157,7 +172,7 @@ export class AdminUsuarioComponent implements OnInit {
 
   }
 
-  obtenerUsuario(_id: any) {
+  obtenerUsuario(_id: any,accion:any) {
     this._servUsuario.obtenerUsuario(_id).subscribe(
       response => {
         if (response.message[0]._id) {
@@ -175,6 +190,7 @@ export class AdminUsuarioComponent implements OnInit {
           } else {
             this.estadoEdicion = false;
           }
+          if(accion==1){this.mr = this.modal.open(this.modalModificarUsuario);}
         } else {//No se ha encontrado la Sala
         }
       }, error => {
@@ -288,35 +304,34 @@ export class AdminUsuarioComponent implements OnInit {
       response => {
 
         if (!response.message._id) {
-          this.msjError("El Usuario no pudo ser Modificado");
+          this.msjError("El Usuario no pudo ser modificado");
         } else {
           this.usuarioEdit = new Usuario('', '', '', '', '', '', '', '', '', '');
           this.obtenerUsuarios();
-          this.cerrarModal('#editAdminUserModal');
-          this.msjExitoso("Usuario Modificado Exitosamente");
+          this.cerrar();
+          this.msjExitoso("Usuario modificado exitosamente");
         }
       }, error => {
         var alertMessage = <any>error;
         if (alertMessage != null) {
-          var body = JSON.parse(error._body);
-          alert('El Usuario no se pudo modificar');
+          this.msjError("El Usuario no pudo ser modificado");
 
         }
       }
     );
   }
-  cerrarModal(modalId: any) {
-    $(".modal-backdrop").remove();
-    $('body').removeClass('modal-open');
-    $(modalId).removeClass('show');
-    $(modalId).css('display', 'none');
-  }
-  //abrir modal
-  abrirModal(modalId: any) {
-    $('body').append('<div class="modal-backdrop fade show" ></div>');
-    $('body').addClass('modal-open');
-    $(modalId).addClass('show');
-    $(modalId).css('display', 'block');
-  }
+  // cerrarModal(modalId: any) {
+  //   $(".modal-backdrop").remove();
+  //   $('body').removeClass('modal-open');
+  //   $(modalId).removeClass('show');
+  //   $(modalId).css('display', 'none');
+  // }
+  // //abrir modal
+  // abrirModal(modalId: any) {
+  //   $('body').append('<div class="modal-backdrop fade show" ></div>');
+  //   $('body').addClass('modal-open');
+  //   $(modalId).addClass('show');
+  //   $(modalId).css('display', 'block');
+  // }
 
 }

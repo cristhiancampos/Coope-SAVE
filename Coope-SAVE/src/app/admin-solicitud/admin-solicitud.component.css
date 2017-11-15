@@ -40,11 +40,12 @@
 		font-size: 1.2rem; 
 	  }
 	
-	  /* #bnt-sala{
-		  width: 120px;
-	  }*/
 	  #bnt-vehiculo{
-		width: 130px;
+		width: 154px;
+		
+	} 
+	#bnt-sala{
+		width: 154px;
 		
 	} 
 	footer{
@@ -69,3 +70,7 @@ footer {
 	
 	
 	} 
+
+	button{
+		cursor: pointer;
+	}

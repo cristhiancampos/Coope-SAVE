@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild, TemplateRef  } from '@angular/core';
 import * as $ from 'jquery';
 import { Usuario } from '../modelos/usuario';
 import { NgModel } from '@angular/forms';
@@ -6,6 +6,9 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import swal from 'sweetalert2';
 import { ServicioUsuario } from '../servicios/usuario';
 import { ServicioDepartamento } from '../servicios/departamento';
+import {NgbModalRef,NgbModal,ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+
+
 @Component({
   selector: 'app-principal',
   templateUrl: './principal.component.html',
@@ -13,6 +16,10 @@ import { ServicioDepartamento } from '../servicios/departamento';
   providers: [ServicioUsuario,ServicioDepartamento]
 })
 export class PrincipalComponent implements OnInit {
+  @ViewChild('modalLogin') modalLogin: TemplateRef<any>;
+  @ViewChild('modalRegistro') modalRegistro: TemplateRef<any>;
+  @ViewChild('modalRecuperarContrasena') modalRecuperarContrasena: TemplateRef<any>;
+  public mr: NgbModalRef;
   //identity = true;
   mmostrar = false;
   public usuario: Usuario;
@@ -41,7 +48,8 @@ export class PrincipalComponent implements OnInit {
     private _route: ActivatedRoute,
     private _router: Router,
     private _servUsuario: ServicioUsuario,
-    private _servDepa: ServicioDepartamento
+    private _servDepa: ServicioDepartamento,
+    private modal: NgbModal
   ) 
   {
     this.usuario = new Usuario('','','','','','','','','','');
@@ -75,6 +83,17 @@ export class PrincipalComponent implements OnInit {
     this.verificarCredenciales();
     this.obtenerDepartamentos();
   }
+
+  abrir(modal){
+    
+    this.mr = this.modal.open(modal,{ backdrop: 'static', keyboard: false});
+  
+  }
+  cerrar(){
+    this.mr.close();
+  
+  }
+
   //olcultar mensaje de existencia de usuario
   onfocusCorreo() {
     this.userExist = false;
@@ -131,6 +150,7 @@ export class PrincipalComponent implements OnInit {
           this.mensajeAlerta = "Error al registarse";
           this.msjError('Error al registrar el usuario');
         } else {
+          this._router.navigate(['/principal']);
           this.msjExitoso('Usuario registrado exitosamente');
           this.mensajeAlerta = "Usuario registrado  exitosamente";
           if (user != null) {
@@ -140,7 +160,8 @@ export class PrincipalComponent implements OnInit {
           }
           this.usuarioRegistrado = new Usuario('','','','','','','','','','');
           localStorage.setItem('identity', JSON.stringify(user));
-          this.cerrarModal('#registroUsuarioModal');
+          this.cerrar();
+         // this.cerrarModal('#registroUsuarioModal');
           this.mmostrar = true;
         }
       }, error => {
@@ -175,11 +196,14 @@ export class PrincipalComponent implements OnInit {
               localStorage.setItem('token', token);
               this.usuario = new Usuario('','','','','','','','','','');
               console.log(response.token);
-              this.cerrarModal('#loginModal');
+              this.cerrar();
+              this._router.navigate(['/principal']);
+             // this.cerrarModal('#loginModal');
               this.mmostrar = true;
               let identity = localStorage.getItem('identity');
               let user = JSON.parse(identity);
               if (user != null) {
+                this.cerrar();
                 $('#nav-user').text(user.nombre + ' ' + user.apellidos);
                 if (this.recordarme) {
                   localStorage.setItem('remember', 'true');
@@ -231,7 +255,8 @@ export class PrincipalComponent implements OnInit {
         this.identity = identity;
         if (!this.identity._id) {
           $('#nav-user').text(' ');
-          this.abrirModal('#loginModal');
+         // this.abrirModal('#loginModal');
+         this.abrir(this.modalLogin);
           this.mmostrar = false;
         } else {
           //conseguir el token para enviarselo a cada petición
@@ -241,14 +266,14 @@ export class PrincipalComponent implements OnInit {
               this.token = token;
               if (this.token <= 0) {
                 $('#nav-user').text(' ');
-                this.abrirModal('#loginModal');
+                this.abrir(this.modalLogin);
                 this.mmostrar = false;
               } else {
                 // crear elemento en el localstorage para tener el token disponible
                 localStorage.setItem('token', token);
                 this.usuario = new Usuario('','','','','','','','','','');
-                this.cerrarModal('#loginModal');
                 this.mmostrar = true;
+              //  this.cerrar();
                 let identity = localStorage.getItem('identity');
                 let user = JSON.parse(identity);
                 if (user != null) {
@@ -265,7 +290,7 @@ export class PrincipalComponent implements OnInit {
             }, error => {
              this.mensajeError='Error de conexión'
               $('#nav-user').text(' ');
-              this.abrirModal('#loginModal');
+              this.abrir(this.modalLogin);
               this.mmostrar = false;
             }
           );
@@ -273,46 +298,50 @@ export class PrincipalComponent implements OnInit {
       }, error => {
         this.mensajeError='Error de conexión';
         $('#nav-user').text(' ');
-        this.abrirModal('#loginModal');
+        this.abrir(this.modalLogin);
         this.mmostrar = false;
       }
       );
     } else {
       this.mensajeError='Error de conexión';
       $('#nav-user').text(' ');
-      this.abrirModal('#loginModal');
+      this.abrir(this.modalLogin);
       this.mmostrar = false;
     }
   }
   //mostrar el formulario de registro de usuarios
   mostrarRegistrarse() {
     this.usuario = new Usuario('','','','','','','','','','');
-    this.cerrarModal('#loginModal');
-    this.abrirModal('#registroUsuarioModal');
+    this.cerrar();
+    this.abrir(this.modalRegistro);
     this.mmostrar = false;
-    this._router.navigate['/principal'];
+
   }
 
   mostrarRecuperarContrasena() {
     this.forgotPass="";
    // this.usuario = new Usuario('','','','','','','','','','');
-    this.cerrarModal('#loginModal');
-    this.abrirModal('#forgotModal');
+    //this.cerrarModal('#loginModal');
+    this.cerrar();
+   this.abrir( this.modalRecuperarContrasena);
+    //this.abrirModal('#forgotModal');
     this.mmostrar = false;
     //this._router.navigate['/principal'];
   }
   regresar() {
     this.forgotPass="";
-    this.cerrarModal('#forgotModal');
-    this.abrirModal('#loginModal');
+    this.cerrar();
+    this.abrir(this.modalLogin);
+    //this.cerrarModal('#forgotModal');
+  //  this.abrirModal('#loginModal');
     this.mmostrar = false;
     //this._router.navigate['/principal'];
   }
   //regresar al formulario del login
   loginBack() {
     this.usuario = new Usuario('','','','','','','','','','');
-    this.cerrarModal('#registroUsuarioModal');
-    this.abrirModal('#loginModal');
+    this.cerrar();
+    this.abrir(this.modalLogin);
     this.mmostrar = false;
     this.confirmaContra = '';
   }
