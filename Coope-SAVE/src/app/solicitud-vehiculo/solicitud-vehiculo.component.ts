@@ -118,6 +118,7 @@ export class SolicitudVehiculoComponent implements OnInit {
   tempNombreVehiculo = "";
   listaSolicitudes = [];
   public p=1;
+  nuevoVehiculo="";
   tempEvent: any;
   timeI = { hour: null, minute: null, second: 0 };
   timeF = { hour: null, minute: null, second: 0 };
@@ -178,7 +179,7 @@ export class SolicitudVehiculoComponent implements OnInit {
     this.solicitudVehiculo.horaSalida = { hour: 7, minute: 0 };
     this.solicitudVehiculo.horaRegreso = { hour: 11, minute: 0 };
     this.activeDayIsOpen = false;
-   
+    this.obtenerSolicitudVehiculos();
     this._servSolicitud.fechaActualVehiculo().subscribe(
       response => {
 
@@ -547,15 +548,18 @@ let val = ev.target.value;
                                 this.actions = [];
                               }
                               if (listaSolicitudes[index].fecha.year < serverDate.getFullYear()) {
+                                console.log('primer control');
                                 this.tempEvent = [];
                                 this.actions = [];
                                 this.tempEnable = false;
                               } else if (listaSolicitudes[index].fecha.month < (serverDate.getMonth() + 1)) {
+                                console.log('Segundo control');
                                 this.tempEvent = [];
                                 this.actions = [];
                                 this.tempEnable = false;
                               } else if (listaSolicitudes[index].fecha.month == (serverDate.getMonth() + 1)) {
                                 if (listaSolicitudes[index].fecha.day < serverDate.getDate()) {
+                                  console.log('Tercer control');
                                   this.tempEvent = [];
                                   this.actions = [];
                                   this.tempEnable = false;
@@ -707,27 +711,23 @@ let val = ev.target.value;
     this.refresh.next();
   }
 
+  vehiculoSeleccionadoEditar(nuevoVehiculo:any){
+    this.nuevoVehiculo= nuevoVehiculo;
+    console.log(nuevoVehiculo);
+  }
 
+  vehiculoActual={};
   tempArrayChecked = [];
   esMayor = false; 
   tempTitleModal = "";
-  tempSolicitud = { usuario: null, departamento: null, fecha: null, motivo: null, inicio: null, fin: null, vehiculo: null }
+  tempSolicitud = { usuario: null, departamento: null, fecha: null, motivo: null, inicio: null, fin: null, vehiculo:{placa: null, tipo: null, marca:null} }
   eliminar = false;
   handleEvent(action: string, event: CalendarEvent): void {
    
-
+    this.obtenerSolicitudVehiculos();
 
     if (action == "Eliminar") {
-      let _id = this.tempColor.color.id;
-      let salir = false;
-      let eliminar = false;
-      if (_id == "" || _id == "undefined" || _id == null) {
-        this.msjError("La Solicitud no pudo ser eliminada");
-      } else {
-        this.eliminar = true;
-        this.mr = this.modal.open(this.modalContent2, { size: 'lg' });
-
-      }
+     
     }
     else {
       this.tempArrayChecked = []
@@ -744,8 +744,29 @@ let val = ev.target.value;
           if (response.message[0]._id) {
             this.tempSolicitud.usuario = response.message[0].nombre + ' ' + response.message[0].apellidos;
             this.tempSolicitud.departamento = response.message[0].departamento;
-            this.tempSolicitud.vehiculo = this.tempColor.vehiculo;
-            console.log(this.tempColor.id);
+            
+            this.usuariosAgregados=[];
+            for(let i=0; i<this.listaSolicitudes.length; i++){
+              if(this.tempColor.id == this.listaSolicitudes[i]._id){
+                for (var u = 0; u < this.listaSolicitudes[i].acompanantes.length; u++) {
+                    this.usuariosAgregados.push(this.listaSolicitudes[i].acompanantes[u]);
+                }
+                console.log(this.usuariosAgregados);
+              }
+            }
+           
+            
+            for(let i=0;i< this.vehiculos.length; i++){
+              if(this.tempColor.vehiculo==this.vehiculos[i].placa){
+                  let posicion =this.vehiculos[0];
+                  this.vehiculos[0]= this.vehiculos[i];
+                  this.vehiculos[i]= posicion;
+                  break;
+              }
+            }
+             
+
+           
             this._servSolicitud.obtenerSolicitudVehiculo(this.tempColor.id).subscribe(
               response => {
                 if (response.message) {
@@ -820,12 +841,13 @@ let val = ev.target.value;
                           if (date.getDate() < serverDate.getDate() || this.minDate.day < serverDate.getDate()) {
                             this.tempEvent = [];
                           } else {
-                            // alert('entra aqui 1');
-                            //    this.tempEvent = event.actions;
+                            
+                            this.tempEvent = event.actions;
                           }
                         } else {
-                          // alert('entra aqui 2');
-                          // this.tempEvent = event.actions;
+                         
+                          this.tempEvent = event.actions;
+
                         }
                       } else {
                       }
