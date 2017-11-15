@@ -90,7 +90,7 @@ export class SolicitudVehiculoComponent implements OnInit {
     this.obtenerVehiculos();
    
     this.obtenerUsuarios();
-    this.obtenerSolicitudVehiculos();
+      this.obtenerSolicitudVehiculos();
     console.log('cargó el calendario de vehiculo');
   } 
   private departamentos = [];
@@ -122,6 +122,8 @@ export class SolicitudVehiculoComponent implements OnInit {
   tempEvent: any;
   timeI = { hour: null, minute: null, second: 0 };
   timeF = { hour: null, minute: null, second: 0 };
+  tempPlacaVehiculo="";
+  dateUpdate = { day: null, month: null, year: null };
   
 
   @Input() placeholder: string;
@@ -179,7 +181,7 @@ export class SolicitudVehiculoComponent implements OnInit {
     this.solicitudVehiculo.horaSalida = { hour: 7, minute: 0 };
     this.solicitudVehiculo.horaRegreso = { hour: 11, minute: 0 };
     this.activeDayIsOpen = false;
-    this.obtenerSolicitudVehiculos();
+   
     this._servSolicitud.fechaActualVehiculo().subscribe(
       response => {
 
@@ -466,13 +468,258 @@ let val = ev.target.value;
 
   } 
 
+  modificarSolicitud(solicitudparaEditar:any){ 
+    console.log('probando datos');
+    console.log(solicitudparaEditar);
+    this.tempPlacaVehiculo = solicitudparaEditar.placa;
+    this.solicitudVehiculoEdit.fecha = { year: null, month: null, day: null };
+    this.solicitudVehiculoEdit.horaSalida = this.timeI;
+    this.solicitudVehiculoEdit.horaRegreso = this.timeF;
+
+    let dat = new Date();
+    dat.setFullYear(this.model.year);
+    dat.setMonth(this.model.month - 1);
+    dat.setDate(this.model.day);
+
+    this.solicitudVehiculoEdit.fecha.year = dat.getFullYear();
+    this.solicitudVehiculoEdit.fecha.month = dat.getMonth() + 1;
+    this.solicitudVehiculoEdit.fecha.day = dat.getDate();
+
+    let array;
+    //console.log('fecha enviada');
+    //console.log(this.solicitudSalaEdit.fecha );
+    //  this.solicitudSala.fecha.year = dat;
+
+    
+    this.solicitudVehiculo.fecha = dat;
+    console.log(this.solicitudVehiculo);
+    this._servSolicitud.obtenerSolicitudes(this.solicitudVehiculo).subscribe(
+      response => {
+        if (!response.message) {//no hay registros
+        } else {//no hay vehiculo registrados
+          
+          array = response.message;
+          this.solicitudesdia = array;
+          console.log(this.solicitudesdia);
+          var minInicial = ((this.solicitudVehiculoEdit.horaSalida.hour * 60) + this.solicitudVehiculoEdit.horaSalida.minute);
+          var minFinal = ((this.solicitudVehiculoEdit.horaRegreso.hour * 60) + this.solicitudVehiculoEdit.horaRegreso.minute);
+          if (minFinal - minInicial <= 0) {
+            this.mensajeSolicitudInvalidaEdit = "La hora final no debe ser igual o menor a la hora de inicio";
+          } else {
+            if (minFinal - minInicial > 0 && minFinal - minInicial < 30) {
+              this.mensajeSolicitudInvalidaEdit = "El tiempo mínimo que se puede pedir una sala es de 30 minutos";
+            }
+            else {// validar el horario de la sala
+              if (dat == null) {
+                this.mensajeSolicitudInvalidaEdit = 'Favor seleccione una fecha';
+              } else {
+                let dia;
+                if (dat.getDay() == 0) {
+                  dia = "Domingo";
+                } else if (dat.getDay() == 1) {
+                  dia = "Lunes";
+
+                } else if (dat.getDay() == 2) {
+                  dia = "Martes";
+
+                } else if (dat.getDay() == 3) {
+                  dia = "Miercoles";
+
+                } else if (dat.getDay() == 4) {
+                  dia = "Jueves";
+
+                } else if (dat.getDay() == 5) {
+                  dia = "Viernes";
+
+                } else if (dat.getDay() == 6) {
+                  dia = "Sabado";
+
+                }
+                //alert(dia);
+                let horarioDiaVehiculo = { dia: null, desde: null, hasta: null };
+                for (let index = 0; index < this.tempHorarioVehiculo.length; index++) {
+                  if (this.tempHorarioVehiculo[index].dia == dia) {
+                    horarioDiaVehiculo = this.tempHorarioVehiculo[index];
+                    break;
+                  }
+                }
+
+                if (horarioDiaVehiculo.desde == null || horarioDiaVehiculo.desde == undefined || horarioDiaVehiculo.desde == "" || horarioDiaVehiculo.desde == "null") {
+                  this.mensajeSolicitudInvalidaEdit = "El día " + dia + " para la sala seleccinada no cuenta con un horario establecido , favor comuniquese con el administrador.";
+                } else { // validar el horario del dia selecciona con respecto al horario de la sala
+                  this.mensajeSolicitudInvalidaEdit = "";
+                  let agregarValid = false;
+                  let agregar = false;
+                  let horaEntradaDigit = (parseInt(this.solicitudVehiculoEdit.horaSalida.hour) + ((parseInt(this.solicitudVehiculoEdit.horaSalida.minute) / 60)));
+                  let horaSalidaDigit = (parseInt(this.solicitudVehiculoEdit.horaRegreso.hour) + ((parseInt(this.solicitudVehiculoEdit.horaRegreso.minute) / 60)));
+                  // console.log('Inicio pantalla '+horaEntradaDigit+'<  Inicio Solicitud'+horarioDiaVehiculo.desde);
+                  //console.log('Fin pantalla '+horaSalidaDigit +'> Hasta  Solicitud'+horarioDiaVehiculo.hasta);
+
+                  if (horaEntradaDigit < parseInt(horarioDiaVehiculo.desde) ||
+                    (horaSalidaDigit > parseInt(horarioDiaVehiculo.hasta))) {
+                    let meridianoInit;
+                    let meridianoFin;
+                    let meridNumIni;
+                    let meridNumFin;
+                    if (parseInt(horarioDiaVehiculo.desde) < 12) {
+                      meridianoInit = "AM";
+                      meridNumIni = parseInt(horarioDiaVehiculo.desde);
+                    } else if (parseInt(horarioDiaVehiculo.desde) >= 12) {
+                      meridianoInit = "PM";
+                      meridNumIni = (parseInt(horarioDiaVehiculo.desde) - 12);
+                    }
+                    if (parseInt(horarioDiaVehiculo.hasta) == 24) {
+                      meridianoFin = "AM";
+                      meridNumFin = (parseInt(horarioDiaVehiculo.hasta) - 12);
+                    }
+                    if (parseInt(horarioDiaVehiculo.hasta) > 12 && parseInt(horarioDiaVehiculo.hasta) < 24) {
+                      meridianoFin = "PM";
+                      meridNumFin = (parseInt(horarioDiaVehiculo.hasta) - 12);
+                    } else if (parseInt(horarioDiaVehiculo.hasta) < 12) {
+                      meridianoFin = "AM";
+                      meridNumFin = parseInt(horarioDiaVehiculo.hasta);
+                    }
+                    if (meridNumIni == 0) {
+                      meridNumIni = meridNumIni + 12;
+                    }
+                    agregarValid = false;
+                    this.mensajeSolicitudInvalidaEdit = "El horario habilitado el día " + dia + " para la sala selecionada, es desde  " + meridNumIni + " " + meridianoInit + " hasta " + meridNumFin + " " + meridianoFin;
+                    //alert('horamal');
+                  }
+                  else {// validar la disponibilidad de horario
+
+                    //   alert('horabien'+this.solicitudesdia.length);
+                    if (this.solicitudesdia.length == 0) {//no hay solicitudes del día y el hora escogido es válido
+                      agregarValid = true;
+                    } else {
+                      // alert('entró aqui  valid' +agregarValid);
+                      console.log('AgregarValidEn false');
+                      agregarValid = false;
+                      if (this.tempPlacaVehiculo == "") {
+                        this.mensajeSolicitudInvalidaEdit = "Seleccione una Sala";
+                      } else {
+                        //     console.log('solicitudes dia');
+                        //   console.log(this.solicitudesdia);
+                        //buscar la solicitud seleccionada y eleminarla dela lista de solicitudes del día,
+                        // para poder realizar su respectiva modificación en caso de ser el mismos día y se pretenda camibiar solo las horas
+                        for (let conta = 0; conta < this.solicitudesdia.length; conta++) {
+                          console.log('dentro del for que va a aleliminar el evento de hoy');
+                          if (this.solicitudesdia[conta]._id === this.solicitudVehiculoEdit._id) {
+                            console.log('la econtró');
+                            this.solicitudesdia.splice(conta, 1);
+                            break;
+                          }
+                        }
+                        //método burbuja para ordenar las solicitudes de menor a mayor
+                        // console.log(this.solicitudSalaEdit._id);
+                        //console.log(this.solicitudesdia);
+                        let k = [];
+                        for (let i = 1; i < this.solicitudesdia.length; i++) {
+                          for (var j = 0; j < (this.solicitudesdia.length - i); j++) {
+                            if (this.solicitudesdia[j].horaInicio.hour > this.solicitudesdia[j + 1].horaInicio.hour) {
+                              k = this.solicitudesdia[j + 1];
+                              this.solicitudesdia[j + 1] = this.solicitudesdia[j];
+                              this.solicitudesdia[j] = k;
+                            }
+                          }
+                        }
+                        //extraer el horario de la solicitudes de la sala seleccionda 
+                        let tempArrayHoraInicio = [];
+                        let tempArrayHoraFinal = [];
+                        for (let indice = 0; indice < this.solicitudesdia.length; indice++) {
+                          if (this.solicitudesdia[indice].vehiculo == this.tempPlacaVehiculo) {
+                            tempArrayHoraInicio.push(this.solicitudesdia[indice].horaInicio);
+                            tempArrayHoraFinal.push(this.solicitudesdia[indice].horaFin);
+                          }
+                        }
+
+                        //buscar solicitudes entre el rango de horas escojido por el usuario y deteriminar si existen solicitudes
+                        let tempArrayVerificacion = [];
+                        for (let contador = 0; contador < tempArrayHoraFinal.length; contador++) {
+                          let sumatoriaFinal = ((tempArrayHoraFinal[contador].hour * 60) + (tempArrayHoraFinal[contador].minute));
+                          let sumatoriaInicial = ((tempArrayHoraInicio[contador].hour * 60) + (tempArrayHoraInicio[contador].minute));
+
+                          if (sumatoriaInicial <= (horaEntradaDigit * 60) && (horaEntradaDigit * 60) < sumatoriaFinal) {
+                            tempArrayVerificacion.push(minFinal);
+                            break;
+                          }
+                          if (sumatoriaFinal > (horaEntradaDigit * 60) && (horaSalidaDigit * 60) > sumatoriaInicial) {
+                            tempArrayVerificacion.push(minFinal);
+                            break;
+                          }
+                        }
+
+                        // verificar si se encontraron
+                        if (tempArrayVerificacion.length > 0) {
+                          agregar = false;
+                          console.log('agregar en false');
+                        } else {
+                          agregar = true;
+                        }
+                      }
+
+                    }
+                    if (!agregar && !agregarValid) {
+                      this.mensajeSolicitudInvalidaEdit = "Ya existe una solicitud para esta sala, con el mismo horario ingresado";
+                    }
+
+                    if (agregar || agregarValid) {// todo correcto , puede agregar la solicitud
+                      //alert('puede modificar ');
+                      this.dateUpdate.year = this.solicitudVehiculoEdit.fecha.year;
+                      this.dateUpdate.month = this.solicitudVehiculoEdit.fecha.month;
+                      this.dateUpdate.day = this.solicitudVehiculoEdit.fecha.day;
+                      this.solicitudVehiculoEdit.fecha = this.dateUpdate;
+                      this.solicitudVehiculoEdit.acompanantes = this.usuariosAgregados;
+                      console.log(this.solicitudVehiculoEdit);
+                      this._servSolicitud.modificarSolicitudVehiculo(this.solicitudVehiculoEdit).subscribe(
+                        response => {
+                          if (!response.message) {
+                            this.msjError(response.message);
+                          } else {
+                            let solicitud = response.message;
+                            this.msjExitoso("Solicitud de sala modificada exitosamente");
+                            console.log(solicitud);
+                            // this.enviarEmail(solicitud);
+                            this.solicitudVehiculoEdit = new SolicitudVehiculo('', '', '', null, null, null, '', '', '', null, '', '');
+                            // this.cupoMaximo="";
+                            this.obtenerSolicitudes(new Date(), false);
+                            this.obtenerSolicitudVehiculos();
+                            this.mr.close();
+                          }
+                        }, error => {
+                          var alertMessage = <any>error;
+                          if (alertMessage != null) {
+                            var body = JSON.parse(error._body);
+                            this.msjError('Solicitud no registrada');
+                          }
+                        }
+                      );
+                    }
+
+                  }
+                }
+              }
+            }
+
+          }
+        }
+      }, error => {
+        // alert('erro');
+      }
+    );
+
+  }
+
+
+
+
+
   tempColor: any = {
     color: {
       primary: '#ad2121',
       secondary: '#FAE3E3',
       usuario: null,
       vehiculo: null,
-      recursos: [],
       id: null
     }
   };
@@ -724,7 +971,6 @@ let val = ev.target.value;
   eliminar = false;
   handleEvent(action: string, event: CalendarEvent): void {
    
-    this.obtenerSolicitudVehiculos();
 
     if (action == "Eliminar") {
      
@@ -745,13 +991,17 @@ let val = ev.target.value;
             this.tempSolicitud.usuario = response.message[0].nombre + ' ' + response.message[0].apellidos;
             this.tempSolicitud.departamento = response.message[0].departamento;
             
+            
             this.usuariosAgregados=[];
+           
             for(let i=0; i<this.listaSolicitudes.length; i++){
+              
               if(this.tempColor.id == this.listaSolicitudes[i]._id){
+               
                 for (var u = 0; u < this.listaSolicitudes[i].acompanantes.length; u++) {
                     this.usuariosAgregados.push(this.listaSolicitudes[i].acompanantes[u]);
+                    
                 }
-                console.log(this.usuariosAgregados);
               }
             }
            
@@ -764,7 +1014,6 @@ let val = ev.target.value;
                   break;
               }
             }
-             
 
            
             this._servSolicitud.obtenerSolicitudVehiculo(this.tempColor.id).subscribe(
