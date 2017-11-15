@@ -276,4 +276,8 @@ footer {
 	margin-bottom: 0px;
 	
 	
-	}
+  }
+  
+  button{
+    cursor: pointer;
+  }

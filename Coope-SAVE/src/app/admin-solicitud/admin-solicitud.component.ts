@@ -186,8 +186,6 @@ export class AdminSolicitudComponent implements OnInit {
   }
 
   eliminarSolicitudSala() {
-
-    console.log(this.idEliminar);
     this._servSolicitudSala.eliminarSolicitudSala(this.idEliminar).subscribe(
       response => {
 

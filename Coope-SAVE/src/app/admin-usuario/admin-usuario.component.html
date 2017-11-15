@@ -33,8 +33,8 @@
             <th>{{usuario.rol}}</th>
             <th>{{usuario.estado}}</th>
             <th style="text-align: center">
-              <button class="btn btn-primary btn-accion" data-toggle="modal" data-target="#editAdminUserModal"  (click)="obtenerUsuario(usuario._id)"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete" [disabled]='usuario.correo==currentUser || usuario.rol=="ADMINISTRADOR"' (click)="obtenerUsuario(usuario._id)"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+              <button class="btn btn-primary btn-accion"   (click)="obtenerUsuario(usuario._id,1)"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
+              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete" [disabled]='usuario.correo==currentUser || usuario.rol=="ADMINISTRADOR"' (click)="obtenerUsuario(usuario._id,2)"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
             </th>
           </tr>
           
@@ -49,9 +49,8 @@
   
   <hr>
   <!-- paginador-->
- <pagination-controls (pageChange)="p =$event">
+ <pagination-controls (pageChange)="p =$event"></pagination-controls>
 
- </pagination-controls>
 <!-- Modal  eliminar usuario-->
 <div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -77,14 +76,15 @@
 </div>
 
 <!-- Modal  Modificar Usuario-->
-<div class="modal fade bd-example-modal-sm " id="editAdminUserModal" tabindex="-1" role="dialog"
+<!-- <div class="modal fade bd-example-modal-sm " id="editAdminUserModal" tabindex="-1" role="dialog"
 aria-hidden="true">
 <div class="modal-dialog bd-example-modal-sm " role="document">
-  <div class="modal-content">
+  <div class="modal-content"> -->
+    <ng-template  #modalModificarUsuario let-c="close" let-d="dismiss">
     <div class="modal-header" style="background: #0069d9;color:#fff">
       <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-user-circle-o"></i>&nbsp;&nbsp;Modificar Usuario</h5>
-       <button type="button" class="close" data-dismiss="modal" aria-label="Close"> 
-          <span aria-hidden="true">&times;</span>
+      <button type="button" class="close"  aria-label="Close" (click)="c('Close click')"> 
+          <small aria-hidden="true">&times;</small>
         </button>
     </div>
     <div class="modal-body">
@@ -178,7 +178,7 @@ aria-hidden="true">
                    </div>
 
               <div style="float: right">
-                  <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" >Salir</button>               
+                  <button type="button" class="btn btn-default btn-modal-can" (click)="c('Close click')" >Salir</button>               
                   <button id="btn-edit-admin-usuario" type="submit" 
                    [disabled]="!correo.valid || !nombre.valid || !apellidos.valid  ||  !departamento.valid || usuarioExist"
                     class="btn btn-success">Continuar</button>
@@ -189,10 +189,11 @@ aria-hidden="true">
         </div>
       </div>
     </div>
+  </ng-template>
    
-  </div>
+  <!-- </div>
 </div>
-</div>
+</div> -->
 </div>
 <br><br><br>
 <section>
