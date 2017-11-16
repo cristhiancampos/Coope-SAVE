@@ -22,6 +22,7 @@ import { FormControl } from '@angular/forms';
 import { filtrarUsuario } from './filtroUsuarios';
 import { ServicioDepartamento } from '../servicios/departamento';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import * as jsPDF from 'jspdf';
 
 const colors: any = {
   red: {
@@ -131,6 +132,7 @@ export class SolicitudVehiculoComponent implements OnInit {
   timeF = { hour: null, minute: null, second: 0 };
   tempPlacaVehiculo = "";
   dateUpdate = { day: null, month: null, year: null };
+  
 
 
   @Input() placeholder: string;
@@ -182,7 +184,23 @@ export class SolicitudVehiculoComponent implements OnInit {
     });
   }
 
+  crearPDF(){
+
+    const pdf = new jsPDF();
+    const imgLogo = "assets/img/logo.png";
+    const html= "<h1> Probando htmlPDF</h1>"
+    pdf.text('Probando PDF',10,10);
+    pdf.addImage(imgLogo, 'PNG', 10, 40, 180, 180);  
+    pdf.fromHTML($('#areaText').get(0),20,20,{'width':800} );
+
+
+   
+
+    pdf.save('prueba.pdf');
+  
+  }
   cancelarAccion() {
+    this.crearPDF();
     this.obtenerSolicitudes(new Date(), false);
     this.obtenerSolicitudVehiculos();
     this.mr.close();
@@ -220,11 +238,13 @@ export class SolicitudVehiculoComponent implements OnInit {
             } else {
               // alert('entra aqui 1');
               this.obtenerSolicitudes(date, true);
+              this.eliminarUsuarioActual();
               this.writeValue(date);
             }
           } else {
             // alert('entra aqui 2');
             this.obtenerSolicitudes(date, true);
+            this.eliminarUsuarioActual();
             this.writeValue(date);
           }
         } else {
@@ -924,12 +944,11 @@ export class SolicitudVehiculoComponent implements OnInit {
   }
   obtenerUsuarios() {
 
-    console.log('llamo metodo llenar usuarios');
+    
     this._servUsuario.obtenerUsuarios().subscribe(
       response => {
         if (response.message) {
           this.listaUsuarios = response.message;
-          console.log(this.listaUsuarios);
           this.listaNombres();
         } else {//no hay Salas registradas
         }
@@ -963,6 +982,24 @@ export class SolicitudVehiculoComponent implements OnInit {
   verificarFechaSeleccionada(userDate: Date) {
   }
 
+  eliminarUsuarioActual(){// Eliminar el usuario actual de la lista de usuarios disponibles, para el la seccion de acompanantes
+
+    let identity = localStorage.getItem('identity');
+    let user = JSON.parse(identity);
+    console.log(user);
+    if(!user){
+      this._router.navigate(['/principal']);
+    } else {
+      for( let i= 0; i<this.listaUsuarios.length; i++){
+          if(user._id == this.listaUsuarios[i]._id){
+            this.listaUsuarios.splice(i,1);
+            
+            break;
+          }
+      }
+    }
+  }
+
   eventTimesChanged({
     event,
     newStart,
@@ -986,9 +1023,13 @@ export class SolicitudVehiculoComponent implements OnInit {
   tempTitleModal = "";
   tempSolicitud = { usuario: null, departamento: null, fecha: null, motivo: null, inicio: null, fin: null, vehiculo: { placa: null, tipo: null, marca: null } }
   eliminar = false;
+
   handleEvent(action: string, event: CalendarEvent): void {
 
     this.obtenerUsuarios();
+    this.tempColor = event.color;
+    this.solicitudVehiculoEdit._id = this.tempColor.id;
+    this.activeDayIsOpen=false;
 
     if (action == "Eliminar") {
       this.eliminarSolicitud();
@@ -1030,9 +1071,7 @@ export class SolicitudVehiculoComponent implements OnInit {
               }
             }
 
-
-
-            for (let i = 0; i < this.vehiculos.length; i++) {
+            for (let i = 0; i < this.vehiculos.length; i++) {// Ordena el vector de vehiculos, poniendo el vehiculo de la solicitud selecionadad de primero.
               if (this.tempColor.vehiculo == this.vehiculos[i].placa) {
                 let posicion = this.vehiculos[0];
                 this.vehiculos[0] = this.vehiculos[i];
@@ -1041,7 +1080,9 @@ export class SolicitudVehiculoComponent implements OnInit {
               }
             }
 
+            
 
+            this.eliminarUsuarioActual();
             this._servSolicitud.obtenerSolicitudVehiculo(this.tempColor.id).subscribe(
               response => {
                 if (response.message) {
@@ -1207,6 +1248,7 @@ export class SolicitudVehiculoComponent implements OnInit {
   cerrar(){
     this.mr.close();
     this.solicSala=true;
+    this.activeDayIsOpen=true;
   
   }
 

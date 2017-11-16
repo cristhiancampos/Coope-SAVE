@@ -16,15 +16,15 @@
     </div>
     <form>
       <div class="list-group">
-        <a href="javascript:void(0);" class="list-group-item list-group-item-action flex-column align-items-start ">
+        <div href="javascript:void(0);" class="list-group-item  flex-column align-items-start ">
           <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1"> <i class="fa fa-user" aria-hidden="true"></i> Solicitante</h5>
           </div>
           <br>
           <p class="mb-1"> <strong>Nombre</strong> {{tempSolicitud.usuario}}</p>
           <p class="mb-1"> <strong>Departamento</strong> {{tempSolicitud.departamento}}</p>
-        </a>
-        <a href="javascript:void(0);" class="list-group-item list-group-item-action flex-column align-items-start">
+        </div>
+        <div href="javascript:void(0);" class="list-group-item  flex-column align-items-start">
           <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1"><i class="fa fa-asterisk" aria-hidden="true"></i> Detalles</h5>
           </div>
@@ -139,7 +139,7 @@
             <div class="col-md-5">
               <div class="control-group form-group">
                 <div class="controls">
-                  <textarea class="form-control" #descpE="ngModel" name="descpE" [(ngModel)]="solicitudVehiculoEdit.descripcion" placeholder="Motivo por el cuál solicita la sala."
+                  <textarea id="areaText" class="form-control" #descpE="ngModel" name="descpE" [(ngModel)]="solicitudVehiculoEdit.descripcion" placeholder="Motivo por el cuál solicita la sala."
                     rows="2" required maxlength="50" [disabled]="tempEvent.length<=0"></textarea>
                   <!-- <div *ngIf="descp.valid" class="small form-text text-success" style="font-size:0.9rem">Correcto <i class="fa fa-check" aria-hidden="true"></i></div> -->
                   <div class="small form-text text-danger" *ngIf="descpE.invalid && (descpE.dirty || descpE.touched)" style="font-size:0.9rem">
@@ -154,7 +154,7 @@
           </div>
 
           <!-- //////////////////////////////////////////////////Acompañantes/////////////////////////////////////////////////////////////// -->
-          <div class="container-fluid">
+          <div class="container-fluid" *ngIf="tempEvent.length>0">
               <hr>
               <h4 style="color:#0069d9">Acompañantes</h4> <br>
               <div class="container">
@@ -163,7 +163,7 @@
                     <div id="imaginary_container">
                       <div class="input-group stylish-input-group">
                         <input type="text" class="form-control" #filtro="ngModel" [(ngModel)]="filtroUsuario" name="filtro" placeholder="Buscar Usuario"
-                          (input)="getItems($event)" id="filtroUsuario" [value]="filtroUsuario">
+                          (input)="getItems($event)" id="filtroUsuario" [value]="filtroUsuario" [disabled]="tempEvent.length<=0">
                         <span class="input-group-addon">
                                       <button type="submit">
                                           <span class="fa fa-search" aria-hidden="true"></span>
@@ -181,8 +181,8 @@
                     <div class="row col-md-12" style="overflow-y: scroll; height: 150px">
   
                       <div class="col-md-12" *ngFor="let usuario of listaUsuarios | filter: filtroUsuario">
-                        <label class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="home" (click)="agregarAcompanates(usuario)">
-                        <span class="custom-control-description"  >{{usuario.nombre}} {{usuario.apellidos}} </span>
+                        <label class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="home" (click)="agregarAcompanates(usuario)" >
+                        <span class="custom-control-description">{{usuario.nombre}} {{usuario.apellidos}} </span>
                         <span class="fa fa-plus" aria-hidden="true" style="float: right"></span>
                     </label>
                       </div>
@@ -207,7 +207,7 @@
             </div>
 
 
-        </a>
+          </div >
 
 
       </div>
@@ -494,7 +494,7 @@
 
                     <div class="col-md-12" *ngFor="let usuario of listaUsuarios | filter: filtroUsuario">
                       <label class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="home" (click)="agregarAcompanates(usuario)">
-                      <span class="custom-control-description"  >{{usuario.nombre}} {{usuario.apellidos}} </span>
+                      <span class="custom-control-description "  >{{usuario.nombre}} {{usuario.apellidos}} </span>
                       <span class="fa fa-plus" aria-hidden="true" style="float: right"></span>
                   </label>
                     </div>
