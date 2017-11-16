@@ -6,7 +6,7 @@
         </button> -->
     <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;{{tempTitleModal}} Solicitud</h5>
     <!-- {{ modalData?.action }}-->
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal" (click)="close()"> 
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal" (click)="cancelarAccion()"> 
           <small aria-hidden="true">&times;</small>
         </button>
   </div>
@@ -322,7 +322,7 @@
                 <ul class="nav nav-pills nav-fill nav-tabs" style="text-align: center;">
 
                   <li class="nav-item">
-                    <a id="bnt-lista" class="nav-link active" href="#tab1primary" data-toggle="tab" (click)="solicitud(1)" style="width: 210px;font-size: 1.3rem;margin-left: 25px;">Solicitar Sala</a>
+                    <a id="bnt-lista" class="nav-link active" href="#tab1primary" data-toggle="tab" (click)="solicitud(1)" style="width: 210px;font-size: 1.3rem;margin-left: 25px;">Solicitar Vehículo</a>
                   </li>
                   <li class="nav-item">
                     <a id="bnt-solicitud" class="nav-link" href="#tab2primary" data-toggle="tab" (click)="solicitud(2)" style="width: 210px;font-size: 1.3rem;">Solicitudes del día</a>
