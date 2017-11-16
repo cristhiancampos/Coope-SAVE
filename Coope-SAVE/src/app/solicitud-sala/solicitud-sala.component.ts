@@ -26,6 +26,7 @@ import { ChangeDetectorRef, forwardRef, Input, OnInit } from '@angular/core';
 import { NgbDateStruct, NgbTimeStruct, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FormControl } from '@angular/forms';
+import { NgStyle } from '@angular/common';
 const colors: any = {
   red: {
     primary: '#ad2121',

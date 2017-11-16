@@ -75,7 +75,7 @@ export class SolicitudVehiculoComponent implements OnInit {
     {
       label: '<i class="fa fa-fw fa-times"></i>',
       onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.events = this.events.filter(iEvent => iEvent !== event);
+      //  this.events = this.events.filter(iEvent => iEvent !== event);
         this.handleEvent('Eliminar', event);
       }
     }

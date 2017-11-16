@@ -107,3 +107,42 @@ border-color:#ccc;
 #pagionadorVehiculos{
   font-size: 12px
 }
+.guiColors{
+  margin-left: 2%;width: 96%;height: auto;
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color:transparent;
+}
+.spanDepart{
+  margin-left: 25px;
+  color: green;
+}
+
+
+ li  {
+  display: block;
+  /* color: white; */
+  text-align: center;
+  padding: 16px;
+  text-decoration: none;
+}
+ li {
+  float: left;
+} 
+
+.span-g
+{-moz-border-radius: 50%;
+  border-radius: 50%;
+  border-color: transparent;
+  background-color: black;
+  color: white;
+  width: 20px;
+  height: 20px;
+  padding-left: 8px;
+  padding-right: 15px;
+  font-size: 1em;
+}

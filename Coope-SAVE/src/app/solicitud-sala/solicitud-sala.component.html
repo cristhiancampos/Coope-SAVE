@@ -250,7 +250,16 @@
     (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
   </mwl-calendar-day-view>
 </div>
-
+<br>
+<section class="guiColors">
+  <!-- <h3> &nbsp;&nbsp;Guía de Colores</h3> -->
+  <ul>
+    <li *ngFor="let departamento of departamentos"  > <span class="span-g" [style.background]="departamento.color"></span> &nbsp; {{departamento.nombre}}</li>
+  </ul>
+  <br>
+</section>
+<br>
+<br>
 <!-- Modal  agregar nueva solicitud-->
   <ng-template #modalAgregarSolicitudSala let-c="close" let-d="dismiss">
       <div class="modal-header" style="color: #FFF;background: #0069d9">
