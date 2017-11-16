@@ -71,6 +71,7 @@ export class SolicitudSalaComponent implements OnInit {
   //*********************************************AGREGADOS***************************** */
   ngOnInit() {
     this.verificarCredenciales();
+    this. estiloBotones();
 
   }
 
@@ -152,7 +153,7 @@ export class SolicitudSalaComponent implements OnInit {
     this.solicitudSalaEdit = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
     this.obtenerRecursos();
     this.obtenerSalas();
-    this.estiloBotones();
+   // this.estiloBotones();
     this.minDate = { day: null, month: null, year: null };
 
   }
@@ -181,17 +182,17 @@ export class SolicitudSalaComponent implements OnInit {
   }
   //fijar el estilos delos botones, solicitar sala y solicitudes del día en el modal de agregar solicitud
   estiloBotones() {
-    $('#bnt-lista').css('background', '#0069d9');
-    $('#bnt-solicitud').css('background', '#eee');
+    $('#btn-lista').css('background', '#0069d9');
+    $('#btn-solicitud').css('background', '#eee');
 
     $('#bnt-lista').click(function () {
-      $('#bnt-lista').css('background', '#0069d9');
-      $('#bnt-solicitud').css('background', '#eee');
+      $('#btn-lista').css('background', '#0069d9');
+      $('#btn-solicitud').css('background', '#eee');
     });
 
-    $('#bnt-vehiculo').click(function () {
-      $('#bnt-solicitud').css('background', '#0069d9');
-      $('#bnt-lista').css('background', '#eee');
+    $('#btn-vehiculo').click(function () {
+      $('#btn-solicitud').css('background', '#0069d9');
+      $('#btn-lista').css('background', '#eee');
     });
   }
   // obtiene todas las solicitudes solicitudes realizadas

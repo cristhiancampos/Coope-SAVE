@@ -72,6 +72,7 @@ export class AdminSolicitudComponent implements OnInit {
 
         if (response.message) {
           this.solicitudSalas = response.message;
+          this.solicitudSalas=this.ordenarPorFecha(this.solicitudSalas);
         } else {//no hay Salas registradas
         }
       }, error => {
@@ -81,6 +82,59 @@ export class AdminSolicitudComponent implements OnInit {
         }
       }
     );
+  }
+
+  ordenarSolicitudesSala(filtro:string){
+    if(filtro==='Horario'){
+      this.ordenarPorHorario(this.solicitudSalas);
+    }
+    else if(filtro==='Personas'){
+     this.ordenarPorCantidadPersonas(this.solicitudSalas);
+    }  else if(filtro==='Fecha'){
+      this.ordenarPorFecha(this.solicitudSalas);
+     } 
+  }
+  /*Métodos Generales*/
+  ordenarPorHorario(array:any){
+    let k = [];
+    for (let i = 1; i < array.length; i++) {
+      for (var j = 0; j < (array.length - i); j++) {
+        if (array[j].horaInicio.hour > array[j + 1].horaInicio.hour) {
+          k = array[j + 1];
+          array[j + 1] = array[j];
+          array[j] = k;
+        }
+      }
+    }
+    return array;
+  }
+
+  ordenarPorCantidadPersonas(array:any){
+    let k = [];
+    for (let i = 1; i < array.length; i++) {
+      for (var j = 0; j < (array.length - i); j++) {
+        if (parseInt(array[j].cantidadPersonas) > parseInt(array[j + 1].cantidadPersonas)) {
+          k = array[j + 1];
+          array[j + 1] = array[j];
+          array[j] = k;
+        }
+      }
+    }
+    return array;
+  }
+  ordenarPorFecha(array:any){
+    console.log(this.solicitudSalas);
+    let k = [];
+    for (let i = 1; i < array.length; i++) {
+      for (var j = 0; j < (array.length - i); j++) {
+        if ((array[j].fecha.year + (array[j].fecha.month*30) + array[j].fecha.day) <(array[j+1].fecha.year + (array[j+1].fecha.month*30) + array[j+1].fecha.day) ) {
+          k = array[j + 1];
+          array[j + 1] = array[j];
+          array[j] = k;
+        }
+      }
+    }
+    return array;
   }
 
   obtenerUsuarios() {

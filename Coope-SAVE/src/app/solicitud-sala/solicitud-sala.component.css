@@ -96,3 +96,64 @@ button{
     color: #ffffff;
     cursor: pointer;
 }
+
+button{
+  cursor: pointer;
+}
+
+#btn-solicitud{
+  width: 100%;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; 
+  font-size: 1.2rem; 
+
+}
+
+#btn-lista{
+  width: 100%;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; 
+  font-size: 1.2rem; 
+}
+
+table{
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; 
+  font-size: 1.2rem; 
+  }
+  
+  tr{
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; 
+  font-size: 1.2rem; 
+  }
+  th{
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; 
+    font-size: 1.2rem; 
+    }
+  a{
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; 
+  font-size: 1.2rem; 
+  }
+  pagination-controls{
+		font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; 
+		font-size: 1.2rem; 
+	}
+
+  label{
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; 
+		font-size: 1.2rem; 
+  }
+  select {
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; 
+    font-size: 1.2rem;
+   
+  }
+  input{
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; 
+		font-size: 1.2rem;
+  }
+  textarea{
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; 
+		font-size: 1.2rem;
+  }
+  p{
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; 
+		font-size: 1.2rem;
+  }
