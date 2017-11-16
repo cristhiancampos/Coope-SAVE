@@ -1,9 +1,11 @@
 import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef, Pipe, PipeTransform } from '@angular/core';
-import { startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours,
-  getSeconds,getMinutes,getHours,getDate,getMonth,getYear,setSeconds,setMinutes,setHours,setDate,setMonth,setYear } from 'date-fns';
+import {
+  startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours,
+  getSeconds, getMinutes, getHours, getDate, getMonth, getYear, setSeconds, setMinutes, setHours, setDate, setMonth, setYear
+} from 'date-fns';
 import { Subject } from 'rxjs/Subject';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent} from 'angular-calendar';
+import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent } from 'angular-calendar';
 import * as $ from 'jquery';
 import { Usuario } from '../modelos/usuario';
 import { SolicitudVehiculo } from '../modelos/solicitudVehiculo';
@@ -14,10 +16,10 @@ import { ServicioUsuario } from '../servicios/usuario';
 import swal from 'sweetalert2';
 import * as moment from 'moment';
 import { ChangeDetectorRef, forwardRef, Input, OnInit } from '@angular/core';
-import { NgbDateStruct, NgbTimeStruct, NgbModalRef  } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct, NgbTimeStruct, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { FormControl } from '@angular/forms'; 
-import {filtrarUsuario} from './filtroUsuarios';
+import { FormControl } from '@angular/forms';
+import { filtrarUsuario } from './filtroUsuarios';
 import { ServicioDepartamento } from '../servicios/departamento';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
@@ -34,24 +36,24 @@ const colors: any = {
     primary: '#e3bc08',
     secondary: '#FDF1BA'
   }
-};  
+};
 
 @Component({
   selector: 'app-solicitud-vehiculo',
   templateUrl: './solicitud-vehiculo.component.html',
   styleUrls: ['./solicitud-vehiculo.component.css'],
-  providers: [ServicioSolicitudVehiculo,ServicioVehiculo, ServicioUsuario, filtrarUsuario, ServicioDepartamento],
-  
-  
-  
-  
+  providers: [ServicioSolicitudVehiculo, ServicioVehiculo, ServicioUsuario, filtrarUsuario, ServicioDepartamento],
+
+
+
+
 
 })
 export class SolicitudVehiculoComponent implements OnInit {
 
   @ViewChild('modalContent2') modalContent2: TemplateRef<any>;
   @ViewChild('modalDeleteSolicitudVehiculo') modalDeleteSolicitudVehiculo: TemplateRef<any>;
-  
+
   view = 'month';
   viewDate: Date = new Date();
 
@@ -77,24 +79,25 @@ export class SolicitudVehiculoComponent implements OnInit {
   ];
 
 
+
   refresh: Subject<any> = new Subject();
 
   events: CalendarEvent[] = [
 
-    
-   ];
+
+  ];
   locale: string = 'es';
   activeDayIsOpen = true;
 
   //*********************************************AGREGADOS***************************** */
-  ngOnInit(){
+  ngOnInit() {
     this.estiloBotones();
     this.obtenerVehiculos();
-   
+
     this.obtenerUsuarios();
-      this.obtenerSolicitudVehiculos();
+    this.obtenerSolicitudVehiculos();
     console.log('cargó el calendario de vehiculo');
-  } 
+  }
   private departamentos = [];
   private usuarios = [];
   solicitudVehiculo: SolicitudVehiculo;
@@ -106,27 +109,27 @@ export class SolicitudVehiculoComponent implements OnInit {
   vehiculos = [];
   recursos = [];
   tempAcompanantes = [];
-  listaUsuarios=[];
-  nombreUsuarios=[];
-  idUsuarios=[];
-  usuariosAgregados=[];
+  listaUsuarios = [];
+  nombreUsuarios = [];
+  idUsuarios = [];
+  usuariosAgregados = [];
   currentDate;
   private solicSala = true;
-  public solicitudesdia=[];
+  public solicitudesdia = [];
   minDate: NgbDateStruct;
   mensajeSolicitudInvalida = "";
-  mensajeSolicitudInvalidaEdit="";
+  mensajeSolicitudInvalidaEdit = "";
   tempHorarioVehiculo = [];
   tempNombreVehiculo = "";
   listaSolicitudes = [];
-  public p=1;
-  nuevoVehiculo="";
+  public p = 1;
+  nuevoVehiculo = "";
   tempEvent: any;
   timeI = { hour: null, minute: null, second: 0 };
   timeF = { hour: null, minute: null, second: 0 };
-  tempPlacaVehiculo="";
+  tempPlacaVehiculo = "";
   dateUpdate = { day: null, month: null, year: null };
-  
+
 
   @Input() placeholder: string;
   date: Date;
@@ -149,10 +152,10 @@ export class SolicitudVehiculoComponent implements OnInit {
   ) {
     this.solicitudVehiculo = new SolicitudVehiculo('', '', '', null, null, null, '', '', '', null, '', '');
     this.solicitudVehiculoEdit = new SolicitudVehiculo('', '', '', null, null, null, '', '', '', null, '', '');
-    
+
     this.minDate = { year: null, month: null, day: null };
-    this.filtroUsuario="";
-  
+    this.filtroUsuario = "";
+
   }
   solicitud(num: any) {
     if (num === 1) {
@@ -161,31 +164,38 @@ export class SolicitudVehiculoComponent implements OnInit {
       this.solicSala = false;
     }
   }
-  
-  estiloBotones(){
+
+  estiloBotones() {
     $('#bnt-lista').css('background', '#0069d9');
     $('#bnt-solicitud').css('background', '#eee');
 
-    $('#bnt-lista').click(function(){
+    $('#bnt-lista').click(function () {
       $('#bnt-lista').css('background', '#0069d9');
       $('#bnt-solicitud').css('background', '#eee');
     });
 
-    $('#bnt-vehiculo').click(function(){
+    $('#bnt-vehiculo').click(function () {
       $('#bnt-solicitud').css('background', '#0069d9');
       $('#bnt-lista').css('background', '#eee');
     });
   }
 
+  cancelarAccion() {
+    this.obtenerSolicitudes(new Date(), false);
+    this.obtenerSolicitudVehiculos();
+    this.mr.close();
+    this.activeDayIsOpen = true;
+  }
+
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }) {
-    
+
     this.obtenerUsuarios();
-    this.usuariosAgregados=[];
+    this.usuariosAgregados = [];
     this.solicitudVehiculo.fecha = date;
     this.solicitudVehiculo.horaSalida = { hour: 7, minute: 0 };
     this.solicitudVehiculo.horaRegreso = { hour: 11, minute: 0 };
     this.activeDayIsOpen = false;
-   
+
     this._servSolicitud.fechaActualVehiculo().subscribe(
       response => {
 
@@ -222,49 +232,49 @@ export class SolicitudVehiculoComponent implements OnInit {
       }
     );
   }
-temid;
+  temid;
 
-listaNombres(){
-  for(let w=0; w< this.listaUsuarios.length; w++){
-    this.nombreUsuarios[w]=this.listaUsuarios[w].nombre+' '+this.listaUsuarios[w].apellidos;
+  listaNombres() {
+    for (let w = 0; w < this.listaUsuarios.length; w++) {
+      this.nombreUsuarios[w] = this.listaUsuarios[w].nombre + ' ' + this.listaUsuarios[w].apellidos;
+    }
   }
-}
 
-getItems(ev: any) {
-  this.listaNombres();
-let val = ev.target.value;
-  if (val && val.trim() != '') {
+  getItems(ev: any) {
+    this.listaNombres();
+    let val = ev.target.value;
+    if (val && val.trim() != '') {
 
-    this.nombreUsuarios= this.nombreUsuarios.filter((item) => {
-      return (item.toLowerCase().indexOf(val.toLowerCase()) > -1);
-    })
+      this.nombreUsuarios = this.nombreUsuarios.filter((item) => {
+        return (item.toLowerCase().indexOf(val.toLowerCase()) > -1);
+      })
+    }
+
   }
-  
-  }
-  agregarAcompanates(usuario: any){
+  agregarAcompanates(usuario: any) {
     console.log(usuario);
-  this.usuariosAgregados.push(usuario);   
-    this.filtroUsuario= "";
-  for(let i=0;i<this.listaUsuarios.length; i++){
-    if(this.listaUsuarios[i]._id== usuario._id){
-      this.listaUsuarios.splice(i,1);
-      break
+    this.usuariosAgregados.push(usuario);
+    this.filtroUsuario = "";
+    for (let i = 0; i < this.listaUsuarios.length; i++) {
+      if (this.listaUsuarios[i]._id == usuario._id) {
+        this.listaUsuarios.splice(i, 1);
+        break
+      }
     }
+
   }
- 
-  }
-  eliminarAcompanante(usuario: any){
-  this.listaUsuarios.push(usuario);
-  for(let i=0;i<this.usuariosAgregados.length; i++){
-    if(this.usuariosAgregados[i]._id== usuario._id){
-      this.usuariosAgregados.splice(i,1);
-      break
+  eliminarAcompanante(usuario: any) {
+    this.listaUsuarios.push(usuario);
+    for (let i = 0; i < this.usuariosAgregados.length; i++) {
+      if (this.usuariosAgregados[i]._id == usuario._id) {
+        this.usuariosAgregados.splice(i, 1);
+        break
+      }
     }
-  }
   }
 
   agregarSolicitud() {
-    
+
 
     var minInicial = ((this.solicitudVehiculo.horaSalida.hour * 60) + this.solicitudVehiculo.horaSalida.minute);
     var minFinal = ((this.solicitudVehiculo.horaRegreso.hour * 60) + this.solicitudVehiculo.horaRegreso.minute);
@@ -308,12 +318,12 @@ let val = ev.target.value;
               break;
             }
           }
-          
+
 
           if (horarioDiaVehiculo.desde == null || horarioDiaVehiculo.desde == undefined || horarioDiaVehiculo.desde == "" || horarioDiaVehiculo.desde == "null") {
-            
+
             this.mensajeSolicitudInvalida = "El día " + dia + " para el vehiculo seleccinado no cuenta con un horario establecido , favor comuniquese con el administrador.";
-         
+
           } else { // validar el horario del dia selecciona con respecto al horario de la sala
             let agregarValid = false;
             let agregar = false;
@@ -355,20 +365,20 @@ let val = ev.target.value;
             }
             else {// validar la disponibilidad de horario
               //alert('horabien'+this.solicitudesdia.length);
-             
+
               if (this.solicitudesdia.length == 0) {//no hay solicitudes del día y el hora escogido es válido
                 agregarValid = true;
-                
+
               } else {
                 // alert('entró aqui  valid' +agregarValid);
-               
+
                 agregarValid = false;
-                this.tempNombreVehiculo= this.solicitudVehiculo.vehiculo;
+                this.tempNombreVehiculo = this.solicitudVehiculo.vehiculo;
                 if (this.tempNombreVehiculo == "") {
                   this.mensajeSolicitudInvalida = "Seleccione un Vehiculo";
-                  
+
                 } else {
-                
+
                   //método burbuja para ordenar las solicitudes de menor a mayor
                   let k = [];
                   for (let i = 1; i < this.solicitudesdia.length; i++) {
@@ -409,12 +419,12 @@ let val = ev.target.value;
                       break;
                     }
                   }
-                 
+
 
                   // verificar si se encontraron
                   if (tempArrayVerificacion.length > 0) {
                     agregar = false;
-                    
+
                   } else {
                     agregar = true;
                   }
@@ -443,7 +453,7 @@ let val = ev.target.value;
                       } else {
                         let solicitud = response.message;
                         this.msjExitoso("Solicitud agregada exitosamente");
-                       //this.enviarEmail(solicitud);
+                        //this.enviarEmail(solicitud);
                         this.solicitudVehiculo = new SolicitudVehiculo('', '', '', null, null, null, '', '', '', null, '', '');
                         this.obtenerSolicitudes(this.date, false);
                         this.obtenerSolicitudVehiculos();
@@ -471,9 +481,9 @@ let val = ev.target.value;
 
     }
 
-  } 
+  }
 
-  modificarSolicitud(solicitudparaEditar:any){ 
+  modificarSolicitud(solicitudparaEditar: any) {
     console.log('probando datos');
     console.log(solicitudparaEditar);
     this.tempPlacaVehiculo = solicitudparaEditar.placa;
@@ -495,14 +505,14 @@ let val = ev.target.value;
     //console.log(this.solicitudSalaEdit.fecha );
     //  this.solicitudSala.fecha.year = dat;
 
-    
+
     this.solicitudVehiculo.fecha = dat;
     console.log(this.solicitudVehiculo);
     this._servSolicitud.obtenerSolicitudes(this.solicitudVehiculo).subscribe(
       response => {
         if (!response.message) {//no hay registros
         } else {//no hay vehiculo registrados
-          
+
           array = response.message;
           this.solicitudesdia = array;
           console.log(this.solicitudesdia);
@@ -728,7 +738,7 @@ let val = ev.target.value;
       id: null
     }
   };
-  
+
   tempEnable = false;
   obtenerSolicitudVehiculos() {
     let identity = localStorage.getItem('identity');
@@ -858,13 +868,13 @@ let val = ev.target.value;
 
     } else {
       this._router.navigate(['/principal']);
-     // this.msjError('Debe Verificar sus credenciales');
+      // this.msjError('Debe Verificar sus credenciales');
     }
 
   }
 
   setHorarioVehiculo(placa) {
-    
+
     this.mensajeSolicitudInvalida = "";
     this.tempHorarioVehiculo = []
     for (let index = 0; index < this.vehiculos.length; index++) {
@@ -884,10 +894,10 @@ let val = ev.target.value;
     return '-';
   }
 
-  vehiculoSeleccionado(p: any){
-    this.p= p;
-    this.setHorarioVehiculo(this.vehiculos[p-1].placa)
-    this.solicitudVehiculo.vehiculo= this.vehiculos[p-1].placa;
+  vehiculoSeleccionado(p: any) {
+    this.p = p;
+    this.setHorarioVehiculo(this.vehiculos[p - 1].placa)
+    this.solicitudVehiculo.vehiculo = this.vehiculos[p - 1].placa;
   }
 
   obtenerSolicitudes(userDate, abrirMod: boolean) {
@@ -909,8 +919,8 @@ let val = ev.target.value;
         // alert('erro');
       }
     );
-   }
-   obtenerUsuarios(){
+  }
+  obtenerUsuarios() {
 
     console.log('llamo metodo llenar usuarios');
     this._servUsuario.obtenerUsuarios().subscribe(
@@ -928,14 +938,14 @@ let val = ev.target.value;
         }
       }
     );
-   }
-   obtenerVehiculos() {
+  }
+  obtenerVehiculos() {
     this._servVehiculo.obtenerVehiculos().subscribe(
       response => {
         if (response.message) {
           this.vehiculos = response.message;
           this.setHorarioVehiculo(this.vehiculos[0].placa);
-          this.solicitudVehiculo.vehiculo= this.vehiculos[0].placa;
+          this.solicitudVehiculo.vehiculo = this.vehiculos[0].placa;
           console.log(this.vehiculos);
         } else {//no hay Salas registradas
         }
@@ -947,9 +957,9 @@ let val = ev.target.value;
       }
     );
   }
-    //este método verificaque la fecha seleccionada sea mayor o igual a la fecha del servidor, para poder realizar la solicitud correctamente.
-    verificarFechaSeleccionada(userDate: Date) {  
-    }
+  //este método verificaque la fecha seleccionada sea mayor o igual a la fecha del servidor, para poder realizar la solicitud correctamente.
+  verificarFechaSeleccionada(userDate: Date) {
+  }
 
   eventTimesChanged({
     event,
@@ -963,19 +973,20 @@ let val = ev.target.value;
     this.refresh.next();
   }
 
-  vehiculoSeleccionadoEditar(nuevoVehiculo:any){
-    this.nuevoVehiculo= nuevoVehiculo;
+  vehiculoSeleccionadoEditar(nuevoVehiculo: any) {
+    this.nuevoVehiculo = nuevoVehiculo;
     console.log(nuevoVehiculo);
   }
 
-  vehiculoActual={};
+  vehiculoActual = {};
   tempArrayChecked = [];
-  esMayor = false; 
+  esMayor = false;
   tempTitleModal = "";
-  tempSolicitud = { usuario: null, departamento: null, fecha: null, motivo: null, inicio: null, fin: null, vehiculo:{placa: null, tipo: null, marca:null} }
+  tempSolicitud = { usuario: null, departamento: null, fecha: null, motivo: null, inicio: null, fin: null, vehiculo: { placa: null, tipo: null, marca: null } }
   eliminar = false;
   handleEvent(action: string, event: CalendarEvent): void {
-   
+
+    this.obtenerUsuarios();
 
     if (action == "Eliminar") {
       this.eliminarSolicitud();
@@ -995,34 +1006,40 @@ let val = ev.target.value;
           if (response.message[0]._id) {
             this.tempSolicitud.usuario = response.message[0].nombre + ' ' + response.message[0].apellidos;
             this.tempSolicitud.departamento = response.message[0].departamento;
-            
-            
-            this.usuariosAgregados=[];
-           
-            for(let i=0; i<this.listaSolicitudes.length; i++){
-              
-              if(this.tempColor.id == this.listaSolicitudes[i]._id){
-               
+
+
+            this.usuariosAgregados = [];
+
+            for (let i = 0; i < this.listaSolicitudes.length; i++) {// Agregar los usuarios que ya la solocitud tiene
+
+              if (this.tempColor.id == this.listaSolicitudes[i]._id) {
+
                 for (var u = 0; u < this.listaSolicitudes[i].acompanantes.length; u++) {
-                    this.usuariosAgregados.push(this.listaSolicitudes[i].acompanantes[u]);
-                    
+                  this.usuariosAgregados.push(this.listaSolicitudes[i].acompanantes[u]);
                 }
               }
             }
-           
-            
-           
-            
-            for(let i=0;i< this.vehiculos.length; i++){
-              if(this.tempColor.vehiculo==this.vehiculos[i].placa){
-                  let posicion =this.vehiculos[0];
-                  this.vehiculos[0]= this.vehiculos[i];
-                  this.vehiculos[i]= posicion;
-                  break;
+
+            for (let u = 0; u < this.usuariosAgregados.length; u++) { //Eliminar de la lista de usuariosdisponibles, los usuarios que ya la solocitud tiene.
+              for(let i=0; i< this.listaUsuarios.length; i++){
+                if(this.usuariosAgregados[u]._id == this.listaUsuarios[i]._id){
+                this.listaUsuarios.splice(i, 1);
+              }
+            }
+          }
+
+
+
+            for (let i = 0; i < this.vehiculos.length; i++) {
+              if (this.tempColor.vehiculo == this.vehiculos[i].placa) {
+                let posicion = this.vehiculos[0];
+                this.vehiculos[0] = this.vehiculos[i];
+                this.vehiculos[i] = posicion;
+                break;
               }
             }
 
-           
+
             this._servSolicitud.obtenerSolicitudVehiculo(this.tempColor.id).subscribe(
               response => {
                 if (response.message) {
@@ -1045,30 +1062,8 @@ let val = ev.target.value;
                   this.solicitudVehiculoEdit.horaSalida = this.timeI;
                   this.solicitudVehiculoEdit.horaRegreso = this.timeF;
 
-                  this.solicitudVehiculoEdit.acompanantes = solicit.acompanantes;
-                  //  console.log(this.recursos);
-                  //console.log(solicit.recursos);
+                  this.solicitudVehiculoEdit.acompanantes = solicit.acompanantes;           
 
-
-                  // console.log(solicit.recursos[i]);
-                  // for (var index = 0; index < this.recursos.length; index++) {
-                  //   this.tempArrayChecked[index] = false;
-
-                  //   for (var i = 0; i < solicit.recursos.length; i++) {
-                  //     if (this.recursos[index]._id == solicit.recursos[i]) {
-                  //       this.tempArrayChecked[index] = true;
-                  //       // console.log(this.recursos[index].nombre);
-                  //     }
-                  //     else {
-
-                  //       //console.log(this.recursos[index].nombre);
-                  //     }
-                  //   }
-
-
-                  // }
-
-                 
                   let date = new Date();
                   date.setFullYear(solicit.fecha.year);
                   date.setMonth(solicit.fecha.month - 1);
@@ -1097,11 +1092,11 @@ let val = ev.target.value;
                           if (date.getDate() < serverDate.getDate() || this.minDate.day < serverDate.getDate()) {
                             this.tempEvent = [];
                           } else {
-                            
+
                             this.tempEvent = event.actions;
                           }
                         } else {
-                         
+
                           this.tempEvent = event.actions;
 
                         }
@@ -1215,7 +1210,7 @@ let val = ev.target.value;
     $('body').removeClass('modal-open');
     $(modalId).removeClass('show');
     $(modalId).css('display', 'none');
-    this.solicSala=true;
+    this.solicSala = true;
   }
 
   abrirModal(modalId: any) {
@@ -1326,7 +1321,7 @@ let val = ev.target.value;
       this.dateStruct.year
     );
     this.onChangeCallback(newDate);
-  
+
   }
 
   updateTime(): void {
