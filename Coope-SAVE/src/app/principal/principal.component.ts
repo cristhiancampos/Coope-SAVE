@@ -85,10 +85,9 @@ export class PrincipalComponent implements OnInit {
   }
 
   abrir(modal){
-    
     this.mr = this.modal.open(modal,{ backdrop: 'static', keyboard: false});
-  
   }
+  
   cerrar(){
     this.mr.close();
   

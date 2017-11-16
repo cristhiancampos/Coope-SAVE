@@ -200,7 +200,7 @@
 
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-secondary" (click)="cancelarAccion()">OK</button>
+    <button type="button" class="btn btn-outline-secondary" (click)="cancelarAccion()">Salir</button>
     <button *ngIf="tempEvent.length>0" type="button" class="btn btn-outline-secondary" (click)="modificarSolicitud()" [disabled]="!timeUpdateF.valid || !timeUpdate.valid || cupE.value<='0'  || cupE.value>cupoMaximoEdit || eliminar">Modificar
       </button>
     <button *ngIf="tempEvent.length>0" type="button" class="btn btn-outline-secondary" (click)="eliminarSolicitud()">Eliminar
@@ -256,13 +256,14 @@
 </div>
 
 <!-- Modal  agregar nueva solicitud-->
-<div class="modal fade bd-example-modal-lg" id="modal-add-new-request" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<!-- <div class="modal fade bd-example-modal-lg" id="modal-add-new-request" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
+    <div class="modal-content"> -->
+  <ng-template #modalAgregarSolicitudSala let-c="close" let-d="dismiss">
       <div class="modal-header" style="color: #FFF;background: #0069d9">
         <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar-plus-o" aria-hidden="true"></i> Solicitar Sala</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cerrarModal('#modal-add-new-request')">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cerrar()">
             <small aria-hidden="true" style="font-size: 2rem; cursor: pointer">&times;</small>
           </button>
       </div>
@@ -295,25 +296,7 @@
 
         </div>
 
-        <!-- Modal  eliminar solicitud-->
-        <ng-template #modalDeleteSolicitudSala>
-          <div class="modal-header" style="color: #FFF;background: #0069d9">
-            <h5 class="modal-title" id="exampleModalLabel">Eliminar Solicitud</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body" style="text-align: center">
-            <span>
-            <i class="fa fa-trash fa-5x" aria-hidden="true" style="color:red"></i> 
-          </span>
-            <br><br>
-            <h5>¿Está seguro que desea eliminar la solicitud? </h5>
-            <br>
-            <button type="button" class="btn btn-default btn-modal-can" (click)="cancelarAccion()">Cancelar</button>
-            <button type="button" class="btn btn-default btn-modal-suc" (click)="confirmEliminar()">Confirmar</button>
-          </div>
-        </ng-template>
+
 
 
         <!--sección agregar solicitud-->
@@ -466,7 +449,7 @@
             </div>
           </div>
           <hr>
-          <button type="button" class="btn btn-danger" (click)="cerrarModal('#modal-add-new-request')">Cancelar</button>
+          <button type="button" class="btn btn-danger" (click)="cerrar()">Cancelar</button>
           <button id="btn-add-solid" type="submit" class="btn btn-success" (click)="agregarSolicitud()" [disabled]="!descp.valid || !cup.valid || !sal.valid ||  !ctrlInitDate.valid || cup.value<='0'">Confirmar</button>
 
         </section>
@@ -486,7 +469,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let solicitud of solicitudesdia; let i = index">
+              <tr *ngFor="let solicitud of solicitudesdia | paginate: {itemsPerPage:5, currentPage: p} let i = index">
                 <th scope="row">{{i+1}}</th>
                 <th>{{solicitud.sala}}</th>
                 <th>{{solicitud.horaInicio.hour}}:{{solicitud.horaInicio.minute}} - {{solicitud.horaFin.hour}}:{{solicitud.horaFin.minute}}
@@ -498,9 +481,36 @@
           </table>
           <h6 *ngIf='solicitudesdia ==undefined || solicitudesdia.length==0'>No hay solicitudes realizadas para el día seleccionado.<br></h6>
           <hr>
-          <button type="button" class="btn btn-danger" (click)="cerrarModal('#modal-add-new-request')">Cancelar</button>
+        
+          <!-- paginador-->
+         <pagination-controls (pageChange)="p =$event">
+       
+         </pagination-controls>
+         <hr>
+          <button type="button" class="btn btn-danger" (click)="cerrar()">Cancelar</button>
         </section>
       </div>
-    </div>
+    <!-- </div>
   </div>
-</div>
+</div> -->
+</ng-template>
+
+<!-- Modal  eliminar solicitud-->
+<ng-template #modalDeleteSolicitudSala>
+  <div class="modal-header" style="color: #FFF;background: #0069d9">
+    <h5 class="modal-title" id="exampleModalLabel">Eliminar Solicitud</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+  </div>
+  <div class="modal-body" style="text-align: center">
+    <span>
+            <i class="fa fa-trash fa-5x" aria-hidden="true" style="color:red"></i> 
+          </span>
+    <br><br>
+    <h5>¿Está seguro que desea eliminar la solicitud? </h5>
+    <br>
+    <button type="button" class="btn btn-default btn-modal-can" (click)="cancelarAccion()">Cancelar</button>
+    <button type="button" class="btn btn-default btn-modal-suc" (click)="confirmEliminar()">Confirmar</button>
+  </div>
+</ng-template>
