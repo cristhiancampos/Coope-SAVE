@@ -81,8 +81,9 @@ export class SolicitudSalaComponent implements OnInit {
   cerrar(){
     this.mr.close();
     this.solicSala=true;
-  
+    this.activeDayIsOpen=true;
   }
+
   solicitudSala: SolicitudSala;
   solicitudSalaEdit: SolicitudSala;
   private departamentos = [];
@@ -437,7 +438,6 @@ export class SolicitudSalaComponent implements OnInit {
           this.solicitudesdia = array;
           if (abrirMod) {
             this.abrir(this.modalAgregarSolicitudSala);
-           // this.abrirModal('#modal-add-new-request');
           }
         }
       }, error => {
@@ -493,10 +493,11 @@ export class SolicitudSalaComponent implements OnInit {
     this.refresh.next();
   }
 
-  
+  //manejador de eventos
   handleEvent(action: string, event: CalendarEvent): void {
     this.tempColor = event.color;
     this.solicitudSalaEdit._id = this.tempColor.id;
+    this.activeDayIsOpen=false;
     if (action == "Eliminar") {
       this.eliminarSolicitud();
     }
@@ -607,7 +608,7 @@ export class SolicitudSalaComponent implements OnInit {
                       }
 
                       this.modalData = { event, action };
-                      this.mr = this.modal.open(this.modalContent, { size: 'lg' });
+                      this.mr = this.modal.open(this.modalContent, { size: 'lg',backdrop: 'static', keyboard: false });
                     }, error => {
                       //ocurrió un error
                     }
