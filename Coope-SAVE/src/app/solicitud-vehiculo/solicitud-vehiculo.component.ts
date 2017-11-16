@@ -53,7 +53,9 @@ export class SolicitudVehiculoComponent implements OnInit {
 
   @ViewChild('modalContent2') modalContent2: TemplateRef<any>;
   @ViewChild('modalDeleteSolicitudVehiculo') modalDeleteSolicitudVehiculo: TemplateRef<any>;
-
+  @ViewChild('modalAgregarSolicitudVehiculo') modalAgregarSolicitudVehiculo: TemplateRef<any>;
+  
+  
   view = 'month';
   viewDate: Date = new Date();
 
@@ -457,7 +459,7 @@ export class SolicitudVehiculoComponent implements OnInit {
                         this.solicitudVehiculo = new SolicitudVehiculo('', '', '', null, null, null, '', '', '', null, '', '');
                         this.obtenerSolicitudes(this.date, false);
                         this.obtenerSolicitudVehiculos();
-                        this.cerrarModal('#modal-add-new-solicitudVehiculo');
+                        this.cerrar();
                         // this.obtenerSalas();
                       }
                     }, error => {
@@ -912,7 +914,7 @@ export class SolicitudVehiculoComponent implements OnInit {
           array = response.message;
           this.solicitudesdia = array;
           if (abrirMod) {
-            this.abrirModal('#modal-add-new-solicitudVehiculo');
+            this.abrir(this.modalAgregarSolicitudVehiculo);
           }
         }
       }, error => {
@@ -1021,12 +1023,12 @@ export class SolicitudVehiculoComponent implements OnInit {
             }
 
             for (let u = 0; u < this.usuariosAgregados.length; u++) { //Eliminar de la lista de usuariosdisponibles, los usuarios que ya la solocitud tiene.
-              for(let i=0; i< this.listaUsuarios.length; i++){
-                if(this.usuariosAgregados[u]._id == this.listaUsuarios[i]._id){
-                this.listaUsuarios.splice(i, 1);
+              for (let i = 0; i < this.listaUsuarios.length; i++) {
+                if (this.usuariosAgregados[u]._id == this.listaUsuarios[i]._id) {
+                  this.listaUsuarios.splice(i, 1);
+                }
               }
             }
-          }
 
 
 
@@ -1202,23 +1204,33 @@ export class SolicitudVehiculoComponent implements OnInit {
     );
   }
 
+  cerrar(){
+    this.mr.close();
+    this.solicSala=true;
+  
+  }
+
+  abrir(modal){
+    this.mr = this.modal.open(modal,{ backdrop: 'static', keyboard: false,size: 'lg'});
+  }
+
 
   ///***************************************************METODOS AGREGADOS***********************************
 
-  cerrarModal(modalId: any) {
-    $(".modal-backdrop").remove();
-    $('body').removeClass('modal-open');
-    $(modalId).removeClass('show');
-    $(modalId).css('display', 'none');
-    this.solicSala = true;
-  }
+  // cerrarModal(modalId: any) {
+  //   $(".modal-backdrop").remove();
+  //   $('body').removeClass('modal-open');
+  //   $(modalId).removeClass('show');
+  //   $(modalId).css('display', 'none');
+  //   this.solicSala = true;
+  // }
 
-  abrirModal(modalId: any) {
-    $('body').append('<div class="modal-backdrop fade show" ></div>');
-    $('body').addClass('modal-open');
-    $(modalId).addClass('show');
-    $(modalId).css('display', 'block');
-  }
+  // abrirModal(modalId: any) {
+  //   $('body').append('<div class="modal-backdrop fade show" ></div>');
+  //   $('body').addClass('modal-open');
+  //   $(modalId).addClass('show');
+  //   $(modalId).css('display', 'block');
+  // }
 
   msjExitoso(texto: string) {
     swal({
