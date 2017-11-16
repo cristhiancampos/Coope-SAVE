@@ -44,13 +44,13 @@
           <thead class="thead-default">
             <tr>
               <th class="th-color"><i class="fa fa-list-ol" aria-hidden="true"></i></th>
-              <th class="th-color">Fecha</th>
-              <th class="th-color">Horario</th>
-              <th class="th-color">Sala</th>
-              <th class="th-color">Motivo</th>
-              <th class="th-color">Personas</th>
-              <th class="th-color">Solicitante</th>
-              <th class="th-color"> Recursos</th>
+              <th class="th-color">Fecha<a (click)="ordenarSolicitudesSala('Fecha')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+              <th class="th-color">Horario<a (click)="ordenarSolicitudesSala('Horario')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+              <th class="th-color">Sala<a (click)="ordenarSolicitudesSala('Sala')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+              <th class="th-color">Motivo <a (click)="ordenarSolicitudesSala('Motivo')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+              <th class="th-color">Personas <a (click)="ordenarSolicitudesSala('Personas')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+              <th class="th-color">Solicitante <a (click)="ordenarSolicitudesSala('Solicitante')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+              <th class="th-color"> Recursos </th>
               <th class="th-color" style="text-align: center">Acciones</th>
             </tr>
           </thead>

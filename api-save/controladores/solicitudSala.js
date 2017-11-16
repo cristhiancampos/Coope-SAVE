@@ -42,7 +42,7 @@ function agregarSolicitud(req, res) {
 }
 function obtenerFechaActual(req, res) {
   var hoy = new Date();
-  console.log(hoy.getDate());
+  //console.log(hoy.getDate());
   res.status(200).send({ currentDate: hoy });
 }
 function obtenerSolicitudesSalas(req, res) {

@@ -1,9 +1,5 @@
 <ng-template #modalContent let-close="close" id="modalContent">
   <div class="modal-header" style="background: #0069d9;color:#fff">
-    <!-- <h5 class="modal-title">Event action occurred</h5>
-      <button type="button" class="close" (click)="close()">
-        <span aria-hidden="true">&times;</span>
-      </button> -->
     <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;{{tempTitleModal}} Solicitud</h5>
     <!-- {{ modalData?.action }}-->
     <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal" (click)="close()"> 
@@ -266,34 +262,35 @@
       <div class="modal-body" style="text-align: center">
 
 
-        <div class="row">
-          <div class="col-md-8" style="margin-left: 9%;">
-            <div class="panel with-nav-tabs panel-primary">
-              <div class="panel-heading">
-                <ul class="nav nav-pills nav-fill nav-tabs">
-
-                  <li class="nav-item">
-                    <a id="bnt-lista" class="nav-link active" href="#tab1primary" data-toggle="tab" (click)="solicitud(1)" style="width: 210px;font-size: 1.3rem;">Solicitar Sala</a>
-                  </li>
-                  <li class="nav-item">
-                    <a id="bnt-solicitud" class="nav-link" href="#tab2primary" (click)="solicitud(2)" data-toggle="tab" style="width: 210px;font-size: 1.3rem;">Solicitudes del día</a>
-                  </li>
-                </ul>
+          <div class="row" >
+              <div class="col-md-3">
               </div>
-              <div class="panel-body">
-                <div class="tab-content">
-                  <div class="tab-pane fade in active" id="tab1primary">
+              <div class="col-md-6">
+                <div class="panel with-nav-tabs panel-primary">
+                  <div class="panel-heading">
+                    <ul class="nav nav-pills nav-fill nav-tabs">
+          
+                      <li class="nav-item">
+                        <a  id="btn-solicitud" class="nav-link active" href="#tab1primary" data-toggle="tab" (click)="solicitud(1)" >Solicitar Sala</a>
+                      </li>
+                      <li class="nav-item">
+                        <a id="btn-lista" class="nav-link" href="#tab2primary" data-toggle="tab" (click)="solicitud(2)">Solicitudes del día</a>
+                      </li>
+                    </ul>
                   </div>
-                  <div class="tab-pane fade" id="tab2primary"></div>
+                  <div class="panel-body">
+                    <div class="tab-content">
+                      <div class="tab-pane fade in active" id="tab1primary">
+                      </div>
+                      <div class="tab-pane fade" id="tab2primary"></div>
+                    </div>
+                  </div>
                 </div>
               </div>
+              <div class="col-md-3">
+              </div>
+          
             </div>
-          </div>
-
-        </div>
-
-
-
 
         <!--sección agregar solicitud-->
         <section *ngIf="solicSala">
