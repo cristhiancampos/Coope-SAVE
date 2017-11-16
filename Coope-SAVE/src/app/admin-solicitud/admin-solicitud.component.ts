@@ -24,7 +24,7 @@ export class AdminSolicitudComponent implements OnInit {
   private token;
   private identity;
 
-  //Variables para solicitud sala
+  //Variables para solicitudes
   public solicitudSala: SolicitudSala;
   public solicitudSalaEdit: SolicitudSala;
   public solicitudSalaTemp: SolicitudSala;
@@ -41,8 +41,6 @@ export class AdminSolicitudComponent implements OnInit {
   public idEliminar;
   public acompananteIndex;
 
-  //Variables para solicitudVehiculos
-
 
 
   constructor(
@@ -56,14 +54,13 @@ export class AdminSolicitudComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.verificarCredenciales();
     this.obtenerUsuarios();
     this.obtenerRecursos();
-    this.verificarCredenciales();
     this.obtenerSolicitudSalas();
     this.obtenerSolicitudVehiculo()
 
   }
-
 
   //********************************************************************Sección Solicitud Sala**********************************************************************//
   obtenerSolicitudSalas() {
@@ -93,6 +90,33 @@ export class AdminSolicitudComponent implements OnInit {
     }  else if(filtro==='Fecha'){
       this.ordenarPorFecha(this.solicitudSalas);
      } 
+     else if(filtro==='Sala'){
+     this.ordenarPorSala(this.solicitudSalas);
+     } 
+     else if(filtro==='Solicitante'){
+      this.ordenarPorUsuario(this.solicitudSalas);
+      } else if(filtro==='Motivo'){
+        this.ordenarPorMotivo(this.solicitudSalas);
+        } 
+     
+  }
+  ordenarSolicitudesVehiculo(filtro:string){
+    if(filtro==='Horario'){
+      this.ordenarPorHorarioVehiculo(this.solicitudVehiculos);
+    }
+    else if(filtro==='Placa'){
+    this.ordenarPorPlaca(this.solicitudVehiculos);
+    }  else if(filtro==='Fecha'){
+      this.ordenarPorFecha(this.solicitudVehiculos);
+     } 
+     else if(filtro==='Destino'){
+    this.ordenarPorDestino(this.solicitudVehiculos);
+     } 
+     else if(filtro==='Solicitante'){
+      this.ordenarPorUsuario(this.solicitudVehiculos);
+      } else if(filtro==='Motivo'){
+        this.ordenarPorMotivo(this.solicitudVehiculos);
+        } 
   }
   /*Métodos Generales*/
   ordenarPorHorario(array:any){
@@ -108,7 +132,72 @@ export class AdminSolicitudComponent implements OnInit {
     }
     return array;
   }
+  ordenarPorHorarioVehiculo(array:any){
+    let k = [];
+    for (let i = 1; i < array.length; i++) {
+      for (var j = 0; j < (array.length - i); j++) {
+        if (array[j].horaSalida.hour > array[j + 1].horaSalida.hour) {
+          k = array[j + 1];
+          array[j + 1] = array[j];
+          array[j] = k;
+        }
+      }
+    }
+    return array;
+  }
+  ordenarPorSala(array:any){
+    array.sort(function(a, b){
+    var keyA = a.sala,
+        keyB = b.sala;
+    if(keyA < keyB) return -1;
+    if(keyA > keyB) return 1;
+    return 0;
+   });
+    return array;
+  }
 
+  ordenarPorUsuario(array:any){
+    array.sort(function(a, b){
+      var keyA = a.usuario,
+          keyB = b.usuario;
+      if(keyA < keyB) return -1;
+      if(keyA > keyB) return 1;
+      return 0;
+    });
+    return array;
+  }
+
+  ordenarPorMotivo(array:any){
+    array.sort(function(a, b){
+      var keyA = a.descripcion,
+          keyB = b.descripcion;
+      if(keyA < keyB) return -1;
+      if(keyA > keyB) return 1;
+      return 0;
+    });
+    return array;
+  }
+  ordenarPorDestino(array:any){
+    array.sort(function(a, b){
+      var keyA = a.destino,
+          keyB = b.destino;
+      if(keyA < keyB) return -1;
+      if(keyA > keyB) return 1;
+      return 0;
+      });
+      return array;
+    }
+
+  ordenarPorPlaca(array:any){
+    array.sort(function(a, b){
+      var keyA = a.vehiculo,
+          keyB = b.vehiculo;
+      if(keyA < keyB) return -1;
+      if(keyA > keyB) return 1;
+      return 0;
+    });
+    return array;
+  }
   ordenarPorCantidadPersonas(array:any){
     let k = [];
     for (let i = 1; i < array.length; i++) {
@@ -123,7 +212,6 @@ export class AdminSolicitudComponent implements OnInit {
     return array;
   }
   ordenarPorFecha(array:any){
-    console.log(this.solicitudSalas);
     let k = [];
     for (let i = 1; i < array.length; i++) {
       for (var j = 0; j < (array.length - i); j++) {
@@ -138,7 +226,6 @@ export class AdminSolicitudComponent implements OnInit {
   }
 
   obtenerUsuarios() {
-
     this._servUsuario.obtenerUsuarios().subscribe(
       response => {
         if (response.message) {
@@ -166,7 +253,6 @@ export class AdminSolicitudComponent implements OnInit {
 
   }
   obtenerRecursos() {
-
     this._servRecurso.obtenerRecursos().subscribe(
       response => {
         if (response.message) {
@@ -184,7 +270,6 @@ export class AdminSolicitudComponent implements OnInit {
   }
 
   getNombreRecurso(id: any) {
-
     this.listaNombreRecursos = [];
     this.codigosRecursosTemp = [];
     this.solicitudSalaTemp = id;
@@ -207,7 +292,6 @@ export class AdminSolicitudComponent implements OnInit {
 
 
   elimarRecursoSoicitud() {
-
     let index = this.currenIndex;
     this.solicitudSalaTemp.recursos = this.codigosRecursosTemp;
     this.listaNombreRecursos.splice(index, 1);
@@ -270,7 +354,7 @@ export class AdminSolicitudComponent implements OnInit {
 
         if (response.message) {
           this.solicitudVehiculos = response.message;
-
+          this.solicitudVehiculos=this.ordenarPorFecha(this.solicitudVehiculos);
           console.log(this.solicitudVehiculos);
         } else {//no hay Salas registradas
         }
@@ -285,8 +369,6 @@ export class AdminSolicitudComponent implements OnInit {
 
 
   eliminarSolicitudVehiculo() {
-
-    console.log(this.idEliminar);
     
     this._servSolicitudVehiculo.eliminarSolicitudVehiculo(this.idEliminar).subscribe(
       response => {
@@ -310,8 +392,6 @@ export class AdminSolicitudComponent implements OnInit {
 
   getNombreAcompanantes(vehiculo: any) {
     this.solicitudVehiculoTem = vehiculo;
-
-    console.log(this.solicitudVehiculoTem);
     for (var e = 0; e < vehiculo.acompanantes.length; e++) {
       this.listaNombreAcompanantes[e] = vehiculo.acompanantes[e];
     }
@@ -321,7 +401,6 @@ export class AdminSolicitudComponent implements OnInit {
   elimarAcompanante() {
 
     let index = this.acompananteIndex;
-
     this.listaNombreAcompanantes.splice(index, 1);
     this.solicitudVehiculoTem.acompanantes= this.listaNombreAcompanantes;
   
@@ -351,9 +430,6 @@ export class AdminSolicitudComponent implements OnInit {
 
   }
 
- 
-
-
   //********************************************************************Fin Sección Solicitud Vehiculo**********************************************************************//
   setCurrenIndex(index: any) {
     this.currenIndex = index
@@ -365,10 +441,6 @@ export class AdminSolicitudComponent implements OnInit {
   setIdEliminar(id: any) {
     this.idEliminar = id;
   }
-
-
-
-
 
   verificarCredenciales() {
     this.identity = this._servUsuario.getIndentity();
@@ -387,7 +459,7 @@ export class AdminSolicitudComponent implements OnInit {
         this.identity = identity;
         if (!this.identity._id) {
           $('#nav-user').text(' ');
-          this.abrirModal('#loginModal');
+          this._router.navigate(['/principal']);
         } else {
           //conseguir el token para enviarselo a cada petición
           this._servUsuario.verificarCredenciales(usuarioTemp, 'true').subscribe(
@@ -396,7 +468,7 @@ export class AdminSolicitudComponent implements OnInit {
               this.token = token;
               if (this.token <= 0) {
                 $('#nav-user').text(' ');
-                this.abrirModal('#loginModal');
+                this._router.navigate(['/principal']);
               } else {
                 // crear elemento en el localstorage para tener el token disponible
                 localStorage.setItem('token', token);
@@ -413,13 +485,13 @@ export class AdminSolicitudComponent implements OnInit {
               }
             }, error => {
               $('#nav-user').text(' ');
-              this.abrirModal('#loginModal');
+              this._router.navigate(['/principal']);
             }
           );
         }
       }, error => {
         $('#nav-user').text(' ');
-        this.abrirModal('#loginModal');
+        this._router.navigate(['/principal']);
       }
       );
     } else {
@@ -482,6 +554,5 @@ export class AdminSolicitudComponent implements OnInit {
       $('#bnt-sala').css('background', '#eee');
     });
   }
-
 
 }
