@@ -84,8 +84,6 @@
   </section>
 
 <!-- Sección de modal de Recursos-->
-
-
 <div  class="modal fade bd-example-modal-sm " id="modalRecursos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
 aria-hidden="true">
 <div class="modal-dialog bd-example-modal-sm " role="document">
@@ -127,7 +125,6 @@ aria-hidden="true">
 </div>
 
 
-
   <!-- Sección de vehiculos-->
   <section *ngIf="!sala">
       <br>
@@ -146,12 +143,12 @@ aria-hidden="true">
           <thead class="thead-default">
             <tr>
               <th class="th-color"><i class="fa fa-list-ol" aria-hidden="true"></i></th>
-              <th class="th-color">Fecha</th>
-              <th class="th-color">Horario</th>
-              <th class="th-color">Placa-Vehículo</th>
-              <th class="th-color">Motivo</th>
-              <th class="th-color">Destino</th>
-              <th class="th-color">Solicitante</th>
+              <th class="th-color">Fecha<a (click)="ordenarSolicitudesVehiculo('Fecha')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+              <th class="th-color">Horario <a (click)="ordenarSolicitudesVehiculo('Horario')"> <i class="fa fa-sort" aria-hidden="true"></i></a> </th>
+              <th class="th-color">Placa-Vehículo <a (click)="ordenarSolicitudesVehiculo('Placa')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+              <th class="th-color">Motivo <a (click)="ordenarSolicitudesVehiculo('Motivo')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+              <th class="th-color">Destino <a (click)="ordenarSolicitudesVehiculo('Destino')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+              <th class="th-color">Solicitante <a (click)="ordenarSolicitudesVehiculo('Solicitante')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
               <th class="th-color"> Acompañantes</th>
               <th class="th-color" style="text-align: center">Acciones</th>
             </tr>
