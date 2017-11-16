@@ -51,6 +51,7 @@ const colors: any = {
 export class SolicitudSalaComponent implements OnInit {
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
   @ViewChild('modalDeleteSolicitudSala') modalDeleteSolicitudSala: TemplateRef<any>;
+  @ViewChild('modalAgregarSolicitudSala') modalAgregarSolicitudSala: TemplateRef<any>;
   view = 'month';
   viewDate: Date = new Date();
 
@@ -70,9 +71,17 @@ export class SolicitudSalaComponent implements OnInit {
   //*********************************************AGREGADOS***************************** */
   ngOnInit() {
     this.verificarCredenciales();
-    // this.obtenerDepartamentos();
 
+  }
 
+  abrir(modal){
+    this.mr = this.modal.open(modal,{ backdrop: 'static', keyboard: false,size: 'lg'});
+  }
+  
+  cerrar(){
+    this.mr.close();
+    this.solicSala=true;
+  
   }
   solicitudSala: SolicitudSala;
   solicitudSalaEdit: SolicitudSala;
@@ -359,6 +368,7 @@ export class SolicitudSalaComponent implements OnInit {
   }
   //mostrar modal de solicitar sala a hacer click en un día del calendario
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }) {
+    this.solicitudSala = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
     this.solicitudSala.fecha = date;
     this.solicitudSala.horaInicio = { hour: 7, minute: 0 };
     this.solicitudSala.horaFin = { hour: 11, minute: 0 };
@@ -367,6 +377,7 @@ export class SolicitudSalaComponent implements OnInit {
     this._servSolicitud.fechaActual().subscribe(
       response => {
         if (response.currentDate) {
+         // console.log(response.currentDate);
           this.currentDate = response.currentDate;
           var momentDate = moment(this.currentDate, 'YYYY-MM-DD HH:mm:ss');
           let serverDate = momentDate.toDate();
@@ -374,11 +385,12 @@ export class SolicitudSalaComponent implements OnInit {
           this.minDate.year = serverDate.getFullYear();
           this.minDate.month = (serverDate.getMonth() + 1);
           this.minDate.day = serverDate.getDate();
+
           if (date.getFullYear() < serverDate.getFullYear()) {
             this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
-          } else if (((date.getMonth() + 1) < (serverDate.getMonth() + 1))) {
+          } else if (date.getMonth()  < serverDate.getMonth()) {
             this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
-          } else if (((date.getMonth() + 1) == (serverDate.getMonth() + 1))) {
+          } else if (date.getMonth() == serverDate.getMonth() ) {
             if (date.getDate() < serverDate.getDate()) {
               this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
             } else {
@@ -424,7 +436,8 @@ export class SolicitudSalaComponent implements OnInit {
           array = response.message;
           this.solicitudesdia = array;
           if (abrirMod) {
-            this.abrirModal('#modal-add-new-request');
+            this.abrir(this.modalAgregarSolicitudSala);
+           // this.abrirModal('#modal-add-new-request');
           }
         }
       }, error => {
@@ -851,7 +864,7 @@ export class SolicitudSalaComponent implements OnInit {
                         let solicitud = response.message;
                         this.msjExitoso("Solicitud agregada exitosamente");
                         this.enviarEmail(solicitud);
-                        this.cerrarModal('#modal-add-new-request');
+                        this.cerrar();
                         this.solicitudSala = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
                         this.obtenerSolicitudes(this.date, false);
                         this.obtenerSolicitudSalas();
