@@ -187,15 +187,31 @@ export class SolicitudVehiculoComponent implements OnInit {
   crearPDF(){
 
     const pdf = new jsPDF();
-    const imgLogo = "assets/img/logo.png";
-    const html= "<h1> Probando htmlPDF</h1>"
-    pdf.text('Probando PDF',10,10);
-    pdf.addImage(imgLogo, 'PNG', 10, 40, 180, 180);  
-    pdf.fromHTML($('#areaText').get(0),20,20,{'width':800} );
+    const htmlTitulo= `<h3 style="text-align: center;"> Traslado y uso de Vehículos</h3>`
+ 
+    let logo = new Image();
+    let imgDatos= new Image();
+    logo.src = '../assets/img/logo.png';
+    imgDatos.src= '../assets/img/datos.jpg.';
+    
+    pdf.addImage(logo, 'PNG', 65, 14, 80, 15);
+    pdf.addImage(imgDatos, 'JPEG', 20, 150, 300, 300);
+    pdf.setFontSize(14);
 
+    pdf.fromHTML(htmlTitulo,80, 30, {} );
+    // pdf.fromHTML(htmlDatos, 20,50 );   
 
-   
-
+    console.log(this.listaSolicitudes);
+    pdf.text(20, 60, 'Placa:'); pdf.text(65,14, this.listaSolicitudes[0].vehiculo);
+    pdf.text(130, 60, 'Fecha:'); pdf.text(150,60, this.listaSolicitudes[0].vehiculo);
+    pdf.text(20, 70, 'Hora Salida:'); pdf.text(70,70, this.listaSolicitudes[0].vehiculo);
+    pdf.text(20, 80, 'Hora Regreso:'); pdf.text(70,80, this.listaSolicitudes[0].vehiculo);
+    pdf.text(20, 90, 'Motivo de la Gira:'); pdf.text(70,90, this.listaSolicitudes[0].vehiculo);
+    pdf.text(20, 100, 'Destino:');  pdf.text(70,100, this.listaSolicitudes[0].vehiculo);
+    pdf.text(20, 110, 'Acompañantes:'); pdf.text(70,110, this.listaSolicitudes[0].vehiculo);
+    pdf.text(20, 120, 'Encargado:');  pdf.text(70,120, this.listaSolicitudes[0].vehiculo);
+    pdf.text(130, 120, 'Firma:'); pdf.text(150,120, this.listaSolicitudes[0].vehiculo);
+    
     pdf.save('prueba.pdf');
   
   }
