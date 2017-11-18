@@ -34,6 +34,8 @@ import { AdminSolicitudComponent } from './admin-solicitud/admin-solicitud.compo
 import { SolicitudVehiculoComponent } from './solicitud-vehiculo/solicitud-vehiculo.component';
 import {filtrarUsuario} from './solicitud-vehiculo/filtroUsuarios';
 import {NgxPaginationModule} from 'ngx-pagination';
+import { ReportesComponent } from './reportes/reportes.component';
+import { ChartsModule } from 'ng2-charts';
 
 
 @NgModule({
@@ -52,7 +54,8 @@ import {NgxPaginationModule} from 'ngx-pagination';
     AdminRecursoComponent,
     AdminSolicitudComponent,
     SolicitudVehiculoComponent,
-    filtrarUsuario
+    filtrarUsuario,
+    ReportesComponent
     
 
   ],
@@ -64,7 +67,8 @@ import {NgxPaginationModule} from 'ngx-pagination';
     BrowserAnimationsModule,
     CalendarModule.forRoot(),
     NgbModule.forRoot(),
-    NgxPaginationModule
+    NgxPaginationModule,
+    ChartsModule
     
     
   ],
