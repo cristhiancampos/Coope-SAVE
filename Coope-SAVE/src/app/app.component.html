@@ -21,8 +21,8 @@
                   </a>
               <a class="dropdown-item" routerLink="/modificar" routerLinkActive="actived">
                     <i class="fa fa-user" aria-hidden="true"></i>&nbsp;Perfil
-                    <hr>
-              </a> 
+                   
+              </a>  <hr>
                   <a class="dropdown-item" routerLink="/solicitudSala" routerLinkActive="actived">
                     
                         <i class="fa fa-users" aria-hidden="true"></i>&nbsp;Solicitar Sala
@@ -32,7 +32,6 @@
                   </a>
               <a class="dropdown-item" routerLink="/administrador" routerLinkActive="actived" 
               *ngIf='(SESSION.rol && SESSION.rol=="SUPERADMIN") || (SESSION.rol && SESSION.rol=="ADMINISTRADOR")'>
-              <hr>
                      <i class="fa fa-cogs" aria-hidden="true" ></i>&nbsp;Administrador
                   </a>
                   <a class="dropdown-item" routerLink="/reportes" routerLinkActive="actived"
