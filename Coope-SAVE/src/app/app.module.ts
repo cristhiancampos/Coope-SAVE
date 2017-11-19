@@ -18,7 +18,7 @@ import {CalendarHeaderComponent} from './demo-utils/calendar-header.component';
 import * as moment from 'moment';
 import 'moment/locale/es';
 moment.locale('es');
-import { RegistoUsuarioComponent } from './registo-usuario/registo-usuario.component';
+// import { RegistoUsuarioComponent } from './registo-usuario/registo-usuario.component';
 import { PrincipalComponent } from './principal/principal.component';
 
 
@@ -43,7 +43,6 @@ import { ChartsModule } from 'ng2-charts';
     AppComponent,
     SolicitudSalaComponent,
     CalendarHeaderComponent,
-    RegistoUsuarioComponent,
     PrincipalComponent,
     ModificarUsuarioComponent,
     AdministradorComponent,
