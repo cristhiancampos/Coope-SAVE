@@ -229,7 +229,7 @@ export class SolicitudSalaComponent implements OnInit {
                               for (var i = 0; i < this.usuarios.length; i++) {
                                 if (listaSolicitudes[index].usuario == this.usuarios[i]._id) {
                                   for (var c = 0; c < this.departamentos.length; c++) {
-                                    if (this.usuarios[i].departamento == this.departamentos[c].nombre) {
+                                    if (this.usuarios[i].departamento == this.departamentos[c]._id) {
                                       this.tempColor = {
                                         color: {
                                           primary: this.departamentos[c].color + '',
@@ -481,6 +481,16 @@ export class SolicitudSalaComponent implements OnInit {
       }
     );
 
+  }
+///obtiene el nombre departamento, partiendo de su _id
+  obtenerNombreDep(id_Dep: any) {
+    for (var index = 0; index < this.departamentos.length; index++) {
+      if (this.departamentos[index]._id == id_Dep) {
+        return this.departamentos[index].nombre;
+      }
+
+    }
+    return "";
   }
 
   //administra el evento de cambio de hora en las solicitudes

@@ -64,10 +64,17 @@
               <th>{{sala.descripcion}}</th>
               <th>{{sala.cantidadPersonas}}</th>
               <th>{{getNombre(sala.usuario)}}</th>
-              <th><button   class="btn btn-success btn-accion" [disabled]="sala.recursos==0" data-toggle="modal" (click)="getNombreRecurso(sala)" data-target="#modalRecursos" aria-hidden="true"> <i class="fa fa-tasks" aria-hidden="true"></i></button></th>
+              <th><button   class="btn btn-success btn-accion"
+                 [disabled]='sala.recursos==0 || (identity.rol != "SUPERADMIN" && identity.rol != "ADMINISTRADOR")  || (identity.rol != "ADMINISTRADOR" && identity.rol != "SUPERADMIN")'
+                data-toggle="modal" (click)="getNombreRecurso(sala)" data-target="#modalRecursos" aria-hidden="true"> <i class="fa fa-tasks" aria-hidden="true"></i></button></th>
               <th style="text-align: center">
-                 <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button> 
-                <button class="btn btn-danger btn-accion" data-toggle="modal"  (click)="setIdEliminar(sala._id)" data-target="#modal-delete-solicitud"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+                 <button class="btn btn-primary btn-accion"  [disabled]='(identity.rol != "SUPERADMIN" && identity.rol != "ADMINISTRADOR")  || (identity.rol != "ADMINISTRADOR" && identity.rol != "SUPERADMIN")'>
+                   <i class="fa fa-pencil" aria-hidden="true"></i> 
+                  </button> 
+                <button class="btn btn-danger btn-accion" data-toggle="modal"  (click)="setIdEliminar(sala._id)" data-target="#modal-delete-solicitud"
+                [disabled]='(identity.rol != "SUPERADMIN" && identity.rol != "ADMINISTRADOR")  || (identity.rol != "ADMINISTRADOR" && identity.rol != "SUPERADMIN")'>
+                <i class="fa fa-trash-o" aria-hidden="true"></i> 
+              </button>
               </th>
             </tr>
           </tbody>
@@ -163,10 +170,18 @@ aria-hidden="true">
               <th>{{vehiculo.descripcion}}</th>
               <th>{{vehiculo.destino}}</th>
               <th>{{getNombre(vehiculo.usuario)}}</th>
-              <th><button   class="btn btn-success btn-accion" [disabled]="vehiculo.acompanantes==0" data-toggle="modal" (click)="getNombreAcompanantes(vehiculo)" data-target="#modalAcompanantes" aria-hidden="true"> <i class="fa fa-tasks" aria-hidden="true"></i></button></th>
+              <th><button   class="btn btn-success btn-accion" data-toggle="modal" (click)="getNombreAcompanantes(vehiculo)" data-target="#modalAcompanantes" aria-hidden="true"
+                 [disabled]='vehiculo.acompanantes==0 || (identity.rol != "SUPERADMIN" && identity.rol != "ADMINISTRADOR")  || (identity.rol != "ADMINISTRADOR" && identity.rol != "SUPERADMIN")'
+                  > <i class="fa fa-tasks" aria-hidden="true"></i></button></th>
               <th style="text-align: center">
-                <button class="btn btn-primary btn-accion"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-                <button class="btn btn-danger btn-accion" data-toggle="modal"  (click)="setIdEliminar(vehiculo._id)"data-target="#modal-delete-solicitudVehiculo"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+                <button class="btn btn-primary btn-accion"
+                [disabled]='(identity.rol != "SUPERADMIN" && identity.rol != "ADMINISTRADOR")  || (identity.rol != "ADMINISTRADOR" && identity.rol != "SUPERADMIN")'>
+                  <i class="fa fa-pencil" aria-hidden="true"></i>
+                 </button>
+                <button class="btn btn-danger btn-accion" data-toggle="modal"  (click)="setIdEliminar(vehiculo._id)"data-target="#modal-delete-solicitudVehiculo"
+                [disabled]='(identity.rol != "SUPERADMIN" && identity.rol != "ADMINISTRADOR")  || (identity.rol != "ADMINISTRADOR" && identity.rol != "SUPERADMIN")'>
+                <i class="fa fa-trash-o" aria-hidden="true"></i>
+               </button>
               </th>
             </tr>
           </tbody>
@@ -219,6 +234,7 @@ aria-hidden="true">
             </tr>
           </tbody>
         </table>
+        
       </div>
       <div style="float: right">
         <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal" >Salir</button>

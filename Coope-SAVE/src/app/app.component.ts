@@ -10,7 +10,7 @@ moment.locale('es');
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'], 
+  styleUrls: ['./app.component.css'],
   providers: [ServicioUsuario]
 })
 export class AppComponent implements OnInit {
@@ -24,7 +24,8 @@ export class AppComponent implements OnInit {
   public errorMessage;
   public user: Usuario;
   public mmostrar;
-  public adminEnable =false;
+  public adminEnable = false;
+  indentityy;
 
 
   constructor(
@@ -93,7 +94,7 @@ export class AppComponent implements OnInit {
             } else {
               //crear elemento en el localstorage para tener el token disponible
               localStorage.setItem('token', token);
-              this.user = new Usuario('','','','','','','','','','');
+              this.user = new Usuario('', '', '', '', '', '', '', '', '', '');
             }
           }, error => {
             var errorMensaje = <any>error;
@@ -136,40 +137,45 @@ export class AppComponent implements OnInit {
   }
   // método que realiza una acción después de haberse cargado el componente
   ngOnInit() {
-
-    //localStorage.clear();
-    /*console.log('---------------------------------------------');
-    let identity =localStorage.getItem('identity');
-    let user =JSON.parse(identity);
-    this.SESSION =user;
-    console.log(user);
-    if(user!=null)
-      {
-        this.mmostrar = true;
-      }else{
-        this.mmostrar = false;
-       
-      }*/
-    
-    // var wsh = new ActiveXObject('WScript.Shell');
-    // var usuario = wsh.ExpandEnvironmentStrings('%USERNAME%');
-    // document.elform.T1.value= usuario;
-    //Creamos un objeto ActiveX
-
-
-//Obtenemos los datos del equipo
-// var usr = wsh.UserName;
-// var equ = wsh.ComputerName;
-// var dom = wsh.UserDomain;
+    this.verificarCredenciales();
   }
+  verificarCredenciales() {
+    this.indentityy = this._servUsuario.getIndentity();
+    this.token = this._servUsuario.getToken();
+    let identity = localStorage.getItem('identity');
+    let user = JSON.parse(identity);
+    let recordar = localStorage.getItem('remember');
+    let recordarValue = JSON.parse(recordar);
+    if (user != null) {
+      let usuarioTemp = new Usuario('', '', '', '', '', '', '', '', '', '');
+      usuarioTemp.correo = user.correo;
+      usuarioTemp.contrasena = user.contrasena;
+      // obtener datos de usuario identificado
+      this._servUsuario.verificarCredenciales(usuarioTemp).subscribe(response => {
+        let identity = response.user;
+        this.indentityy = identity;
+        // console.log('---------------------------------');
+        // console.log(this.indentityy.rol);
+        if (!this.indentityy._id) {
+          this.SESSION.rol = "";
 
-  logout()
-  {
-     localStorage.removeItem('identity');
-     localStorage.removeItem('token');
-     localStorage.removeItem('remember');
-     localStorage.clear();
-     this._router.navigate['/principal'];
+        } else {
+          this.SESSION.rol = this.indentityy.rol;
+        }
+      }, error => {
+        this.SESSION.rol = "";
+      }
+      );
+    } else {
+      this.SESSION.rol = "";
+    }
+  }
+  logout() {
+    localStorage.removeItem('identity');
+    localStorage.removeItem('token');
+    localStorage.removeItem('remember');
+    localStorage.clear();
+    this._router.navigate['/principal'];
     // this.abrirModal('#loginModal');
   }
   abrirModal(modalId: any) {

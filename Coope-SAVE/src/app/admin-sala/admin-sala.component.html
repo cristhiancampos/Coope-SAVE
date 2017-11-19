@@ -5,7 +5,9 @@
       <div class="col-md-12">
         <h2> Administración Salas de Conferencias</h2>
         <hr>
-        <button class="btn btn-primary" (click)="abrir(modalAgregarSala)" style="float: left;margin-bottom: 6px"> <i class="fa fa-plus" aria-hidden="true"></i></button>
+        <button class="btn btn-primary" (click)="abrir(modalAgregarSala)" style="float: left;margin-bottom: 6px"
+        [disabled]='(identity.rol != "SUPERADMIN" && identity.rol != "ADMINISTRADOR")  || (identity.rol != "ADMINISTRADOR" && identity.rol != "SUPERADMIN")'>
+           <i class="fa fa-plus" aria-hidden="true"></i></button>
       </div>
 
     </div>
@@ -32,9 +34,18 @@
               <th>{{sala.estado}}</th>
               <th>{{sala.reporte}}</th>
               <th style="text-align: center">
-                <button class="btn btn-primary btn-accion"  (click)="obtenerSala(sala._id,1)"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-                <button class="btn btn-success btn-accion" (click)="obtenerSala(sala._id,3)"><i class="fa fa-calendar" aria-hidden="true"></i> </button>
-                <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"   (click)="obtenerSala(sala._id,2)"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+                <button class="btn btn-primary btn-accion"  (click)="obtenerSala(sala._id,1)"
+                [disabled]='(identity.rol != "SUPERADMIN" && identity.rol != "ADMINISTRADOR")  || (identity.rol != "ADMINISTRADOR" && identity.rol != "SUPERADMIN")'>
+                <i class="fa fa-pencil" aria-hidden="true"></i> 
+              </button>
+                <button class="btn btn-success btn-accion" (click)="obtenerSala(sala._id,3)"
+                [disabled]='(identity.rol != "SUPERADMIN" && identity.rol != "ADMINISTRADOR")  || (identity.rol != "ADMINISTRADOR" && identity.rol != "SUPERADMIN")'>
+                  <i class="fa fa-calendar" aria-hidden="true"></i> 
+                </button>
+                <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"   (click)="obtenerSala(sala._id,2)"
+                [disabled]='(identity.rol != "SUPERADMIN" && identity.rol != "ADMINISTRADOR")  || (identity.rol != "ADMINISTRADOR" && identity.rol != "SUPERADMIN")'>
+                  <i class="fa fa-trash-o" aria-hidden="true"></i>
+                 </button>
               </th>
             </tr>
           </tbody>

@@ -22,7 +22,7 @@ export class AdminSolicitudComponent implements OnInit {
 
   private sala = true;// Boolean para controlar que tabla de solicitudes se muestras
   private token;
-  private identity;
+   identity;
 
   //Variables para solicitudes
   public solicitudSala: SolicitudSala;
@@ -461,6 +461,7 @@ export class AdminSolicitudComponent implements OnInit {
           $('#nav-user').text(' ');
           this._router.navigate(['/principal']);
         } else {
+          if (this.identity.rol == "ADMINISTRADOR" || this.identity.rol == "SUPERADMIN") { 
           //conseguir el token para enviarselo a cada petición
           this._servUsuario.verificarCredenciales(usuarioTemp, 'true').subscribe(
             response => {
@@ -488,6 +489,11 @@ export class AdminSolicitudComponent implements OnInit {
               this._router.navigate(['/principal']);
             }
           );
+
+        } else {
+          this._router.navigate(['/principal']);
+        }
+          
         }
       }, error => {
         $('#nav-user').text(' ');

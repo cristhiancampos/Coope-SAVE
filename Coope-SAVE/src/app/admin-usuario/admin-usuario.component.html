@@ -29,7 +29,7 @@
             <th>{{usuario.correo}}</th>
             <th>{{usuario.nombre}}</th>
             <th>{{usuario.apellidos}}</th>
-            <th>{{usuario.departamento}}</th>
+            <th>{{obtenerNombreDep(usuario.departamento)}}</th>
             <th>{{usuario.rol}}</th>
             <th>{{usuario.estado}}</th>
             <th style="text-align: center">
@@ -76,10 +76,7 @@
 </div>
 
 <!-- Modal  Modificar Usuario-->
-<!-- <div class="modal fade bd-example-modal-sm " id="editAdminUserModal" tabindex="-1" role="dialog"
-aria-hidden="true">
-<div class="modal-dialog bd-example-modal-sm " role="document">
-  <div class="modal-content"> -->
+
     <ng-template  #modalModificarUsuario let-c="close" let-d="dismiss">
     <div class="modal-header" style="background: #0069d9;color:#fff">
       <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-user-circle-o"></i>&nbsp;&nbsp;Modificar Usuario</h5>
@@ -149,12 +146,14 @@ aria-hidden="true">
               </div>
               <div class="control-group form-group">
                 <div class="controls">
-                  <select [disabled]='tempUserRol=="ADMINISTRADOR"' #rol="ngModel" name="rol" [(ngModel)]="usuarioEdit.rol" class="selectpicker" 
+                  <select [disabled]='tempUserRol=="SUPERADMIN"' #rol="ngModel" name="rol" [(ngModel)]="usuarioEdit.rol" class="selectpicker" 
                   style="width: 100%;padding: .5rem .75rem;" required  >  
                     <option value="" selected disabled >Rol</option>
-                        <option>ADMINISTRADOR</option>
-                        <option>NOTIFICACIONES</option>
-                        <option>USUARIO</option>
+                        <option [disabled]='tempUserRol=="SUPERADMIN"'>ADMINISTRADOR</option>
+                        <option [disabled]="true">SUPERADMIN</option>
+                        <option [disabled]='tempUserRol=="SUPERADMIN"'>NOTIFICACIONES</option>
+                        <option [disabled]='tempUserRol=="SUPERADMIN"'>USUARIO</option>
+                        <option [disabled]='tempUserRol=="SUPERADMIN"'>REPORTES</option>
                       </select>
                       <small *ngIf='tempUserRol!="ADMINISTRADOR"' [hidden]="rol.valid || (rol.pristine && !editAdmiUserForm.submitted)">
                           <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El rol de usario es  obligatorio
@@ -166,7 +165,7 @@ aria-hidden="true">
                   <div class="controls" >
                        <ul>
                          <li style="margin-left: -37px;" > <label class="switch">
-                             <input [disabled]='tempUserRol=="ADMINISTRADOR"' type="checkbox" [checked]='estadoEdicion' (change)="cambiarEstadoEdicion($event)">
+                             <input [disabled]='tempUserRol=="SUPERADMIN"' type="checkbox" [checked]='estadoEdicion' (change)="cambiarEstadoEdicion($event)">
                              <small class="slider round"></small>
                            </label>
                          </li>

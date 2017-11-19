@@ -134,8 +134,9 @@ export class AdminVehiculoComponent implements OnInit {
         this.identity = identity;
         if (!this.identity._id) {
           $('#nav-user').text(' ');
-          this.abrirModal('#loginModal');
+          this._router.navigate(['/principal']);
         } else {
+          if (this.identity.rol == "ADMINISTRADOR" || this.identity.rol == "SUPERADMIN") {
           //conseguir el token para enviarselo a cada petición
           this._servUsuario.verificarCredenciales(usuarioTemp, 'true').subscribe(
             response => {
@@ -143,7 +144,7 @@ export class AdminVehiculoComponent implements OnInit {
               this.token = token;
               if (this.token <= 0) {
                 $('#nav-user').text(' ');
-                this.abrirModal('#loginModal');
+                this._router.navigate(['/principal']);
               } else {
                 // crear elemento en el localstorage para tener el token disponible
                 localStorage.setItem('token', token);
@@ -158,13 +159,16 @@ export class AdminVehiculoComponent implements OnInit {
               }
             }, error => {
               $('#nav-user').text(' ');
-              this.abrirModal('#loginModal');
+              this._router.navigate(['/principal']);
             }
           );
+        } else {
+          this._router.navigate(['/principal']);
+        }
         }
       }, error => {
         $('#nav-user').text(' ');
-        this.abrirModal('#loginModal');
+        this._router.navigate(['/principal']);
       }
       );
     } else {

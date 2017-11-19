@@ -1,8 +1,8 @@
-import { Component, OnInit,ViewChild, TemplateRef} from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import * as $ from 'jquery';
 import { ServicioRecursos } from '../servicios/recurso';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import {NgbModalRef,NgbModal,ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Recurso } from '../modelos/recursos';
 import swal from 'sweetalert2';
 import { ServicioUsuario } from '../servicios/usuario';
@@ -36,21 +36,21 @@ export class AdminRecursoComponent implements OnInit {
     private _servRecurso: ServicioRecursos,
     private modal: NgbModal
   ) {
-    this.recurso = new Recurso('', '', '', '', this.estadoMensaje, '','','');
-    this.recursoEdit = new Recurso('', '', '', '', '', '','','');
+    this.recurso = new Recurso('', '', '', '', this.estadoMensaje, '', '', '');
+    this.recursoEdit = new Recurso('', '', '', '', '', '', '', '');
   }
 
   ngOnInit() {
-   this.verificarCredenciales();
+    this.verificarCredenciales();
   }
-  abrir(modal){
-    
+  abrir(modal) {
+
     this.mr = this.modal.open(modal);
-  
+
   }
-  cerrar(){
+  cerrar() {
     this.mr.close();
-  
+
   }
   verificarCredenciales() {
     this.identity = this._servUsuario.getIndentity();
@@ -71,31 +71,35 @@ export class AdminRecursoComponent implements OnInit {
           $('#nav-user').text(' ');
           this._router.navigate(['/principal']);
         } else {
-          //conseguir el token para enviarselo a cada petición
-          this._servUsuario.verificarCredenciales(usuarioTemp, 'true').subscribe(
-            response => {
-              let token = response.token;
-              this.token = token;
-              if (this.token <= 0) {
+          if (this.identity.rol == "ADMINISTRADOR" || this.identity.rol == "SUPERADMIN") {
+            //conseguir el token para enviarselo a cada petición
+            this._servUsuario.verificarCredenciales(usuarioTemp, 'true').subscribe(
+              response => {
+                let token = response.token;
+                this.token = token;
+                if (this.token <= 0) {
+                  $('#nav-user').text(' ');
+                  this._router.navigate(['/principal']);
+                } else {
+                  // crear elemento en el localstorage para tener el token disponible
+                  localStorage.setItem('token', token);
+                  let identity = localStorage.getItem('identity');
+                  let user = JSON.parse(identity);
+                  if (user != null) {
+                    $('#nav-user').text(user.nombre + ' ' + user.apellidos);
+                    this.obtenerRecursos();
+                  } else {
+                    $('#nav-user').text('');
+                  }
+                }
+              }, error => {
                 $('#nav-user').text(' ');
                 this._router.navigate(['/principal']);
-              } else {
-                // crear elemento en el localstorage para tener el token disponible
-                localStorage.setItem('token', token);
-                let identity = localStorage.getItem('identity');
-                let user = JSON.parse(identity);
-                if (user != null) {
-                  $('#nav-user').text(user.nombre + ' ' + user.apellidos);
-                  this.obtenerRecursos();
-                } else {
-                  $('#nav-user').text('');
-                }
               }
-            }, error => {
-              $('#nav-user').text(' ');
-              this._router.navigate(['/principal']);
-            }
-          );
+            );
+          } else {
+            this._router.navigate(['/principal']);
+          }
         }
       }, error => {
         $('#nav-user').text(' ');
@@ -140,7 +144,7 @@ export class AdminRecursoComponent implements OnInit {
         if (!response.message) {
           this.msjError("El recurso no pudo ser agregado");
         } else {
-          this.recurso = new Recurso('', '', '', '', this.estadoMensaje, '','','');
+          this.recurso = new Recurso('', '', '', '', this.estadoMensaje, '', '', '');
           this.cerrar();
           this.msjExitoso("Recurso Agregado Exitosamente");
           this.obtenerRecursos();
@@ -175,7 +179,7 @@ export class AdminRecursoComponent implements OnInit {
         }
       }
     );
-    
+
   }
 
   obtenerRecursos() {
@@ -194,7 +198,7 @@ export class AdminRecursoComponent implements OnInit {
     );
   }
 
-  obtenerRecurso(_id: any,accion:any) {
+  obtenerRecurso(_id: any, accion: any) {
     this._servRecurso.obtenerRecurso(_id).subscribe(
       response => {
         if (response.message[0]._id) {
@@ -212,7 +216,7 @@ export class AdminRecursoComponent implements OnInit {
             this.estadoEdicion = false;
           }
 
-          if(accion==1){this.mr = this.modal.open(this.modalMofificarRecurso);}
+          if (accion == 1) { this.mr = this.modal.open(this.modalMofificarRecurso); }
         } else {//no se encontró el recurso
         }
       }, error => {
@@ -226,7 +230,7 @@ export class AdminRecursoComponent implements OnInit {
   onfocusRecurso() {
     // this.codRecursosExist= false;
   }
-  modificarRecurso() { 
+  modificarRecurso() {
     this.recursoEdit.estado = this.estadoMensajEdit;
     this._servRecurso.modificarRecurso(this.recursoEdit).subscribe(
       response => {
@@ -248,8 +252,8 @@ export class AdminRecursoComponent implements OnInit {
       }
     );
   }
-  
-  eliminarRecurso(){
+
+  eliminarRecurso() {
     this._servRecurso.eliminarRecurso(this.recursoEdit._id).subscribe(
       response => {
 
@@ -257,7 +261,7 @@ export class AdminRecursoComponent implements OnInit {
           this.msjError("El recurso no pudo ser eliminado");
         } else {
           this.msjExitoso("Recurso eliminado exitosamente");
-          this.recursoEdit = new Recurso('', '', '', '', '', '-','','');
+          this.recursoEdit = new Recurso('', '', '', '', '', '-', '', '');
           this.obtenerRecursos();
         }
       }, error => {
@@ -295,7 +299,7 @@ export class AdminRecursoComponent implements OnInit {
     );
   }
 
-  msjExitoso(texto: string){
+  msjExitoso(texto: string) {
     swal({
       position: 'top',
       type: 'success',
@@ -304,8 +308,8 @@ export class AdminRecursoComponent implements OnInit {
       timer: 2500
     })
   }
-  
-  msjError(texto: string){
+
+  msjError(texto: string) {
     swal(
       'Oops...',
       texto,

@@ -141,6 +141,14 @@ export class PrincipalComponent implements OnInit {
     let use = new Usuario('','','','','','','','','','');
     use = this.usuario;
     use.correo = this.dominio;
+
+    for (var index = 0; index < this.departamentos.length; index++) {
+      if(use.departamento==this.departamentos[index].nombre){
+        use.departamento=this.departamentos[index]._id;
+        break;
+      }
+      
+    }
     this._servUsuario.registrarUsuario(use).subscribe(
       response => {
         let user = response.user;
@@ -160,14 +168,11 @@ export class PrincipalComponent implements OnInit {
           this.usuarioRegistrado = new Usuario('','','','','','','','','','');
           localStorage.setItem('identity', JSON.stringify(user));
           this.cerrar();
-         // this.cerrarModal('#registroUsuarioModal');
           this.mmostrar = true;
         }
       }, error => {
         var alertMessage = <any>error;
         if (alertMessage != null) {
-          //var body = JSON.parse(error._body);
-          //this.mensajeAlerta = body.message;
           this.msjError('Error al registrar el usuario');
         }
       }
