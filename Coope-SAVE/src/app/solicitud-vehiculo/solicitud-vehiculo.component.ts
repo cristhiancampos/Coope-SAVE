@@ -499,7 +499,7 @@ export class SolicitudVehiculoComponent implements OnInit {
                   this.solicitudVehiculo.acompanantes = this.usuariosAgregados;
                   //let regreso= {minute: this.solicitudVehiculo.horaRegreso.minute, hour: this.solicitudVehiculo.horaRegreso.hour   };
                   //this.solicitudVehiculo.horaRegreso= regreso;
-                  console.log(SolicitudVehiculo);
+                 
                   this._servSolicitud.registrarSolicitud(this.solicitudVehiculo).subscribe(
                     response => {
                       if (!response.message._id) {
@@ -507,6 +507,8 @@ export class SolicitudVehiculoComponent implements OnInit {
                       } else {
                         let solicitud = response.message;
                         this.msjExitoso("Solicitud agregada exitosamente");
+                        console.log(solicitud);
+                        this.enviarEmail(solicitud);
                         this.crearPDF(this.solicitudVehiculo);
                         //this.enviarEmail(solicitud);
                         this.solicitudVehiculo = new SolicitudVehiculo('', '', '', null, null, null, '', '', '', null, '', '');
@@ -536,6 +538,24 @@ export class SolicitudVehiculoComponent implements OnInit {
 
     }
 
+  }
+
+  enviarEmail(solicitud:any) {
+   
+    
+    this._servSolicitud.enviarCorreo(solicitud).subscribe(
+      response => {
+        console.log('Respuesta:' + response);
+        if (!response) {
+          console.log('Fallo el envio de correo');
+        } else {
+          console.log('Exito envio de correo');
+        }
+        console.log('Pruebas de enviar correo');
+      }, error => {
+        console.log('Fallo el envio de correo 3234234');
+      }
+    );
   }
 
   modificarSolicitud(solicitudparaEditar: any) {
@@ -827,7 +847,7 @@ export class SolicitudVehiculoComponent implements OnInit {
                               for (var i = 0; i < this.usuarios.length; i++) {
                                 if (listaSolicitudes[index].usuario == this.usuarios[i]._id) {
                                   for (var c = 0; c < this.departamentos.length; c++) {
-                                    if (this.usuarios[i].departamento == this.departamentos[c].nombre) {
+                                    if (this.usuarios[i].departamento == this.departamentos[c]._id) {
                                       this.tempColor = {
                                         color: {
                                           primary: this.departamentos[c].color + '',

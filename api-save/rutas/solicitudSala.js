@@ -14,7 +14,7 @@ api.get('/obtenerTodasSolicitudes',ControladorSolicitudSala.obtenerTodasSolicitu
  api.put('/modificarSolicitudSala',ControladorSolicitudSala.modificarSolicitudSala);
 api.delete('/eliminarSolicitudSala/:id', ControladorSolicitudSala.eliminarSolicitudSala);
 
-api.post('/enviarCorreo', ControladorEnviarCorreo.sendEmail);
+api.post('/enviarCorreo', ControladorEnviarCorreo.sendEmailSala);
 
 
 
