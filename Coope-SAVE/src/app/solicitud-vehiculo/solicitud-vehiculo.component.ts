@@ -55,8 +55,8 @@ export class SolicitudVehiculoComponent implements OnInit {
   @ViewChild('modalContent2') modalContent2: TemplateRef<any>;
   @ViewChild('modalDeleteSolicitudVehiculo') modalDeleteSolicitudVehiculo: TemplateRef<any>;
   @ViewChild('modalAgregarSolicitudVehiculo') modalAgregarSolicitudVehiculo: TemplateRef<any>;
-  
-  
+
+
   view = 'month';
   viewDate: Date = new Date();
 
@@ -75,7 +75,7 @@ export class SolicitudVehiculoComponent implements OnInit {
     {
       label: '<i class="fa fa-fw fa-times"></i>',
       onClick: ({ event }: { event: CalendarEvent }): void => {
-      //  this.events = this.events.filter(iEvent => iEvent !== event);
+        //  this.events = this.events.filter(iEvent => iEvent !== event);
         this.handleEvent('Eliminar', event);
       }
     }
@@ -132,7 +132,7 @@ export class SolicitudVehiculoComponent implements OnInit {
   timeF = { hour: null, minute: null, second: 0 };
   tempPlacaVehiculo = "";
   dateUpdate = { day: null, month: null, year: null };
-  
+
 
 
   @Input() placeholder: string;
@@ -184,39 +184,55 @@ export class SolicitudVehiculoComponent implements OnInit {
     });
   }
 
-  crearPDF(){
+  crearPDF(solicitudVehiculo:any) {
 
     const pdf = new jsPDF();
-    const htmlTitulo= `<h3 style="text-align: center;"> Traslado y uso de Vehículos</h3>`
- 
+    const htmlTitulo = `<h2 style="text-align: center;"> Traslado y uso de Vehículos</h2>`
+
     let logo = new Image();
-    let imgDatos= new Image();
+    let imgDatos = new Image();
+
     logo.src = '../assets/img/logo.png';
-    imgDatos.src= '../assets/img/datos.jpg.';
-    
+    imgDatos.src = '../assets/img/datos.jpg';
+
+    console.log(imgDatos);
     pdf.addImage(logo, 'PNG', 65, 14, 80, 15);
-    pdf.addImage(imgDatos, 'JPEG', 20, 150, 300, 300);
+    //pdf.addImage(imgDatos, 'JPEG', 65,14, 80, 15);
+    
+
     pdf.setFontSize(14);
 
-    pdf.fromHTML(htmlTitulo,80, 30, {} );
+    pdf.fromHTML(htmlTitulo, 68, 30, {});
     // pdf.fromHTML(htmlDatos, 20,50 );   
-
-    console.log(this.listaSolicitudes);
-    pdf.text(20, 60, 'Placa:'); pdf.text(65,14, this.listaSolicitudes[0].vehiculo);
-    pdf.text(130, 60, 'Fecha:'); pdf.text(150,60, this.listaSolicitudes[0].vehiculo);
-    pdf.text(20, 70, 'Hora Salida:'); pdf.text(70,70, this.listaSolicitudes[0].vehiculo);
-    pdf.text(20, 80, 'Hora Regreso:'); pdf.text(70,80, this.listaSolicitudes[0].vehiculo);
-    pdf.text(20, 90, 'Motivo de la Gira:'); pdf.text(70,90, this.listaSolicitudes[0].vehiculo);
-    pdf.text(20, 100, 'Destino:');  pdf.text(70,100, this.listaSolicitudes[0].vehiculo);
-    pdf.text(20, 110, 'Acompañantes:'); pdf.text(70,110, this.listaSolicitudes[0].vehiculo);
-    pdf.text(20, 120, 'Encargado:');  pdf.text(70,120, this.listaSolicitudes[0].vehiculo);
-    pdf.text(130, 120, 'Firma:'); pdf.text(150,120, this.listaSolicitudes[0].vehiculo);
+    console.log(solicitudVehiculo);
+    let fecha = solicitudVehiculo.fecha.year + '/' + solicitudVehiculo.fecha.month + '/' + solicitudVehiculo.fecha.day;
+    let horaSalida = solicitudVehiculo.horaSalida.hour + ':' + solicitudVehiculo.horaSalida.minute;
+    let horaRegreso = solicitudVehiculo.horaRegreso.hour + ':' + solicitudVehiculo.horaRegreso.minute;
+    let acompanantes='';
+    for(let i= 0; i< solicitudVehiculo.acompanantes.length; i++){
+      acompanantes+= solicitudVehiculo.acompanantes[i].nombre+' '+ solicitudVehiculo.acompanantes[i].apellidos+ ' ';
+    }
     
+
+    //Sección de los datos de la solicitud
+    pdf.text(20, 60, 'Placa:'); pdf.text(70, 60, solicitudVehiculo.vehiculo);
+    pdf.text(130, 60, 'Fecha:'); pdf.text(150, 60, fecha);
+    pdf.text(20, 70, 'Hora Salida:'); pdf.text(70, 70, horaSalida);
+    pdf.text(20, 80, 'Hora Regreso:'); pdf.text(70,80, horaRegreso);
+    pdf.text(20, 90, 'Motivo de la Gira:'); pdf.text(70,90, solicitudVehiculo.descripcion);
+    pdf.text(20, 100, 'Destino:');  pdf.text(70,100, solicitudVehiculo.destino);
+    pdf.text(20, 110, 'Acompañantes:'); pdf.text(70,110, acompanantes);
+    pdf.text(20, 120, 'Encargado:');  pdf.text(70,120,'Esteban Solis' );
+    pdf.text(130, 120, 'Firma:'); pdf.text(150,120, 'Esteban Solis');
+
+    //Seccion de los datos de entrega de vehículo
+
+
     pdf.save('prueba.pdf');
-  
+
   }
   cancelarAccion() {
-    this.crearPDF();
+    this.crearPDF(this.listaSolicitudes[1]);
     this.obtenerSolicitudes(new Date(), false);
     this.obtenerSolicitudVehiculos();
     this.mr.close();
@@ -491,6 +507,7 @@ export class SolicitudVehiculoComponent implements OnInit {
                       } else {
                         let solicitud = response.message;
                         this.msjExitoso("Solicitud agregada exitosamente");
+                        this.crearPDF(this.solicitudVehiculo);
                         //this.enviarEmail(solicitud);
                         this.solicitudVehiculo = new SolicitudVehiculo('', '', '', null, null, null, '', '', '', null, '', '');
                         this.obtenerSolicitudes(this.date, false);
@@ -960,7 +977,7 @@ export class SolicitudVehiculoComponent implements OnInit {
   }
   obtenerUsuarios() {
 
-    
+
     this._servUsuario.obtenerUsuarios().subscribe(
       response => {
         if (response.message) {
@@ -998,20 +1015,20 @@ export class SolicitudVehiculoComponent implements OnInit {
   verificarFechaSeleccionada(userDate: Date) {
   }
 
-  eliminarUsuarioActual(){// Eliminar el usuario actual de la lista de usuarios disponibles, para el la seccion de acompanantes
+  eliminarUsuarioActual() {// Eliminar el usuario actual de la lista de usuarios disponibles, para el la seccion de acompanantes
 
     let identity = localStorage.getItem('identity');
     let user = JSON.parse(identity);
     console.log(user);
-    if(!user){
+    if (!user) {
       this._router.navigate(['/principal']);
     } else {
-      for( let i= 0; i<this.listaUsuarios.length; i++){
-          if(user._id == this.listaUsuarios[i]._id){
-            this.listaUsuarios.splice(i,1);
-            
-            break;
-          }
+      for (let i = 0; i < this.listaUsuarios.length; i++) {
+        if (user._id == this.listaUsuarios[i]._id) {
+          this.listaUsuarios.splice(i, 1);
+
+          break;
+        }
       }
     }
   }
@@ -1045,7 +1062,7 @@ export class SolicitudVehiculoComponent implements OnInit {
     this.obtenerUsuarios();
     this.tempColor = event.color;
     this.solicitudVehiculoEdit._id = this.tempColor.id;
-    this.activeDayIsOpen=false;
+    this.activeDayIsOpen = false;
 
     if (action == "Eliminar") {
       this.eliminarSolicitud();
@@ -1096,7 +1113,7 @@ export class SolicitudVehiculoComponent implements OnInit {
               }
             }
 
-            
+
 
             this.eliminarUsuarioActual();
             this._servSolicitud.obtenerSolicitudVehiculo(this.tempColor.id).subscribe(
@@ -1121,7 +1138,7 @@ export class SolicitudVehiculoComponent implements OnInit {
                   this.solicitudVehiculoEdit.horaSalida = this.timeI;
                   this.solicitudVehiculoEdit.horaRegreso = this.timeF;
 
-                  this.solicitudVehiculoEdit.acompanantes = solicit.acompanantes;           
+                  this.solicitudVehiculoEdit.acompanantes = solicit.acompanantes;
 
                   let date = new Date();
                   date.setFullYear(solicit.fecha.year);
@@ -1261,15 +1278,15 @@ export class SolicitudVehiculoComponent implements OnInit {
     );
   }
 
-  cerrar(){
+  cerrar() {
     this.mr.close();
-    this.solicSala=true;
-    this.activeDayIsOpen=true;
-  
+    this.solicSala = true;
+    this.activeDayIsOpen = true;
+
   }
 
-  abrir(modal){
-    this.mr = this.modal.open(modal,{ backdrop: 'static', keyboard: false,size: 'lg'});
+  abrir(modal) {
+    this.mr = this.modal.open(modal, { backdrop: 'static', keyboard: false, size: 'lg' });
   }
 
 
