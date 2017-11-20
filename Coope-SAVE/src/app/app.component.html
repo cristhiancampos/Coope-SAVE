@@ -30,17 +30,14 @@
                   <a class="dropdown-item" routerLink="/solicitudVehiculo" routerLinkActive="actived">
                     <i class="fa fa-car" aria-hidden="true"></i>&nbsp;Solicitar Vehículo
                   </a>
-              <a class="dropdown-item" routerLink="/administrador" routerLinkActive="actived" 
-              *ngIf='(SESSION.rol && SESSION.rol=="SUPERADMIN") || (SESSION.rol && SESSION.rol=="ADMINISTRADOR")'>
+              <a class="dropdown-item" routerLink="/administrador" routerLinkActive="actived" > <!--*ngIf='(SESSION.rol && SESSION.rol=="SUPERADMIN") || (SESSION.rol && SESSION.rol=="ADMINISTRADOR")' -->
                      <i class="fa fa-cogs" aria-hidden="true" ></i>&nbsp;Administrador
                   </a>
-                  <a class="dropdown-item" routerLink="/reportes" routerLinkActive="actived"
-                  *ngIf='(SESSION.rol && SESSION.rol=="SUPERADMIN") || (SESSION.rol && SESSION.rol=="ADMINISTRADOR") || (SESSION.rol && SESSION.rol=="REPORTES")'>
+                  <a class="dropdown-item" routerLink="/reportes" routerLinkActive="actived"> <!--*ngIf='(SESSION.rol && SESSION.rol=="SUPERADMIN") || (SESSION.rol && SESSION.rol=="ADMINISTRADOR") || (SESSION.rol && SESSION.rol=="REPORTES")' -->
                     <i class="fa fa-area-chart" aria-hidden="true" ></i>&nbsp;Reportes
                  </a>
-             
+                 <hr>
               <a class="dropdown-item" routerLink="/" routerLinkActive="actived" (click)="logout()">
-                <hr>
                     <i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;Salir
                   </a>
             </div>
