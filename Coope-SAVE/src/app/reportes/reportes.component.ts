@@ -6,28 +6,37 @@ import { ServicioDepartamento } from '../servicios/departamento';
 import { ServicioUsuario } from '../servicios/usuario';
 import { ServicioSala } from '../servicios/sala';
 import { ServicioSolicitudSala } from '../servicios/solicitudSala';
+import { ServicioVehiculo } from '../servicios/vehiculo';
+import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-reportes',
   templateUrl: './reportes.component.html',
   styleUrls: ['./reportes.component.css'],
-  providers: [ServicioDepartamento,ServicioUsuario,ServicioSala,ServicioSolicitudSala]
+  providers: [ServicioDepartamento,ServicioUsuario,ServicioSala,ServicioSolicitudSala,ServicioVehiculo]
 })
 export class ReportesComponent implements OnInit {
 
   usuarios=[];
   departamentos=[];
   salas=[];
+  vehiculos=[];
   identity;
   currentUser;
-  //model: NgbDateStruct;
-  //date: {year: number, month: number};
+  modelFechaInicio: NgbDateStruct;
+  dateInicio: {year: number, month: number};
+  vehiculoFiltro="";
+  salaFiltro="";
+
+  modelFechaFinal: NgbDateStruct;
+  dateFinal: {year: number, month: number};
   
   constructor(
     private _servUsuario: ServicioUsuario,
     private _servDepartamento: ServicioDepartamento,
     private _servSala: ServicioSala,
     private _servSolicitud: ServicioSolicitudSala,
+    private _servVehiculo: ServicioVehiculo
   ) { 
 
     
@@ -38,6 +47,7 @@ export class ReportesComponent implements OnInit {
     this.obtenerUsuarios();
     this.obtenerDepartamentos();
     this.obtenerSalas();
+    this.obtenerVehiculos();
   }
   
   obtenerSalas() {
@@ -88,6 +98,21 @@ export class ReportesComponent implements OnInit {
         if (response.message) {
           this.usuarios = response.message;
         } else {//no hay Usuarios registradas
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+        }
+      }
+    );
+  }
+  obtenerVehiculos() {
+    this._servVehiculo.obtenerVehiculos().subscribe(
+      response => {
+        if (response.message) {
+          this.vehiculos = response.message;
+        } else {//ho hay vehiculos registrados
         }
       }, error => {
         var errorMensaje = <any>error;
