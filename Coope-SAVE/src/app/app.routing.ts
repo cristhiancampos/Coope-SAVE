@@ -1,7 +1,6 @@
 import {ModuleWithProviders} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 import {SolicitudSalaComponent} from './solicitud-sala/solicitud-sala.component';
-import {RegistoUsuarioComponent} from './registo-usuario/registo-usuario.component';
 import {PrincipalComponent} from './principal/principal.component';
 import {ModificarUsuarioComponent} from './modificar-usuario/modificar-usuario.component';
 //admin modules
@@ -13,6 +12,8 @@ import {AdminUsuarioComponent} from './admin-usuario/admin-usuario.component';
 import {AdminRecursoComponent} from './admin-recurso/admin-recurso.component';
 import {AdminSolicitudComponent} from './admin-solicitud/admin-solicitud.component';
 import { SolicitudVehiculoComponent } from './solicitud-vehiculo/solicitud-vehiculo.component';
+import { ReportesComponent } from './reportes/reportes.component';
+
 
 
 const appRoutes: Routes = [
@@ -28,6 +29,7 @@ const appRoutes: Routes = [
     { path: 'admUsuario', component: AdminUsuarioComponent },
     { path: 'admRecurso', component: AdminRecursoComponent },
     { path: 'admSolicitud', component: AdminSolicitudComponent },
+    { path: 'reportes', component: ReportesComponent },
     {path: '**', component: PrincipalComponent}
 
 ];

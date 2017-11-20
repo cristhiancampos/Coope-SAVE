@@ -39,37 +39,42 @@ export class AdministradorComponent implements OnInit {
         this.identity = identity;
         if (!this.identity._id) {
           $('#nav-user').text(' ');
-          this.abrirModal('#loginModal');
+          this._router.navigate(['/principal']);
         } else {
           //conseguir el token para enviarselo a cada petición
-          this._servUsuario.verificarCredenciales(usuarioTemp, 'true').subscribe(
-            response => {
-              let token = response.token;
-              this.token = token;
-              if (this.token <= 0) {
-                $('#nav-user').text(' ');
-                this.abrirModal('#loginModal');
-              } else {
-                // crear elemento en el localstorage para tener el token disponible
-                localStorage.setItem('token', token);
-                let identity = localStorage.getItem('identity');
-                let user = JSON.parse(identity);
-                if (user != null) {
-                  $('#nav-user').text(user.nombre + ' ' + user.apellidos);
-                 // this.obtenerVehiculos();
+          if (this.identity.rol == "ADMINISTRADOR" || this.identity.rol == "SUPERADMIN") {
+            this._servUsuario.verificarCredenciales(usuarioTemp, 'true').subscribe(
+              response => {
+                let token = response.token;
+                this.token = token;
+                if (this.token <= 0) {
+                  $('#nav-user').text(' ');
+                  this._router.navigate(['/principal']);
                 } else {
-                  $('#nav-user').text('');
+                  // crear elemento en el localstorage para tener el token disponible
+                  localStorage.setItem('token', token);
+                  let identity = localStorage.getItem('identity');
+                  let user = JSON.parse(identity);
+                  if (user != null) {
+                    $('#nav-user').text(user.nombre + ' ' + user.apellidos);
+                    // this.obtenerVehiculos();
+                  } else {
+                    $('#nav-user').text('');
+                  }
                 }
+              }, error => {
+                $('#nav-user').text(' ');
+                this._router.navigate(['/principal']);
               }
-            }, error => {
-              $('#nav-user').text(' ');
-              this.abrirModal('#loginModal');
-            }
-          );
+            );
+          } else {
+            this._router.navigate(['/principal']);
+          }
+
         }
       }, error => {
         $('#nav-user').text(' ');
-        this.abrirModal('#loginModal');
+        this._router.navigate(['/principal']);
       }
       );
     } else {
@@ -78,19 +83,19 @@ export class AdministradorComponent implements OnInit {
     }
   }
 
-  cerrarModal(modalId: any) {
-    $(".modal-backdrop").remove();
-    $('body').removeClass('modal-open');
-    $(modalId).removeClass('show');
-    $(modalId).css('display', 'none');
-  }
+  // cerrarModal(modalId: any) {
+  //   $(".modal-backdrop").remove();
+  //   $('body').removeClass('modal-open');
+  //   $(modalId).removeClass('show');
+  //   $(modalId).css('display', 'none');
+  // }
 
-  abrirModal(modalId: any) {
-    $('body').append('<div class="modal-backdrop fade show" ></div>');
-    $('body').addClass('modal-open');
-    $(modalId).addClass('show');
-    $(modalId).css('display', 'block');
-  }
+  // abrirModal(modalId: any) {
+  //   $('body').append('<div class="modal-backdrop fade show" ></div>');
+  //   $('body').addClass('modal-open');
+  //   $(modalId).addClass('show');
+  //   $(modalId).css('display', 'block');
+  // }
 
 
 }

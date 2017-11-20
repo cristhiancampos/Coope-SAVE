@@ -4,7 +4,9 @@
     <div class="col-md-12">
       <h2> Admistración de Vehiculos</h2>
       <hr>
-      <button class="btn btn-primary" data-toggle="modal" data-target="#modalAdminVehiculo" style="float: left;margin-bottom: 6px"> <i class="fa fa-plus" aria-hidden="true"></i></button>
+      <button class="btn btn-primary" data-toggle="modal" data-target="#modalAdminVehiculo" style="float: left;margin-bottom: 6px"
+      [disabled]='(identity.rol != "SUPERADMIN" && identity.rol != "ADMINISTRADOR")  || (identity.rol != "ADMINISTRADOR" && identity.rol != "SUPERADMIN")'> 
+        <i class="fa fa-plus" aria-hidden="true"></i></button>
     </div>
   </div>
 
@@ -43,9 +45,12 @@
             <th>{{vehiculo.estado}}</th>
             <th>{{vehiculo.reporte}}</th>
             <th style="text-align: center">
-              <button class="btn btn-primary btn-accion" data-toggle="modal" data-target="#modalEditVehiculo" (click)="obtenerVehiculo(vehiculo._id)"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-success btn-accion" data-toggle="modal" data-target="#modal-AddHorario" (click)="obtenerVehiculo(vehiculo._id)"><i class="fa fa-calendar" aria-hidden="true"></i> </button>
-              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete" (click)="obtenerVehiculo(vehiculo._id)"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
+              <button class="btn btn-primary btn-accion" data-toggle="modal" data-target="#modalEditVehiculo" (click)="obtenerVehiculo(vehiculo._id)"
+              [disabled]='(identity.rol != "SUPERADMIN" && identity.rol != "ADMINISTRADOR")  || (identity.rol != "ADMINISTRADOR" && identity.rol != "SUPERADMIN")'><i class="fa fa-pencil" aria-hidden="true"></i> </button>
+              <button class="btn btn-success btn-accion" data-toggle="modal" data-target="#modal-AddHorario" (click)="obtenerVehiculo(vehiculo._id)"
+              [disabled]='(identity.rol != "SUPERADMIN" && identity.rol != "ADMINISTRADOR")  || (identity.rol != "ADMINISTRADOR" && identity.rol != "SUPERADMIN")'><i class="fa fa-calendar" aria-hidden="true"></i> </button>
+              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete" (click)="obtenerVehiculo(vehiculo._id)"
+              [disabled]='(identity.rol != "SUPERADMIN" && identity.rol != "ADMINISTRADOR")  || (identity.rol != "ADMINISTRADOR" && identity.rol != "SUPERADMIN")'><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
             </th>
           </tr>
         </tbody>

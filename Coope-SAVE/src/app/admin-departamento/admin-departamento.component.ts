@@ -48,26 +48,26 @@ export class AdminDepartamentoComponent implements OnInit {
     this.departamentoEdit = new Departamento('', '', '', '','','');
     this.departamento = new Departamento('', '', '', this.estadoMensaje,'','');
   }
-abrir(modal){
+    abrir(modal){
   
   this.mr = this.modal.open(modal);
 
 }
 
-private getDismissReason(reason: any): string {
-  if (reason === ModalDismissReasons.ESC) {
-    return 'by pressing ESC';
-  } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-    return 'by clicking on a backdrop';
-  } else {
-    return  `with: ${reason}`;
-  }
-}
+// private getDismissReason(reason: any): string {
+//   if (reason === ModalDismissReasons.ESC) {
+//     return 'by pressing ESC';
+//   } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+//     return 'by clicking on a backdrop';
+//   } else {
+//     return  `with: ${reason}`;
+//   }
+// }
 
-cerrar(){
-  this.mr.close();
+   cerrar(){
+     this.mr.close();
 
-}
+   }
   ngOnInit() {
     //this.obtenerDepartamentos();
     this.verificarCredenciales();
@@ -89,16 +89,20 @@ cerrar(){
         this.identity = identity;
         if (!this.identity._id) {
           $('#nav-user').text(' ');
-          this.abrirModal('#loginModal');
+          this._router.navigate(['/principal']);
         } else {
-          //conseguir el token para enviarselo a cada petición
+          if (this.identity.rol == "ADMINISTRADOR" || this.identity.rol == "SUPERADMIN") {
+            //conseguir el token para enviarselo a cada petición
+            console.log("identidad");
+            console.log(this.identity.rol);
+            
           this._servUsuario.verificarCredenciales(usuarioTemp, 'true').subscribe(
             response => {
               let token = response.token;
               this.token = token;
               if (this.token <= 0) {
                 $('#nav-user').text(' ');
-                this.abrirModal('#loginModal');
+                this._router.navigate(['/principal']);
               } else {
                 // crear elemento en el localstorage para tener el token disponible
                 localStorage.setItem('token', token);
@@ -113,19 +117,20 @@ cerrar(){
               }
             }, error => {
               $('#nav-user').text(' ');
-              this.abrirModal('#loginModal');
+              this._router.navigate(['/principal']);
             }
           );
+        } else {
+          this._router.navigate(['/principal']);
+        }
         }
       }, error => {
         $('#nav-user').text(' ');
-        this.abrirModal('#loginModal');
+        this._router.navigate(['/principal']);
       }
       );
     } else {
-      $('#nav-user').text(' ');
       this._router.navigate(['/principal']);
-      //this.abrirModal('#loginModal');
     }
   }
 
@@ -250,12 +255,11 @@ cerrar(){
     this._servDepartamento.modificarDepartamento(this.departamentoEdit).subscribe(
       response => {
         if (!response.message._id) {
-          alert('Error al modificar el departamento');
+          this.msjError('Error al modificar el departamento');
         } else {
           this.departamentoEdit = new Departamento('', '', '', '', '', '');
           this.obtenerDepartamentos();
           this.mr.close();
-         // this.cerrarModal('#modalEditDepartamento');
           this.msjExitoso("Departamento modificado Exitosamente");
         }
       }, error => {
@@ -268,6 +272,7 @@ cerrar(){
     );
    }
 
+  
    validarModificacion() {
     let nombre = this.departamentoEdit.nombre.trim().toUpperCase();
     this.departamentoEdit.nombre = nombre;
@@ -315,23 +320,23 @@ cerrar(){
     );
   }
  
-msjExitoso(texto: string){
+  msjExitoso(texto: string){
   swal({
     position: 'top',
     type: 'success',
     title: texto,
     showConfirmButton: false,
     timer: 2500
-  })
-}
+   });
+  }
 
-msjError(texto: string){
-  swal(
+  msjError(texto: string){
+   swal(
     'Oops...',
     texto,
     'error'
-  )
-}
+    );
+  }
 
   cerrarModal(modalId: any) {
     $(".modal-backdrop").remove();
@@ -346,7 +351,5 @@ msjError(texto: string){
     $(modalId).addClass('show');
     $(modalId).css('display', 'block');
   }
-
-  
 
 }
