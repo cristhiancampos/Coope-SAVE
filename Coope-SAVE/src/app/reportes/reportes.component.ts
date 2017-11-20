@@ -20,6 +20,8 @@ export class ReportesComponent implements OnInit {
   salas=[];
   identity;
   currentUser;
+  //model: NgbDateStruct;
+  //date: {year: number, month: number};
   
   constructor(
     private _servUsuario: ServicioUsuario,

@@ -137,7 +137,7 @@ export class AppComponent implements OnInit {
   }
   // método que realiza una acción después de haberse cargado el componente
   ngOnInit() {
-    this.verificarCredenciales();
+    //this.verificarCredenciales();
   }
   verificarCredenciales() {
     this.indentityy = this._servUsuario.getIndentity();
