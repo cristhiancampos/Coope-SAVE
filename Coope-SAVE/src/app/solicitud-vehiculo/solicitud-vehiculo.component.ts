@@ -542,7 +542,10 @@ export class SolicitudVehiculoComponent implements OnInit {
 
   enviarEmail(solicitud:any) {
    
-    
+    let identity = localStorage.getItem('identity');
+    let user = JSON.parse(identity);
+
+    solicitud.usuario = user.nombre+' '+  user.apellidos ;
     this._servSolicitud.enviarCorreo(solicitud).subscribe(
       response => {
         console.log('Respuesta:' + response);

@@ -147,6 +147,7 @@ exports.sendEmailSala = function (req, res) {
     };
 
     obtenerUsuarios();
+   
     // Enviamos el email
     if (!listaCorreos) {
         console.log("Error en la solicitud");
