@@ -64,19 +64,19 @@ export class PrincipalComponent implements OnInit {
     this.recordarme = !this.recordarme;
   }
   //cerrar modal
-  cerrarModal(modalId: any) {
-    $(".modal-backdrop").remove();
-    $('body').removeClass('modal-open');
-    $(modalId).removeClass('show');
-    $(modalId).css('display', 'none');
-  }
-  //abrir modal
-  abrirModal(modalId: any) {
-    $('body').append('<div class="modal-backdrop fade show" ></div>');
-    $('body').addClass('modal-open');
-    $(modalId).addClass('show');
-    $(modalId).css('display', 'block');
-  }
+  // cerrarModal(modalId: any) {
+  //   $(".modal-backdrop").remove();
+  //   $('body').removeClass('modal-open');
+  //   $(modalId).removeClass('show');
+  //   $(modalId).css('display', 'none');
+  // }
+  // //abrir modal
+  // abrirModal(modalId: any) {
+  //   $('body').append('<div class="modal-backdrop fade show" ></div>');
+  //   $('body').addClass('modal-open');
+  //   $(modalId).addClass('show');
+  //   $(modalId).css('display', 'block');
+  // }
   //al cargarse la pagina verifica si la sesión de usuario se guardó previamente
   ngOnInit() {
     //this._router.navigate['/principal'];
@@ -485,6 +485,7 @@ obtenerDepartamentos() {
           console.log('Fallo el envio de correo');
           this.msjError('Falló la recuperación de contraseña ');
         } else {
+          this.cerrar();
           this.msInfo('Su nueva contraseña ha sido enviada via correo electrónico a '+user.correo);          
           this._router.navigate(['/principal']);
         }

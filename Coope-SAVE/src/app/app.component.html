@@ -38,9 +38,8 @@
                   *ngIf='(SESSION.rol && SESSION.rol=="SUPERADMIN") || (SESSION.rol && SESSION.rol=="ADMINISTRADOR") || (SESSION.rol && SESSION.rol=="REPORTES")'>
                     <i class="fa fa-area-chart" aria-hidden="true" ></i>&nbsp;Reportes
                  </a>
-             
+                 <hr>
               <a class="dropdown-item" routerLink="/" routerLinkActive="actived" (click)="logout()">
-                <hr>
                     <i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;Salir
                   </a>
             </div>
