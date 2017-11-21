@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild,TemplateRef } from '@angular/core';
 import * as $ from 'jquery';
 import swal from 'sweetalert2';
 import {Chart } from 'chart.js/src/chart';
@@ -7,7 +7,8 @@ import { ServicioUsuario } from '../servicios/usuario';
 import { ServicioSala } from '../servicios/sala';
 import { ServicioSolicitudSala } from '../servicios/solicitudSala';
 import { ServicioVehiculo } from '../servicios/vehiculo';
-import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct, NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 
 @Component({
   selector: 'app-reportes',
@@ -16,6 +17,8 @@ import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
   providers: [ServicioDepartamento,ServicioUsuario,ServicioSala,ServicioSolicitudSala,ServicioVehiculo]
 })
 export class ReportesComponent implements OnInit {
+  @ViewChild('modalSalas') modalSalas: TemplateRef<any>;
+  @ViewChild('modalVehiculos') modalVehiculos: TemplateRef<any>;
 
   usuarios=[];
   departamentos=[];
@@ -23,33 +26,57 @@ export class ReportesComponent implements OnInit {
   vehiculos=[];
   identity;
   currentUser;
-  modelFechaInicio: NgbDateStruct;
-  dateInicio: {year: number, month: number};
   vehiculoFiltro="";
   salaFiltro="";
+  public mr: NgbModalRef;
 
+  modelFechaInicio: NgbDateStruct;
+  dateInicio: {year: number, month: number};
   modelFechaFinal: NgbDateStruct;
   dateFinal: {year: number, month: number};
+
+
+  modelFechaInicioVehiculo: NgbDateStruct;
+  dateInicioVehiculo: {year: number, month: number};
+  modelFechaFinalVehiculo: NgbDateStruct;
+  dateFinalVehiculo: {year: number, month: number};
   
   constructor(
     private _servUsuario: ServicioUsuario,
     private _servDepartamento: ServicioDepartamento,
     private _servSala: ServicioSala,
     private _servSolicitud: ServicioSolicitudSala,
-    private _servVehiculo: ServicioVehiculo
+    private _servVehiculo: ServicioVehiculo,
+    private modal: NgbModal
   ) { 
 
     
   }
  
+  abrir(modal) {
+    this.mr = this.modal.open(modal);
+  }
+  cerrar() {
+    this.mr.close();
+
+  }
 
   ngOnInit() {
     this.obtenerUsuarios();
     this.obtenerDepartamentos();
     this.obtenerSalas();
     this.obtenerVehiculos();
+    $('#infoTable').on('click', 'tbody tr', function(event) {
+      $(this).addClass('highlight').siblings().removeClass('highlight');
+    });
   }
   
+  setSalaSeleccionda(nombreSala:string){
+    this.salaFiltro=nombreSala;
+  }
+  setVehiculoSelecciondo(vehiculoPlaca:string){
+    this.vehiculoFiltro=vehiculoPlaca;
+  }
   obtenerSalas() {
     this._servSala.obtenerSalasHabilitadas().subscribe(
       response => {

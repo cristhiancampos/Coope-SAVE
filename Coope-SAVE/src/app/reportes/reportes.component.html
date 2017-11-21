@@ -23,10 +23,10 @@
       <div class="col-md-2">
         <div class="form-group">
           <div class="input-group">
-            <input class="form-control" placeholder="Vehículo" name="Sala" [(ngModel)]="salaFiltro" #vehiculo [disabled]="true" required>
-            <button class="input-group-addon" type="button">
-                            <i class="fa fa-users" aria-hidden="true"></i>
-                        </button>
+            <input class="form-control" placeholder="Sala" name="Sala" [(ngModel)]="salaFiltro" #vehiculo [disabled]="true" required>
+            <button class="btn btn-primary input-group-addon" type="button" (click)="abrir(modalSalas)" style="background: #0069d9;color: #fff">
+              <i class="fa fa-users" aria-hidden="true"></i>
+             </button>
           </div>
         </div>
 
@@ -38,9 +38,9 @@
           <div class="input-group">
             <input class="form-control" placeholder="Inicia" name="dI" [(ngModel)]="modelFechaInicio" ngbDatepicker #dI="ngbDatepicker"
               [disabled]="true" required>
-            <button class="input-group-addon" (click)="dI.toggle()" type="button">
-                            <i class="fa fa-calendar" aria-hidden="true"></i>
-                        </button>
+            <button class="input-group-addon" (click)="dI.toggle()" type="button" [disabled]='salaFiltro==""' style="background: #0069d9;color: #fff">
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+              </button>
           </div>
         </div>
       </div>
@@ -51,9 +51,9 @@
           <div class="input-group">
             <input class="form-control" placeholder="Termina" name="dF" [(ngModel)]="modelFechaFinal" ngbDatepicker #dF="ngbDatepicker"
               [disabled]="true" required>
-            <button class="input-group-addon" (click)="dF.toggle()" type="button">
-                            <i class="fa fa-calendar" aria-hidden="true"></i>
-                        </button>
+            <button class="input-group-addon" (click)="dF.toggle()" type="button" [disabled]='salaFiltro==""' style="background: #0069d9;color: #fff">
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+            </button>
           </div>
         </div>
       </div>
@@ -61,7 +61,8 @@
       <div class="col-md-2">
         <div class="form-group">
           <div class="btn-group">
-            <button type="button" class="btn btn-secundary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button type="button" class="btn btn-secundary dropdown-toggle" data-toggle="dropdown" 
+            aria-haspopup="true" aria-expanded="false" [disabled]='salaFiltro==""' style="background: #0069d9;color: #fff">
                 Solicitante
                </button>
             <div class="dropdown-menu">
@@ -74,9 +75,10 @@
       <div class="col-md-2">
         <div class="form-group">
           <div class="btn-group">
-            <button type="button" class="btn btn-secundary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Departamento
-                   </button>
+            <button type="button" class="btn btn-secundary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+             aria-expanded="false" [disabled]='salaFiltro==""' style="background: #0069d9;color: #fff">
+              Departamento
+            </button>
             <div class="dropdown-menu">
               <a class="dropdown-item" href="javascript:void(0);" *ngFor="let departamento of departamentos">{{departamento.nombre}}</a>
             </div>
@@ -87,7 +89,8 @@
 
       <div class="col-md-1">
         <div class="form-group">
-          <button type="button" class="btn btn-success"><i class="fa fa-search" aria-hidden="true"></i></button>
+          <button type="button" class="btn btn-success" [disabled]='salaFiltro==""'>
+            <i class="fa fa-search" aria-hidden="true" ></i></button>
         </div>
       </div>
 
@@ -133,20 +136,20 @@
   <section>
     <br>
     <div class="row">
-        <div class="col-md-8">
-          <h2> Reportes - Solicitudes de Vehículos</h2>
-        </div>
-        <div class="col-md-4" >
-          <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
-          <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px" ><i class="fa fa-print" aria-hidden="true"></i></button>
-          <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px"><i class="fa fa-download" aria-hidden="true"></i></button>
-        </div>
+      <div class="col-md-8">
+        <h2> Reportes - Solicitudes de Vehículos</h2>
       </div>
-      <div class="row">
-        <div class="col-md-12">
-          <hr>
-        </div>
+      <div class="col-md-4">
+        <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
+        <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px"><i class="fa fa-print" aria-hidden="true"></i></button>
+        <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px"><i class="fa fa-download" aria-hidden="true"></i></button>
       </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <hr>
+      </div>
+    </div>
 
     <div class="row">
       <hr>
@@ -155,9 +158,9 @@
           <div class="input-group">
             <input class="form-control" placeholder="Vehículo" name="vehiculo" [(ngModel)]="vehiculoFiltro" #vehiculo [disabled]="true"
               required>
-            <button class="input-group-addon" type="button">
-                              <i class="fa fa-car" aria-hidden="true"></i>
-                          </button>
+            <button class="input-group-addon" type="button" (click)="abrir(modalVehiculos)" style="background: #0069d9;color: #fff" >
+              <i class="fa fa-car" aria-hidden="true"></i>
+              </button>
           </div>
         </div>
 
@@ -167,11 +170,12 @@
 
         <div class="form-group">
           <div class="input-group">
-            <input class="form-control" placeholder="Inicia" name="dI" [(ngModel)]="modelFechaInicio" ngbDatepicker #dI="ngbDatepicker"
+            <input class="form-control" placeholder="Inicia" name="dI" [(ngModel)]="modelFechaInicioVehiculo" ngbDatepicker #dIV="ngbDatepicker"
               [disabled]="true" required>
-            <button class="input-group-addon" (click)="dI.toggle()" type="button">
-                              <i class="fa fa-calendar" aria-hidden="true"></i>
-                          </button>
+            <button class="input-group-addon" (click)="dIV.toggle()" type="button"
+            [disabled]='vehiculoFiltro==""' style="background: #0069d9;color: #fff">
+             <i class="fa fa-calendar" aria-hidden="true"></i>
+            </button>
           </div>
         </div>
       </div>
@@ -182,11 +186,12 @@
       <div class="col-md-2">
         <div class="form-group">
           <div class="input-group">
-            <input class="form-control" placeholder="Termina" name="dF" [(ngModel)]="modelFechaFinal" ngbDatepicker #dF="ngbDatepicker"
+            <input class="form-control" placeholder="Termina" name="dF" [(ngModel)]="modelFechaFinalVehiculo" ngbDatepicker #dFV="ngbDatepicker"
               [disabled]="true" required>
-            <button class="input-group-addon" (click)="dF.toggle()" type="button">
-                              <i class="fa fa-calendar" aria-hidden="true"></i>
-                          </button>
+            <button class="input-group-addon" (click)="dFV.toggle()" type="button"
+            [disabled]='vehiculoFiltro==""' style="background: #0069d9;color: #fff">
+             <i class="fa fa-calendar" aria-hidden="true"></i>
+            </button>
           </div>
         </div>
       </div>
@@ -194,7 +199,8 @@
       <div class="col-md-2">
         <div class="form-group">
           <div class="btn-group">
-            <button type="button" class="btn btn-secundary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button type="button" class="btn btn-secundary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" 
+            aria-expanded="false"  [disabled]='vehiculoFiltro==""' style="background: #0069d9;color: #fff">
                   Solicitante
                  </button>
             <div class="dropdown-menu">
@@ -207,7 +213,8 @@
       <div class="col-md-2">
         <div class="form-group">
           <div class="btn-group">
-            <button type="button" class="btn btn-secundary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button type="button" class="btn btn-secundary dropdown-toggle" data-toggle="dropdown" 
+            aria-haspopup="true" aria-expanded="false"  [disabled]='vehiculoFiltro==""' style="background: #0069d9;color: #fff">
                       Departamento
                      </button>
             <div class="dropdown-menu">
@@ -220,7 +227,8 @@
 
       <div class="col-md-1">
         <div class="form-group">
-          <button type="button" class="btn btn-success"><i class="fa fa-search" aria-hidden="true"></i></button>
+          <button type="button" class="btn btn-success"  [disabled]='vehiculoFiltro==""' >
+            <i class="fa fa-search" aria-hidden="true"></i></button>
         </div>
       </div>
 
@@ -266,6 +274,92 @@
 
   </section>
 
+
+  <!-- Sección de modal de Salas-->
+  <ng-template #modalSalas>
+    <div class="modal-header" style="background: #0069d9;color:#fff">
+      <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Seleccionar Sala</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal" (click)="cerrar()"> 
+        <small aria-hidden="true">&times;</small>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row" style="text-align: center">
+        <table class="table" id="infoTable">
+          <thead class="thead-default">
+            <tr>
+              <th data-field="state" data-radio="true"></th>
+              <th class="th-color">Nombre</th>
+              <th class="th-color" >Cupo</th>
+              <th class="th-color" >Descripción</th>
+            </tr>
+          </thead>
+          <tbody style="font-family: 'Times New Roman', Times, serif">
+            <tr *ngFor="let sala of salas | paginate: {itemsPerPage:5, currentPage: p} let i = index">
+              <th><input type="radio" name="radioGroup" (click)="setSalaSeleccionda(sala.nombre)" [checked]="sala.nombre===salaFiltro"></th>
+              <th>{{sala.nombre}}</th>
+              <th>{{sala.cupo}}</th>
+              <th>{{sala.descripcion}}</th>
+            </tr>
+          </tbody>
+        </table>
+        <pagination-controls (pageChange)="p =$event">
+            
+         </pagination-controls>
+
+         
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-default btn-modal-can" (click)="cerrar()">Continuar</button>
+      </div>
+    </div>
+  </ng-template>
+
+   <!-- Sección de modal de Vehiculos-->
+   <ng-template #modalVehiculos>
+      <div class="modal-header" style="background: #0069d9;color:#fff">
+        <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Seleccionar Vehículo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal" (click)="cerrar()"> 
+          <small aria-hidden="true">&times;</small>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row" style="text-align: center">
+          <table class="table" id="infoTable">
+            <thead class="thead-default">
+              <tr>
+                <th data-field="state" data-radio="true"></th>
+                <th class="th-color">Placa</th>
+                <th class="th-color" >Tipo</th>
+                <th class="th-color" >Marca</th>
+                <th class="th-color" >Descripción</th>
+              </tr>
+            </thead>
+            <tbody style="font-family: 'Times New Roman', Times, serif">
+              <tr *ngFor="let vehiculo of vehiculos | paginate: {itemsPerPage:5, currentPage: p} let i = index">
+                <th><input type="radio" name="radioGroup" (click)="setVehiculoSelecciondo(vehiculo.placa)" [checked]="vehiculo.placa===vehiculoFiltro"></th>
+                <th>{{vehiculo.placa}}</th>
+                <th>{{vehiculo.tipo}}</th>
+                <th>{{vehiculo.marca}}</th>
+                <th>{{vehiculo.descripcion}}</th>
+              </tr>
+            </tbody>
+          </table>
+          <pagination-controls (pageChange)="p =$event">
+              
+           </pagination-controls>
+  
+           
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default btn-modal-can" (click)="cerrar()">Continuar</button>
+        </div>
+      </div>
+    </ng-template>
+
+  <!-- </div>
+</div>
+</div> -->
   <!-- <div class="row" style="text-align: center">
         <div class="col-md-12">
           <h2> Reportes</h2>
