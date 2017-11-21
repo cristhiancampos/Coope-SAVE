@@ -21,6 +21,8 @@ moment.locale('es');
 // import { RegistoUsuarioComponent } from './registo-usuario/registo-usuario.component';
 import { PrincipalComponent } from './principal/principal.component';
 
+import { PdfmakeModule } from 'ng-pdf-make';
+
 
 import { RouterModule, Routes } from '@angular/router';
 import { ModificarUsuarioComponent } from './modificar-usuario/modificar-usuario.component';
@@ -67,7 +69,8 @@ import { ChartsModule } from 'ng2-charts';
     CalendarModule.forRoot(),
     NgbModule.forRoot(),
     NgxPaginationModule,
-    ChartsModule
+    ChartsModule,
+    PdfmakeModule
     
     
   ],

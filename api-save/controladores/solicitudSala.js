@@ -42,7 +42,6 @@ function agregarSolicitud(req, res) {
 }
 function obtenerFechaActual(req, res) {
   var hoy = new Date();
-  //console.log(hoy.getDate());
   res.status(200).send({ currentDate: hoy });
 }
 function obtenerSolicitudesSalas(req, res) {
@@ -109,6 +108,51 @@ function obtenerTodasSolicitudes(req, res){
 //   });
 // }
 
+function filtrosReportes(req, res){
+  var params = req.body;
+
+  let query=params[0];
+  
+ console.log(query);
+  // if(params.sala !=null){
+  //   console.log("viene llena la sala");
+  // }
+  //  if(params.fechaInicio=!null){
+  //    if(params.fechaInicio.year==undefined || params.fechaInicio.year==null || params.fechaInicio.year==""){
+  //     console.log('fecha de incio undefinida');
+  //    }else{
+  //     console.log("viene llena la fecha inicio"+params.fechaInicio.year);
+  //    }
+  // }
+  // if(params.fechaFin.year=!null){
+  //   console.log("viene llena la fecha fin");
+  // }
+
+  SolicitudSala.find(query, (err, solicitud) => {
+
+    if (err) {
+     req.status(500).send({ mesage: 'Error al obtener las solicitudes' });
+   } else {
+     if (!solicitud) {
+       res.status(404).send({ message: 'No existen solicitudes para esta fecha' });
+     } else {
+       res.status(200).send({ message: solicitud });
+     }
+   }
+ });
+  // SolicitudSala.find({ estado: { $ne: "Eliminado" } }, (err, solicitudSalas) => {
+  //   if (err) {
+  //     res.status(500).send({ message: 'Error en la petición' });
+  //   } else {
+  //     if (!solicitudSalas) {
+  //       res.status(404).send({ message: 'No existen Salas registradas en el sistema' });
+  //     } else {
+  //       res.status(200).send({ message: solicitudSalas });
+  //     }
+  //   }
+  // }).sort('number');
+
+}
 
 
 function modificarSolicitudSala(req, res) {
@@ -173,6 +217,7 @@ module.exports = {
   obtenerTodasSolicitudes,
   modificarSolicitudSala,
   eliminarSolicitudSala,
-  obtenerSolicitudSala
+  obtenerSolicitudSala,
+  filtrosReportes
 }
 

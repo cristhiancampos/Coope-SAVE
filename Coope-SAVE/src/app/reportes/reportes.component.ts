@@ -8,13 +8,13 @@ import { ServicioSala } from '../servicios/sala';
 import { ServicioSolicitudSala } from '../servicios/solicitudSala';
 import { ServicioVehiculo } from '../servicios/vehiculo';
 import { NgbDateStruct, NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
-
+import { SolicitudSala } from '../modelos/solicitudSala';
+import { PdfmakeService } from 'ng-pdf-make/pdfmake/pdfmake.service';
 @Component({
   selector: 'app-reportes',
   templateUrl: './reportes.component.html',
   styleUrls: ['./reportes.component.css'],
-  providers: [ServicioDepartamento,ServicioUsuario,ServicioSala,ServicioSolicitudSala,ServicioVehiculo]
+  providers: [ServicioDepartamento,ServicioUsuario,ServicioSala,ServicioSolicitudSala,ServicioVehiculo,PdfmakeService]
 })
 export class ReportesComponent implements OnInit {
   @ViewChild('modalSalas') modalSalas: TemplateRef<any>;
@@ -28,7 +28,13 @@ export class ReportesComponent implements OnInit {
   currentUser;
   vehiculoFiltro="";
   salaFiltro="";
+  solicitanteFiltro="";
+  departamentoFiltro="";
+  usuarioGenerador="";
+
+  solicitudesSalasFiltradas=[];
   public mr: NgbModalRef;
+  solicitudSala:SolicitudSala;
 
   modelFechaInicio: NgbDateStruct;
   dateInicio: {year: number, month: number};
@@ -41,16 +47,19 @@ export class ReportesComponent implements OnInit {
   modelFechaFinalVehiculo: NgbDateStruct;
   dateFinalVehiculo: {year: number, month: number};
   
+  reporteFiltros=[];//{sala:any,fechaInicio:any,fechaFin:any,solicitante:any,departamento:any,usuarioGenerador:any};
+
+
   constructor(
     private _servUsuario: ServicioUsuario,
     private _servDepartamento: ServicioDepartamento,
     private _servSala: ServicioSala,
-    private _servSolicitud: ServicioSolicitudSala,
+    private _servSolicitudSala: ServicioSolicitudSala,
     private _servVehiculo: ServicioVehiculo,
-    private modal: NgbModal
+    private modal: NgbModal,
+    private pdfmake: PdfmakeService
   ) { 
-
-    
+    //this.reporteFiltros.solicitante="";
   }
  
   abrir(modal) {
@@ -60,15 +69,30 @@ export class ReportesComponent implements OnInit {
     this.mr.close();
 
   }
+  openPdf(){
+    this.pdfmake.configureStyles({ header: { fontSize: 18, bold: true } });
+    
+       // Add a text with style
+       this.pdfmake.addText('This is a header, using header style', 'header');
+    this.pdfmake.open();
+}
 
+printPdf(){
+    this.pdfmake.print();
+}
+
+downloadPDF(){
+    this.pdfmake.download();
+}
+
+downloadPdfWithName(customName: string){
+    this.pdfmake.download(customName);
+}
   ngOnInit() {
     this.obtenerUsuarios();
     this.obtenerDepartamentos();
     this.obtenerSalas();
     this.obtenerVehiculos();
-    $('#infoTable').on('click', 'tbody tr', function(event) {
-      $(this).addClass('highlight').siblings().removeClass('highlight');
-    });
   }
   
   setSalaSeleccionda(nombreSala:string){
@@ -139,6 +163,91 @@ export class ReportesComponent implements OnInit {
       response => {
         if (response.message) {
           this.vehiculos = response.message;
+        } else {//ho hay vehiculos registrados
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+        }
+      }
+    );
+  }
+  getNombreUsuario(id:any){
+
+    for (var i = 0; i < this.usuarios.length; i++) {
+      if(this.usuarios[i]._id===id){
+     return this.usuarios[i].nombre+ " "+ this.usuarios[i].apellidos;
+      }
+      
+    }
+  }
+
+  getIdUsuario(nombre){
+
+    let usuarioSelected = "";
+    for (let i = 0; i < nombre.length; i++) {
+      if (nombre.charAt(i) === " ") {
+      } else {
+        usuarioSelected += nombre.charAt(i);
+      }
+    }
+    let cadena="";
+       for (var index = 0; index < this.usuarios.length; index++) {
+         let comparar="";
+         cadena="";
+         comparar= this.usuarios[index].nombre+""+this.usuarios[index].apellidos;
+        for (let j = 0; j < comparar.length; j++) {
+          if (comparar.charAt(j) === " ") {
+          } else {
+            cadena += comparar.charAt(j);
+          }
+        }
+       if(usuarioSelected==cadena){
+         return this.usuarios[index]._id;
+       } 
+    }
+  }
+  
+  fitlroReporteSalas(){
+    this.reporteFiltros=[];
+    let identity = localStorage.getItem('identity');
+    let user = JSON.parse(identity);
+    if (user != null) {
+      this.usuarioGenerador=user.nombre +" "+user.apellidos; 
+    }
+    else{
+      this.usuarioGenerador="";
+    }
+
+    if(this.salaFiltro!=""){
+      this.reporteFiltros.push({sala:this.salaFiltro});
+    }
+     if(this.solicitanteFiltro!=""){
+     let solicitante=this.getIdUsuario(this.solicitanteFiltro);
+      this.reporteFiltros.push({usuario:solicitante});
+    }
+  
+    if(this.modelFechaInicio!=null){
+      this.reporteFiltros.push({fecha:{year:this.modelFechaInicio.year,month:this.modelFechaInicio.month,day:this.modelFechaInicio.day}});
+    }
+    if(this.modelFechaFinal!=null){
+      this.reporteFiltros.push({fecha:{year:this.modelFechaFinal.year,month:this.modelFechaFinal.month,day:this.modelFechaFinal.day}});
+    }   
+    this._servSolicitudSala.fitlroReporteSalas(this.reporteFiltros).subscribe(
+      response => {
+        if (response.message) {
+          let array=response.message;
+          this.solicitudesSalasFiltradas=response.message;
+          for (var i = 0; i < array.length; i++) {
+           if(array[i].estado=="Eliminado"){
+            this.solicitudesSalasFiltradas.splice(i,1);
+           }
+            
+          }
+         
+          //this.vehiculos = response.message;
+          //console.log(response.message);
         } else {//ho hay vehiculos registrados
         }
       }, error => {

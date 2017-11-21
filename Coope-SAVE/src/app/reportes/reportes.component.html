@@ -7,7 +7,9 @@
         <h2> Reportes - Solicitudes de Salas</h2>
       </div>
       <div class="col-md-4">
-        <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
+        <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px" (click)="openPdf()">
+          <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+        </button>
         <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px"><i class="fa fa-print" aria-hidden="true"></i></button>
         <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px"><i class="fa fa-download" aria-hidden="true"></i></button>
       </div>
@@ -38,20 +40,20 @@
           <div class="input-group">
             <input class="form-control" placeholder="Inicia" name="dI" [(ngModel)]="modelFechaInicio" ngbDatepicker #dI="ngbDatepicker"
               [disabled]="true" required>
-            <button class="input-group-addon" (click)="dI.toggle()" type="button" [disabled]='salaFiltro==""' style="background: #0069d9;color: #fff">
+            <button class="input-group-addon" (click)="dI.toggle()" type="button"  style="background: #0069d9;color: #fff">
               <i class="fa fa-calendar" aria-hidden="true"></i>
               </button>
           </div>
         </div>
       </div>
-      <div class="col-md-1">
-      </div>
+      <!-- <div class="col-md-1">
+      </div> -->
       <div class="col-md-2">
         <div class="form-group">
           <div class="input-group">
             <input class="form-control" placeholder="Termina" name="dF" [(ngModel)]="modelFechaFinal" ngbDatepicker #dF="ngbDatepicker"
               [disabled]="true" required>
-            <button class="input-group-addon" (click)="dF.toggle()" type="button" [disabled]='salaFiltro==""' style="background: #0069d9;color: #fff">
+            <button class="input-group-addon" (click)="dF.toggle()" type="button"  style="background: #0069d9;color: #fff">
               <i class="fa fa-calendar" aria-hidden="true"></i>
             </button>
           </div>
@@ -60,7 +62,12 @@
 
       <div class="col-md-2">
         <div class="form-group">
-          <div class="btn-group">
+            <select #solicitante="ngModel" name="solicitante" [(ngModel)]="solicitanteFiltro" class="selectpicker" 
+            style="width: 100%;padding: .5rem .75rem;" required  >  
+              <option value="" selected disabled >Solicitante</option>
+                  <option *ngFor="let usuario of usuarios;">{{usuario.nombre}} {{usuario.apellidos}}</option>
+                </select>
+          <!-- <div class="btn-group">
             <button type="button" class="btn btn-secundary dropdown-toggle" data-toggle="dropdown" 
             aria-haspopup="true" aria-expanded="false" [disabled]='salaFiltro==""' style="background: #0069d9;color: #fff">
                 Solicitante
@@ -68,13 +75,18 @@
             <div class="dropdown-menu">
               <a class="dropdown-item" href="javascript:void(0);" *ngFor="let usuario of usuarios">{{usuario.nombre}}</a>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
 
       <div class="col-md-2">
         <div class="form-group">
-          <div class="btn-group">
+            <select #departamento="ngModel" name="departamento" [(ngModel)]="departamentoFiltro" class="selectpicker" 
+            style="width: 100%;padding: .5rem .75rem;" required  >  
+              <option value="" selected disabled >Departamento</option>
+                  <option *ngFor="let departamento of departamentos;">{{departamento.nombre}}</option>
+                </select>
+          <!-- <div class="btn-group">
             <button type="button" class="btn btn-secundary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
              aria-expanded="false" [disabled]='salaFiltro==""' style="background: #0069d9;color: #fff">
               Departamento
@@ -82,20 +94,22 @@
             <div class="dropdown-menu">
               <a class="dropdown-item" href="javascript:void(0);" *ngFor="let departamento of departamentos">{{departamento.nombre}}</a>
             </div>
-          </div>
+          </div> -->
         </div>
 
       </div>
 
-      <div class="col-md-1">
+      <div class="col-md-2">
         <div class="form-group">
-          <button type="button" class="btn btn-success" [disabled]='salaFiltro==""'>
+          <button type="button" class="btn btn-success"  (click)="fitlroReporteSalas()">
             <i class="fa fa-search" aria-hidden="true" ></i></button>
+            <button type="button" class="btn btn-success">
+                <i class="fa fa-refresh" aria-hidden="true" ></i></button>
         </div>
       </div>
 
     </div>
-    <br>
+    <!-- <hr> -->
     <div class="col-md-12">
       <div class="row" style="text-align: center">
         <table class="table">
@@ -109,11 +123,13 @@
             </tr>
           </thead>
           <tbody style="font-family: 'Times New Roman', Times, serif">
-            <tr *ngFor="let sala of solicitudSalas | paginate: {itemsPerPage:5, currentPage: p} let i = index">
+            <tr *ngFor="let sala of solicitudesSalasFiltradas | paginate: {itemsPerPage:5, currentPage: p} let i = index">
               <th scope="row">{{i+1}}</th>
-              <th>{{sala.fecha.day}}/{{sala.fecha.month}}/{{sala.fecha.year}}</th>
-              <th>{{sala.horaInicio.hour}}:{{sala.horaInicio.minute}} - {{sala.horaFin.hour}}: {{sala.horaFin.minute}}</th>
               <th>{{sala.sala}}</th>
+              <th>{{getNombreUsuario(sala.usuario)}}</th>
+              <th>{{sala.fecha.day}}/{{sala.fecha.month}}/{{sala.fecha.year}}</th>
+              <!-- <th>{{sala.horaInicio.hour}}:{{sala.horaInicio.minute}} - {{sala.horaFin.hour}}: {{sala.horaFin.minute}}</th>
+              <th>{{sala.sala}}</th> -->
               <th>{{sala.descripcion}}</th>
             </tr>
           </tbody>
