@@ -12,14 +12,15 @@ function getUsuario(req, res) {
 
 function agregarUsuario(req, res) {
 
+  
   var user = new Usuario();//creamos un nuevo objeto usuario  
   var params = req.body;//obtenemos los datos de la peticion
   //llenamos el nuevo objeto usuario a agregar con los datos del request
   user.nombre = params.nombre;
   user.apellidos = params.apellidos;
   user.correo = params.correo;
-  user.rol = 'USUARIO';
-  user.estado = 'Habilitado';
+  user.rol = params.rol;
+  user.estado = params.estado;
   user.departamento = params.departamento;
   user.contrasena = params.contrasena;
   user.created_at = new Date();
@@ -35,6 +36,7 @@ function agregarUsuario(req, res) {
         && user.rol != null && user.estado != null && user.departamento != null
       ) {
         //guardar usuario
+
         user.save((err, userStored) => {
           if (err) {
             res.status(500).send({ message: 'Error al registrar usuario ' });
@@ -201,8 +203,8 @@ function modificarPerfil(req, res) {
       nombre: params.nombre,
       apellidos: params.apellidos,
       departamento: params.departamento,
-      rol: params.rol,
-      estado: params.estado,
+      //rol: params.rol,
+      //estado: params.estado,
       updated_at: params.updated_at
     }, (err, modificarUsuario) => {
       if (err) {
@@ -260,8 +262,6 @@ function modificarUsuario(req, res) {
             nombre: params.nombre,
             apellidos: params.apellidos,
             departamento: params.departamento,
-            rol: params.rol,
-            estado: params.estado,
             updated_at: params.updated_at
           }, (err, modificarUsuario) => {
             if (err) {

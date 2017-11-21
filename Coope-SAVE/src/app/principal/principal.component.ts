@@ -141,14 +141,18 @@ export class PrincipalComponent implements OnInit {
     let use = new Usuario('','','','','','','','','','');
     use = this.usuario;
     use.correo = this.dominio;
+    use.rol= 'USUARIO';
+    use.estado='Habilitado';
 
     for (var index = 0; index < this.departamentos.length; index++) {
       if(use.departamento==this.departamentos[index].nombre){
         use.departamento=this.departamentos[index]._id;
+        console.log(this.departamentos[index].nombre);
         break;
       }
       
     }
+    console.log(use.departamento);
     this._servUsuario.registrarUsuario(use).subscribe(
       response => {
         let user = response.user;

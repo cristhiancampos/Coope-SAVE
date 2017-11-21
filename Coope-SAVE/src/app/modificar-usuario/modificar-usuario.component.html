@@ -45,7 +45,7 @@
           </div>
           <div class="control-group form-group">
             <div class="controls">
-              <select #departamentoModificar="ngModel" name="departamentoModificar" [(ngModel)]="usuarioEdit.departamento" class="selectpicker"
+              <select #departamentoModificar="ngModel" name="departamentoModificar" [(ngModel)]="departamentoUsuarioModificiar" class="selectpicker"
                 style="width: 100%;padding: .5rem .75rem;" required>  
                 <option value="" selected disabled >Departamento</option>
                     <option *ngFor="let depa of departamentos;">{{depa.nombre}}</option>

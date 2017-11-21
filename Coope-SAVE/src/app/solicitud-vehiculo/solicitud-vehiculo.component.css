@@ -105,7 +105,8 @@ border-color:#ccc;
 }
 
 #pagionadorVehiculos{
-  font-size: 12px
+  font-size: 12px;
+  margin-left: -60px;
 }
 .guiColors{
   margin-left: 2%;width: 96%;height: auto;

@@ -17,19 +17,27 @@ import { NgbModalRef, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-boo
 })
 export class AdminUsuarioComponent implements OnInit {
   @ViewChild('modalModificarUsuario') modalModificarUsuario: TemplateRef<any>;
+  @ViewChild('modalAgregarUsuario') modalAgregarUsuario: TemplateRef<any>;
   public mr: NgbModalRef;
 
   public usuario: Usuario;
   public usuarioEdit: Usuario;
+  public usuarioAgregar: Usuario;
   public usuarios = [];
   public usuarioExist: boolean;
   public mostrarModal: boolean;
   public estadoMensajEdit: String;
+  public estadoMensajAgregar: String;
   public estadoEdicion: boolean;
+  public estadoEdicionAgregar: Boolean;
   public estadoMensaje = 'Habilitado';
   public currentUser = "";
   public identity: any;;
   public token;
+  public correo;
+  public dominio;
+  public dominioCoope;
+  public verError;
   public tempUserRol;
   public departamentos = [];
   public userExist: boolean;
@@ -45,6 +53,11 @@ export class AdminUsuarioComponent implements OnInit {
     this.mostrarModal = false;
     this.usuario = new Usuario('', '', '', '', '', '', '', '', '', '');
     this.usuarioEdit = new Usuario('', '', '', '', '', '', '', '', '', '');
+    this.usuarioAgregar = new Usuario('', '', '', '', '', '', '', '', '', '');
+    this.dominio = "@coopesparta.fi.cr";
+    this.estadoEdicionAgregar= true;
+    this.estadoMensajAgregar= 'Habilitado';
+    this.usuarioAgregar.estado= this.estadoMensajAgregar;
   }
 
   ngOnInit() {
@@ -132,6 +145,23 @@ export class AdminUsuarioComponent implements OnInit {
     }
   }
 
+  cambiarEstadoAgregar(event: any) {
+    //alert(event.target.checked);
+
+    this.estadoEdicionAgregar = !this.estadoEdicionAgregar;
+    console.log(this.estadoEdicionAgregar);
+    if (this.estadoEdicionAgregar) {
+      this.estadoMensajAgregar = 'Habilitado';
+      this.usuarioAgregar.estado = this.estadoMensajAgregar;
+      console.log('88888888888888888888888888888888888888');
+      console.log(this.usuarioAgregar.estado);
+    } else {
+      this.estadoMensajAgregar = 'Deshabilitado';
+      this.usuarioAgregar.estado = this.estadoMensajAgregar;
+      console.log('333333333333333333333333333333333333333');
+      console.log(this.usuarioAgregar.estado)
+    }
+  }
   obtenerNombreDep(id_Dep: any) {
     for (var index = 0; index < this.departamentos.length; index++) {
       if (this.departamentos[index]._id == id_Dep) {
@@ -271,6 +301,18 @@ export class AdminUsuarioComponent implements OnInit {
     this.usuario.correo = correoFinal;
 
   }
+  changeAgregar(event: any) {
+    let correoFinal = "";
+    this.usuarioAgregar.correo = this.usuarioAgregar.correo.trim();
+    for (let i = 0; i < this.usuarioAgregar.correo.length; i++) {
+      if (this.usuarioEdit.correo.charAt(i) === " ") {
+      } else {
+        correoFinal += this.usuarioAgregar.correo.charAt(i);
+      }
+    }
+    this.usuarioAgregar.correo = correoFinal;
+
+  }
 
   validarModificacion() {
     let correo = this.usuarioEdit.correo.trim();
@@ -295,6 +337,7 @@ export class AdminUsuarioComponent implements OnInit {
       }
     );
   }
+  
 
   modificarUsuario() {
     this.usuarioEdit.estado = this.estadoMensajEdit;
@@ -324,6 +367,131 @@ export class AdminUsuarioComponent implements OnInit {
 
     }
 
+  }
+
+
+  //olcultar mensaje de existencia de usuario
+  onfocusCorreo() {
+    this.userExist = false;
+    this.verError = false;
+  }
+  validarCorreo() {
+    let user = new Usuario('','','','','','','','','','');;
+    user.correo = this.dominio;
+    this._servUsuario.getCorreo(user).subscribe(
+      response => {
+        if (response.message) {
+          let co = response.message.correo;;
+          this.correo = co;
+          this.userExist = true;
+          $('#input-correo').css("border-left", "5px solid #a94442");
+        } else {//no existe el corrreo
+          $('#input-correo').css("border-left", "5px solid #42A948");;
+          this.correo = null;
+          this.userExist = false;
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+        if (errorMensaje != null) {
+          //var body = JSON.parse(error._body);
+        }
+      }
+    );
+  }
+
+  validarCorreoAgregar() {
+    let user = new Usuario('','','','','','','','','','');;
+    user.correo = this.usuarioAgregar.correo+''+this.dominio;
+    console.log(user.correo);
+    this._servUsuario.getCorreo(user).subscribe(
+      response => {
+        if (response.message) {
+          let co = response.message.correo;;
+          this.correo = co;
+          this.userExist = true;
+          $('#input-correo').css("border-left", "5px solid #a94442");
+        } else {//no existe el corrreo
+          $('#input-correo').css("border-left", "5px solid #42A948");;
+          this.correo = null;
+          this.userExist = false;
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+        if (errorMensaje != null) {
+          //var body = JSON.parse(error._body);
+        }
+      }
+    );
+  }
+
+  generatePassword() {
+    var length = 8,
+        charset = "!@#DEF34qrst56GHI$%^cdefg&*()_+|}{[TUV0op1278WXYZ]\:;?><,./-=abhijklmnuvwxyzABCJKLMNOPQRS9",
+        retVal = "";
+    for (var i = 0, n = charset.length; i < length; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * n));
+    }
+    return retVal;
+}
+
+enviarContrasena(user:any) {
+  this._servUsuario.enviarContrasena(user).subscribe(
+    response => {
+     
+      if (!response) {
+        console.log('Fallo el envio de correo');
+      } else {
+        console.log('correo de contrase;a enviada');
+        //this.cerrar();
+       // this.msInfo('Su nueva contraseña ha sido enviada via correo electrónico a '+user.correo);          
+        //this._router.navigate(['/principal']);
+      }
+    }, error => {
+      console.log('Fallo el envio de correo');
+    }
+  );
+}//Fin del metodo EnviarEmail
+
+
+
+  registrarUsuario() {
+    let use = new Usuario('','','','','','','','','','');
+    console.log(this.usuarioAgregar.estado);
+    use = this.usuarioAgregar;
+    use.correo+= this.dominio;
+    use.contrasena= this.generatePassword();
+    let temPass= use.contrasena;
+    for (var index = 0; index < this.departamentos.length; index++) {
+      if(use.departamento==this.departamentos[index].nombre){
+        use.departamento=this.departamentos[index]._id;
+        break;
+      }
+      
+    }
+    console.log(use.estado);
+    this._servUsuario.registrarUsuario(use).subscribe(
+      response => {
+        console.log(response);
+        let user = response.user;
+        if (!response.user._id) {
+          
+          this.msjError('Error al registrar el usuario');
+        } else {
+          //this._router.navigate(['/principal']);
+          this.msjExitoso('Usuario registrado exitosamente');
+          user.contrasena= temPass;
+          this.enviarContrasena(user);
+          this.cerrar();
+          this.obtenerUsuarios();
+          
+        }
+      }, error => {
+        var alertMessage = <any>error;
+        if (alertMessage != null) {
+          this.msjError('Error al registrar el usuario');
+        }
+      }
+    );
   }
   // cerrarModal(modalId: any) {
   //   $(".modal-backdrop").remove();

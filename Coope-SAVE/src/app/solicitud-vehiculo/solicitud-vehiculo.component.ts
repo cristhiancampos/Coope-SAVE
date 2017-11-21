@@ -187,20 +187,21 @@ export class SolicitudVehiculoComponent implements OnInit {
   crearPDF(solicitudVehiculo:any) {
 
     const pdf = new jsPDF();
-    const htmlTitulo = `<h2 style="text-align: center;"> Traslado y uso de Vehículos</h2>`
+    const htmlTitulo = `<h2 style="text-align: center;"> Traslado y uso de Vehículos</h2>`;
+    const htmlTitulo2 = `<h2 style="text-align: center;"> Entrega del Vehiculo </h2>`;
+    const htmlTitulo3 = `<h3 style="text-align: center;"> Estado del Vehiculo al momento de la entrega</h3>`;
+    const htmlTitulo4 = `<h2 style="text-align: center;"> Recepción de Vehículo</h2>`;
+    const htmlTitulo5 = `<h3 style="text-align: center;"> Observaciones  </h3>`;
+    const htmlTitulo6 = `<h3 style="text-align: center;"> Nota: Es obligación de todo usuario revisar el vehículoantes de salir  </h3>`;
+    const htmlTitulo7 = `<h3> y al regresar, así como mantener el aseo del mismo</h3>`;
 
     let logo = new Image();
-    let imgDatos = new Image();
-
     logo.src = '../assets/img/logo.png';
-    imgDatos.src = '../assets/img/datos.jpg';
-
-    console.log(imgDatos);
     pdf.addImage(logo, 'PNG', 65, 14, 80, 15);
-    //pdf.addImage(imgDatos, 'JPEG', 65,14, 80, 15);
+    
     
 
-    pdf.setFontSize(14);
+    pdf.setFontSize(12);
 
     pdf.fromHTML(htmlTitulo, 68, 30, {});
     // pdf.fromHTML(htmlDatos, 20,50 );   
@@ -215,24 +216,88 @@ export class SolicitudVehiculoComponent implements OnInit {
     
 
     //Sección de los datos de la solicitud
-    pdf.text(20, 60, 'Placa:'); pdf.text(70, 60, solicitudVehiculo.vehiculo);
-    pdf.text(130, 60, 'Fecha:'); pdf.text(150, 60, fecha);
+    pdf.text(20, 60, 'Placa:'); pdf.text(70, 60, solicitudVehiculo.vehiculo);             pdf.text(130, 60, 'Fecha:'); pdf.text(150, 60, fecha);
     pdf.text(20, 70, 'Hora Salida:'); pdf.text(70, 70, horaSalida);
     pdf.text(20, 80, 'Hora Regreso:'); pdf.text(70,80, horaRegreso);
     pdf.text(20, 90, 'Motivo de la Gira:'); pdf.text(70,90, solicitudVehiculo.descripcion);
     pdf.text(20, 100, 'Destino:');  pdf.text(70,100, solicitudVehiculo.destino);
     pdf.text(20, 110, 'Acompañantes:'); pdf.text(70,110, acompanantes);
-    pdf.text(20, 120, 'Encargado:');  pdf.text(70,120,'Esteban Solis' );
-    pdf.text(130, 120, 'Firma:'); pdf.text(150,120, 'Esteban Solis');
+    pdf.text(20, 120, 'Encargado:');  pdf.text(70,120,'Esteban Solis' );                   pdf.text(130, 120, 'Firma:'); pdf.line(145, 120, 200,120)
 
     //Seccion de los datos de entrega de vehículo
+
+    pdf.fromHTML(htmlTitulo2, 80, 125, {});
+    
+    pdf.text(20, 150, 'Fecha:'); pdf.line(35, 150, 100, 150);                         pdf.text(130, 150, 'Hora:'); pdf.line(145, 150, 200,150)
+                                                         
+    pdf.text(20, 160, 'Entregado por:'); pdf.line(50, 160, 125, 160);                 pdf.text(130, 160, 'Firma:'); pdf.line(145, 160, 200,160)
+                                                                                
+                                         
+    pdf.text(20, 170, 'Recibido por:'); pdf.line(47, 170, 125, 170);                   pdf.text(130, 170, 'Firma:'); pdf.line(145, 170, 200,170)
+    
+    pdf.text(20, 180, 'Kilometraje:'); pdf.line(44, 180, 95, 180);                   pdf.text(100, 180, 'Nivel de Combustible:'); 
+
+    let combustible = new Image();
+    combustible.src=  '../assets/img/pruebas/3.png';
+
+    pdf.addImage(combustible, 'PNG', 150, 175, 60, 10);
+
+    pdf.fromHTML(htmlTitulo3, 20, 185, {});
+
+    let carro = new Image();
+    carro.src=  '../assets/img/pruebas/1.png';
+
+    pdf.addImage(carro, 'PNG', 20, 200, 80, 80);
+
+    let componentesCarro = new Image();
+    componentesCarro.src=  '../assets/img/pruebas/2.png';
+
+    pdf.addImage(componentesCarro, 'PNG', 120, 200, 80, 80);
+
+    //Seunda Pagina 
+
+    pdf.addPage();
+    pdf.addImage(logo, 'PNG', 65, 14, 80, 15);
+    pdf.fromHTML(htmlTitulo4, 68, 30, {});
+    pdf.text(20, 60, 'Fecha:'); pdf.line(35, 60, 100, 60);                         pdf.text(130, 60, 'Hora:'); pdf.line(145, 60, 200,60)
+    
+    pdf.text(20, 70, 'Entregado por:'); pdf.line(50, 70, 125, 70);                 pdf.text(130, 70, 'Firma:'); pdf.line(145, 70, 200,70)
+                           
+
+    pdf.text(20, 80, 'Recibido por:'); pdf.line(47, 80, 125, 80);                   pdf.text(130, 80, 'Firma:'); pdf.line(145, 80, 200,80)
+
+    pdf.text(20, 90, 'Kilometraje:'); pdf.line(44, 90, 95, 90);                   pdf.text(100, 90, 'Nivel de Combustible:'); 
+    pdf.addImage(combustible, 'PNG', 150, 85, 60, 10);
+
+    pdf.fromHTML(htmlTitulo3, 20, 95, {});
+
+    pdf.addImage(carro, 'PNG', 20, 115, 80, 80);
+    pdf.addImage(componentesCarro, 'PNG', 120, 115, 80, 80);
+
+    pdf.fromHTML(htmlTitulo5, 20, 200, {});
+
+    pdf.line(20, 220, 200, 220); 
+    pdf.line(20, 225, 200, 225); 
+    pdf.line(20, 230, 200, 230); 
+    pdf.line(20, 235, 200, 235); 
+    pdf.line(20, 240, 200, 240); 
+    pdf.line(20, 245, 200, 245); 
+    pdf.line(20, 250, 200, 250); 
+
+    pdf.fromHTML(htmlTitulo6, 20, 265, {});
+    pdf.fromHTML(htmlTitulo7, 20, 270, {});
+
+
+
+    
+
 
 
     pdf.save('prueba.pdf');
 
   }
   cancelarAccion() {
-    this.crearPDF(this.listaSolicitudes[1]);
+    //this.crearPDF(this.listaSolicitudes[1]);
     this.obtenerSolicitudes(new Date(), false);
     this.obtenerSolicitudVehiculos();
     this.mr.close();
@@ -509,7 +574,7 @@ export class SolicitudVehiculoComponent implements OnInit {
                         this.msjExitoso("Solicitud agregada exitosamente");
                         console.log(solicitud);
                         this.enviarEmail(solicitud);
-                        this.crearPDF(this.solicitudVehiculo);
+                       // this.crearPDF(this.solicitudVehiculo);
                         //this.enviarEmail(solicitud);
                         this.solicitudVehiculo = new SolicitudVehiculo('', '', '', null, null, null, '', '', '', null, '', '');
                         this.obtenerSolicitudes(this.date, false);

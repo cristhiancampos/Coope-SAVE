@@ -30,6 +30,7 @@ export class ModificarUsuarioComponent implements OnInit {
   public tempUserRol;
   public identity;
   public departamentos = [];
+  public departamentoUsuarioModificiar;
 
   codigo=''; //process.env["USERPROFILE"];
 
@@ -47,6 +48,7 @@ export class ModificarUsuarioComponent implements OnInit {
     this.validarContrasena= '';
     this.userExistEdit = false;
     this.confirmaContraExist= false;
+    
 
    }
 
@@ -59,12 +61,45 @@ export class ModificarUsuarioComponent implements OnInit {
     this.verificarCredenciales();
     this.obtenerUsuario();
     this.obtenerDepartamentos();
+    
     console.log('modificar usuario.ts cargado ...FECHA' + this.date + '.....año' + this.year);
+
+
+  }
+  nombreDepartamento(){
+   
+    for (var index = 0; index < this.departamentos.length; index++) {
+      if (this.departamentos[index]._id == this.usuarioEdit.departamento ) {
+    
+        this.departamentoUsuarioModificiar= this.departamentos[index].nombre;
+        
+        break;
+      }
+      
+    }
+   
   }
 
+  obtenerId_Dep(nombreDep: any) {
+   
+    for (var index = 0; index < this.departamentos.length; index++) {
+      if (this.departamentos[index].nombre == nombreDep) {
+        return this.departamentos[index]._id;
+
+      }
+
+    }
+    return "";
+  }
 
   modificarPerfil() {
-    
+
+            
+            this.usuarioEdit.departamento = this.obtenerId_Dep(this.departamentoUsuarioModificiar);
+            console.log('Local Storage');
+            let identity = localStorage.getItem('identity');
+            let user = JSON.parse(identity);
+            console.log(user);
             this._servUsuario.modificarPerfil(this.usuarioEdit).subscribe(
               response => {
                
@@ -73,18 +108,22 @@ export class ModificarUsuarioComponent implements OnInit {
                 } else {
                   this.msjExitoso("Usuario Modificado Exitosamente");
                   console.log(response.message);
-                  localStorage.removeItem('identity');
+                  //this._router.navigate(['/principal']);
+
+                  // localStorage.removeItem('identity');
+                  console.log('usuario que devuelve');
+                  console.log(response.message);
                   localStorage.setItem('identity',JSON.stringify(response.message));
                  
                   let identity = localStorage.getItem('identity');
                   let user = JSON.parse(identity);
                   console.log(user);
-                  if (user != null) {
-                    $('#nav-user').text(user[0].nombre + ' ' + user[0].apellidos);
+                  // if (user != null) {
+                  //   $('#nav-user').text(user[0].nombre + ' ' + user[0].apellidos);
                     
-                  } else {
-                    $('#nav-user').text('');
-                  }
+                  // } else {
+                  //   $('#nav-user').text('');
+                  // }
               
                 }
               }, error => {
@@ -291,6 +330,7 @@ export class ModificarUsuarioComponent implements OnInit {
       response => {
         if (response.message) {
           this.departamentos = response.message;
+          this.nombreDepartamento();
         } else {//no hay departamentos registrados
         }
       }, error => {

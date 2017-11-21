@@ -4,6 +4,9 @@
     <div class="col-md-12">
       <h2> Admistración de Usuarios</h2>
       <hr>
+      <button class="btn btn-primary" (click)="abrir(modalAgregarUsuario)" style="float: left;margin-bottom: 6px"
+      [disabled]='(identity.rol != "SUPERADMIN" && identity.rol != "ADMINISTRADOR")  || (identity.rol != "ADMINISTRADOR" && identity.rol != "SUPERADMIN")'>
+         <i class="fa fa-plus" aria-hidden="true"></i></button>
       <!-- <button class="btn btn-primary" style="float: left;margin-bottom: 6px"> <i class="fa fa-plus" aria-hidden="true"></i></button> -->
     </div>
   </div>
@@ -189,6 +192,127 @@
       </div>
     </div>
   </ng-template>
+
+<!-- Modal Agragar Usuario -->
+
+  <ng-template #modalAgregarUsuario let-c="close" let-d="dismiss">
+    <div class="modal-header" style="background: #0069d9;color:#fff">
+      <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-user-circle-o"></i>&nbsp;&nbsp;Registrarse</h5>
+      <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="salir()"> 
+          <span aria-hidden="true">&times;</span>
+        </button>-->
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12">
+          <ol class="breadcrumb">
+            <li>
+              <a><img src="assets/img/logo.png" ></a>
+            </li>
+          </ol>
+        </div>
+      </div>
+      <!-- END BREADCRUMB-->
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-12">
+
+            <form #registerForm="ngForm" (ngSubmit)="registrarUsuario()">
+              <div class="control-group form-group">
+                <div class="controls">
+                  <div class="row" style="margin-left:0em;margin-right:0em">
+                    <input id="input-correo" type="text" #correo="ngModel" name="correo" class="form-control col-md-4  " (input)="changeAgregar($event)"
+                      [(ngModel)]="usuarioAgregar.correo" placeholder="usuario" autofocus (input)="validarCorreoAgregar()" (focus)="onfocusCorreo()"
+                      required>
+                    <input type="text" #correoLabel="ngModel" name="correoLabel" class="form-control col-md-8  " [(ngModel)]="dominio" placeholder=""
+                      disabled required [email]="true">
+                    <!-- <label class="col-md-6" > @coopesparta.fi.cr</label> [email]="true"-->
+                  </div>
+                  <small *ngIf="correo.touched && correo.value==''"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El correo es obligatorio. </small>
+                  <!-- <small *ngIf="!correo.valid && correo.value!null"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Formato de correo inválido.</small>                      -->
+                  <small *ngIf="userExist"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe una cuenta con ese correo</small>
+                </div>
+              </div>
+              <div class="control-group form-group">
+                <div class="controls">
+                  <input type="text" class="form-control" #nombre="ngModel" name="nombre" [(ngModel)]="usuarioAgregar.nombre" placeholder="Nombre"
+                    required>
+                  <small [hidden]="nombre.valid || (nombre.pristine && !registerForm.submitted)">
+                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El nombre es obligatorio
+                    </small>
+                </div>
+              </div>
+
+              <div class="control-group form-group">
+                <div class="controls">
+
+                  <input type="text" class="form-control" #apellidos="ngModel" name="apellidos" [(ngModel)]="usuarioAgregar.apellidos" placeholder="Apellidos"
+                    required maxlength="60">
+                  <small [hidden]="apellidos.valid || (apellidos.pristine && !registerForm.submitted)">
+                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Los apellidos son obligatorios
+                    </small>
+                </div>
+              </div>
+
+              <div class="control-group form-group">
+                <div class="controls">
+                  <select #departamento="ngModel" name="departamento" [(ngModel)]="usuarioAgregar.departamento" class="selectpicker" style="width: 100%;padding: .5rem .75rem;"
+                    required>  
+                    <option value="" selected disabled >Departamento</option>
+                        <option *ngFor="let depa of departamentos;">{{depa.nombre}}</option>
+                      </select>
+                  <small [hidden]="departamento.valid || (departamento.pristine && !registerForm.submitted)">
+                          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El departamento es  obligatorio
+                      </small>
+                </div>
+              </div>
+
+              <div class="control-group form-group">
+                <div class="controls">
+                  <select [disabled]='tempUserRol=="ADMINISTRADOR"' #rol="ngModel" name="rol" [(ngModel)]="usuarioAgregar.rol" class="selectpicker" 
+                  style="width: 100%;padding: .5rem .75rem;" required  >  
+                    <option value="" selected disabled >Rol</option>
+                        <option [disabled]='tempUserRol=="ADMINISTRADOR"'>ADMINISTRADOR</option>
+                        <option [disabled]="true">SUPERADMIN</option>
+                        <option [disabled]='tempUserRol=="ADMINISTRADOR"'>NOTIFICACIONES</option>
+                        <option [disabled]='tempUserRol=="ADMINISTRADOR"'>USUARIO</option>
+                        <option [disabled]='tempUserRol=="ADMINISTRADOR"'>REPORTES</option>
+                      </select>
+                      <small *ngIf='tempUserRol!="ADMINISTRADOR"' [hidden]="rol.valid || (rol.pristine && !registerForm.submitted)">
+                          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El rol de usario es  obligatorio
+                      </small>
+                </div>
+              </div>
+              
+              <div class="control-group form-group">
+                <div class="controls" >
+                     <ul>
+                       <li style="margin-left: -37px;" > <label class="switch">
+                           <input [disabled]='tempUserRol=="ADMINISTRADOR"' type="checkbox" [checked]='estadoEdicionAgregar' (change)="cambiarEstadoAgregar($event)">
+                           <small class="slider round"></small>
+                         </label>
+                       </li>
+                       <li>
+                         <label style="float: left;margin-top: -2.3em;">{{estadoMensajAgregar}}</label>
+                       </li>
+                     </ul>
+                   </div>
+                 </div>
+          
+              <button id="btnRegister" type="submit" style="float:right" [disabled]="!correo.valid || !nombre.valid || !apellidos.valid  ||  !departamento.valid || userExist "
+                class="btn btn-success">Continuar</button>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+
+      <!-- <button type="button" class="btn btn-secondary"  style="background: #f00a0a;" (click)="salir()">Salir</button>         -->
+    </div>
+</ng-template>
+
    
   <!-- </div>
 </div>
