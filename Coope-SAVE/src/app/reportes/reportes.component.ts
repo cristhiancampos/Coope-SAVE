@@ -70,10 +70,7 @@ export class ReportesComponent implements OnInit {
 
   }
   openPdf(){
-    this.pdfmake.configureStyles({ header: { fontSize: 18, bold: true } });
-    
-       // Add a text with style
-       this.pdfmake.addText('This is a header, using header style', 'header');
+   // this.pdfmake.download();
     this.pdfmake.open();
 }
 
@@ -93,6 +90,11 @@ downloadPdfWithName(customName: string){
     this.obtenerDepartamentos();
     this.obtenerSalas();
     this.obtenerVehiculos();
+    this.pdfmake.configureStyles({ header: { fontSize: 18, bold: true } });
+    
+       // Add a text with style
+       this.pdfmake.addText('This is a header, using header style', 'header');
+       this.pdfmake.addImage('http://upload.wikimedia.org/wikipedia/commons/4/4a/Logo_2013_Google.png');
   }
   
   setSalaSeleccionda(nombreSala:string){
