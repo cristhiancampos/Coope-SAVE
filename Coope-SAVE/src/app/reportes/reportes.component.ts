@@ -1,7 +1,7 @@
-import { Component, OnInit,ViewChild,TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import * as $ from 'jquery';
 import swal from 'sweetalert2';
-import {Chart } from 'chart.js/src/chart';
+import { Chart } from 'chart.js/src/chart';
 import { ServicioDepartamento } from '../servicios/departamento';
 import { ServicioUsuario } from '../servicios/usuario';
 import { ServicioSala } from '../servicios/sala';
@@ -14,40 +14,40 @@ import { PdfmakeService } from 'ng-pdf-make/pdfmake/pdfmake.service';
   selector: 'app-reportes',
   templateUrl: './reportes.component.html',
   styleUrls: ['./reportes.component.css'],
-  providers: [ServicioDepartamento,ServicioUsuario,ServicioSala,ServicioSolicitudSala,ServicioVehiculo,PdfmakeService]
+  providers: [ServicioDepartamento, ServicioUsuario, ServicioSala, ServicioSolicitudSala, ServicioVehiculo, PdfmakeService]
 })
 export class ReportesComponent implements OnInit {
   @ViewChild('modalSalas') modalSalas: TemplateRef<any>;
   @ViewChild('modalVehiculos') modalVehiculos: TemplateRef<any>;
 
-  usuarios=[];
-  departamentos=[];
-  salas=[];
-  vehiculos=[];
+  usuarios = [];
+  departamentos = [];
+  salas = [];
+  vehiculos = [];
   identity;
   currentUser;
-  vehiculoFiltro="";
-  salaFiltro="";
-  solicitanteFiltro="";
-  departamentoFiltro="";
-  usuarioGenerador="";
+  vehiculoFiltro = "";
+  salaFiltro = "";
+  solicitanteFiltro = "";
+  departamentoFiltro = "";
+  usuarioGenerador = "";
 
-  solicitudesSalasFiltradas=[];
+  solicitudesSalasFiltradas = [];
   public mr: NgbModalRef;
-  solicitudSala:SolicitudSala;
+  solicitudSala: SolicitudSala;
 
   modelFechaInicio: NgbDateStruct;
-  dateInicio: {year: number, month: number};
+  dateInicio: { year: number, month: number };
   modelFechaFinal: NgbDateStruct;
-  dateFinal: {year: number, month: number};
+  dateFinal: { year: number, month: number };
 
 
   modelFechaInicioVehiculo: NgbDateStruct;
-  dateInicioVehiculo: {year: number, month: number};
+  dateInicioVehiculo: { year: number, month: number };
   modelFechaFinalVehiculo: NgbDateStruct;
-  dateFinalVehiculo: {year: number, month: number};
-  
-  reporteFiltros=[];//{sala:any,fechaInicio:any,fechaFin:any,solicitante:any,departamento:any,usuarioGenerador:any};
+  dateFinalVehiculo: { year: number, month: number };
+
+  reporteFiltros = [];//{sala:any,fechaInicio:any,fechaFin:any,solicitante:any,departamento:any,usuarioGenerador:any};
 
 
   constructor(
@@ -58,10 +58,10 @@ export class ReportesComponent implements OnInit {
     private _servVehiculo: ServicioVehiculo,
     private modal: NgbModal,
     private pdfmake: PdfmakeService
-  ) { 
+  ) {
     //this.reporteFiltros.solicitante="";
   }
- 
+
   abrir(modal) {
     this.mr = this.modal.open(modal);
   }
@@ -69,39 +69,39 @@ export class ReportesComponent implements OnInit {
     this.mr.close();
 
   }
-  openPdf(){
-   // this.pdfmake.download();
+  openPdf() {
+    // this.pdfmake.download();
     this.pdfmake.open();
-}
+  }
 
-printPdf(){
+  printPdf() {
     this.pdfmake.print();
-}
+  }
 
-downloadPDF(){
+  downloadPDF() {
     this.pdfmake.download();
-}
+  }
 
-downloadPdfWithName(customName: string){
+  downloadPdfWithName(customName: string) {
     this.pdfmake.download(customName);
-}
+  }
   ngOnInit() {
     this.obtenerUsuarios();
     this.obtenerDepartamentos();
     this.obtenerSalas();
     this.obtenerVehiculos();
     this.pdfmake.configureStyles({ header: { fontSize: 18, bold: true } });
-    
-       // Add a text with style
-       this.pdfmake.addText('This is a header, using header style', 'header');
-       this.pdfmake.addImage('http://upload.wikimedia.org/wikipedia/commons/4/4a/Logo_2013_Google.png');
+
+    // Add a text with style
+    this.pdfmake.addText('This is a header, using header style', 'header');
+    this.pdfmake.addImage('http://upload.wikimedia.org/wikipedia/commons/4/4a/Logo_2013_Google.png');
   }
-  
-  setSalaSeleccionda(nombreSala:string){
-    this.salaFiltro=nombreSala;
+
+  setSalaSeleccionda(nombreSala: string) {
+    this.salaFiltro = nombreSala;
   }
-  setVehiculoSelecciondo(vehiculoPlaca:string){
-    this.vehiculoFiltro=vehiculoPlaca;
+  setVehiculoSelecciondo(vehiculoPlaca: string) {
+    this.vehiculoFiltro = vehiculoPlaca;
   }
   obtenerSalas() {
     this._servSala.obtenerSalasHabilitadas().subscribe(
@@ -175,17 +175,17 @@ downloadPdfWithName(customName: string){
       }
     );
   }
-  getNombreUsuario(id:any){
+  getNombreUsuario(id: any) {
 
     for (var i = 0; i < this.usuarios.length; i++) {
-      if(this.usuarios[i]._id===id){
-     return this.usuarios[i].nombre+ " "+ this.usuarios[i].apellidos;
+      if (this.usuarios[i]._id === id) {
+        return this.usuarios[i].nombre + " " + this.usuarios[i].apellidos;
       }
-      
+
     }
   }
 
-  getIdUsuario(nombre){
+  getIdUsuario(nombre) {
 
     let usuarioSelected = "";
     for (let i = 0; i < nombre.length; i++) {
@@ -194,47 +194,47 @@ downloadPdfWithName(customName: string){
         usuarioSelected += nombre.charAt(i);
       }
     }
-    let cadena="";
-       for (var index = 0; index < this.usuarios.length; index++) {
-         let comparar="";
-         cadena="";
-         comparar= this.usuarios[index].nombre+""+this.usuarios[index].apellidos;
-        for (let j = 0; j < comparar.length; j++) {
-          if (comparar.charAt(j) === " ") {
-          } else {
-            cadena += comparar.charAt(j);
-          }
+    let cadena = "";
+    for (var index = 0; index < this.usuarios.length; index++) {
+      let comparar = "";
+      cadena = "";
+      comparar = this.usuarios[index].nombre + "" + this.usuarios[index].apellidos;
+      for (let j = 0; j < comparar.length; j++) {
+        if (comparar.charAt(j) === " ") {
+        } else {
+          cadena += comparar.charAt(j);
         }
-       if(usuarioSelected==cadena){
-         return this.usuarios[index]._id;
-       } 
+      }
+      if (usuarioSelected == cadena) {
+        return this.usuarios[index]._id;
+      }
     }
   }
-  
-  getDepartamento(id){
+
+  getDepartamento(id) {
     let departamento;
     for (var j = 0; j < this.usuarios.length; j++) {
-     if(this.usuarios[j]._id==id){
-      departamento=this.usuarios[j].departamento;
-      break;
-     }
-      
+      if (this.usuarios[j]._id == id) {
+        departamento = this.usuarios[j].departamento;
+        break;
+      }
+
     }
-    for (var i = 0; i < this.departamentos.length; i++) {  
-      if(this.departamentos[i]._id==departamento){
+    for (var i = 0; i < this.departamentos.length; i++) {
+      if (this.departamentos[i]._id == departamento) {
         return this.departamentos[i].nombre;
       }
     }
   }
-  fitlroReporteSalas(){
-    this.reporteFiltros=[];
+  fitlroReporteSalas() {
+    this.reporteFiltros = [];
     let identity = localStorage.getItem('identity');
     let user = JSON.parse(identity);
     if (user != null) {
-      this.usuarioGenerador=user.nombre +" "+user.apellidos; 
+      this.usuarioGenerador = user.nombre + " " + user.apellidos;
     }
-    else{
-      this.usuarioGenerador="";
+    else {
+      this.usuarioGenerador = "";
     }
 
     // if(this.salaFiltro!=""){
@@ -244,7 +244,7 @@ downloadPdfWithName(customName: string){
     //  let solicitante=this.getIdUsuario(this.solicitanteFiltro);
     //   this.reporteFiltros.push({usuario:solicitante});
     // }
-  
+
     // if(this.modelFechaInicio!=null){
     //   this.reporteFiltros.push({fecha:{year:this.modelFechaInicio.year,month:this.modelFechaInicio.month,day:this.modelFechaInicio.day}});
     // }
@@ -255,157 +255,268 @@ downloadPdfWithName(customName: string){
     this._servSolicitudSala.obtenerTodasSolicitudes().subscribe(
       response => {
         if (response.message) {
-          let array=response.message;
+          let array = response.message;
 
-          if(this.salaFiltro!=""  && this.modelFechaInicio!=null && this.modelFechaFinal!=null && this.solicitanteFiltro!="" && this.departamentoFiltro!=""){
-            let solicitante=this.getIdUsuario(this.solicitanteFiltro);
-            let arryTemp=[];
+          if (this.salaFiltro != "" && this.modelFechaInicio != null && this.modelFechaFinal != null && this.solicitanteFiltro != "" && this.departamentoFiltro != "") {
+            let solicitante = this.getIdUsuario(this.solicitanteFiltro);
+            let arryTemp = [];
             for (let index = 0; index < array.length; index++) {
-              let fechaIncio=((this.modelFechaInicio.year*365)+(this.modelFechaInicio.month*30)+this.modelFechaInicio.day);
-              let fechaFin=((this.modelFechaFinal.year*365)+(this.modelFechaFinal.month*30)+this.modelFechaFinal.day);
-              let fechaSolicitud=((array[index].fecha.year*365)+(array[index].fecha.month*30)+array[index].fecha.day);
-              let departamento=this.getDepartamento(array[index].usuario);
-              if(array[index].sala==this.salaFiltro && ( fechaIncio<=fechaSolicitud && fechaFin>=fechaSolicitud) 
-                && array[index].usuario==solicitante  && departamento== this.departamentoFiltro ){
+              let fechaIncio = ((this.modelFechaInicio.year * 365) + (this.modelFechaInicio.month * 30) + this.modelFechaInicio.day);
+              let fechaFin = ((this.modelFechaFinal.year * 365) + (this.modelFechaFinal.month * 30) + this.modelFechaFinal.day);
+              let fechaSolicitud = ((array[index].fecha.year * 365) + (array[index].fecha.month * 30) + array[index].fecha.day);
+              let departamento = this.getDepartamento(array[index].usuario);
+              if (array[index].sala == this.salaFiltro && (fechaIncio <= fechaSolicitud && fechaFin >= fechaSolicitud)
+                && array[index].usuario == solicitante && departamento == this.departamentoFiltro) {
                 console.log(array[index].usuario);
                 arryTemp.push(array[index]);
               }
             }
 
-            this.solicitudesSalasFiltradas=arryTemp;
+            this.solicitudesSalasFiltradas = arryTemp;
 
-          }else{
-          //filtro único por sala
-            if(this.salaFiltro!=""  && this.modelFechaInicio==null && this.modelFechaFinal==null && this.solicitanteFiltro=="" && this.departamentoFiltro==""){
-              let arryTemp=[];
-              for (let index = 0; index < array.length; index++) {
-                if(array[index].sala===this.salaFiltro){
-                      arryTemp.push(array[index]);
-                  }
-              }
-              this.solicitudesSalasFiltradas=arryTemp;
-  
-            }
-            //filtro único por fecha de inicio
-            if(this.salaFiltro==""  && this.modelFechaInicio!=null && this.modelFechaFinal==null && this.solicitanteFiltro=="" && this.departamentoFiltro==""){
-              let arryTemp=[];
-              for (let index = 0; index < array.length; index++) {
-                let fechaIncio=((this.modelFechaInicio.year*365)+(this.modelFechaInicio.month*30)+this.modelFechaInicio.day);
-                let fechaSolicitud=((array[index].fecha.year*365)+(array[index].fecha.month*30)+array[index].fecha.day);
+          } else {
 
-                if(fechaIncio==fechaSolicitud){
-                      arryTemp.push(array[index]);
-                  }
+            let arrayTemporal = [];// array;
+
+            let arrayTemporal2 = [];
+
+            let arrayTemporal3 = [];
+
+            let arrayTemporal4 = [];
+
+            if (this.salaFiltro != "") {
+
+              for (let index = 0; index < array.length; index++) {
+                if (array[index].sala === this.salaFiltro) {
+                  arrayTemporal2.push(array[index]);
+                }
               }
-              this.solicitudesSalasFiltradas=arryTemp;
-  
+              arrayTemporal = arrayTemporal2;
             }
 
-            //filtro único por fecha final
-            if(this.salaFiltro==""  && this.modelFechaInicio==null && this.modelFechaFinal!=null && this.solicitanteFiltro=="" && this.departamentoFiltro==""){
-              let arryTemp=[];
-              for (let index = 0; index < array.length; index++) {
-                let fechaFin=((this.modelFechaFinal.year*365)+(this.modelFechaFinal.month*30)+this.modelFechaFinal.day);
-                let fechaSolicitud=((array[index].fecha.year*365)+(array[index].fecha.month*30)+array[index].fecha.day);
+            if (this.modelFechaInicio != null) {
 
-                if(fechaFin==fechaSolicitud){
-                      arryTemp.push(array[index]);
-                  }
-              }
-              this.solicitudesSalasFiltradas=arryTemp;
-  
-            }
+              if (arrayTemporal2.length > 0) {
 
-            //filtro único por solicitante
-            if(this.salaFiltro==""  && this.modelFechaInicio==null && this.modelFechaFinal==null && this.solicitanteFiltro!="" && this.departamentoFiltro==""){
-              let solicitante=this.getIdUsuario(this.solicitanteFiltro);
-              let arryTemp=[];
-              for (let index = 0; index < array.length; index++) {
-                if(array[index].usuario==solicitante){
-                      arryTemp.push(array[index]);
+                if (this.modelFechaFinal != null) {
+                  for (let index = 0; index < arrayTemporal2.length; index++) {
+                    let fechaIncio = ((this.modelFechaInicio.year * 365) + (this.modelFechaInicio.month * 30) + this.modelFechaInicio.day);
+                    let fechaFin = ((this.modelFechaFinal.year * 365) + (this.modelFechaFinal.month * 30) + this.modelFechaFinal.day);
+                    let fechaSolicitud = ((arrayTemporal2[index].fecha.year * 365) + (arrayTemporal2[index].fecha.month * 30) + arrayTemporal2[index].fecha.day);
+                    if (fechaSolicitud >= fechaIncio && fechaSolicitud <= fechaFin) {
+                      arrayTemporal3.push(arrayTemporal2[index]);
+                    }
                   }
-              }
-              this.solicitudesSalasFiltradas=arryTemp;
-  
-            }
-             //filtro único por departamento
-             if(this.salaFiltro==""  && this.modelFechaInicio==null && this.modelFechaFinal==null && this.solicitanteFiltro=="" && this.departamentoFiltro!=""){
-              let arryTemp=[];
-              for (let index = 0; index < array.length; index++) {
-                let departamento=this.getDepartamento(array[index].usuario);
-                if(departamento==this.departamentoFiltro){
-                      arryTemp.push(array[index]);
-                  }
-              }
-              this.solicitudesSalasFiltradas=arryTemp;
-  
-            }
-             //filtro sala y fecha de inicio
-             if(this.salaFiltro!=""  && this.modelFechaInicio!=null && this.modelFechaFinal==null && this.solicitanteFiltro=="" && this.departamentoFiltro==""){
-              let arryTemp=[];
-              for (let index = 0; index < array.length; index++) {
-                let fechaIncio=((this.modelFechaInicio.year*365)+(this.modelFechaInicio.month*30)+this.modelFechaInicio.day);
-                let fechaSolicitud=((array[index].fecha.year*365)+(array[index].fecha.month*30)+array[index].fecha.day);
+                  arrayTemporal = arrayTemporal3;
+                } else {
+                  for (let index = 0; index < arrayTemporal2.length; index++) {
+                    let fechaIncio = ((this.modelFechaInicio.year * 365) + (this.modelFechaInicio.month * 30) + this.modelFechaInicio.day);
+                    let fechaSolicitud = ((arrayTemporal2[index].fecha.year * 365) + (arrayTemporal2[index].fecha.month * 30) + arrayTemporal2[index].fecha.day);
 
-                if(this.salaFiltro==array[index].sala && fechaIncio==fechaSolicitud ){
-                      arryTemp.push(array[index]);
+                    if (fechaSolicitud == fechaIncio) {
+                      arrayTemporal3.push(arrayTemporal2[index]);
+                    }
                   }
-              }
-              this.solicitudesSalasFiltradas=arryTemp;
-  
-            }
-            //filtro sala y fecha de fin
-            if(this.salaFiltro!=""  && this.modelFechaInicio==null && this.modelFechaFinal!=null && this.solicitanteFiltro=="" && this.departamentoFiltro==""){
-              let arryTemp=[];
-              for (let index = 0; index < array.length; index++) {
-                let fechaFin=((this.modelFechaFinal.year*365)+(this.modelFechaFinal.month*30)+this.modelFechaFinal.day);
-                let fechaSolicitud=((array[index].fecha.year*365)+(array[index].fecha.month*30)+array[index].fecha.day);
+                  arrayTemporal = arrayTemporal3;
+                }
 
-                if(this.salaFiltro==array[index].sala && fechaFin==fechaSolicitud ){
-                      arryTemp.push(array[index]);
-                  }
-              }
-              this.solicitudesSalasFiltradas=arryTemp;
-  
-            }
+              } else {
+                for (let j = 0; j < array.length; j++) {
+                  let fechaIncio = ((this.modelFechaInicio.year * 365) + (this.modelFechaInicio.month * 30) + this.modelFechaInicio.day);
+                  let fechaSolicitud = ((array[j].fecha.year * 365) + (array[j].fecha.month * 30) + array[j].fecha.day);
 
-            //filtro sala y solicitante
-            if(this.salaFiltro!=""  && this.modelFechaInicio==null && this.modelFechaFinal==null && this.solicitanteFiltro!="" && this.departamentoFiltro==""){
-              let solicitante=this.getIdUsuario(this.solicitanteFiltro);
-              let arryTemp=[];
-              for (let index = 0; index < array.length; index++) {
-                if(this.salaFiltro==array[index].sala && array[index].usuario==solicitante ){
-                      arryTemp.push(array[index]);
+                  if (fechaSolicitud == fechaIncio) {
+                    arrayTemporal3.push(array[j]);
                   }
+                }
+                arrayTemporal=arrayTemporal3;
               }
-              this.solicitudesSalasFiltradas=arryTemp;
-  
+              //console.log(arrayTemporal3);
+             // arrayTemporal=arrayTemporal3;
             }
             
-            //filtro sala y departamento
-            if(this.salaFiltro!=""  && this.modelFechaInicio==null && this.modelFechaFinal==null && this.solicitanteFiltro=="" && this.departamentoFiltro!=""){
-              let solicitante=this.getIdUsuario(this.solicitanteFiltro);
-              let arryTemp=[];
-              for (let index = 0; index < array.length; index++) {
-                let departamento=this.getDepartamento(array[index].usuario);
-                if(this.salaFiltro==array[index].sala && departamento==this.departamentoFiltro ){
-                      arryTemp.push(array[index]);
+            if (this.modelFechaFinal != null) {
+              console.log(arrayTemporal3);
+              if (arrayTemporal3.length > 0) {
+                
+                 if (this.modelFechaInicio != null) {
+                   alert('trae fecha de inicio');
+                //   alert('tambien hay fecha inicio');
+                //   for (let i = 0; i < arrayTemporal3.length; i++) {
+                //     let fechaIncio = ((this.modelFechaInicio.year * 365) + (this.modelFechaInicio.month * 30) + this.modelFechaInicio.day);
+                //     let fechaFin = ((this.modelFechaFinal.year * 365) + (this.modelFechaFinal.month * 30) + this.modelFechaFinal.day);
+                //     let fechaSolicitud = ((arrayTemporal3[i].fecha.year * 365) + (arrayTemporal3[i].fecha.month * 30) + arrayTemporal3[i].fecha.day);
+                //     console.log("inicio "+fechaIncio +"  solicitud "+ fechaSolicitud  +"   fin "+ fechaFin );
+                //     if ((fechaSolicitud > fechaIncio && fechaSolicitud < fechaFin) || fechaSolicitud==fechaIncio || fechaFin==fechaSolicitud ) {
+                //       arrayTemporal4.push(arrayTemporal3[i]);
+                //     }
+                //   }
+                //   arrayTemporal = arrayTemporal4;
+                }
+                // else {
+                //   alert('no va el de inicio');
+                //   for (let index = 0; index < arrayTemporal3.length; index++) {
+                //     let fechaFinal = ((this.modelFechaFinal.year * 365) + (this.modelFechaFinal.month * 30) + this.modelFechaFinal.day);
+                //     let fechaSolicitud = ((arrayTemporal3[index].fecha.year * 365) + (arrayTemporal3[index].fecha.month * 30) + arrayTemporal3[index].fecha.day);
+
+                //     if (fechaSolicitud == fechaFinal) {
+                //       arrayTemporal4.push(arrayTemporal3[index]);
+                //     }
+                //   }
+                //   arrayTemporal = arrayTemporal4;
+                // }
+
+
+               }
+               //console.log(arrayTemporal3);
+                else {
+                  alert('no trae fecha de inicio');
+                for (let index = 0; index < array.length; index++) {
+                  let fechaIncio = ((this.modelFechaFinal.year * 365) + (this.modelFechaFinal.month * 30) + this.modelFechaFinal.day);
+                  let fechaSolicitud = ((array[index].fecha.year * 365) + (array[index].fecha.month * 30) + array[index].fecha.day);
+
+                  if (fechaSolicitud == fechaIncio) {
+                    arrayTemporal4.push(array[index]);
                   }
+                }
+                arrayTemporal=arrayTemporal4;
               }
-              this.solicitudesSalasFiltradas=arryTemp;
-  
+
             }
+            else if (this.solicitanteFiltro != "") {
+
+            }
+            else if (this.departamentoFiltro != "") {
+
+            }
+
+            this.solicitudesSalasFiltradas = arrayTemporal;
+
+            //filtro único por sala
+            //   if(this.salaFiltro!=""  && this.modelFechaInicio==null && this.modelFechaFinal==null && this.solicitanteFiltro=="" && this.departamentoFiltro==""){
+            //     let arryTemp=[];
+            //     for (let index = 0; index < array.length; index++) {
+            //       if(array[index].sala===this.salaFiltro){
+            //             arryTemp.push(array[index]);
+            //         }
+            //     }
+            //     this.solicitudesSalasFiltradas=arryTemp;
+
+            //   }
+            //   //filtro único por fecha de inicio
+            //   if(this.salaFiltro==""  && this.modelFechaInicio!=null && this.modelFechaFinal==null && this.solicitanteFiltro=="" && this.departamentoFiltro==""){
+            //     let arryTemp=[];
+            //     for (let index = 0; index < array.length; index++) {
+            //       let fechaIncio=((this.modelFechaInicio.year*365)+(this.modelFechaInicio.month*30)+this.modelFechaInicio.day);
+            //       let fechaSolicitud=((array[index].fecha.year*365)+(array[index].fecha.month*30)+array[index].fecha.day);
+
+            //       if(fechaIncio==fechaSolicitud){
+            //             arryTemp.push(array[index]);
+            //         }
+            //     }
+            //     this.solicitudesSalasFiltradas=arryTemp;
+
+            //   }
+
+            //   //filtro único por fecha final
+            //   if(this.salaFiltro==""  && this.modelFechaInicio==null && this.modelFechaFinal!=null && this.solicitanteFiltro=="" && this.departamentoFiltro==""){
+            //     let arryTemp=[];
+            //     for (let index = 0; index < array.length; index++) {
+            //       let fechaFin=((this.modelFechaFinal.year*365)+(this.modelFechaFinal.month*30)+this.modelFechaFinal.day);
+            //       let fechaSolicitud=((array[index].fecha.year*365)+(array[index].fecha.month*30)+array[index].fecha.day);
+
+            //       if(fechaFin==fechaSolicitud){
+            //             arryTemp.push(array[index]);
+            //         }
+            //     }
+            //     this.solicitudesSalasFiltradas=arryTemp;
+
+            //   }
+
+            //   //filtro único por solicitante
+            //   if(this.salaFiltro==""  && this.modelFechaInicio==null && this.modelFechaFinal==null && this.solicitanteFiltro!="" && this.departamentoFiltro==""){
+            //     let solicitante=this.getIdUsuario(this.solicitanteFiltro);
+            //     let arryTemp=[];
+            //     for (let index = 0; index < array.length; index++) {
+            //       if(array[index].usuario==solicitante){
+            //             arryTemp.push(array[index]);
+            //         }
+            //     }
+            //     this.solicitudesSalasFiltradas=arryTemp;
+
+            //   }
+            //    //filtro único por departamento
+            //    if(this.salaFiltro==""  && this.modelFechaInicio==null && this.modelFechaFinal==null && this.solicitanteFiltro=="" && this.departamentoFiltro!=""){
+            //     let arryTemp=[];
+            //     for (let index = 0; index < array.length; index++) {
+            //       let departamento=this.getDepartamento(array[index].usuario);
+            //       if(departamento==this.departamentoFiltro){
+            //             arryTemp.push(array[index]);
+            //         }
+            //     }
+            //     this.solicitudesSalasFiltradas=arryTemp;
+
+            //   }
+            //    //filtro sala y fecha de inicio
+            //    if(this.salaFiltro!=""  && this.modelFechaInicio!=null && this.modelFechaFinal==null && this.solicitanteFiltro=="" && this.departamentoFiltro==""){
+            //     let arryTemp=[];
+            //     for (let index = 0; index < array.length; index++) {
+            //       let fechaIncio=((this.modelFechaInicio.year*365)+(this.modelFechaInicio.month*30)+this.modelFechaInicio.day);
+            //       let fechaSolicitud=((array[index].fecha.year*365)+(array[index].fecha.month*30)+array[index].fecha.day);
+
+            //       if(this.salaFiltro==array[index].sala && fechaIncio==fechaSolicitud ){
+            //             arryTemp.push(array[index]);
+            //         }
+            //     }
+            //     this.solicitudesSalasFiltradas=arryTemp;
+
+            //   }
+            //   //filtro sala y fecha de fin
+            //   if(this.salaFiltro!=""  && this.modelFechaInicio==null && this.modelFechaFinal!=null && this.solicitanteFiltro=="" && this.departamentoFiltro==""){
+            //     let arryTemp=[];
+            //     for (let index = 0; index < array.length; index++) {
+            //       let fechaFin=((this.modelFechaFinal.year*365)+(this.modelFechaFinal.month*30)+this.modelFechaFinal.day);
+            //       let fechaSolicitud=((array[index].fecha.year*365)+(array[index].fecha.month*30)+array[index].fecha.day);
+
+            //       if(this.salaFiltro==array[index].sala && fechaFin==fechaSolicitud ){
+            //             arryTemp.push(array[index]);
+            //         }
+            //     }
+            //     this.solicitudesSalasFiltradas=arryTemp;
+
+            //   }
+
+            //   //filtro sala y solicitante
+            //   if(this.salaFiltro!=""  && this.modelFechaInicio==null && this.modelFechaFinal==null && this.solicitanteFiltro!="" && this.departamentoFiltro==""){
+            //     let solicitante=this.getIdUsuario(this.solicitanteFiltro);
+            //     let arryTemp=[];
+            //     for (let index = 0; index < array.length; index++) {
+            //       if(this.salaFiltro==array[index].sala && array[index].usuario==solicitante ){
+            //             arryTemp.push(array[index]);
+            //         }
+            //     }
+            //     this.solicitudesSalasFiltradas=arryTemp;
+
+            //   }
+
+            //   //filtro sala y departamento
+            //   if(this.salaFiltro!=""  && this.modelFechaInicio==null && this.modelFechaFinal==null && this.solicitanteFiltro=="" && this.departamentoFiltro!=""){
+            //     let solicitante=this.getIdUsuario(this.solicitanteFiltro);
+            //     let arryTemp=[];
+            //     for (let index = 0; index < array.length; index++) {
+            //       let departamento=this.getDepartamento(array[index].usuario);
+            //       if(this.salaFiltro==array[index].sala && departamento==this.departamentoFiltro ){
+            //             arryTemp.push(array[index]);
+            //         }
+            //     }
+            //     this.solicitudesSalasFiltradas=arryTemp;
+
+            //   }
 
           }
-          
-         // console.log(this.reporteFiltros);
-          // for (var i = 0; i < array.length; i++) {
-          //  if(array[i].estado=="Eliminado"){
-          //   this.solicitudesSalasFiltradas.splice(i,1);
-          //  }
-            
-          // }
-         
+
+
+
           //this.vehiculos = response.message;
           //console.log(response.message);
         } else {//ho hay vehiculos registrados
@@ -456,7 +567,7 @@ downloadPdfWithName(customName: string){
   // ];
   // public lineChartLegend:boolean = true;
   // public lineChartType:string = 'line';
- 
+
   // public randomize():void {
   //   let _lineChartData:Array<any> = new Array(this.lineChartData.length);
   //   for (let i = 0; i < this.lineChartData.length; i++) {
@@ -467,12 +578,12 @@ downloadPdfWithName(customName: string){
   //   }
   //   this.lineChartData = _lineChartData;
   // }
- 
+
   // // events
   // public chartClicked(e:any):void {
   //   console.log(e);
   // }
- 
+
   // public chartHovered(e:any):void {
   //   console.log(e);
   // }
@@ -485,21 +596,21 @@ downloadPdfWithName(customName: string){
   // public barChartLabels:string[] = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
   // public barChartType:string = 'bar';
   // public barChartLegend:boolean = true;
- 
+
   // public barChartData:any[] = [
   //   {data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A'},
   //   {data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B'}
   // ];
- 
+
   // // events
   // public chartClickedBar(e:any):void {
   //   console.log(e);
   // }
- 
+
   // public chartHoveredBar(e:any):void {
   //   console.log(e);
   // }
- 
+
   // public randomizeBar():void {
   //   // Only Change 3 values
   //   let data = [
@@ -527,12 +638,12 @@ downloadPdfWithName(customName: string){
   // public doughnutChartLabels:string[] = ['Download Sales', 'In-Store Sales', 'Mail-Order Sales'];
   // public doughnutChartData:number[] = [350, 450, 100];
   // public doughnutChartType:string = 'doughnut';
- 
+
   // // events
   // public chartClickedDo(e:any):void {
   //   console.log(e);
   // }
- 
+
   // public chartHoveredDo(e:any):void {
   //   console.log(e);
   // }
@@ -541,18 +652,18 @@ downloadPdfWithName(customName: string){
 
   //  /////////////////////////////////////////////////////////// Radar//////////////////////////////////////
   //  public radarChartLabels:string[] = ['Eating', 'Drinking', 'Sleeping', 'Designing', 'Coding', 'Cycling', 'Running'];
-   
+
   //   public radarChartData:any = [
   //     {data: [65, 59, 90, 81, 56, 55, 40], label: 'Series A'},
   //     {data: [28, 48, 40, 19, 96, 27, 100], label: 'Series B'}
   //   ];
   //   public radarChartType:string = 'radar';
-   
+
   //   // events
   //   public chartClickedRa(e:any):void {
   //     console.log(e);
   //   }
-   
+
   //   public chartHoveredRa(e:any):void {
   //     console.log(e);
   //   }
@@ -561,12 +672,12 @@ downloadPdfWithName(customName: string){
   // public pieChartLabels:string[] = ['Download Sales', 'In-Store Sales', 'Mail Sales'];
   // public pieChartData:number[] = [300, 500, 100];
   // public pieChartType:string = 'pie';
- 
+
   // // events
   // public chartClickedPi(e:any):void {
   //   console.log(e);
   // }
- 
+
   // public chartHoveredPi(e:any):void {
   //   console.log(e);
   // }
