@@ -211,6 +211,21 @@ downloadPdfWithName(customName: string){
     }
   }
   
+  getDepartamento(id){
+    let departamento;
+    for (var j = 0; j < this.usuarios.length; j++) {
+     if(this.usuarios[j]._id==id){
+      departamento=this.usuarios[j].departamento;
+      break;
+     }
+      
+    }
+    for (var i = 0; i < this.departamentos.length; i++) {  
+      if(this.departamentos[i]._id==departamento){
+        return this.departamentos[i].nombre;
+      }
+    }
+  }
   fitlroReporteSalas(){
     this.reporteFiltros=[];
     let identity = localStorage.getItem('identity');
@@ -222,31 +237,174 @@ downloadPdfWithName(customName: string){
       this.usuarioGenerador="";
     }
 
-    if(this.salaFiltro!=""){
-      this.reporteFiltros.push({sala:this.salaFiltro});
-    }
-     if(this.solicitanteFiltro!=""){
-     let solicitante=this.getIdUsuario(this.solicitanteFiltro);
-      this.reporteFiltros.push({usuario:solicitante});
-    }
+    // if(this.salaFiltro!=""){
+    //   this.reporteFiltros.push({sala:this.salaFiltro});
+    // }
+    //  if(this.solicitanteFiltro!=""){
+    //  let solicitante=this.getIdUsuario(this.solicitanteFiltro);
+    //   this.reporteFiltros.push({usuario:solicitante});
+    // }
   
-    if(this.modelFechaInicio!=null){
-      this.reporteFiltros.push({fecha:{year:this.modelFechaInicio.year,month:this.modelFechaInicio.month,day:this.modelFechaInicio.day}});
-    }
-    if(this.modelFechaFinal!=null){
-      this.reporteFiltros.push({fecha:{year:this.modelFechaFinal.year,month:this.modelFechaFinal.month,day:this.modelFechaFinal.day}});
-    }   
-    this._servSolicitudSala.fitlroReporteSalas(this.reporteFiltros).subscribe(
+    // if(this.modelFechaInicio!=null){
+    //   this.reporteFiltros.push({fecha:{year:this.modelFechaInicio.year,month:this.modelFechaInicio.month,day:this.modelFechaInicio.day}});
+    // }
+    // if(this.modelFechaFinal!=null){
+    //   this.reporteFiltros.push({fecha:{year:this.modelFechaFinal.year,month:this.modelFechaFinal.month,day:this.modelFechaFinal.day}});
+    // }   
+    //this.solicitudesSalasFiltradas=[];
+    this._servSolicitudSala.obtenerTodasSolicitudes().subscribe(
       response => {
         if (response.message) {
           let array=response.message;
-          this.solicitudesSalasFiltradas=response.message;
-          for (var i = 0; i < array.length; i++) {
-           if(array[i].estado=="Eliminado"){
-            this.solicitudesSalasFiltradas.splice(i,1);
-           }
+
+          if(this.salaFiltro!=""  && this.modelFechaInicio!=null && this.modelFechaFinal!=null && this.solicitanteFiltro!="" && this.departamentoFiltro!=""){
+            let solicitante=this.getIdUsuario(this.solicitanteFiltro);
+            let arryTemp=[];
+            for (let index = 0; index < array.length; index++) {
+              let fechaIncio=((this.modelFechaInicio.year*365)+(this.modelFechaInicio.month*30)+this.modelFechaInicio.day);
+              let fechaFin=((this.modelFechaFinal.year*365)+(this.modelFechaFinal.month*30)+this.modelFechaFinal.day);
+              let fechaSolicitud=((array[index].fecha.year*365)+(array[index].fecha.month*30)+array[index].fecha.day);
+              let departamento=this.getDepartamento(array[index].usuario);
+              if(array[index].sala==this.salaFiltro && ( fechaIncio<=fechaSolicitud && fechaFin>=fechaSolicitud) 
+                && array[index].usuario==solicitante  && departamento== this.departamentoFiltro ){
+                console.log(array[index].usuario);
+                arryTemp.push(array[index]);
+              }
+            }
+
+            this.solicitudesSalasFiltradas=arryTemp;
+
+          }else{
+          //filtro único por sala
+            if(this.salaFiltro!=""  && this.modelFechaInicio==null && this.modelFechaFinal==null && this.solicitanteFiltro=="" && this.departamentoFiltro==""){
+              let arryTemp=[];
+              for (let index = 0; index < array.length; index++) {
+                if(array[index].sala===this.salaFiltro){
+                      arryTemp.push(array[index]);
+                  }
+              }
+              this.solicitudesSalasFiltradas=arryTemp;
+  
+            }
+            //filtro único por fecha de inicio
+            if(this.salaFiltro==""  && this.modelFechaInicio!=null && this.modelFechaFinal==null && this.solicitanteFiltro=="" && this.departamentoFiltro==""){
+              let arryTemp=[];
+              for (let index = 0; index < array.length; index++) {
+                let fechaIncio=((this.modelFechaInicio.year*365)+(this.modelFechaInicio.month*30)+this.modelFechaInicio.day);
+                let fechaSolicitud=((array[index].fecha.year*365)+(array[index].fecha.month*30)+array[index].fecha.day);
+
+                if(fechaIncio==fechaSolicitud){
+                      arryTemp.push(array[index]);
+                  }
+              }
+              this.solicitudesSalasFiltradas=arryTemp;
+  
+            }
+
+            //filtro único por fecha final
+            if(this.salaFiltro==""  && this.modelFechaInicio==null && this.modelFechaFinal!=null && this.solicitanteFiltro=="" && this.departamentoFiltro==""){
+              let arryTemp=[];
+              for (let index = 0; index < array.length; index++) {
+                let fechaFin=((this.modelFechaFinal.year*365)+(this.modelFechaFinal.month*30)+this.modelFechaFinal.day);
+                let fechaSolicitud=((array[index].fecha.year*365)+(array[index].fecha.month*30)+array[index].fecha.day);
+
+                if(fechaFin==fechaSolicitud){
+                      arryTemp.push(array[index]);
+                  }
+              }
+              this.solicitudesSalasFiltradas=arryTemp;
+  
+            }
+
+            //filtro único por solicitante
+            if(this.salaFiltro==""  && this.modelFechaInicio==null && this.modelFechaFinal==null && this.solicitanteFiltro!="" && this.departamentoFiltro==""){
+              let solicitante=this.getIdUsuario(this.solicitanteFiltro);
+              let arryTemp=[];
+              for (let index = 0; index < array.length; index++) {
+                if(array[index].usuario==solicitante){
+                      arryTemp.push(array[index]);
+                  }
+              }
+              this.solicitudesSalasFiltradas=arryTemp;
+  
+            }
+             //filtro único por departamento
+             if(this.salaFiltro==""  && this.modelFechaInicio==null && this.modelFechaFinal==null && this.solicitanteFiltro=="" && this.departamentoFiltro!=""){
+              let arryTemp=[];
+              for (let index = 0; index < array.length; index++) {
+                let departamento=this.getDepartamento(array[index].usuario);
+                if(departamento==this.departamentoFiltro){
+                      arryTemp.push(array[index]);
+                  }
+              }
+              this.solicitudesSalasFiltradas=arryTemp;
+  
+            }
+             //filtro sala y fecha de inicio
+             if(this.salaFiltro!=""  && this.modelFechaInicio!=null && this.modelFechaFinal==null && this.solicitanteFiltro=="" && this.departamentoFiltro==""){
+              let arryTemp=[];
+              for (let index = 0; index < array.length; index++) {
+                let fechaIncio=((this.modelFechaInicio.year*365)+(this.modelFechaInicio.month*30)+this.modelFechaInicio.day);
+                let fechaSolicitud=((array[index].fecha.year*365)+(array[index].fecha.month*30)+array[index].fecha.day);
+
+                if(this.salaFiltro==array[index].sala && fechaIncio==fechaSolicitud ){
+                      arryTemp.push(array[index]);
+                  }
+              }
+              this.solicitudesSalasFiltradas=arryTemp;
+  
+            }
+            //filtro sala y fecha de fin
+            if(this.salaFiltro!=""  && this.modelFechaInicio==null && this.modelFechaFinal!=null && this.solicitanteFiltro=="" && this.departamentoFiltro==""){
+              let arryTemp=[];
+              for (let index = 0; index < array.length; index++) {
+                let fechaFin=((this.modelFechaFinal.year*365)+(this.modelFechaFinal.month*30)+this.modelFechaFinal.day);
+                let fechaSolicitud=((array[index].fecha.year*365)+(array[index].fecha.month*30)+array[index].fecha.day);
+
+                if(this.salaFiltro==array[index].sala && fechaFin==fechaSolicitud ){
+                      arryTemp.push(array[index]);
+                  }
+              }
+              this.solicitudesSalasFiltradas=arryTemp;
+  
+            }
+
+            //filtro sala y solicitante
+            if(this.salaFiltro!=""  && this.modelFechaInicio==null && this.modelFechaFinal==null && this.solicitanteFiltro!="" && this.departamentoFiltro==""){
+              let solicitante=this.getIdUsuario(this.solicitanteFiltro);
+              let arryTemp=[];
+              for (let index = 0; index < array.length; index++) {
+                if(this.salaFiltro==array[index].sala && array[index].usuario==solicitante ){
+                      arryTemp.push(array[index]);
+                  }
+              }
+              this.solicitudesSalasFiltradas=arryTemp;
+  
+            }
             
+            //filtro sala y departamento
+            if(this.salaFiltro!=""  && this.modelFechaInicio==null && this.modelFechaFinal==null && this.solicitanteFiltro=="" && this.departamentoFiltro!=""){
+              let solicitante=this.getIdUsuario(this.solicitanteFiltro);
+              let arryTemp=[];
+              for (let index = 0; index < array.length; index++) {
+                let departamento=this.getDepartamento(array[index].usuario);
+                if(this.salaFiltro==array[index].sala && departamento==this.departamentoFiltro ){
+                      arryTemp.push(array[index]);
+                  }
+              }
+              this.solicitudesSalasFiltradas=arryTemp;
+  
+            }
+
           }
+          
+         // console.log(this.reporteFiltros);
+          // for (var i = 0; i < array.length; i++) {
+          //  if(array[i].estado=="Eliminado"){
+          //   this.solicitudesSalasFiltradas.splice(i,1);
+          //  }
+            
+          // }
          
           //this.vehiculos = response.message;
           //console.log(response.message);

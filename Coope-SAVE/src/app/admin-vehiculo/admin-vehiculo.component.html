@@ -197,7 +197,7 @@
                 <div class="control-group form-group">
                   <div class="controls">
                     <input id="input-placa-edit" type="text" class="form-control" #placa="ngModel" name="placa" [(ngModel)]="vehiculoEdit.placa"
-                      placeholder="Placa de Vehiculo" required (input)="validarModificacion()">
+                      placeholder="Placa de Vehiculo" required (input)="validarModificacion()" [disabled]="true">
                     <small *ngIf="placa.invalid && (placa.dirty || placa.touched)">
                         <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La placa es obligatoria</small>
                     <small *ngIf="placaExistEdit"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe un Vehiculo con esa placa</small>
