@@ -165,7 +165,7 @@
                 <div class="contrrol-group form-group">
                   <div class="controls">
                     <input id="input-nombre" type="text" class="form-control" #nombreE="ngModel" name="nombreE" [(ngModel)]="salaEdit.nombre"
-                      placeholder="Nombre" required (input)="validarModificacion()">
+                      placeholder="Nombre" required (input)="validarModificacion()" [disabled]="true">
                     <small *ngIf="nombreE.invalid && (nombreE.dirty || nombreE.touched)">
                     <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El nombre es obligatorio</small>
                     <small *ngIf="nombreExistEdit"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe una Sala con ese nombre</small>

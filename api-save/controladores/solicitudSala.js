@@ -128,18 +128,18 @@ function filtrosReportes(req, res){
   //   console.log("viene llena la fecha fin");
   // }
 
-  SolicitudSala.find(query, (err, solicitud) => {
+//   SolicitudSala.find(query, (err, solicitud) => {
 
-    if (err) {
-     req.status(500).send({ mesage: 'Error al obtener las solicitudes' });
-   } else {
-     if (!solicitud) {
-       res.status(404).send({ message: 'No existen solicitudes para esta fecha' });
-     } else {
-       res.status(200).send({ message: solicitud });
-     }
-   }
- });
+//     if (err) {
+//      req.status(500).send({ mesage: 'Error al obtener las solicitudes' });
+//    } else {
+//      if (!solicitud) {
+//        res.status(404).send({ message: 'No existen solicitudes para esta fecha' });
+//      } else {
+//        res.status(200).send({ message: solicitud });
+//      }
+//    }
+//  });
   // SolicitudSala.find({ estado: { $ne: "Eliminado" } }, (err, solicitudSalas) => {
   //   if (err) {
   //     res.status(500).send({ message: 'Error en la petición' });
