@@ -162,20 +162,6 @@ export class SolicitudSalaComponent implements OnInit {
   solicitud(num: any) {
     if (num === 1) {
       this.solicSala = true;
-      //this.updateTime();
-      // this.timeStruct = { second: 0, minute: 12, hour: 10 };
-      // const newDate: Date = setHours(
-      //   setMinutes(
-      //     setSeconds(this.date, this.timeStruct.second),
-      //     this.solicitudSala.horaFin.minute
-      //   ),
-      //   this.solicitudSala.horaFin.hour
-      // );
-      // console.log(newDate);
-      // this.onChangeCallback(newDate);
-
-      // console.log(this.timeStruct);
-      // console.log(this.solicitudSala);
     } else {
       this.solicSala = false;
       this.mensajeSolicitudInvalida = "";

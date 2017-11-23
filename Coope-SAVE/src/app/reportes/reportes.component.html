@@ -1,6 +1,37 @@
 <div class="container-fluid" style="margin-top: 8%; padding: 0 10% 0 10%">
 
-  <section>
+  
+    <div class="row" >
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-6">
+          <div class="panel with-nav-tabs panel-primary">
+            <div class="panel-heading">
+              <ul class="nav nav-pills nav-fill nav-tabs">
+    
+                <li class="nav-item">
+                  <a  id="btn-solicitud" class="nav-link active" href="#tab1primary" data-toggle="tab" (click)="solicitud(1)" >Salas</a>
+                </li>
+                <li class="nav-item">
+                  <a id="btn-lista" class="nav-link" href="#tab2primary" data-toggle="tab" (click)="solicitud(2)">Vehículos</a>
+                </li>
+              </ul>
+            </div>
+            <div class="panel-body">
+              <div class="tab-content">
+                <div class="tab-pane fade in active" id="tab1primary">
+                </div>
+                <div class="tab-pane fade" id="tab2primary"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+        </div>
+    
+      </div>
+
+  <section *ngIf="reporteSala">
     <br>
     <div class="row">
       <div class="col-md-8">
@@ -46,8 +77,7 @@
           </div>
         </div>
       </div>
-      <!-- <div class="col-md-1">
-      </div> -->
+
       <div class="col-md-2">
         <div class="form-group">
           <div class="input-group">
@@ -67,15 +97,6 @@
               <option value="" selected disabled >Solicitante</option>
                   <option *ngFor="let usuario of usuarios;">{{usuario.nombre}} {{usuario.apellidos}}</option>
                 </select>
-          <!-- <div class="btn-group">
-            <button type="button" class="btn btn-secundary dropdown-toggle" data-toggle="dropdown" 
-            aria-haspopup="true" aria-expanded="false" [disabled]='salaFiltro==""' style="background: #0069d9;color: #fff">
-                Solicitante
-               </button>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="javascript:void(0);" *ngFor="let usuario of usuarios">{{usuario.nombre}}</a>
-            </div>
-          </div> -->
         </div>
       </div>
 
@@ -86,15 +107,6 @@
               <option value="" selected disabled >Departamento</option>
                   <option *ngFor="let departamento of departamentos;">{{departamento.nombre}}</option>
                 </select>
-          <!-- <div class="btn-group">
-            <button type="button" class="btn btn-secundary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-             aria-expanded="false" [disabled]='salaFiltro==""' style="background: #0069d9;color: #fff">
-              Departamento
-            </button>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="javascript:void(0);" *ngFor="let departamento of departamentos">{{departamento.nombre}}</a>
-            </div>
-          </div> -->
         </div>
 
       </div>
@@ -149,7 +161,7 @@
   </section>
 
 
-  <section>
+  <section *ngIf="!reporteSala">
     <br>
     <div class="row">
       <div class="col-md-8">

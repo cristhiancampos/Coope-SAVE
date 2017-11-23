@@ -31,6 +31,7 @@ export class ReportesComponent implements OnInit {
   solicitanteFiltro = "";
   departamentoFiltro = "";
   usuarioGenerador = "";
+  reporteSala = true;
 
   solicitudesSalasFiltradas = [];
   public mr: NgbModalRef;
@@ -339,6 +340,7 @@ export class ReportesComponent implements OnInit {
             if (this.modelFechaFinal != null) {// filtro de fecha final
               if (arrayTemporal3.length > 0) {
                 if (this.modelFechaInicio != null) {
+                  console.log("selccionó sala y fecha de incio también");
                   for (let index = 0; index < arrayTemporal3.length; index++) {
                     let fechaIncio = ((this.modelFechaInicio.year * 365) + (this.modelFechaInicio.month * 30) + this.modelFechaInicio.day);
                     let fechaFin = ((this.modelFechaFinal.year * 365) + (this.modelFechaFinal.month * 30) + this.modelFechaFinal.day);
@@ -349,6 +351,8 @@ export class ReportesComponent implements OnInit {
                   }
                   arrayTemporal = arrayTemporal4;
                 } else {
+                  console.log("seleccionó fecha salida");
+
                   for (let index = 0; index < arrayTemporal3.length; index++) {
                     let fechaIncio = ((this.modelFechaInicio.year * 365) + (this.modelFechaInicio.month * 30) + this.modelFechaInicio.day);
                     let fechaSolicitud = ((arrayTemporal3[index].fecha.year * 365) + (arrayTemporal3[index].fecha.month * 30) + arrayTemporal3[index].fecha.day);
@@ -361,13 +365,14 @@ export class ReportesComponent implements OnInit {
                 }
 
               } else {
+                console.log('aquí');
 
                 if (this.modelFechaInicio != null && this.modelFechaFinal != null) {
                   for (let index = 0; index < array.length; index++) {
                     let fechaIncio = ((this.modelFechaInicio.year * 365) + (this.modelFechaInicio.month * 30) + this.modelFechaInicio.day);
                     let fechaFin = ((this.modelFechaFinal.year * 365) + (this.modelFechaFinal.month * 30) + this.modelFechaFinal.day);
                     let fechaSolicitud = ((array[index].fecha.year * 365) + (array[index].fecha.month * 30) + array[index].fecha.day);
-                    if (fechaSolicitud >= fechaIncio && fechaSolicitud <= fechaFin) {
+                    if (fechaSolicitud >= fechaIncio && fechaSolicitud <= fechaFin && this.salaFiltro==array[index].sala) {
                       arrayTemporal4.push(array[index]);
                     }
                   }
@@ -377,7 +382,7 @@ export class ReportesComponent implements OnInit {
                     let fechaFinal = ((this.modelFechaFinal.year * 365) + (this.modelFechaFinal.month * 30) + this.modelFechaFinal.day);
                     let fechaSolicitud = ((array[z].fecha.year * 365) + (array[z].fecha.month * 30) + array[z].fecha.day);
 
-                    if (fechaSolicitud == fechaFinal) {
+                    if (fechaSolicitud == fechaFinal && this.salaFiltro==array[z].sala) {
                       arrayTemporal4.push(array[z]);
                     }
                   }
@@ -706,6 +711,15 @@ export class ReportesComponent implements OnInit {
       }
     );
   }
+
+    //cambia el tab de solicitar salas a lista de solitudes, según día seleccionado, y vicebersa, en el modal de solicitar sala
+    solicitud(num: any) {
+      if (num === 1) {
+        this.reporteSala = true;
+      } else {
+        this.reporteSala = false;
+      }
+    }
   // ////////////////////////////////////////////LINE CHART///////////////////////////////////////////////
   // public lineChartData:Array<any> = [
   //   {data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A'},
