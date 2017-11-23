@@ -377,12 +377,28 @@ export class ReportesComponent implements OnInit {
                     }
                   }
                   arrayTemporal = arrayTemporal4;
-                } else {
+                }
+                if(this.modelFechaFinal != null && this.salaFiltro==""){
+                  console.log('ddd');
+               // }
+               // else {
                   for (let z = 0; z < array.length; z++) {
                     let fechaFinal = ((this.modelFechaFinal.year * 365) + (this.modelFechaFinal.month * 30) + this.modelFechaFinal.day);
                     let fechaSolicitud = ((array[z].fecha.year * 365) + (array[z].fecha.month * 30) + array[z].fecha.day);
 
-                    if (fechaSolicitud == fechaFinal && this.salaFiltro==array[z].sala) {
+                    if (fechaSolicitud == fechaFinal ) {
+                      arrayTemporal4.push(array[z]);
+                    }
+                  }
+                  arrayTemporal = arrayTemporal4;
+                }
+                else{
+                  console.log("sss");
+                  for (let z = 0; z < array.length; z++) {
+                    let fechaFinal = ((this.modelFechaFinal.year * 365) + (this.modelFechaFinal.month * 30) + this.modelFechaFinal.day);
+                    let fechaSolicitud = ((array[z].fecha.year * 365) + (array[z].fecha.month * 30) + array[z].fecha.day);
+
+                    if (fechaSolicitud == fechaFinal && this.salaFiltro==array[z].sala ) {
                       arrayTemporal4.push(array[z]);
                     }
                   }
