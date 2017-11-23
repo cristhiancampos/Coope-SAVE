@@ -230,7 +230,7 @@ export class ReportesComponent implements OnInit {
   limpiarFiltros() {
     this.solicitanteFiltro = "";
     this.salaFiltro = "";
-    //this.departamentoFiltro="";
+    this.departamentoFiltro="";
     this.modelFechaInicio = null;
     this.modelFechaFinal = null;
   }
