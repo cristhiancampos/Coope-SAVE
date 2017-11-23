@@ -201,15 +201,15 @@
             <input class="form-control" placeholder="Inicia" name="dI" [(ngModel)]="modelFechaInicioVehiculo" ngbDatepicker #dIV="ngbDatepicker"
               [disabled]="true" required>
             <button class="input-group-addon" (click)="dIV.toggle()" type="button"
-            [disabled]='vehiculoFiltro==""' style="background: #0069d9;color: #fff">
+             style="background: #0069d9;color: #fff">
              <i class="fa fa-calendar" aria-hidden="true"></i>
             </button>
           </div>
         </div>
       </div>
 
-      <div class="col-md-1">
-      </div>
+      <!-- <div class="col-md-1">
+      </div> -->
 
       <div class="col-md-2">
         <div class="form-group">
@@ -217,7 +217,7 @@
             <input class="form-control" placeholder="Termina" name="dF" [(ngModel)]="modelFechaFinalVehiculo" ngbDatepicker #dFV="ngbDatepicker"
               [disabled]="true" required>
             <button class="input-group-addon" (click)="dFV.toggle()" type="button"
-            [disabled]='vehiculoFiltro==""' style="background: #0069d9;color: #fff">
+             style="background: #0069d9;color: #fff">
              <i class="fa fa-calendar" aria-hidden="true"></i>
             </button>
           </div>
@@ -225,40 +225,34 @@
       </div>
 
       <div class="col-md-2">
-        <div class="form-group">
-          <div class="btn-group">
-            <button type="button" class="btn btn-secundary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" 
-            aria-expanded="false"  [disabled]='vehiculoFiltro==""' style="background: #0069d9;color: #fff">
-                  Solicitante
-                 </button>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="javascript:void(0);" *ngFor="let usuario of usuarios">{{usuario.nombre}}</a>
-            </div>
+          <div class="form-group">
+              <select #solicitanteVehiculo="ngModel" name="solicitanteVehiculo" [(ngModel)]="solicitanteFiltroVehiculo" class="selectpicker" 
+              style="width: 100%;padding: .5rem .75rem;" required  >  
+                <option value="" selected disabled >Solicitante</option>
+                    <option *ngFor="let usuario of usuarios;">{{usuario.nombre}} {{usuario.apellidos}}</option>
+                  </select>
           </div>
         </div>
-      </div>
+  
+        <div class="col-md-2">
+          <div class="form-group">
+              <select #departamentoVehiculo="ngModel" name="departamentoVehiculo" [(ngModel)]="departamentoFiltroVehiculo" class="selectpicker" 
+              style="width: 100%;padding: .5rem .75rem;" required  >  
+                <option value="" selected disabled >Departamento</option>
+                    <option *ngFor="let departamento of departamentos;">{{departamento.nombre}}</option>
+                  </select>
+          </div>
+  
+        </div>
 
-      <div class="col-md-2">
-        <div class="form-group">
-          <div class="btn-group">
-            <button type="button" class="btn btn-secundary dropdown-toggle" data-toggle="dropdown" 
-            aria-haspopup="true" aria-expanded="false"  [disabled]='vehiculoFiltro==""' style="background: #0069d9;color: #fff">
-                      Departamento
-                     </button>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="javascript:void(0);" *ngFor="let departamento of departamentos">{{departamento.nombre}}</a>
+        <div class="col-md-2">
+            <div class="form-group">
+              <button type="button" class="btn btn-success"  (click)="fitlroReporteVehiculos()">
+                <i class="fa fa-search" aria-hidden="true" ></i></button>
+                <button type="button" class="btn btn-success" (click)="limpiarFiltrosVehiculo()">
+                    <i class="fa fa-refresh" aria-hidden="true" ></i></button>
             </div>
           </div>
-        </div>
-
-      </div>
-
-      <div class="col-md-1">
-        <div class="form-group">
-          <button type="button" class="btn btn-success"  [disabled]='vehiculoFiltro==""' >
-            <i class="fa fa-search" aria-hidden="true"></i></button>
-        </div>
-      </div>
 
     </div>
     <br>
@@ -277,14 +271,14 @@
             </tr>
           </thead>
           <tbody style="font-family: 'Times New Roman', Times, serif">
-            <tr *ngFor="let sala of solicitudSalas | paginate: {itemsPerPage:5, currentPage: p} let i = index">
+            <tr *ngFor="let vehiculo of solicitudesVehiculosFiltradas | paginate: {itemsPerPage:5, currentPage: p} let i = index">
               <th scope="row">{{i+1}}</th>
-              <th>{{sala.fecha.day}}/{{sala.fecha.month}}/{{sala.fecha.year}}</th>
-              <th>{{sala.horaInicio.hour}}:{{sala.horaInicio.minute}} - {{sala.horaFin.hour}}: {{sala.horaFin.minute}}</th>
-              <th>{{sala.sala}}</th>
-              <th>{{sala.descripcion}}</th>
-              <th>{{sala.sala}}</th>
-              <th>{{sala.descripcion}}</th>
+              <th>{{vehiculo.vehiculo}}</th>
+              <!-- <th>{{vehiculo.tipo}}</th>
+              <th>{{vehiculo.Marca}}</th> -->
+              <th>{{getNombreUsuario(vehiculo.usuario)}}</th>
+              <th>{{vehiculo.fecha.day}}/{{vehiculo.fecha.month}}/{{vehiculo.fecha.year}}</th>              
+              <th>{{vehiculo.destino}}</th>
             </tr>
           </tbody>
         </table>
