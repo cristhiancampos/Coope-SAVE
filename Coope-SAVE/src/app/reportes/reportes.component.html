@@ -128,9 +128,10 @@
           <thead class="thead-default">
             <tr>
               <th class="th-color"><i class="fa fa-list-ol" aria-hidden="true"></i></th>
-              <th class="th-color">Sala<a (click)="ordenarSolicitudesSala('Fecha')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
-              <th class="th-color">Solicitante<a (click)="ordenarSolicitudesSala('Horario')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
-              <th class="th-color">Fecha<a (click)="ordenarSolicitudesSala('Sala')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+              <th class="th-color">Sala<a (click)="ordenarSolicitudesSala('Sala')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+              <th class="th-color">Solicitante<a (click)="ordenarSolicitudesSala('Solicitante')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+              <th class="th-color">Fecha<a (click)="ordenarSolicitudesSala('Fecha')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+              <th class="th-color">Horario<a (click)="ordenarSolicitudesSala('Horario')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>              
               <th class="th-color">Motivo <a (click)="ordenarSolicitudesSala('Motivo')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
             </tr>
           </thead>
@@ -140,8 +141,7 @@
               <th>{{sala.sala}}</th>
               <th>{{getNombreUsuario(sala.usuario)}}</th>
               <th>{{sala.fecha.day}}/{{sala.fecha.month}}/{{sala.fecha.year}}</th>
-              <!-- <th>{{sala.horaInicio.hour}}:{{sala.horaInicio.minute}} - {{sala.horaFin.hour}}: {{sala.horaFin.minute}}</th>
-              <th>{{sala.sala}}</th> -->
+               <th>{{sala.horaInicio.hour}}:{{sala.horaInicio.minute}} - {{sala.horaFin.hour}}: {{sala.horaFin.minute}}</th>
               <th>{{sala.descripcion}}</th>
             </tr>
           </tbody>
@@ -195,7 +195,6 @@
       </div>
 
       <div class="col-md-2">
-
         <div class="form-group">
           <div class="input-group">
             <input class="form-control" placeholder="Inicia" name="dI" [(ngModel)]="modelFechaInicioVehiculo" ngbDatepicker #dIV="ngbDatepicker"
@@ -207,10 +206,6 @@
           </div>
         </div>
       </div>
-
-      <!-- <div class="col-md-1">
-      </div> -->
-
       <div class="col-md-2">
         <div class="form-group">
           <div class="input-group">
@@ -223,7 +218,6 @@
           </div>
         </div>
       </div>
-
       <div class="col-md-2">
           <div class="form-group">
               <select #solicitanteVehiculo="ngModel" name="solicitanteVehiculo" [(ngModel)]="solicitanteFiltroVehiculo" class="selectpicker" 
@@ -262,20 +256,20 @@
           <thead class="thead-default">
             <tr>
               <th class="th-color"><i class="fa fa-list-ol" aria-hidden="true"></i></th>
-              <th class="th-color">Placa<a (click)="ordenarSolicitudesSala('Fecha')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
-              <th class="th-color">Tipo<a (click)="ordenarSolicitudesSala('Horario')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
-              <th class="th-color">Marca<a (click)="ordenarSolicitudesSala('Sala')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
-              <th class="th-color">Solicitante <a (click)="ordenarSolicitudesSala('Motivo')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
-              <th class="th-color">Fecha <a (click)="ordenarSolicitudesSala('Motivo')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
-              <th class="th-color">Destino <a (click)="ordenarSolicitudesSala('Motivo')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+              <th class="th-color">Placa<a (click)="ordenarSolicitudesVehiculo('Placa')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+              <th class="th-color">Tipo<a (click)="ordenarSolicitudesVehiculo('Tipo')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+              <th class="th-color">Marca<a (click)="ordenarSolicitudesVehiculo('Marca')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+              <th class="th-color">Solicitante <a (click)="ordenarSolicitudesVehiculo('Solicitante')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+              <th class="th-color">Fecha <a (click)="ordenarSolicitudesVehiculo('Fecha')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+              <th class="th-color">Destino <a (click)="ordenarSolicitudesVehiculo('Destino')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
             </tr>
           </thead>
           <tbody style="font-family: 'Times New Roman', Times, serif">
             <tr *ngFor="let vehiculo of solicitudesVehiculosFiltradas | paginate: {itemsPerPage:5, currentPage: p} let i = index">
               <th scope="row">{{i+1}}</th>
               <th>{{vehiculo.vehiculo}}</th>
-              <!-- <th>{{vehiculo.tipo}}</th>
-              <th>{{vehiculo.Marca}}</th> -->
+              <th>{{obternerTipoAutomovil(vehiculo.vehiculo)}}</th>
+              <th>{{obternerMarcaAutomovil(vehiculo.vehiculo)}}</th> 
               <th>{{getNombreUsuario(vehiculo.usuario)}}</th>
               <th>{{vehiculo.fecha.day}}/{{vehiculo.fecha.month}}/{{vehiculo.fecha.year}}</th>              
               <th>{{vehiculo.destino}}</th>
@@ -283,9 +277,9 @@
           </tbody>
         </table>
       </div>
-      <!-- <hr *ngIf='solicitudSalas ==undefined || solicitudSalas.length>0'>
-        <h5 *ngIf='solicitudSalas ==undefined || solicitudSalas.length==0'>No existen solicitudes de salas registradas en el sistema.<br></h5>
-        <hr *ngIf='solicitudSalas ==undefined || solicitudSalas.length==0'> -->
+       <hr *ngIf='solicitudesVehiculosFiltradas ==undefined || solicitudesVehiculosFiltradas.length>0'>
+        <h5 *ngIf='solicitudesVehiculosFiltradas ==undefined || solicitudesVehiculosFiltradas.length==0'>No existen coincidencias para esta busqueda.<br></h5>
+        <hr *ngIf='solicitudesVehiculosFiltradas ==undefined || solicitudesVehiculosFiltradas.length==0'> 
     </div>
     <!-- paginador-->
 
