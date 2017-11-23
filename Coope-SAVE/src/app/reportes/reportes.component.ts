@@ -226,6 +226,15 @@ export class ReportesComponent implements OnInit {
       }
     }
   }
+
+  limpiarFiltros() {
+    this.solicitanteFiltro = "";
+    this.salaFiltro = "";
+    //this.departamentoFiltro="";
+    this.modelFechaInicio = null;
+    this.modelFechaFinal = null;
+  }
+
   fitlroReporteSalas() {
     this.reporteFiltros = [];
     let identity = localStorage.getItem('identity');
@@ -236,22 +245,6 @@ export class ReportesComponent implements OnInit {
     else {
       this.usuarioGenerador = "";
     }
-
-    // if(this.salaFiltro!=""){
-    //   this.reporteFiltros.push({sala:this.salaFiltro});
-    // }
-    //  if(this.solicitanteFiltro!=""){
-    //  let solicitante=this.getIdUsuario(this.solicitanteFiltro);
-    //   this.reporteFiltros.push({usuario:solicitante});
-    // }
-
-    // if(this.modelFechaInicio!=null){
-    //   this.reporteFiltros.push({fecha:{year:this.modelFechaInicio.year,month:this.modelFechaInicio.month,day:this.modelFechaInicio.day}});
-    // }
-    // if(this.modelFechaFinal!=null){
-    //   this.reporteFiltros.push({fecha:{year:this.modelFechaFinal.year,month:this.modelFechaFinal.month,day:this.modelFechaFinal.day}});
-    // }   
-    //this.solicitudesSalasFiltradas=[];
     this._servSolicitudSala.obtenerTodasSolicitudes().subscribe(
       response => {
         if (response.message) {
@@ -271,21 +264,18 @@ export class ReportesComponent implements OnInit {
                 arryTemp.push(array[index]);
               }
             }
-
             this.solicitudesSalasFiltradas = arryTemp;
 
           } else {
 
-            let arrayTemporal = [];// array;
-
+            let arrayTemporal = [];
             let arrayTemporal2 = [];
-
             let arrayTemporal3 = [];
-
             let arrayTemporal4 = [];
+            let arrayTemporal5 = [];
+            let arrayTemporal6 = [];
 
-            if (this.salaFiltro != "") {
-
+            if (this.salaFiltro != "") {// filtro de sala
               for (let index = 0; index < array.length; index++) {
                 if (array[index].sala === this.salaFiltro) {
                   arrayTemporal2.push(array[index]);
@@ -294,10 +284,9 @@ export class ReportesComponent implements OnInit {
               arrayTemporal = arrayTemporal2;
             }
 
-            if (this.modelFechaInicio != null) {
+            if (this.modelFechaInicio != null) {// filtro de fecha inicio
 
               if (arrayTemporal2.length > 0) {
-
                 if (this.modelFechaFinal != null) {
                   for (let index = 0; index < arrayTemporal2.length; index++) {
                     let fechaIncio = ((this.modelFechaInicio.year * 365) + (this.modelFechaInicio.month * 30) + this.modelFechaInicio.day);
@@ -321,204 +310,392 @@ export class ReportesComponent implements OnInit {
                 }
 
               } else {
-                for (let j = 0; j < array.length; j++) {
-                  let fechaIncio = ((this.modelFechaInicio.year * 365) + (this.modelFechaInicio.month * 30) + this.modelFechaInicio.day);
-                  let fechaSolicitud = ((array[j].fecha.year * 365) + (array[j].fecha.month * 30) + array[j].fecha.day);
 
-                  if (fechaSolicitud == fechaIncio) {
-                    arrayTemporal3.push(array[j]);
+                if (this.modelFechaInicio != null && this.modelFechaFinal != null) {
+                  for (let index = 0; index < array.length; index++) {
+                    let fechaIncio = ((this.modelFechaInicio.year * 365) + (this.modelFechaInicio.month * 30) + this.modelFechaInicio.day);
+                    let fechaFin = ((this.modelFechaFinal.year * 365) + (this.modelFechaFinal.month * 30) + this.modelFechaFinal.day);
+                    let fechaSolicitud = ((array[index].fecha.year * 365) + (array[index].fecha.month * 30) + array[index].fecha.day);
+                    if (fechaSolicitud >= fechaIncio && fechaSolicitud <= fechaFin) {
+                      arrayTemporal3.push(array[index]);
+                    }
+                  }
+                  arrayTemporal = arrayTemporal3;
+                } else {
+
+                  for (let j = 0; j < array.length; j++) {
+                    let fechaIncio = ((this.modelFechaInicio.year * 365) + (this.modelFechaInicio.month * 30) + this.modelFechaInicio.day);
+                    let fechaSolicitud = ((array[j].fecha.year * 365) + (array[j].fecha.month * 30) + array[j].fecha.day);
+
+                    if (fechaSolicitud == fechaIncio) {
+                      arrayTemporal3.push(array[j]);
+                    }
+                  }
+                  arrayTemporal = arrayTemporal3;
+                }
+              }
+            }
+
+            if (this.modelFechaFinal != null) {// filtro de fecha final
+              if (arrayTemporal3.length > 0) {
+                if (this.modelFechaInicio != null) {
+                  for (let index = 0; index < arrayTemporal3.length; index++) {
+                    let fechaIncio = ((this.modelFechaInicio.year * 365) + (this.modelFechaInicio.month * 30) + this.modelFechaInicio.day);
+                    let fechaFin = ((this.modelFechaFinal.year * 365) + (this.modelFechaFinal.month * 30) + this.modelFechaFinal.day);
+                    let fechaSolicitud = ((arrayTemporal3[index].fecha.year * 365) + (arrayTemporal3[index].fecha.month * 30) + arrayTemporal3[index].fecha.day);
+                    if (fechaSolicitud >= fechaIncio && fechaSolicitud <= fechaFin) {
+                      arrayTemporal4.push(arrayTemporal3[index]);
+                    }
+                  }
+                  arrayTemporal = arrayTemporal4;
+                } else {
+                  for (let index = 0; index < arrayTemporal3.length; index++) {
+                    let fechaIncio = ((this.modelFechaInicio.year * 365) + (this.modelFechaInicio.month * 30) + this.modelFechaInicio.day);
+                    let fechaSolicitud = ((arrayTemporal3[index].fecha.year * 365) + (arrayTemporal3[index].fecha.month * 30) + arrayTemporal3[index].fecha.day);
+
+                    if (fechaSolicitud == fechaIncio) {
+                      arrayTemporal4.push(arrayTemporal3[index]);
+                    }
+                  }
+                  arrayTemporal = arrayTemporal4;
+                }
+
+              } else {
+
+                if (this.modelFechaInicio != null && this.modelFechaFinal != null) {
+                  for (let index = 0; index < array.length; index++) {
+                    let fechaIncio = ((this.modelFechaInicio.year * 365) + (this.modelFechaInicio.month * 30) + this.modelFechaInicio.day);
+                    let fechaFin = ((this.modelFechaFinal.year * 365) + (this.modelFechaFinal.month * 30) + this.modelFechaFinal.day);
+                    let fechaSolicitud = ((array[index].fecha.year * 365) + (array[index].fecha.month * 30) + array[index].fecha.day);
+                    if (fechaSolicitud >= fechaIncio && fechaSolicitud <= fechaFin) {
+                      arrayTemporal4.push(array[index]);
+                    }
+                  }
+                  arrayTemporal = arrayTemporal4;
+                } else {
+                  for (let z = 0; z < array.length; z++) {
+                    let fechaFinal = ((this.modelFechaFinal.year * 365) + (this.modelFechaFinal.month * 30) + this.modelFechaFinal.day);
+                    let fechaSolicitud = ((array[z].fecha.year * 365) + (array[z].fecha.month * 30) + array[z].fecha.day);
+
+                    if (fechaSolicitud == fechaFinal) {
+                      arrayTemporal4.push(array[z]);
+                    }
+                  }
+                  arrayTemporal = arrayTemporal4;
+                }
+              }
+            }
+
+            if (this.solicitanteFiltro != "") {// filtro de solicitante
+
+              if (arrayTemporal4.length > 0 && arrayTemporal2.length > 0 && arrayTemporal3.length == 0) {
+                let solicitante = this.getIdUsuario(this.solicitanteFiltro);
+                for (let index = 0; index < arrayTemporal4.length; index++) {
+
+                  let fechaIncio = ((this.modelFechaFinal.year * 365) + (this.modelFechaFinal.month * 30) + this.modelFechaFinal.day);
+                  let fechaSolicitud = ((arrayTemporal4[index].fecha.year * 365) + (arrayTemporal4[index].fecha.month * 30) + arrayTemporal4[index].fecha.day);
+
+                  if (arrayTemporal4[index].usuario == solicitante
+                    && arrayTemporal4[index].sala == this.salaFiltro &&
+                    fechaIncio == fechaSolicitud) {
+                    arrayTemporal5.push(arrayTemporal4[index]);
                   }
                 }
-                arrayTemporal=arrayTemporal3;
+                arrayTemporal = arrayTemporal5;
               }
-              //console.log(arrayTemporal3);
-             // arrayTemporal=arrayTemporal3;
-            }
-            
-            if (this.modelFechaFinal != null) {
-              console.log(arrayTemporal3);
-              if (arrayTemporal3.length > 0) {
-                
-                 if (this.modelFechaInicio != null) {
-                   alert('trae fecha de inicio');
-                //   alert('tambien hay fecha inicio');
-                //   for (let i = 0; i < arrayTemporal3.length; i++) {
-                //     let fechaIncio = ((this.modelFechaInicio.year * 365) + (this.modelFechaInicio.month * 30) + this.modelFechaInicio.day);
-                //     let fechaFin = ((this.modelFechaFinal.year * 365) + (this.modelFechaFinal.month * 30) + this.modelFechaFinal.day);
-                //     let fechaSolicitud = ((arrayTemporal3[i].fecha.year * 365) + (arrayTemporal3[i].fecha.month * 30) + arrayTemporal3[i].fecha.day);
-                //     console.log("inicio "+fechaIncio +"  solicitud "+ fechaSolicitud  +"   fin "+ fechaFin );
-                //     if ((fechaSolicitud > fechaIncio && fechaSolicitud < fechaFin) || fechaSolicitud==fechaIncio || fechaFin==fechaSolicitud ) {
-                //       arrayTemporal4.push(arrayTemporal3[i]);
-                //     }
-                //   }
-                //   arrayTemporal = arrayTemporal4;
+
+              if (arrayTemporal4.length == 0 && arrayTemporal2.length > 0 && arrayTemporal3.length > 0) {
+                let solicitante = this.getIdUsuario(this.solicitanteFiltro);
+                for (let index = 0; index < arrayTemporal3.length; index++) {
+
+                  let fechaIncio = ((this.modelFechaInicio.year * 365) + (this.modelFechaInicio.month * 30) + this.modelFechaInicio.day);
+                  let fechaSolicitud = ((arrayTemporal3[index].fecha.year * 365) + (arrayTemporal3[index].fecha.month * 30) + arrayTemporal3[index].fecha.day);
+
+                  if (arrayTemporal3[index].usuario == solicitante
+                    && arrayTemporal3[index].sala == this.salaFiltro &&
+                    fechaIncio == fechaSolicitud) {
+                    arrayTemporal5.push(arrayTemporal3[index]);
+                  }
                 }
-                // else {
-                //   alert('no va el de inicio');
-                //   for (let index = 0; index < arrayTemporal3.length; index++) {
-                //     let fechaFinal = ((this.modelFechaFinal.year * 365) + (this.modelFechaFinal.month * 30) + this.modelFechaFinal.day);
-                //     let fechaSolicitud = ((arrayTemporal3[index].fecha.year * 365) + (arrayTemporal3[index].fecha.month * 30) + arrayTemporal3[index].fecha.day);
+                arrayTemporal = arrayTemporal5;
+              }
 
-                //     if (fechaSolicitud == fechaFinal) {
-                //       arrayTemporal4.push(arrayTemporal3[index]);
-                //     }
-                //   }
-                //   arrayTemporal = arrayTemporal4;
-                // }
+              if (arrayTemporal4.length > 0 && arrayTemporal2.length > 0 && arrayTemporal3.length > 0) {
+                let solicitante = this.getIdUsuario(this.solicitanteFiltro);
+                for (let index = 0; index < arrayTemporal4.length; index++) {
 
+                  if (arrayTemporal4[index].usuario == solicitante) {
+                    arrayTemporal5.push(arrayTemporal4[index]);
+                  }
+                }
+                arrayTemporal = arrayTemporal5;
+              }
 
-               }
-               //console.log(arrayTemporal3);
-                else {
-                  alert('no trae fecha de inicio');
+              if (arrayTemporal2.length == 0 && arrayTemporal3.length > 0 && arrayTemporal4.length > 0) {
+                let solicitante = this.getIdUsuario(this.solicitanteFiltro);
+                for (let index = 0; index < arrayTemporal4.length; index++) {
+                  let fechaIncio = ((this.modelFechaInicio.year * 365) + (this.modelFechaInicio.month * 30) + this.modelFechaInicio.day);
+                  let fechaFin = ((this.modelFechaFinal.year * 365) + (this.modelFechaFinal.month * 30) + this.modelFechaFinal.day);
+                  let fechaSolicitud = ((arrayTemporal4[index].fecha.year * 365) + (arrayTemporal4[index].fecha.month * 30) + arrayTemporal4[index].fecha.day);
+                  if (fechaSolicitud >= fechaIncio && fechaSolicitud <= fechaFin && solicitante == arrayTemporal4[index].usuario) {
+                    arrayTemporal5.push(arrayTemporal4[index]);
+                  }
+                }
+                arrayTemporal = arrayTemporal5;
+              }
+
+              if (arrayTemporal4.length == 0 && arrayTemporal2.length == 0 && arrayTemporal3.length == 0) {
+                let solicitante = this.getIdUsuario(this.solicitanteFiltro);
                 for (let index = 0; index < array.length; index++) {
-                  let fechaIncio = ((this.modelFechaFinal.year * 365) + (this.modelFechaFinal.month * 30) + this.modelFechaFinal.day);
+
+                  if (array[index].usuario == solicitante) {
+                    arrayTemporal5.push(array[index]);
+                  }
+                }
+                arrayTemporal = arrayTemporal5;
+              }
+            }
+            if (this.departamentoFiltro != "") {// filtro de departamento
+              if (arrayTemporal2.length == 0 && arrayTemporal3.length == 0 && arrayTemporal4.length == 0 && arrayTemporal5.length == 0) {
+                for (let index = 0; index < array.length; index++) {
+                  let departamento = this.getDepartamento(array[index].usuario);
+                  if (departamento == this.departamentoFiltro) {
+                    arrayTemporal6.push(array[index]);
+                  }
+                }
+                arrayTemporal = arrayTemporal6;
+              }
+
+              if (this.salaFiltro != "") {
+                console.log("seleccionó sala");
+                arrayTemporal6 = [];
+                for (let index = 0; index < array.length; index++) {
+                  let departamento = this.getDepartamento(array[index].usuario);
+                  if (departamento == this.departamentoFiltro && this.salaFiltro == array[index].sala) {
+                    arrayTemporal6.push(array[index]);
+                  }
+                }
+                arrayTemporal = arrayTemporal6;
+              }
+
+              if (this.modelFechaInicio != null) {
+                // console.log("seleccionó fecha inicio");
+
+                arrayTemporal6 = [];
+
+                for (let index = 0; index < array.length; index++) {
+                  let departamento = this.getDepartamento(array[index].usuario);
+                  let fechaIncio = ((this.modelFechaInicio.year * 365) + (this.modelFechaInicio.month * 30) + this.modelFechaInicio.day);
                   let fechaSolicitud = ((array[index].fecha.year * 365) + (array[index].fecha.month * 30) + array[index].fecha.day);
 
-                  if (fechaSolicitud == fechaIncio) {
-                    arrayTemporal4.push(array[index]);
+                  if (departamento == this.departamentoFiltro && fechaIncio == fechaSolicitud) {
+                    arrayTemporal6.push(array[index]);
                   }
+
                 }
-                arrayTemporal=arrayTemporal4;
+                arrayTemporal = arrayTemporal6;
               }
 
-            }
-            else if (this.solicitanteFiltro != "") {
+              if (this.modelFechaFinal != null) {
+                //console.log("seleccionó fecha final");
 
-            }
-            else if (this.departamentoFiltro != "") {
+                arrayTemporal6 = [];
 
-            }
+                for (let index = 0; index < array.length; index++) {
+                  let departamento = this.getDepartamento(array[index].usuario);
+                  let fechaFin = ((this.modelFechaFinal.year * 365) + (this.modelFechaFinal.month * 30) + this.modelFechaFinal.day);
+                  let fechaSolicitud = ((array[index].fecha.year * 365) + (array[index].fecha.month * 30) + array[index].fecha.day);
 
+                  if (departamento == this.departamentoFiltro && fechaFin == fechaSolicitud) {
+                    arrayTemporal6.push(array[index]);
+                  }
+
+                }
+                arrayTemporal = arrayTemporal6;
+              }
+
+              if (this.solicitanteFiltro != "") {
+                // console.log("seleccionó fecha solicitante");
+                arrayTemporal6 = [];
+                let solicitante = this.getIdUsuario(this.solicitanteFiltro);
+
+                for (let index = 0; index < array.length; index++) {
+                  let departamento = this.getDepartamento(array[index].usuario);
+
+                  if (solicitante == array[index].usuario && departamento == this.departamentoFiltro) {
+                    arrayTemporal6.push(array[index]);
+                  }
+
+                }
+                arrayTemporal = arrayTemporal6;
+
+              }
+              if (this.salaFiltro != "" && this.modelFechaInicio != null) {
+                // console.log("seleccionó sala y fecha de inicio");
+                arrayTemporal6 = [];
+
+                for (let index = 0; index < array.length; index++) {
+                  let departamento = this.getDepartamento(array[index].usuario);
+                  let fechaIncio = ((this.modelFechaInicio.year * 365) + (this.modelFechaInicio.month * 30) + this.modelFechaInicio.day);
+                  let fechaSolicitud = ((array[index].fecha.year * 365) + (array[index].fecha.month * 30) + array[index].fecha.day);
+
+                  if (departamento == this.departamentoFiltro && this.salaFiltro == array[index].sala && fechaIncio == fechaSolicitud) {
+                    arrayTemporal6.push(array[index]);
+                  }
+                }
+                arrayTemporal = arrayTemporal6;
+              }
+              if (this.salaFiltro != "" && this.modelFechaFinal != null) {
+                // console.log("seleccionó sala y fecha de fin");
+                arrayTemporal6 = [];
+
+                for (let index = 0; index < array.length; index++) {
+                  let departamento = this.getDepartamento(array[index].usuario);
+                  let fechaFin = ((this.modelFechaFinal.year * 365) + (this.modelFechaFinal.month * 30) + this.modelFechaFinal.day);
+                  let fechaSolicitud = ((array[index].fecha.year * 365) + (array[index].fecha.month * 30) + array[index].fecha.day);
+
+                  if (departamento == this.departamentoFiltro && this.salaFiltro == array[index].sala && fechaFin == fechaSolicitud) {
+                    arrayTemporal6.push(array[index]);
+                  }
+                }
+                arrayTemporal = arrayTemporal6;
+              }
+              if (this.salaFiltro != "" && this.solicitanteFiltro != "") {
+                // console.log("seleccionó sala y solicitante");
+                arrayTemporal6 = [];
+                let solicitante = this.getIdUsuario(this.solicitanteFiltro);
+
+                for (let index = 0; index < array.length; index++) {
+                  let departamento = this.getDepartamento(array[index].usuario);
+
+                  if (array[index].sala == this.salaFiltro && solicitante == array[index].usuario && departamento == this.departamentoFiltro) {
+                    arrayTemporal6.push(array[index]);
+                  }
+
+                }
+                arrayTemporal = arrayTemporal6;
+              }
+              if (this.modelFechaInicio != null && this.modelFechaFinal != null) {
+                // console.log("seleccionó fecha de inicio y fecha final");
+                arrayTemporal6 = [];
+
+                for (let index = 0; index < array.length; index++) {
+                  let departamento = this.getDepartamento(array[index].usuario);
+                  let fechaIncio = ((this.modelFechaInicio.year * 365) + (this.modelFechaInicio.month * 30) + this.modelFechaInicio.day);
+                  let fechaFin = ((this.modelFechaFinal.year * 365) + (this.modelFechaFinal.month * 30) + this.modelFechaFinal.day);
+                  let fechaSolicitud = ((array[index].fecha.year * 365) + (array[index].fecha.month * 30) + array[index].fecha.day);
+                  if (fechaSolicitud >= fechaIncio && fechaSolicitud <= fechaFin && departamento == this.departamentoFiltro) {
+                    arrayTemporal6.push(array[index]);
+                  }
+                }
+                arrayTemporal = arrayTemporal6;
+              }
+              if (this.modelFechaFinal != null && this.solicitanteFiltro != "") {
+                // console.log("seleccionó fecha final  y  solicitante");
+                arrayTemporal6 = [];
+                let solicitante = this.getIdUsuario(this.solicitanteFiltro);
+                let fechaFin = ((this.modelFechaFinal.year * 365) + (this.modelFechaFinal.month * 30) + this.modelFechaFinal.day);
+
+                for (let index = 0; index < array.length; index++) {
+                  let departamento = this.getDepartamento(array[index].usuario);
+                  let fechaSolicitud = ((array[index].fecha.year * 365) + (array[index].fecha.month * 30) + array[index].fecha.day);
+                  if (solicitante == array[index].usuario && departamento == this.departamentoFiltro && fechaFin == fechaSolicitud) {
+                    arrayTemporal6.push(array[index]);
+                  }
+
+                }
+                arrayTemporal = arrayTemporal6;
+              }
+              if (this.salaFiltro != "" && this.modelFechaFinal != null && this.solicitanteFiltro != "") {
+                // console.log("seleccionó sala fecha final  y  solicitante");
+                arrayTemporal6 = [];
+                let solicitante = this.getIdUsuario(this.solicitanteFiltro);
+                let fechaFin = ((this.modelFechaFinal.year * 365) + (this.modelFechaFinal.month * 30) + this.modelFechaFinal.day);
+
+                for (let index = 0; index < array.length; index++) {
+                  let departamento = this.getDepartamento(array[index].usuario);
+                  let fechaSolicitud = ((array[index].fecha.year * 365) + (array[index].fecha.month * 30) + array[index].fecha.day);
+                  if (solicitante == array[index].usuario && departamento == this.departamentoFiltro && fechaFin == fechaSolicitud && this.salaFiltro == array[index].sala) {
+                    arrayTemporal6.push(array[index]);
+                  }
+
+                }
+                arrayTemporal = arrayTemporal6;
+              }
+              if (this.salaFiltro != "" && this.modelFechaInicio != null && this.solicitanteFiltro != "") {
+                // console.log("seleccionó sala fecha inicio  y  solicitante");
+                arrayTemporal6 = [];
+
+                let solicitante = this.getIdUsuario(this.solicitanteFiltro);
+                let fechaIncio = ((this.modelFechaInicio.year * 365) + (this.modelFechaInicio.month * 30) + this.modelFechaInicio.day);
+
+                for (let index = 0; index < array.length; index++) {
+                  let departamento = this.getDepartamento(array[index].usuario);
+                  let fechaSolicitud = ((array[index].fecha.year * 365) + (array[index].fecha.month * 30) + array[index].fecha.day);
+                  if (solicitante == array[index].usuario && departamento == this.departamentoFiltro && fechaIncio == fechaSolicitud && this.salaFiltro == array[index].sala) {
+                    arrayTemporal6.push(array[index]);
+                  }
+
+                }
+                arrayTemporal = arrayTemporal6;
+              }
+              if (this.salaFiltro != "" && this.modelFechaInicio != null && this.modelFechaFinal != null) {
+                // console.log("seleccionó sala, fecha incio y fecha final");
+                arrayTemporal6 = [];
+                let fechaIncio = ((this.modelFechaInicio.year * 365) + (this.modelFechaInicio.month * 30) + this.modelFechaInicio.day);
+                let fechaFin = ((this.modelFechaFinal.year * 365) + (this.modelFechaFinal.month * 30) + this.modelFechaFinal.day);
+
+                for (let index = 0; index < array.length; index++) {
+                  let departamento = this.getDepartamento(array[index].usuario);
+                  let fechaSolicitud = ((array[index].fecha.year * 365) + (array[index].fecha.month * 30) + array[index].fecha.day);
+                  if (fechaSolicitud >= fechaIncio && fechaSolicitud <= fechaFin && departamento == this.departamentoFiltro && this.salaFiltro == array[index].sala) {
+                    arrayTemporal6.push(array[index]);
+                  }
+
+                }
+                arrayTemporal = arrayTemporal6;
+              }
+              if (this.salaFiltro != null && this.modelFechaInicio != null && this.modelFechaFinal != null && this.solicitanteFiltro != "") {
+                // console.log("seleccionó sala, fecha incio y fecha final y solicitante");
+                arrayTemporal6 = [];
+                let fechaIncio = ((this.modelFechaInicio.year * 365) + (this.modelFechaInicio.month * 30) + this.modelFechaInicio.day);
+                let fechaFin = ((this.modelFechaFinal.year * 365) + (this.modelFechaFinal.month * 30) + this.modelFechaFinal.day);
+                let solicitante = this.getIdUsuario(this.solicitanteFiltro);
+
+                for (let index = 0; index < array.length; index++) {
+                  let departamento = this.getDepartamento(array[index].usuario);
+                  let fechaSolicitud = ((array[index].fecha.year * 365) + (array[index].fecha.month * 30) + array[index].fecha.day);
+                  if (fechaSolicitud >= fechaIncio && fechaSolicitud <= fechaFin && departamento == this.departamentoFiltro &&
+                    this.salaFiltro == array[index].sala && array[index].usuario == solicitante) {
+                    arrayTemporal6.push(array[index]);
+                  }
+
+                }
+                arrayTemporal = arrayTemporal6;
+
+              }
+              if (this.modelFechaInicio != null && this.modelFechaFinal != null && this.solicitanteFiltro != "") {
+                // console.log("seleccionó fecha incio y fecha final y solicitante");
+                arrayTemporal6 = [];
+
+                let fechaIncio = ((this.modelFechaInicio.year * 365) + (this.modelFechaInicio.month * 30) + this.modelFechaInicio.day);
+                let fechaFin = ((this.modelFechaFinal.year * 365) + (this.modelFechaFinal.month * 30) + this.modelFechaFinal.day);
+                let solicitante = this.getIdUsuario(this.solicitanteFiltro);
+
+                for (let index = 0; index < array.length; index++) {
+                  let departamento = this.getDepartamento(array[index].usuario);
+                  let fechaSolicitud = ((array[index].fecha.year * 365) + (array[index].fecha.month * 30) + array[index].fecha.day);
+                  if (fechaSolicitud >= fechaIncio && fechaSolicitud <= fechaFin && departamento == this.departamentoFiltro &&
+                    array[index].usuario == solicitante) {
+                    arrayTemporal6.push(array[index]);
+                  }
+                }
+                arrayTemporal = arrayTemporal6;
+              }
+            }
             this.solicitudesSalasFiltradas = arrayTemporal;
 
-            //filtro único por sala
-            //   if(this.salaFiltro!=""  && this.modelFechaInicio==null && this.modelFechaFinal==null && this.solicitanteFiltro=="" && this.departamentoFiltro==""){
-            //     let arryTemp=[];
-            //     for (let index = 0; index < array.length; index++) {
-            //       if(array[index].sala===this.salaFiltro){
-            //             arryTemp.push(array[index]);
-            //         }
-            //     }
-            //     this.solicitudesSalasFiltradas=arryTemp;
-
-            //   }
-            //   //filtro único por fecha de inicio
-            //   if(this.salaFiltro==""  && this.modelFechaInicio!=null && this.modelFechaFinal==null && this.solicitanteFiltro=="" && this.departamentoFiltro==""){
-            //     let arryTemp=[];
-            //     for (let index = 0; index < array.length; index++) {
-            //       let fechaIncio=((this.modelFechaInicio.year*365)+(this.modelFechaInicio.month*30)+this.modelFechaInicio.day);
-            //       let fechaSolicitud=((array[index].fecha.year*365)+(array[index].fecha.month*30)+array[index].fecha.day);
-
-            //       if(fechaIncio==fechaSolicitud){
-            //             arryTemp.push(array[index]);
-            //         }
-            //     }
-            //     this.solicitudesSalasFiltradas=arryTemp;
-
-            //   }
-
-            //   //filtro único por fecha final
-            //   if(this.salaFiltro==""  && this.modelFechaInicio==null && this.modelFechaFinal!=null && this.solicitanteFiltro=="" && this.departamentoFiltro==""){
-            //     let arryTemp=[];
-            //     for (let index = 0; index < array.length; index++) {
-            //       let fechaFin=((this.modelFechaFinal.year*365)+(this.modelFechaFinal.month*30)+this.modelFechaFinal.day);
-            //       let fechaSolicitud=((array[index].fecha.year*365)+(array[index].fecha.month*30)+array[index].fecha.day);
-
-            //       if(fechaFin==fechaSolicitud){
-            //             arryTemp.push(array[index]);
-            //         }
-            //     }
-            //     this.solicitudesSalasFiltradas=arryTemp;
-
-            //   }
-
-            //   //filtro único por solicitante
-            //   if(this.salaFiltro==""  && this.modelFechaInicio==null && this.modelFechaFinal==null && this.solicitanteFiltro!="" && this.departamentoFiltro==""){
-            //     let solicitante=this.getIdUsuario(this.solicitanteFiltro);
-            //     let arryTemp=[];
-            //     for (let index = 0; index < array.length; index++) {
-            //       if(array[index].usuario==solicitante){
-            //             arryTemp.push(array[index]);
-            //         }
-            //     }
-            //     this.solicitudesSalasFiltradas=arryTemp;
-
-            //   }
-            //    //filtro único por departamento
-            //    if(this.salaFiltro==""  && this.modelFechaInicio==null && this.modelFechaFinal==null && this.solicitanteFiltro=="" && this.departamentoFiltro!=""){
-            //     let arryTemp=[];
-            //     for (let index = 0; index < array.length; index++) {
-            //       let departamento=this.getDepartamento(array[index].usuario);
-            //       if(departamento==this.departamentoFiltro){
-            //             arryTemp.push(array[index]);
-            //         }
-            //     }
-            //     this.solicitudesSalasFiltradas=arryTemp;
-
-            //   }
-            //    //filtro sala y fecha de inicio
-            //    if(this.salaFiltro!=""  && this.modelFechaInicio!=null && this.modelFechaFinal==null && this.solicitanteFiltro=="" && this.departamentoFiltro==""){
-            //     let arryTemp=[];
-            //     for (let index = 0; index < array.length; index++) {
-            //       let fechaIncio=((this.modelFechaInicio.year*365)+(this.modelFechaInicio.month*30)+this.modelFechaInicio.day);
-            //       let fechaSolicitud=((array[index].fecha.year*365)+(array[index].fecha.month*30)+array[index].fecha.day);
-
-            //       if(this.salaFiltro==array[index].sala && fechaIncio==fechaSolicitud ){
-            //             arryTemp.push(array[index]);
-            //         }
-            //     }
-            //     this.solicitudesSalasFiltradas=arryTemp;
-
-            //   }
-            //   //filtro sala y fecha de fin
-            //   if(this.salaFiltro!=""  && this.modelFechaInicio==null && this.modelFechaFinal!=null && this.solicitanteFiltro=="" && this.departamentoFiltro==""){
-            //     let arryTemp=[];
-            //     for (let index = 0; index < array.length; index++) {
-            //       let fechaFin=((this.modelFechaFinal.year*365)+(this.modelFechaFinal.month*30)+this.modelFechaFinal.day);
-            //       let fechaSolicitud=((array[index].fecha.year*365)+(array[index].fecha.month*30)+array[index].fecha.day);
-
-            //       if(this.salaFiltro==array[index].sala && fechaFin==fechaSolicitud ){
-            //             arryTemp.push(array[index]);
-            //         }
-            //     }
-            //     this.solicitudesSalasFiltradas=arryTemp;
-
-            //   }
-
-            //   //filtro sala y solicitante
-            //   if(this.salaFiltro!=""  && this.modelFechaInicio==null && this.modelFechaFinal==null && this.solicitanteFiltro!="" && this.departamentoFiltro==""){
-            //     let solicitante=this.getIdUsuario(this.solicitanteFiltro);
-            //     let arryTemp=[];
-            //     for (let index = 0; index < array.length; index++) {
-            //       if(this.salaFiltro==array[index].sala && array[index].usuario==solicitante ){
-            //             arryTemp.push(array[index]);
-            //         }
-            //     }
-            //     this.solicitudesSalasFiltradas=arryTemp;
-
-            //   }
-
-            //   //filtro sala y departamento
-            //   if(this.salaFiltro!=""  && this.modelFechaInicio==null && this.modelFechaFinal==null && this.solicitanteFiltro=="" && this.departamentoFiltro!=""){
-            //     let solicitante=this.getIdUsuario(this.solicitanteFiltro);
-            //     let arryTemp=[];
-            //     for (let index = 0; index < array.length; index++) {
-            //       let departamento=this.getDepartamento(array[index].usuario);
-            //       if(this.salaFiltro==array[index].sala && departamento==this.departamentoFiltro ){
-            //             arryTemp.push(array[index]);
-            //         }
-            //     }
-            //     this.solicitudesSalasFiltradas=arryTemp;
-
-            //   }
-
           }
-
-
-
-          //this.vehiculos = response.message;
-          //console.log(response.message);
         } else {//ho hay vehiculos registrados
         }
       }, error => {

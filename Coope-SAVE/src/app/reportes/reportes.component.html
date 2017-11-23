@@ -25,7 +25,7 @@
       <div class="col-md-2">
         <div class="form-group">
           <div class="input-group">
-            <input class="form-control" placeholder="Sala" name="Sala" [(ngModel)]="salaFiltro" #vehiculo [disabled]="true" required>
+            <input class="form-control" placeholder="Sala" name="Sala" [(ngModel)]="salaFiltro" #sala [disabled]="true" required>
             <button class="btn btn-primary input-group-addon" type="button" (click)="abrir(modalSalas)" style="background: #0069d9;color: #fff">
               <i class="fa fa-users" aria-hidden="true"></i>
              </button>
@@ -103,7 +103,7 @@
         <div class="form-group">
           <button type="button" class="btn btn-success"  (click)="fitlroReporteSalas()">
             <i class="fa fa-search" aria-hidden="true" ></i></button>
-            <button type="button" class="btn btn-success">
+            <button type="button" class="btn btn-success" (click)="limpiarFiltros()">
                 <i class="fa fa-refresh" aria-hidden="true" ></i></button>
         </div>
       </div>
