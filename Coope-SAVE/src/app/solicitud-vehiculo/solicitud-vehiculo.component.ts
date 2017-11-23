@@ -21,6 +21,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FormControl } from '@angular/forms';
 import { filtrarUsuario } from './filtroUsuarios';
 import { ServicioDepartamento } from '../servicios/departamento';
+import { GenerarPDF } from './generarPDF';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { PdfmakeService } from 'ng-pdf-make/pdfmake/pdfmake.service';
 
@@ -142,6 +143,7 @@ export class SolicitudVehiculoComponent implements OnInit {
   timeF = { hour: null, minute: null, second: 0 };
   tempPlacaVehiculo = "";
   dateUpdate = { day: null, month: null, year: null };
+  crearPDF: GenerarPDF;
 
 
 
@@ -172,6 +174,8 @@ export class SolicitudVehiculoComponent implements OnInit {
     this.minDate = { year: null, month: null, day: null };
     this.filtroUsuario = "";
 
+    this.crearPDF = new GenerarPDF(this.pdfmake);
+
   }
   solicitud(num: any) {
     if (num === 1) {
@@ -201,20 +205,20 @@ export class SolicitudVehiculoComponent implements OnInit {
   crearPdf(solicitudAgregada) {
 
     //var docDefinition = 
-    let acompanantes='';
-     for (var index = 0; index < solicitudAgregada.acompanantes.length; index++) {
+    let acompanantes = '';
+    for (var index = 0; index < solicitudAgregada.acompanantes.length; index++) {
 
-      acompanantes+= solicitudAgregada.acompanantes[index].nombre+' '+ solicitudAgregada.acompanantes[index].apellidos+'\n'; 
-     }
+      acompanantes += solicitudAgregada.acompanantes[index].nombre + ' ' + solicitudAgregada.acompanantes[index].apellidos + '\n';
+    }
 
-  console.log('En el metodo del pfd');
-  console.log(solicitudAgregada);
-    let solicitud= solicitudAgregada;
-    let horaSalida= solicitud.horaSalida.hour+':'+solicitud.horaSalida.minute;
-    let vehiculo= solicitudAgregada.vehiculo;
+    console.log('En el metodo del pfd');
+    console.log(solicitudAgregada);
+    let solicitud = solicitudAgregada;
+    let horaSalida = solicitud.horaSalida.hour + ':' + solicitud.horaSalida.minute;
+    let vehiculo = solicitudAgregada.vehiculo;
     console.log(vehiculo);
     this.pdfmake.docDefinition = {
-      
+
       content: [
 
         { text: 'COOPESPARTA R.L', style: 'header' },
@@ -229,13 +233,13 @@ export class SolicitudVehiculoComponent implements OnInit {
               text: 'Placa:'
             },
             {
-              text: ''+solicitudAgregada.vehiculo+''
+              text: '' + solicitudAgregada.vehiculo + ''
             },
             {
               text: 'Fecha:'
             },
             {
-              text: ''+solicitudAgregada.fecha.day+'/'+solicitudAgregada.fecha.month+ '/'+solicitudAgregada.fecha.day+''
+              text: '' + solicitudAgregada.fecha.day + '/' + solicitudAgregada.fecha.month + '/' + solicitudAgregada.fecha.day + ''
             }
           ]
         },
@@ -248,13 +252,13 @@ export class SolicitudVehiculoComponent implements OnInit {
               text: 'Hora Salida:'
             },
             {
-              text: ''+solicitudAgregada.horaSalida.hour+':'+solicitudAgregada.horaSalida.minute+''
+              text: '' + solicitudAgregada.horaSalida.hour + ':' + solicitudAgregada.horaSalida.minute + ''
             },
             {
               text: 'Hora Regreso:'
             },
             {
-              text: ''+solicitudAgregada.horaRegreso.hour+':'+solicitudAgregada.horaRegreso.minute+''
+              text: '' + solicitudAgregada.horaRegreso.hour + ':' + solicitudAgregada.horaRegreso.minute + ''
             }
           ]
         },
@@ -267,7 +271,7 @@ export class SolicitudVehiculoComponent implements OnInit {
               text: 'Motivo de la Gira:'
             },
             {
-              text: ''+solicitudAgregada.descripcion+''
+              text: '' + solicitudAgregada.descripcion + ''
             }
           ]
         },
@@ -280,7 +284,7 @@ export class SolicitudVehiculoComponent implements OnInit {
               text: 'Destino:'
             },
             {
-              text: ''+solicitudAgregada.destino+''
+              text: '' + solicitudAgregada.destino + ''
             }
           ]
         },
@@ -293,7 +297,7 @@ export class SolicitudVehiculoComponent implements OnInit {
               text: 'Acompañantes:'
             },
             {
-              text: ''+acompanantes+''
+              text: '' + acompanantes + ''
             }
           ]
         },
@@ -306,7 +310,7 @@ export class SolicitudVehiculoComponent implements OnInit {
               text: 'Encargado:'
             },
             {
-              text: ''+solicitudAgregada.usuario+''
+              text: '' + solicitudAgregada.usuario + ''
             },
             {
               width: 40,
@@ -418,574 +422,582 @@ export class SolicitudVehiculoComponent implements OnInit {
 
               text: 'IMAGEN DE LOS CARROS'
             },
-            [ 
-              
-              {
-              style: 'espacioMarca',
-              alignment: 'left',
-              columns: [
-                {
-                  width: 125,
-                  text: 'Radio FM/AM:'
-                },
-                {
-                  text: '[         ]'
-                }
-              ]
-
-            },
-            {
-              style: 'espacioMarca',
-              alignment: 'left',
-              columns: [
-                {
-                  width: 125,
-                  text: 'Repuestos:'
-                },
-                {
-                  text: '[         ]'
-                }
-              ]
-
-            },
-            {
-              style: 'espacioMarca',
-              alignment: 'left',
-              columns: [
-                {
-                  width: 125,
-                  text: 'Gata:'
-                },
-                {
-                  text: '[         ]'
-                }
-              ]
-
-            },
-            {
-              style: 'espacioMarca',
-              alignment: 'left',
-              columns: [
-                {
-                  width: 125,
-                  text: 'Llave Rana:'
-                },
-                {
-                  text: '[         ]'
-                }
-              ]
-
-            },
-            {
-              style: 'espacioMarca',
-              alignment: 'left',
-              columns: [
-                {
-                  width: 125,
-                  text: 'Maletin:'
-                },
-                {
-                  text: '[         ]'
-                }
-              ]
-
-            },
-            {
-              style: 'espacioMarca',
-              alignment: 'left',
-              columns: [
-                {
-                  width: 125,
-                  text: 'Linterna de Mano:'
-                },
-                {
-                  text: '[         ]'
-                }
-              ]
-
-            },
-            {
-              style: 'espacioMarca',
-              alignment: 'left',
-              columns: [
-                {
-                  width: 125,
-                  text: '2 Destornilladores:'
-                },
-                {
-                  text: '[         ]'
-                }
-              ]
-
-            },
-            {
-              style: 'espacioMarca',
-              alignment: 'left',
-              columns: [
-                {
-                  width: 125,
-                  text: '1 Alicate:'
-                },
-                {
-                  text: '[         ]'
-                }
-              ]
-
-            },
-            {
-              style: 'espacioMarca',
-              alignment: 'left',
-              columns: [
-                {
-                  width: 125,
-                  text: 'Extintor:'
-                },
-                {
-                  text: '[         ]'
-                }
-              ]
-
-            },
-            {
-              style: 'espacioMarca',
-              alignment: 'left',
-              columns: [
-                {
-                  width: 125,
-                  text: 'Chaleco:'
-                },
-                {
-                  text: '[         ]'
-                }
-              ]
-
-            },
-            {
-              style: 'espacioMarca',
-              alignment: 'left',
-              columns: [
-                {
-                  width: 125,
-                  text: 'Triángulo:'
-                },
-                {
-                  text: '[         ]'
-                }
-              ]
-
-            },
-            {
-              style: 'espacioMarca',
-              alignment: 'left',
-              columns: [
-                {
-                  width: 125,
-                  text: 'Lagartos:'
-                },
-                {
-                  text: '[         ]'
-                }
-              ]
-
-            },
             [
-              { style: 'indice',
-                text:'Indice'
-              },
-             [
+
               {
-                columns:[
-                  {                  
-                      width: 55,
-                      text: 'Rayón:'
-                    },
-                    {
-                      text: '.....'                    
-                  },
-                  {                  
-                    width: 55,
-                    text: 'Golpe:'
+                style: 'espacioMarca',
+                alignment: 'left',
+                columns: [
+                  {
+                    width: 125,
+                    text: 'Radio FM/AM:'
                   },
                   {
-                    text: 'Ø'                    
-                },
+                    text: '[         ]'
+                  }
                 ]
-              }
-             ],
+
+              },
+              {
+                style: 'espacioMarca',
+                alignment: 'left',
+                columns: [
+                  {
+                    width: 125,
+                    text: 'Repuestos:'
+                  },
+                  {
+                    text: '[         ]'
+                  }
+                ]
+
+              },
+              {
+                style: 'espacioMarca',
+                alignment: 'left',
+                columns: [
+                  {
+                    width: 125,
+                    text: 'Gata:'
+                  },
+                  {
+                    text: '[         ]'
+                  }
+                ]
+
+              },
+              {
+                style: 'espacioMarca',
+                alignment: 'left',
+                columns: [
+                  {
+                    width: 125,
+                    text: 'Llave Rana:'
+                  },
+                  {
+                    text: '[         ]'
+                  }
+                ]
+
+              },
+              {
+                style: 'espacioMarca',
+                alignment: 'left',
+                columns: [
+                  {
+                    width: 125,
+                    text: 'Maletin:'
+                  },
+                  {
+                    text: '[         ]'
+                  }
+                ]
+
+              },
+              {
+                style: 'espacioMarca',
+                alignment: 'left',
+                columns: [
+                  {
+                    width: 125,
+                    text: 'Linterna de Mano:'
+                  },
+                  {
+                    text: '[         ]'
+                  }
+                ]
+
+              },
+              {
+                style: 'espacioMarca',
+                alignment: 'left',
+                columns: [
+                  {
+                    width: 125,
+                    text: '2 Destornilladores:'
+                  },
+                  {
+                    text: '[         ]'
+                  }
+                ]
+
+              },
+              {
+                style: 'espacioMarca',
+                alignment: 'left',
+                columns: [
+                  {
+                    width: 125,
+                    text: '1 Alicate:'
+                  },
+                  {
+                    text: '[         ]'
+                  }
+                ]
+
+              },
+              {
+                style: 'espacioMarca',
+                alignment: 'left',
+                columns: [
+                  {
+                    width: 125,
+                    text: 'Extintor:'
+                  },
+                  {
+                    text: '[         ]'
+                  }
+                ]
+
+              },
+              {
+                style: 'espacioMarca',
+                alignment: 'left',
+                columns: [
+                  {
+                    width: 125,
+                    text: 'Chaleco:'
+                  },
+                  {
+                    text: '[         ]'
+                  }
+                ]
+
+              },
+              {
+                style: 'espacioMarca',
+                alignment: 'left',
+                columns: [
+                  {
+                    width: 125,
+                    text: 'Triángulo:'
+                  },
+                  {
+                    text: '[         ]'
+                  }
+                ]
+
+              },
+              {
+                style: 'espacioMarca',
+                alignment: 'left',
+                columns: [
+                  {
+                    width: 125,
+                    text: 'Lagartos:'
+                  },
+                  {
+                    text: '[         ]'
+                  }
+                ]
+
+              },
               [
                 {
-                  columns: [
-                    {
-                      width: 70,
-                      text: 'Raspadura:'
-                    },
-                    {
-                      text: 'X'
-                    },
-                    {
-                      width: 70,
-                      text: 'Abolladura:'
-                    },
-                    {
-                      text: 'O'
-                    }
-                  ]
+                  style: 'indice',
+                  text: 'Indice'
                 },
-              ]
+                [
+                  {
+                    columns: [
+                      {
+                        width: 55,
+                        text: 'Rayón:'
+                      },
+                      {
+                        text: '.....'
+                      },
+                      {
+                        width: 55,
+                        text: 'Golpe:'
+                      },
+                      {
+                        text: 'Ø'
+                      },
+                    ]
+                  }
+                ],
+                [
+                  {
+                    columns: [
+                      {
+                        width: 70,
+                        text: 'Raspadura:'
+                      },
+                      {
+                        text: 'X'
+                      },
+                      {
+                        width: 70,
+                        text: 'Abolladura:'
+                      },
+                      {
+                        text: 'O'
+                      }
+                    ]
+                  },
+                ]
 
-            ],
+              ],
             ]
 
           ]
         },
         { text: 'Recección del Vehículo', style: 'header2' },
-        
-                {
-                  style: 'entrega',
-                  alignment: 'left',
-                  columns: [
-                    {
-                      width: 50,
-                      text: 'Fecha:'
-                    },
-                    {
-                      text: '______________________________'
-                    },
-                    {
-                      width: 50,
-                      text: 'Hora:'
-                    },
-                    {
-                      text: '______________________________'
-                    }
-                  ]
-                },
-                {
-                  style: 'entrega',
-                  alignment: 'left',
-                  columns: [
-                    {
-                      width: 100,
-                      text: 'Entregado por:'
-                    },
-                    {
-                      text: '______________________________'
-                    },
-                    {
-                      width: 50,
-                      text: 'Firma:'
-                    },
-                    {
-                      text: '______________________________'
-                    }
-                  ]
-                },
-                {
-                  style: 'entrega',
-                  alignment: 'left',
-                  columns: [
-                    {
-                      width: 90,
-                      text: 'Recivido por:'
-                    },
-                    {
-                      text: '______________________________'
-                    },
-                    {
-                      width: 50,
-                      text: 'Firma:'
-                    },
-                    {
-                      text: '______________________________'
-                    }
-                  ]
-                },
-                {
-                  style: 'entrega',
-                  alignment: 'left',
-                  columns: [
-                    {
-                      width: 80,
-                      text: 'Kilometraje:'
-                    },
-                    {
-                      text: '______________________________'
-                    },
-                    {
-                      width: 80,
-                      text: 'Combustible:'
-                    },
-                    {
-                      style: 'tablaCombustible',
-                      table: {
-                        body: [
-                          ['1/4', '1/2', '3/4', 'lleno'],
-        
-                        ]
-                      }
-                    }
-                  ]
-                },
-                {
-                  style: 'titulo3',
-                  text: 'Estado del Vehiculo al momento de la entrega'
-                },
-        
-                {
-                  style: 'herramientas',
-                  columns: [
-        
-                    {
-        
-                      text: 'IMAGEN DE LOS CARROS'
-                    },
-                    [ 
-                      
-                      {
-                      style: 'espacioMarca',
-                      alignment: 'left',
-                      columns: [
-                        {
-                          width: 125,
-                          text: 'Radio FM/AM:'
-                        },
-                        {
-                          text: '[         ]'
-                        }
-                      ]
-        
-                    },
-                    {
-                      style: 'espacioMarca',
-                      alignment: 'left',
-                      columns: [
-                        {
-                          width: 125,
-                          text: 'Repuestos:'
-                        },
-                        {
-                          text: '[         ]'
-                        }
-                      ]
-        
-                    },
-                    {
-                      style: 'espacioMarca',
-                      alignment: 'left',
-                      columns: [
-                        {
-                          width: 125,
-                          text: 'Gata:'
-                        },
-                        {
-                          text: '[         ]'
-                        }
-                      ]
-        
-                    },
-                    {
-                      style: 'espacioMarca',
-                      alignment: 'left',
-                      columns: [
-                        {
-                          width: 125,
-                          text: 'Llave Rana:'
-                        },
-                        {
-                          text: '[         ]'
-                        }
-                      ]
-        
-                    },
-                    {
-                      style: 'espacioMarca',
-                      alignment: 'left',
-                      columns: [
-                        {
-                          width: 125,
-                          text: 'Maletin:'
-                        },
-                        {
-                          text: '[         ]'
-                        }
-                      ]
-        
-                    },
-                    {
-                      style: 'espacioMarca',
-                      alignment: 'left',
-                      columns: [
-                        {
-                          width: 125,
-                          text: 'Linterna de Mano:'
-                        },
-                        {
-                          text: '[         ]'
-                        }
-                      ]
-        
-                    },
-                    {
-                      style: 'espacioMarca',
-                      alignment: 'left',
-                      columns: [
-                        {
-                          width: 125,
-                          text: '2 Destornilladores:'
-                        },
-                        {
-                          text: '[         ]'
-                        }
-                      ]
-        
-                    },
-                    {
-                      style: 'espacioMarca',
-                      alignment: 'left',
-                      columns: [
-                        {
-                          width: 125,
-                          text: '1 Alicate:'
-                        },
-                        {
-                          text: '[         ]'
-                        }
-                      ]
-        
-                    },
-                    {
-                      style: 'espacioMarca',
-                      alignment: 'left',
-                      columns: [
-                        {
-                          width: 125,
-                          text: 'Extintor:'
-                        },
-                        {
-                          text: '[         ]'
-                        }
-                      ]
-        
-                    },
-                    {
-                      style: 'espacioMarca',
-                      alignment: 'left',
-                      columns: [
-                        {
-                          width: 125,
-                          text: 'Chaleco:'
-                        },
-                        {
-                          text: '[         ]'
-                        }
-                      ]
-        
-                    },
-                    {
-                      style: 'espacioMarca',
-                      alignment: 'left',
-                      columns: [
-                        {
-                          width: 125,
-                          text: 'Triángulo:'
-                        },
-                        {
-                          text: '[         ]'
-                        }
-                      ]
-        
-                    },
-                    {
-                      style: 'espacioMarca',
-                      alignment: 'left',
-                      columns: [
-                        {
-                          width: 125,
-                          text: 'Lagartos:'
-                        },
-                        {
-                          text: '[         ]'
-                        }
-                      ]
-        
-                    },
-                    [
-                      { style: 'indice',
-                        text:'Indice'
-                      },
-                     [
-                      {
-                        columns:[
-                          {                  
-                              width: 55,
-                              text: 'Rayón:'
-                            },
-                            {
-                              text: '.....'                    
-                          },
-                          {                  
-                            width: 55,
-                            text: 'Golpe:'
-                          },
-                          {
-                            text: 'Ø'                    
-                        },
-                        ]
-                      }
-                     ],
-                      [
-                        {
-                          columns: [
-                            {
-                              width: 70,
-                              text: 'Raspadura:'
-                            },
-                            {
-                              text: 'X'
-                            },
-                            {
-                              width: 70,
-                              text: 'Abolladura:'
-                            },
-                            {
-                              text: 'O'
-                            }
-                          ]
-                        },
-                      ]
-        
-                    ],
-                    ]
-        
-                  ]
-                },
-                {
-                  style: 'titulo5',
-                  text: 'Observaciones'
-                },
-                {width: '*',
-                  text: '_______________________________________________________________________________________________'
-                },
-                {width: '*',
-                text: '_______________________________________________________________________________________________'
-              },
-              {width: '*',
-              text: '_______________________________________________________________________________________________'
+
+        {
+          style: 'entrega',
+          alignment: 'left',
+          columns: [
+            {
+              width: 50,
+              text: 'Fecha:'
             },
-            {width: '*',
-            text: '_______________________________________________________________________________________________'
-          },
-          {width: '*',
+            {
+              text: '______________________________'
+            },
+            {
+              width: 50,
+              text: 'Hora:'
+            },
+            {
+              text: '______________________________'
+            }
+          ]
+        },
+        {
+          style: 'entrega',
+          alignment: 'left',
+          columns: [
+            {
+              width: 100,
+              text: 'Entregado por:'
+            },
+            {
+              text: '______________________________'
+            },
+            {
+              width: 50,
+              text: 'Firma:'
+            },
+            {
+              text: '______________________________'
+            }
+          ]
+        },
+        {
+          style: 'entrega',
+          alignment: 'left',
+          columns: [
+            {
+              width: 90,
+              text: 'Recivido por:'
+            },
+            {
+              text: '______________________________'
+            },
+            {
+              width: 50,
+              text: 'Firma:'
+            },
+            {
+              text: '______________________________'
+            }
+          ]
+        },
+        {
+          style: 'entrega',
+          alignment: 'left',
+          columns: [
+            {
+              width: 80,
+              text: 'Kilometraje:'
+            },
+            {
+              text: '______________________________'
+            },
+            {
+              width: 80,
+              text: 'Combustible:'
+            },
+            {
+              style: 'tablaCombustible',
+              table: {
+                body: [
+                  ['1/4', '1/2', '3/4', 'lleno'],
+
+                ]
+              }
+            }
+          ]
+        },
+        {
+          style: 'titulo3',
+          text: 'Estado del Vehiculo al momento de la entrega'
+        },
+
+        {
+          style: 'herramientas',
+          columns: [
+
+            {
+
+              text: 'IMAGEN DE LOS CARROS'
+            },
+            [
+
+              {
+                style: 'espacioMarca',
+                alignment: 'left',
+                columns: [
+                  {
+                    width: 125,
+                    text: 'Radio FM/AM:'
+                  },
+                  {
+                    text: '[         ]'
+                  }
+                ]
+
+              },
+              {
+                style: 'espacioMarca',
+                alignment: 'left',
+                columns: [
+                  {
+                    width: 125,
+                    text: 'Repuestos:'
+                  },
+                  {
+                    text: '[         ]'
+                  }
+                ]
+
+              },
+              {
+                style: 'espacioMarca',
+                alignment: 'left',
+                columns: [
+                  {
+                    width: 125,
+                    text: 'Gata:'
+                  },
+                  {
+                    text: '[         ]'
+                  }
+                ]
+
+              },
+              {
+                style: 'espacioMarca',
+                alignment: 'left',
+                columns: [
+                  {
+                    width: 125,
+                    text: 'Llave Rana:'
+                  },
+                  {
+                    text: '[         ]'
+                  }
+                ]
+
+              },
+              {
+                style: 'espacioMarca',
+                alignment: 'left',
+                columns: [
+                  {
+                    width: 125,
+                    text: 'Maletin:'
+                  },
+                  {
+                    text: '[         ]'
+                  }
+                ]
+
+              },
+              {
+                style: 'espacioMarca',
+                alignment: 'left',
+                columns: [
+                  {
+                    width: 125,
+                    text: 'Linterna de Mano:'
+                  },
+                  {
+                    text: '[         ]'
+                  }
+                ]
+
+              },
+              {
+                style: 'espacioMarca',
+                alignment: 'left',
+                columns: [
+                  {
+                    width: 125,
+                    text: '2 Destornilladores:'
+                  },
+                  {
+                    text: '[         ]'
+                  }
+                ]
+
+              },
+              {
+                style: 'espacioMarca',
+                alignment: 'left',
+                columns: [
+                  {
+                    width: 125,
+                    text: '1 Alicate:'
+                  },
+                  {
+                    text: '[         ]'
+                  }
+                ]
+
+              },
+              {
+                style: 'espacioMarca',
+                alignment: 'left',
+                columns: [
+                  {
+                    width: 125,
+                    text: 'Extintor:'
+                  },
+                  {
+                    text: '[         ]'
+                  }
+                ]
+
+              },
+              {
+                style: 'espacioMarca',
+                alignment: 'left',
+                columns: [
+                  {
+                    width: 125,
+                    text: 'Chaleco:'
+                  },
+                  {
+                    text: '[         ]'
+                  }
+                ]
+
+              },
+              {
+                style: 'espacioMarca',
+                alignment: 'left',
+                columns: [
+                  {
+                    width: 125,
+                    text: 'Triángulo:'
+                  },
+                  {
+                    text: '[         ]'
+                  }
+                ]
+
+              },
+              {
+                style: 'espacioMarca',
+                alignment: 'left',
+                columns: [
+                  {
+                    width: 125,
+                    text: 'Lagartos:'
+                  },
+                  {
+                    text: '[         ]'
+                  }
+                ]
+
+              },
+              [
+                {
+                  style: 'indice',
+                  text: 'Indice'
+                },
+                [
+                  {
+                    columns: [
+                      {
+                        width: 55,
+                        text: 'Rayón:'
+                      },
+                      {
+                        text: '.....'
+                      },
+                      {
+                        width: 55,
+                        text: 'Golpe:'
+                      },
+                      {
+                        text: 'Ø'
+                      },
+                    ]
+                  }
+                ],
+                [
+                  {
+                    columns: [
+                      {
+                        width: 70,
+                        text: 'Raspadura:'
+                      },
+                      {
+                        text: 'X'
+                      },
+                      {
+                        width: 70,
+                        text: 'Abolladura:'
+                      },
+                      {
+                        text: 'O'
+                      }
+                    ]
+                  },
+                ]
+
+              ],
+            ]
+
+          ]
+        },
+        {
+          style: 'titulo5',
+          text: 'Observaciones'
+        },
+        {
+          width: '*',
           text: '_______________________________________________________________________________________________'
         },
-        {width: '*',
-        text: '_______________________________________________________________________________________________'
-      },
-      {
-        style: 'titulo4',
-        text: 'Nota: Es obligación de todo usuario revisar el vehículoantes de salir y al regresar, así como mantener el aseo del mismo'
-      },
-      
+        {
+          width: '*',
+          text: '_______________________________________________________________________________________________'
+        },
+        {
+          width: '*',
+          text: '_______________________________________________________________________________________________'
+        },
+        {
+          width: '*',
+          text: '_______________________________________________________________________________________________'
+        },
+        {
+          width: '*',
+          text: '_______________________________________________________________________________________________'
+        },
+        {
+          width: '*',
+          text: '_______________________________________________________________________________________________'
+        },
+        {
+          style: 'titulo4',
+          text: 'Nota: Es obligación de todo usuario revisar el vehículoantes de salir y al regresar, así como mantener el aseo del mismo'
+        },
+
       ], styles: {
         header: {
           fontSize: 18,
@@ -1031,18 +1043,18 @@ export class SolicitudVehiculoComponent implements OnInit {
           fontSize: 12,
           margin: [60, 0, 0, 1]
         },
-        indice:{
-          margin: [0, 3,0,0]
+        indice: {
+          margin: [0, 3, 0, 0]
         },
         titulo4: {
           fontSize: 14,
           bold: true,
-          margin: [0,80,0,0]
+          margin: [0, 80, 0, 0]
         },
         titulo5: {
           fontSize: 14,
           bold: true,
-          margin: [0,40,0,0]
+          margin: [0, 40, 0, 0]
         }
       }
     };
@@ -1063,121 +1075,9 @@ export class SolicitudVehiculoComponent implements OnInit {
     this.pdfmake.download(customName);
   }
 
-
-  // crearPDF(solicitudVehiculo:any) {
-
-  //   const pdf = new jsPDF();
-  //   const htmlTitulo = `<h2 style="text-align: center;"> Traslado y uso de Vehículos</h2>`;
-  //   const htmlTitulo2 = `<h2 style="text-align: center;"> Entrega del Vehiculo </h2>`;
-  //   const htmlTitulo3 = `<h3 style="text-align: center;"> Estado del Vehiculo al momento de la entrega</h3>`;
-  //   const htmlTitulo4 = `<h2 style="text-align: center;"> Recepción de Vehículo</h2>`;
-  //   const htmlTitulo5 = `<h3 style="text-align: center;"> Observaciones  </h3>`;
-  //   const htmlTitulo6 = `<h3 style="text-align: center;"> Nota: Es obligación de todo usuario revisar el vehículoantes de salir  </h3>`;
-  //   const htmlTitulo7 = `<h3> y al regresar, así como mantener el aseo del mismo</h3>`;
-
-  //   let logo = new Image();
-  //   logo.src = '../assets/img/logo.png';
-  //   pdf.addImage(logo, 'PNG', 65, 14, 80, 15);
-
-
-
-  //   pdf.setFontSize(12);
-
-  //   pdf.fromHTML(htmlTitulo, 68, 30, {});
-  //   // pdf.fromHTML(htmlDatos, 20,50 );   
-  //   console.log(solicitudVehiculo);
-  //   let fecha = solicitudVehiculo.fecha.year + '/' + solicitudVehiculo.fecha.month + '/' + solicitudVehiculo.fecha.day;
-  //   let horaSalida = solicitudVehiculo.horaSalida.hour + ':' + solicitudVehiculo.horaSalida.minute;
-  //   let horaRegreso = solicitudVehiculo.horaRegreso.hour + ':' + solicitudVehiculo.horaRegreso.minute;
-  //   let acompanantes='';
-  //   for(let i= 0; i< solicitudVehiculo.acompanantes.length; i++){
-  //     acompanantes+= solicitudVehiculo.acompanantes[i].nombre+' '+ solicitudVehiculo.acompanantes[i].apellidos+ ' ';
-  //   }
-
-
-  //   //Sección de los datos de la solicitud
-  //   pdf.text(20, 60, 'Placa:'); pdf.text(70, 60, solicitudVehiculo.vehiculo);             pdf.text(130, 60, 'Fecha:'); pdf.text(150, 60, fecha);
-  //   pdf.text(20, 70, 'Hora Salida:'); pdf.text(70, 70, horaSalida);
-  //   pdf.text(20, 80, 'Hora Regreso:'); pdf.text(70,80, horaRegreso);
-  //   pdf.text(20, 90, 'Motivo de la Gira:'); pdf.text(70,90, solicitudVehiculo.descripcion);
-  //   pdf.text(20, 100, 'Destino:');  pdf.text(70,100, solicitudVehiculo.destino);
-  //   pdf.text(20, 110, 'Acompañantes:'); pdf.text(70,110, acompanantes);
-  //   pdf.text(20, 120, 'Encargado:');  pdf.text(70,120,'Esteban Solis' );                   pdf.text(130, 120, 'Firma:'); pdf.line(145, 120, 200,120)
-
-  //   //Seccion de los datos de entrega de vehículo
-
-  //   pdf.fromHTML(htmlTitulo2, 80, 125, {});
-
-  //   pdf.text(20, 150, 'Fecha:'); pdf.line(35, 150, 100, 150);                         pdf.text(130, 150, 'Hora:'); pdf.line(145, 150, 200,150)
-
-  //   pdf.text(20, 160, 'Entregado por:'); pdf.line(50, 160, 125, 160);                 pdf.text(130, 160, 'Firma:'); pdf.line(145, 160, 200,160)
-
-
-  //   pdf.text(20, 170, 'Recibido por:'); pdf.line(47, 170, 125, 170);                   pdf.text(130, 170, 'Firma:'); pdf.line(145, 170, 200,170)
-
-  //   pdf.text(20, 180, 'Kilometraje:'); pdf.line(44, 180, 95, 180);                   pdf.text(100, 180, 'Nivel de Combustible:'); 
-
-  //   let combustible = new Image();
-  //   combustible.src=  '../assets/img/pruebas/3.png';
-
-  //   pdf.addImage(combustible, 'PNG', 150, 175, 60, 10);
-
-  //   pdf.fromHTML(htmlTitulo3, 20, 185, {});
-
-  //   let carro = new Image();
-  //   carro.src=  '../assets/img/pruebas/1.png';
-
-  //   pdf.addImage(carro, 'PNG', 20, 200, 80, 80);
-
-  //   let componentesCarro = new Image();
-  //   componentesCarro.src=  '../assets/img/pruebas/2.png';
-
-  //   pdf.addImage(componentesCarro, 'PNG', 120, 200, 80, 80);
-
-  //   //Seunda Pagina 
-
-  //   pdf.addPage();
-  //   pdf.addImage(logo, 'PNG', 65, 14, 80, 15);
-  //   pdf.fromHTML(htmlTitulo4, 68, 30, {});
-  //   pdf.text(20, 60, 'Fecha:'); pdf.line(35, 60, 100, 60);                         pdf.text(130, 60, 'Hora:'); pdf.line(145, 60, 200,60)
-
-  //   pdf.text(20, 70, 'Entregado por:'); pdf.line(50, 70, 125, 70);                 pdf.text(130, 70, 'Firma:'); pdf.line(145, 70, 200,70)
-
-
-  //   pdf.text(20, 80, 'Recibido por:'); pdf.line(47, 80, 125, 80);                   pdf.text(130, 80, 'Firma:'); pdf.line(145, 80, 200,80)
-
-  //   pdf.text(20, 90, 'Kilometraje:'); pdf.line(44, 90, 95, 90);                   pdf.text(100, 90, 'Nivel de Combustible:'); 
-  //   pdf.addImage(combustible, 'PNG', 150, 85, 60, 10);
-
-  //   pdf.fromHTML(htmlTitulo3, 20, 95, {});
-
-  //   pdf.addImage(carro, 'PNG', 20, 115, 80, 80);
-  //   pdf.addImage(componentesCarro, 'PNG', 120, 115, 80, 80);
-
-  //   pdf.fromHTML(htmlTitulo5, 20, 200, {});
-
-  //   pdf.line(20, 220, 200, 220); 
-  //   pdf.line(20, 225, 200, 225); 
-  //   pdf.line(20, 230, 200, 230); 
-  //   pdf.line(20, 235, 200, 235); 
-  //   pdf.line(20, 240, 200, 240); 
-  //   pdf.line(20, 245, 200, 245); 
-  //   pdf.line(20, 250, 200, 250); 
-
-  //   pdf.fromHTML(htmlTitulo6, 20, 265, {});
-  //   pdf.fromHTML(htmlTitulo7, 20, 270, {});
-
-
-
-
-
-
-
-  //   pdf.save('prueba.pdf');
-
-  // }
   cancelarAccion() {
     //this.crearPdf();
+    
     this.obtenerSolicitudes(new Date(), false);
     this.obtenerSolicitudVehiculos();
     this.mr.close();
@@ -1453,10 +1353,10 @@ export class SolicitudVehiculoComponent implements OnInit {
                         let solicitud = response.message;
                         this.msjExitoso("Solicitud agregada exitosamente");
                         console.log(solicitud);
-                          this.enviarEmail(solicitud);
+                        this.enviarEmail(solicitud);
                         console.log('antes del crear pdf');
-                        this.crearPdf(solicitud);
-                       
+                        //this.crearPdf(solicitud);
+                        this.crearPDF.generarPDF(solicitud);
                         this.solicitudVehiculo = new SolicitudVehiculo('', '', '', null, null, null, '', '', '', null, '', '');
                         this.obtenerSolicitudes(this.date, false);
                         this.obtenerSolicitudVehiculos();
