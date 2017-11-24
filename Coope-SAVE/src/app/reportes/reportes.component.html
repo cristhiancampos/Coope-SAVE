@@ -1,33 +1,33 @@
 <div class="container-fluid" style="margin-top: 4%; padding: 0 10% 0 10%">
-    <div class="row" >
-        <div class="col-md-4">
+  <div class="row">
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-4">
+      <div class="panel with-nav-tabs panel-primary">
+        <div class="panel-heading">
+          <ul class="nav nav-pills nav-fill nav-tabs">
+
+            <li class="nav-item">
+              <a class="nav-link active" href="#tab1primary" data-toggle="tab" (click)="solicitud(1)">Salas</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#tab2primary" data-toggle="tab" (click)="solicitud(2)">Vehículos</a>
+            </li>
+          </ul>
         </div>
-        <div class="col-md-4">
-          <div class="panel with-nav-tabs panel-primary">
-            <div class="panel-heading">
-              <ul class="nav nav-pills nav-fill nav-tabs">
-    
-                <li class="nav-item">
-                  <a  id="btn-solicitud" class="nav-link active" href="#tab1primary" data-toggle="tab" (click)="solicitud(1)" >Salas</a>
-                </li>
-                <li class="nav-item">
-                  <a id="btn-lista" class="nav-link" href="#tab2primary" data-toggle="tab" (click)="solicitud(2)">Vehículos</a>
-                </li>
-              </ul>
+        <div class="panel-body">
+          <div class="tab-content">
+            <div class="tab-pane fade in active" id="tab1primary">
             </div>
-            <div class="panel-body">
-              <div class="tab-content">
-                <div class="tab-pane fade in active" id="tab1primary">
-                </div>
-                <div class="tab-pane fade" id="tab2primary"></div>
-              </div>
-            </div>
+            <div class="tab-pane fade" id="tab2primary"></div>
           </div>
         </div>
-        <div class="col-md-4">
-        </div>
-    
       </div>
+    </div>
+    <div class="col-md-4">
+    </div>
+
+  </div>
 
   <section *ngIf="reporteSala">
     <br>
@@ -36,11 +36,16 @@
         <h3> Reportes - Solicitudes de Salas</h3>
       </div>
       <div class="col-md-4">
-        <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px" (click)="openPdf()">
-          <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+        <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px" (click)="openPdf()" 
+        [disabled]="solicitudesSalasFiltradas ==undefined || solicitudesSalasFiltradas.length==0" data-toggle="tooltip" data-placement="top" title="Ver reporte en PDF">
+        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
         </button>
-        <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px" (click)="printPdf()"><i class="fa fa-print" aria-hidden="true"></i></button>
-        <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px" (click)="downloadPDF()"><i class="fa fa-download" aria-hidden="true"></i></button>
+        <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px" (click)="printPdf()" 
+        [disabled]="solicitudesSalasFiltradas ==undefined || solicitudesSalasFiltradas.length==0" data-toggle="tooltip" data-placement="top" title="Imprimir reporte">
+        <i class="fa fa-print" aria-hidden="true"></i></button>
+        <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px" (click)="downloadPDF()"
+         [disabled]="solicitudesSalasFiltradas ==undefined || solicitudesSalasFiltradas.length==0" data-toggle="tooltip" data-placement="top" title="Descargar reporte">
+         <i class="fa fa-download" aria-hidden="true"></i></button>
       </div>
     </div>
     <div class="row">
@@ -54,7 +59,7 @@
         <div class="form-group">
           <div class="input-group">
             <input class="form-control" placeholder="Sala" name="Sala" [(ngModel)]="salaFiltro" #sala [disabled]="true" required>
-            <button class="btn btn-primary input-group-addon" type="button" (click)="abrir(modalSalas)" style="background: #0069d9;color: #fff">
+            <button class="btn btn-primary input-group-addon" type="button" (click)="abrir(modalSalas)" style="background: #0069d9;color: #fff" data-toggle="tooltip" data-placement="top" title="Seleccionar Sala">
               <i class="fa fa-users" aria-hidden="true"></i>
              </button>
           </div>
@@ -68,7 +73,7 @@
           <div class="input-group">
             <input class="form-control" placeholder="Inicia" name="dI" [(ngModel)]="modelFechaInicio" ngbDatepicker #dI="ngbDatepicker"
               [disabled]="true" required>
-            <button class="input-group-addon" (click)="dI.toggle()" type="button"  style="background: #0069d9;color: #fff">
+            <button class="input-group-addon" (click)="dI.toggle()" type="button" style="background: #0069d9;color: #fff" data-toggle="tooltip" data-placement="top" title="Fecha de Inicio">
               <i class="fa fa-calendar" aria-hidden="true"></i>
               </button>
           </div>
@@ -80,7 +85,7 @@
           <div class="input-group">
             <input class="form-control" placeholder="Termina" name="dF" [(ngModel)]="modelFechaFinal" ngbDatepicker #dF="ngbDatepicker"
               [disabled]="true" required>
-            <button class="input-group-addon" (click)="dF.toggle()" type="button"  style="background: #0069d9;color: #fff">
+            <button class="input-group-addon" (click)="dF.toggle()" type="button" style="background: #0069d9;color: #fff" data-toggle="tooltip" data-placement="top" title="Fecha Final">
               <i class="fa fa-calendar" aria-hidden="true"></i>
             </button>
           </div>
@@ -89,8 +94,8 @@
 
       <div class="col-md-2">
         <div class="form-group">
-            <select #solicitante="ngModel" name="solicitante" [(ngModel)]="solicitanteFiltro" class="selectpicker" 
-            style="width: 100%;padding: .5rem .75rem;" required  >  
+          <select #solicitante="ngModel" name="solicitante" [(ngModel)]="solicitanteFiltro" class="selectpicker" style="width: 100%;padding: .5rem .75rem;"
+            required>  
               <option value="" selected disabled >Solicitante</option>
                   <option *ngFor="let usuario of usuarios;">{{usuario.nombre}} {{usuario.apellidos}}</option>
                 </select>
@@ -99,8 +104,8 @@
 
       <div class="col-md-2">
         <div class="form-group">
-            <select #departamento="ngModel" name="departamento" [(ngModel)]="departamentoFiltro" class="selectpicker" 
-            style="width: 100%;padding: .5rem .75rem;" required  >  
+          <select #departamento="ngModel" name="departamento" [(ngModel)]="departamentoFiltro" class="selectpicker" style="width: 100%;padding: .5rem .75rem;"
+            required>  
               <option value="" selected disabled >Departamento</option>
                   <option *ngFor="let departamento of departamentos;">{{departamento.nombre}}</option>
                 </select>
@@ -110,9 +115,9 @@
 
       <div class="col-md-2">
         <div class="form-group">
-          <button type="button" class="btn btn-success"  (click)="fitlroReporteSalas()">
+          <button type="button" class="btn btn-success" (click)="fitlroReporteSalas()" data-toggle="tooltip" data-placement="top" title="Realizar búsqueda">
             <i class="fa fa-search" aria-hidden="true" ></i></button>
-            <button type="button" class="btn btn-success" (click)="limpiarFiltros()">
+          <button type="button" class="btn btn-success" (click)="limpiarFiltros()" data-toggle="tooltip" data-placement="top" title="Limpiar filtros">
                 <i class="fa fa-refresh" aria-hidden="true" ></i></button>
         </div>
       </div>
@@ -128,7 +133,7 @@
               <th class="th-color">Sala<a (click)="ordenarSolicitudesSala('Sala')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
               <th class="th-color">Solicitante<a (click)="ordenarSolicitudesSala('Solicitante')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
               <th class="th-color">Fecha<a (click)="ordenarSolicitudesSala('Fecha')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
-              <th class="th-color">Horario<a (click)="ordenarSolicitudesSala('Horario')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>              
+              <th class="th-color">Horario<a (click)="ordenarSolicitudesSala('Horario')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
               <th class="th-color">Motivo <a (click)="ordenarSolicitudesSala('Motivo')"> <i class="fa fa-sort" aria-hidden="true"></i></a></th>
             </tr>
           </thead>
@@ -138,24 +143,19 @@
               <th>{{sala.sala}}</th>
               <th>{{getNombreUsuario(sala.usuario)}}</th>
               <th>{{sala.fecha.day}}/{{sala.fecha.month}}/{{sala.fecha.year}}</th>
-               <th>{{sala.horaInicio.hour}}:{{sala.horaInicio.minute}} - {{sala.horaFin.hour}}: {{sala.horaFin.minute}}</th>
+              <th>{{sala.horaInicio.hour}}:{{sala.horaInicio.minute}} - {{sala.horaFin.hour}}: {{sala.horaFin.minute}}</th>
               <th>{{sala.descripcion}}</th>
             </tr>
           </tbody>
         </table>
       </div>
-      <h5 *ngIf='solicitudesSalasFiltradas ==undefined || solicitudesSalasFiltradas.length==0'>No existen coincidencias para esta busqueda.<br></h5>
-      <hr *ngIf='solicitudesSalasFiltradas ==undefined || solicitudesSalasFiltradas.length==0'> 
+      <h6 *ngIf='solicitudesSalasFiltradas ==undefined || solicitudesSalasFiltradas.length==0'>{{mensajeBusqueda}}  <i class="fa fa-search" aria-hidden="true" ></i><br></h6>
+      <hr *ngIf='solicitudesSalasFiltradas ==undefined || solicitudesSalasFiltradas.length==0'>
     </div>
     <!-- paginador-->
 
-    <pagination-controls (pageChange)="p =$event">
-
-    </pagination-controls>
-
-
+    <pagination-controls (pageChange)="p =$event"> </pagination-controls>
   </section>
-
 
   <section *ngIf="!reporteSala">
     <br>
@@ -164,9 +164,9 @@
         <h3> Reportes - Solicitudes de Vehículos</h3>
       </div>
       <div class="col-md-4">
-        <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
-        <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px"><i class="fa fa-print" aria-hidden="true"></i></button>
-        <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px"><i class="fa fa-download" aria-hidden="true"></i></button>
+        <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px" [disabled]="solicitudesVehiculosFiltradas ==undefined || solicitudesVehiculosFiltradas.length==0" data-toggle="tooltip" data-placement="top" title="Ver reporte en PDF"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
+        <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px" [disabled]="solicitudesVehiculosFiltradas ==undefined || solicitudesVehiculosFiltradas.length==0" data-toggle="tooltip" data-placement="top" title="Imprimir reporte"><i class="fa fa-print" aria-hidden="true"></i></button>
+        <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px" [disabled]="solicitudesVehiculosFiltradas ==undefined || solicitudesVehiculosFiltradas.length==0" data-toggle="tooltip" data-placement="top" title="Descargar reporte"><i class="fa fa-download" aria-hidden="true"></i></button>
       </div>
     </div>
     <div class="row">
@@ -181,7 +181,7 @@
           <div class="input-group">
             <input class="form-control" placeholder="Vehículo" name="vehiculo" [(ngModel)]="vehiculoFiltro" #vehiculo [disabled]="true"
               required>
-            <button class="input-group-addon" type="button" (click)="abrir(modalVehiculos)" style="background: #0069d9;color: #fff" >
+            <button class="input-group-addon" type="button" (click)="abrir(modalVehiculos)" style="background: #0069d9;color: #fff" data-toggle="tooltip" data-placement="top" title="Seleccionar vehículo">
               <i class="fa fa-car" aria-hidden="true"></i>
               </button>
           </div>
@@ -194,8 +194,7 @@
           <div class="input-group">
             <input class="form-control" placeholder="Inicia" name="dI" [(ngModel)]="modelFechaInicioVehiculo" ngbDatepicker #dIV="ngbDatepicker"
               [disabled]="true" required>
-            <button class="input-group-addon" (click)="dIV.toggle()" type="button"
-             style="background: #0069d9;color: #fff">
+            <button class="input-group-addon" (click)="dIV.toggle()" type="button" style="background: #0069d9;color: #fff" data-toggle="tooltip" data-placement="top" title="Fecha de inicio">
              <i class="fa fa-calendar" aria-hidden="true"></i>
             </button>
           </div>
@@ -206,42 +205,41 @@
           <div class="input-group">
             <input class="form-control" placeholder="Termina" name="dF" [(ngModel)]="modelFechaFinalVehiculo" ngbDatepicker #dFV="ngbDatepicker"
               [disabled]="true" required>
-            <button class="input-group-addon" (click)="dFV.toggle()" type="button"
-             style="background: #0069d9;color: #fff">
+            <button class="input-group-addon" (click)="dFV.toggle()" type="button" style="background: #0069d9;color: #fff" data-toggle="tooltip" data-placement="top" title="Fecha final">
              <i class="fa fa-calendar" aria-hidden="true"></i>
             </button>
           </div>
         </div>
       </div>
       <div class="col-md-2">
-          <div class="form-group">
-              <select #solicitanteVehiculo="ngModel" name="solicitanteVehiculo" [(ngModel)]="solicitanteFiltroVehiculo" class="selectpicker" 
-              style="width: 100%;padding: .5rem .75rem;" required  >  
+        <div class="form-group">
+          <select #solicitanteVehiculo="ngModel" name="solicitanteVehiculo" [(ngModel)]="solicitanteFiltroVehiculo" class="selectpicker"
+            style="width: 100%;padding: .5rem .75rem;" required>  
                 <option value="" selected disabled >Solicitante</option>
                     <option *ngFor="let usuario of usuarios;">{{usuario.nombre}} {{usuario.apellidos}}</option>
                   </select>
-          </div>
         </div>
-  
-        <div class="col-md-2">
-          <div class="form-group">
-              <select #departamentoVehiculo="ngModel" name="departamentoVehiculo" [(ngModel)]="departamentoFiltroVehiculo" class="selectpicker" 
-              style="width: 100%;padding: .5rem .75rem;" required  >  
+      </div>
+
+      <div class="col-md-2">
+        <div class="form-group">
+          <select #departamentoVehiculo="ngModel" name="departamentoVehiculo" [(ngModel)]="departamentoFiltroVehiculo" class="selectpicker"
+            style="width: 100%;padding: .5rem .75rem;" required>  
                 <option value="" selected disabled >Departamento</option>
                     <option *ngFor="let departamento of departamentos;">{{departamento.nombre}}</option>
                   </select>
-          </div>
-  
         </div>
 
-        <div class="col-md-2">
-            <div class="form-group">
-              <button type="button" class="btn btn-success"  (click)="fitlroReporteVehiculos()">
+      </div>
+
+      <div class="col-md-2">
+        <div class="form-group">
+          <button type="button" class="btn btn-success" (click)="fitlroReporteVehiculos()" data-toggle="tooltip" data-placement="top" title="Realizar búsqueda">
                 <i class="fa fa-search" aria-hidden="true" ></i></button>
-                <button type="button" class="btn btn-success" (click)="limpiarFiltrosVehiculo()">
+          <button type="button" class="btn btn-success" (click)="limpiarFiltrosVehiculo()" data-toggle="tooltip" data-placement="top" title="Limpiar filtros">
                     <i class="fa fa-refresh" aria-hidden="true" ></i></button>
-            </div>
-          </div>
+        </div>
+      </div>
 
     </div>
     <div class="col-md-12">
@@ -263,26 +261,20 @@
               <th scope="row">{{i+1}}</th>
               <th>{{vehiculo.vehiculo}}</th>
               <th>{{obternerTipoAutomovil(vehiculo.vehiculo)}}</th>
-              <th>{{obternerMarcaAutomovil(vehiculo.vehiculo)}}</th> 
+              <th>{{obternerMarcaAutomovil(vehiculo.vehiculo)}}</th>
               <th>{{getNombreUsuario(vehiculo.usuario)}}</th>
-              <th>{{vehiculo.fecha.day}}/{{vehiculo.fecha.month}}/{{vehiculo.fecha.year}}</th>              
+              <th>{{vehiculo.fecha.day}}/{{vehiculo.fecha.month}}/{{vehiculo.fecha.year}}</th>
               <th>{{vehiculo.destino}}</th>
             </tr>
           </tbody>
         </table>
       </div>
-        <h5 *ngIf='solicitudesVehiculosFiltradas ==undefined || solicitudesVehiculosFiltradas.length==0'>No existen coincidencias para esta busqueda.<br></h5>
-        <hr *ngIf='solicitudesVehiculosFiltradas ==undefined || solicitudesVehiculosFiltradas.length==0'> 
+      <h5 *ngIf='solicitudesVehiculosFiltradas ==undefined || solicitudesVehiculosFiltradas.length==0'>{{mensajeBusquedaVehiculo}}  <i class="fa fa-search" aria-hidden="true" ></i><br></h5>
+      <hr *ngIf='solicitudesVehiculosFiltradas ==undefined || solicitudesVehiculosFiltradas.length==0'>
     </div>
     <!-- paginador-->
-
-    <pagination-controls (pageChange)="p =$event">
-
-    </pagination-controls>
-
-
+   <pagination-controls (pageChange)="p =$event"></pagination-controls>
   </section>
-
 
   <!-- Sección de modal de Salas-->
   <ng-template #modalSalas>
@@ -299,8 +291,8 @@
             <tr>
               <th data-field="state" data-radio="true"></th>
               <th class="th-color">Nombre</th>
-              <th class="th-color" >Cupo</th>
-              <th class="th-color" >Descripción</th>
+              <th class="th-color">Cupo</th>
+              <th class="th-color">Descripción</th>
             </tr>
           </thead>
           <tbody style="font-family: 'Times New Roman', Times, serif">
@@ -312,166 +304,58 @@
             </tr>
           </tbody>
         </table>
-        <pagination-controls (pageChange)="p =$event">
-            
-         </pagination-controls>
-
-         
+        <pagination-controls (pageChange)="p =$event"> </pagination-controls>
       </div>
       <div class="modal-footer">
-          <button type="button" class="btn btn-default btn-modal-can" (click)="cerrar()">Continuar</button>
+        <button type="button" class="btn btn-default btn-modal-can" (click)="cerrar()">Continuar</button>
       </div>
     </div>
   </ng-template>
 
-   <!-- Sección de modal de Vehiculos-->
-   <ng-template #modalVehiculos>
-      <div class="modal-header" style="background: #0069d9;color:#fff">
-        <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Seleccionar Vehículo</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal" (click)="cerrar()"> 
+  <!-- Sección de modal de Vehiculos-->
+  <ng-template #modalVehiculos>
+    <div class="modal-header" style="background: #0069d9;color:#fff">
+      <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Seleccionar Vehículo</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal" (click)="cerrar()"> 
           <small aria-hidden="true">&times;</small>
         </button>
-      </div>
-      <div class="modal-body">
-        <div class="row" style="text-align: center">
-          <table class="table" id="infoTable">
-            <thead class="thead-default">
-              <tr>
-                <th data-field="state" data-radio="true"></th>
-                <th class="th-color">Placa</th>
-                <th class="th-color" >Tipo</th>
-                <th class="th-color" >Marca</th>
-                <th class="th-color" >Descripción</th>
-              </tr>
-            </thead>
-            <tbody style="font-family: 'Times New Roman', Times, serif">
-              <tr *ngFor="let vehiculo of vehiculos | paginate: {itemsPerPage:5, currentPage: p} let i = index">
-                <th><input type="radio" name="radioGroup" (click)="setVehiculoSelecciondo(vehiculo.placa)" [checked]="vehiculo.placa===vehiculoFiltro"></th>
-                <th>{{vehiculo.placa}}</th>
-                <th>{{vehiculo.tipo}}</th>
-                <th>{{vehiculo.marca}}</th>
-                <th>{{vehiculo.descripcion}}</th>
-              </tr>
-            </tbody>
-          </table>
-          <pagination-controls (pageChange)="p =$event">
-              
-           </pagination-controls>
-  
-           
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default btn-modal-can" (click)="cerrar()">Continuar</button>
-        </div>
-      </div>
-    </ng-template>
-
-  <!-- </div>
-</div>
-</div> -->
-  <!-- <div class="row" style="text-align: center">
-        <div class="col-md-12">
-          <h2> Reportes</h2>
-        </div>
-  
-      </div>
-      <br> -->
-
-  <!-- <div class="row" >
-    <h2>Reportes</h2>
-      <div class="col-md-3" style="margin-left: 40%">
-        <div class="panel with-nav-tabs panel-primary">
-          <div class="panel-heading">
-            <ul class="nav nav-pills nav-fill nav-tabs">
-  
-              <li class="nav-item">
-                <a  id="bnt-sala" class="nav-link active" href="#tab1primary" data-toggle="tab" (click)="solicitud(1)" >Tabulares</a>
-              </li>
-              <li class="nav-item">
-                <a id="bnt-vehiculo" class="nav-link" href="#tab2primary" data-toggle="tab" (click)="solicitud(2)">Gráficas</a>
-              </li>
-            </ul>
-          </div>
-          <div class="panel-body">
-            <div class="tab-content">
-              <div class="tab-pane fade in active" id="tab1primary">
-              </div>
-              <div class="tab-pane fade" id="tab2primary"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-  
     </div>
-<hr>
-<br>
-
-
-  <div>
-    <div style="display: block">
-      <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend"
-        [chartType]="barChartType" (chartHover)="chartHoveredBar($event)" (chartClick)="chartClickedBar($event)"></canvas>
-    </div>
-    <button (click)="randomize()">Update</button>
-  </div>
-  <br>
-  <br>
-
-  <div class="row">
-      <div class="col-md-6">
-        <div style="display: block;">
-          <canvas baseChart width="400" height="400" [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions"
-            [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType" (chartHover)="chartHovered($event)"
-            (chartClick)="chartClicked($event)"></canvas>
-        </div>
-      </div>
-      <div class="col-md-6" style="margin-bottom: 10px">
-        <table class="table table-responsive table-condensed">
-          <tr>
-            <th *ngFor="let label of lineChartLabels">{{label}}</th>
-          </tr>
-          <tr *ngFor="let d of lineChartData">
-            <td *ngFor="let label of lineChartLabels; let j=index">{{d && d.data[j]}}</td>
-          </tr>
+    <div class="modal-body">
+      <div class="row" style="text-align: center">
+        <table class="table" id="infoTable">
+          <thead class="thead-default">
+            <tr>
+              <th data-field="state" data-radio="true"></th>
+              <th class="th-color">Placa</th>
+              <th class="th-color">Tipo</th>
+              <th class="th-color">Marca</th>
+              <th class="th-color">Descripción</th>
+            </tr>
+          </thead>
+          <tbody style="font-family: 'Times New Roman', Times, serif">
+            <tr *ngFor="let vehiculo of vehiculos | paginate: {itemsPerPage:5, currentPage: p} let i = index">
+              <th><input type="radio" name="radioGroup" (click)="setVehiculoSelecciondo(vehiculo.placa)" [checked]="vehiculo.placa===vehiculoFiltro"></th>
+              <th>{{vehiculo.placa}}</th>
+              <th>{{vehiculo.tipo}}</th>
+              <th>{{vehiculo.marca}}</th>
+              <th>{{vehiculo.descripcion}}</th>
+            </tr>
+          </tbody>
         </table>
-        <button (click)="randomize()">CLICK</button>
+        <pagination-controls (pageChange)="p =$event"> </pagination-controls>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-modal-can" (click)="cerrar()">Continuar</button>
       </div>
     </div>
-    <br>
-    <br>
-  
-
-
-  <div style="display: block">
-    <canvas baseChart [data]="doughnutChartData" [labels]="doughnutChartLabels" [chartType]="doughnutChartType" (chartHover)="chartHoveredDo($event)"
-      (chartClick)="chartClickedDo($event)"></canvas>
-  </div>
-
-  <br>
-  <br>
-
-  <div style="display: block">
-    <canvas baseChart [datasets]="radarChartData" [labels]="radarChartLabels" [chartType]="radarChartType" (chartHover)="chartHoveredRa($event)"
-      (chartClick)="chartClickedRa($event)"></canvas>
-  </div>
-
-  <br>
-  <br>
-  <div style="display: block">
-    <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType" (chartHover)="chartHoveredPi($event)"
-      (chartClick)="chartClickedPi($event)"></canvas>
-  </div> -->
-  <br>
-  <br>
-  <br>
-
+  </ng-template>
+  <br><br><br>
 </div>
 
 <section>
-    <footer >
-      
-        &copy; Coopesparta R.L.
-    
-    </footer>
-    </section> 
-  
+  <footer>
+
+    &copy; Coopesparta R.L.
+
+  </footer>
+</section>

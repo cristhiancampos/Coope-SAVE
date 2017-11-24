@@ -52,3 +52,12 @@ body{
     font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; 
     font-size: 1rem; 
 }
+
+.btn-modal-can{
+	color: #0082c8
+}
+.btn-modal-can:hover{
+	background: orangered;
+	color: #ffffff;
+	cursor: pointer;
+}

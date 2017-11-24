@@ -40,6 +40,7 @@ export class AdminSolicitudComponent implements OnInit {
   public currenIndex;
   public idEliminar;
   public acompananteIndex;
+  
 
 
 

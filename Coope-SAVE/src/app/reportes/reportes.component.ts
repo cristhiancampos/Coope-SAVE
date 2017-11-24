@@ -42,7 +42,8 @@ export class ReportesComponent implements OnInit {
   departamentoFiltroVehiculo = "";
   usuarioGenerador = "";
   reporteSala = true;
-
+  mensajeBusqueda="";
+  mensajeBusquedaVehiculo="";
   solicitudesSalasFiltradas = [];
   solicitudesVehiculosFiltradas = [];
   public mr: NgbModalRef;
@@ -98,11 +99,9 @@ export class ReportesComponent implements OnInit {
     this.obtenerDepartamentos();
     this.obtenerSalas();
     this.obtenerVehiculos();
-    this.pdfmake.configureStyles({ header: { fontSize: 18, bold: true } });
-
-    // Add a text with style
-    this.pdfmake.addText('This is a header, using header style', 'header');
-    this.pdfmake.addImage('http://upload.wikimedia.org/wikipedia/commons/4/4a/Logo_2013_Google.png');
+    this.mensajeBusqueda=" Para realizar búsquedas que permitan generar reportes, debe seleccionar entre los distintos filtros ubicados en el menú superior ";
+    this.mensajeBusquedaVehiculo=" Para realizar búsquedas que permitan generar reportes, debe seleccionar entre los distintos filtros ubicados en el menú superior ";
+    
   }
 
   setSalaSeleccionda(nombreSala: string) {
@@ -260,6 +259,7 @@ export class ReportesComponent implements OnInit {
     this.modelFechaInicio = null;
     this.modelFechaFinal = null;
     this.solicitudesSalasFiltradas = [];
+    this.mensajeBusqueda=" Para realizar búsquedas que permitan generar reportes, debe seleccionar entre los distintos filtros ubicados en el menú superior ";    
   }
 
   limpiarFiltrosVehiculo() {
@@ -269,6 +269,8 @@ export class ReportesComponent implements OnInit {
     this.modelFechaInicioVehiculo = null;
     this.modelFechaFinalVehiculo = null;
     this.solicitudesVehiculosFiltradas = [];
+    this.mensajeBusquedaVehiculo=" Para realizar búsquedas que permitan generar reportes, debe seleccionar entre los distintos filtros ubicados en el menú superior ";
+    
   }
 
   //fitro para solicitudes de salas
@@ -751,6 +753,7 @@ export class ReportesComponent implements OnInit {
               }
             }
             this.solicitudesSalasFiltradas = arrayTemporal;
+            this.mensajeBusqueda=" La búsqueda no generó resultados o coincidencias ";            
 
           }
         } else {//ho hay vehiculos registrados
@@ -1248,6 +1251,7 @@ export class ReportesComponent implements OnInit {
               }
             }
             this.solicitudesVehiculosFiltradas = arrayTemporal;
+            this.mensajeBusquedaVehiculo=" La búsqueda no generó resultados o coincidencias ";
 
           }
         } else {//ho hay vehiculos registrados
