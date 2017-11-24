@@ -1,10 +1,8 @@
-<div class="container-fluid" style="margin-top: 8%; padding: 0 10% 0 10%">
-
-  
+<div class="container-fluid" style="margin-top: 4%; padding: 0 10% 0 10%">
     <div class="row" >
-        <div class="col-md-3">
+        <div class="col-md-4">
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           <div class="panel with-nav-tabs panel-primary">
             <div class="panel-heading">
               <ul class="nav nav-pills nav-fill nav-tabs">
@@ -26,7 +24,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
         </div>
     
       </div>
@@ -35,7 +33,7 @@
     <br>
     <div class="row">
       <div class="col-md-8">
-        <h2> Reportes - Solicitudes de Salas</h2>
+        <h3> Reportes - Solicitudes de Salas</h3>
       </div>
       <div class="col-md-4">
         <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px" (click)="openPdf()">
@@ -52,7 +50,6 @@
     </div>
 
     <div class="row">
-      <hr>
       <div class="col-md-2">
         <div class="form-group">
           <div class="input-group">
@@ -136,7 +133,7 @@
             </tr>
           </thead>
           <tbody style="font-family: 'Times New Roman', Times, serif">
-            <tr *ngFor="let sala of solicitudesSalasFiltradas | paginate: {itemsPerPage:5, currentPage: p} let i = index">
+            <tr *ngFor="let sala of solicitudesSalasFiltradas | paginate: {itemsPerPage:4, currentPage: p} let i = index">
               <th scope="row">{{i+1}}</th>
               <th>{{sala.sala}}</th>
               <th>{{getNombreUsuario(sala.usuario)}}</th>
@@ -147,9 +144,8 @@
           </tbody>
         </table>
       </div>
-      <!-- <hr *ngIf='solicitudSalas ==undefined || solicitudSalas.length>0'>
-      <h5 *ngIf='solicitudSalas ==undefined || solicitudSalas.length==0'>No existen solicitudes de salas registradas en el sistema.<br></h5>
-      <hr *ngIf='solicitudSalas ==undefined || solicitudSalas.length==0'> -->
+      <h5 *ngIf='solicitudesSalasFiltradas ==undefined || solicitudesSalasFiltradas.length==0'>No existen coincidencias para esta busqueda.<br></h5>
+      <hr *ngIf='solicitudesSalasFiltradas ==undefined || solicitudesSalasFiltradas.length==0'> 
     </div>
     <!-- paginador-->
 
@@ -165,7 +161,7 @@
     <br>
     <div class="row">
       <div class="col-md-8">
-        <h2> Reportes - Solicitudes de Vehículos</h2>
+        <h3> Reportes - Solicitudes de Vehículos</h3>
       </div>
       <div class="col-md-4">
         <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
@@ -180,7 +176,6 @@
     </div>
 
     <div class="row">
-      <hr>
       <div class="col-md-2">
         <div class="form-group">
           <div class="input-group">
@@ -249,7 +244,6 @@
           </div>
 
     </div>
-    <br>
     <div class="col-md-12">
       <div class="row" style="text-align: center">
         <table class="table">
@@ -265,7 +259,7 @@
             </tr>
           </thead>
           <tbody style="font-family: 'Times New Roman', Times, serif">
-            <tr *ngFor="let vehiculo of solicitudesVehiculosFiltradas | paginate: {itemsPerPage:5, currentPage: p} let i = index">
+            <tr *ngFor="let vehiculo of solicitudesVehiculosFiltradas | paginate: {itemsPerPage:4, currentPage: p} let i = index">
               <th scope="row">{{i+1}}</th>
               <th>{{vehiculo.vehiculo}}</th>
               <th>{{obternerTipoAutomovil(vehiculo.vehiculo)}}</th>
@@ -277,7 +271,6 @@
           </tbody>
         </table>
       </div>
-       <hr *ngIf='solicitudesVehiculosFiltradas ==undefined || solicitudesVehiculosFiltradas.length>0'>
         <h5 *ngIf='solicitudesVehiculosFiltradas ==undefined || solicitudesVehiculosFiltradas.length==0'>No existen coincidencias para esta busqueda.<br></h5>
         <hr *ngIf='solicitudesVehiculosFiltradas ==undefined || solicitudesVehiculosFiltradas.length==0'> 
     </div>
@@ -468,4 +461,17 @@
     <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType" (chartHover)="chartHoveredPi($event)"
       (chartClick)="chartClickedPi($event)"></canvas>
   </div> -->
+  <br>
+  <br>
+  <br>
+
 </div>
+
+<section>
+    <footer >
+      
+        &copy; Coopesparta R.L.
+    
+    </footer>
+    </section> 
+  
