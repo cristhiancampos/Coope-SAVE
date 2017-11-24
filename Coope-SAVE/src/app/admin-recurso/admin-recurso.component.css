@@ -113,14 +113,14 @@ small{
   cursor:not-allowed;
  
 }
-table{
+th{
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; 
-  font-size: 1.2rem; 
+  font-size: 1rem; 
 }
 
 tr{
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; 
-  font-size: 1.2rem; 
+  font-size: 1rem; 
 }
 
 footer {

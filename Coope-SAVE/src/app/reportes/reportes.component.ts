@@ -12,6 +12,8 @@ import { NgbDateStruct, NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap
 import { SolicitudSala } from '../modelos/solicitudSala';
 import { PdfmakeService } from 'ng-pdf-make/pdfmake/pdfmake.service';
 import {PDFReportes} from './pdfReportes';
+import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Usuario } from '../modelos/usuario';
 @Component({
   selector: 'app-reportes',
   templateUrl: './reportes.component.html',
@@ -28,13 +30,13 @@ import {PDFReportes} from './pdfReportes';
 export class ReportesComponent implements OnInit {
   @ViewChild('modalSalas') modalSalas: TemplateRef<any>;
   @ViewChild('modalVehiculos') modalVehiculos: TemplateRef<any>;
-
  
   usuarios = [];
   departamentos = [];
   salas = [];
   vehiculos = [];
   identity;
+  token;
   currentUser;
   vehiculoFiltro = "";
   salaFiltro = "";
@@ -55,12 +57,9 @@ export class ReportesComponent implements OnInit {
   modelFechaFinal: NgbDateStruct;
   modelFechaInicioVehiculo: NgbDateStruct;
   modelFechaFinalVehiculo: NgbDateStruct;
-
   crearPDF: PDFReportes;
-
-
-  reporteFiltros = [];//{sala:any,fechaInicio:any,fechaFin:any,solicitante:any,departamento:any,usuarioGenerador:any};
-
+  reporteFiltros = [];
+  
 
   constructor(
     private _servUsuario: ServicioUsuario,
@@ -70,7 +69,9 @@ export class ReportesComponent implements OnInit {
     private _servSolicitudVehiculo: ServicioSolicitudVehiculo,
     private _servVehiculo: ServicioVehiculo,
     private modal: NgbModal,
-    private pdfmake: PdfmakeService
+    private pdfmake: PdfmakeService,
+    private _route: ActivatedRoute,
+    private _router: Router,
   ) {
     this.crearPDF = new PDFReportes(this.pdfmake);
   }
@@ -104,6 +105,7 @@ export class ReportesComponent implements OnInit {
     this.pdfmake.download(customName);
   }
   ngOnInit() {
+    this.verificarCredenciales();
     this.obtenerUsuarios();
     this.obtenerDepartamentos();
     this.obtenerSalas();
@@ -192,7 +194,6 @@ export class ReportesComponent implements OnInit {
     );
   }
   getNombreUsuario(id: any) {
-
     for (var i = 0; i < this.usuarios.length; i++) {
       if (this.usuarios[i]._id === id) {
         return this.usuarios[i].nombre + " " + this.usuarios[i].apellidos;
@@ -202,7 +203,6 @@ export class ReportesComponent implements OnInit {
   }
 
   getIdUsuario(nombre) {
-
     let usuarioSelected = "";
     for (let i = 0; i < nombre.length; i++) {
       if (nombre.charAt(i) === " ") {
@@ -1371,11 +1371,11 @@ export class ReportesComponent implements OnInit {
     return array;
   }
 
-  ordenarPorFecha(array: any) {
+  ordenarPorFecha(array:any){
     let k = [];
     for (let i = 1; i < array.length; i++) {
       for (var j = 0; j < (array.length - i); j++) {
-        if ((array[j].fecha.year + (array[j].fecha.month * 30) + array[j].fecha.day) < (array[j + 1].fecha.year + (array[j + 1].fecha.month * 30) + array[j + 1].fecha.day)) {
+        if (((array[j].fecha.year*365) + (array[j].fecha.month*30) + array[j].fecha.day) <((array[j+1].fecha.year*365) + (array[j+1].fecha.month*30) + array[j+1].fecha.day) ) {
           k = array[j + 1];
           array[j + 1] = array[j];
           array[j] = k;
@@ -1416,7 +1416,64 @@ export class ReportesComponent implements OnInit {
       return 0;
       });
       return array;
+  }
+  verificarCredenciales() {
+    this.identity = this._servUsuario.getIndentity();
+    this.token = this._servUsuario.getToken();
+    let identity = localStorage.getItem('identity');
+    let user = JSON.parse(identity);
+    let recordar = localStorage.getItem('remember');
+    let recordarValue = JSON.parse(recordar);
+    if (user != null) {
+      let usuarioTemp = new Usuario('', '', '', '', '', '', '', '', '', '');
+      usuarioTemp.correo = user.correo;
+      usuarioTemp.contrasena = user.contrasena;
+      // obtener datos de usuario identificado
+      this._servUsuario.verificarCredenciales(usuarioTemp).subscribe(response => {
+        let identity = response.user;
+        this.identity = identity;
+        if (!this.identity._id) {
+          $('#nav-user').text(' ');
+          this._router.navigate(['/principal']);
+        } else {
+          if (this.identity.rol == "ADMINISTRADOR" || this.identity.rol == "SUPERADMIN" || this.identity.rol == "REPORTES") {            
+          this._servUsuario.verificarCredenciales(usuarioTemp, 'true').subscribe(
+            response => {
+              let token = response.token;
+              this.token = token;
+              if (this.token <= 0) {
+                $('#nav-user').text(' ');
+                this._router.navigate(['/principal']);
+              } else {
+                // crear elemento en el localstorage para tener el token disponible
+                localStorage.setItem('token', token);
+                let identity = localStorage.getItem('identity');
+                let user = JSON.parse(identity);
+                if (user != null) {
+                  $('#nav-user').text(user.nombre + ' ' + user.apellidos);
+                  this.obtenerDepartamentos();
+                } else {
+                  $('#nav-user').text('');
+                }
+              }
+            }, error => {
+              $('#nav-user').text(' ');
+              this._router.navigate(['/principal']);
+            }
+          );
+        } else {
+          this._router.navigate(['/principal']);
+        }
+        }
+      }, error => {
+        $('#nav-user').text(' ');
+        this._router.navigate(['/principal']);
+      }
+      );
+    } else {
+      this._router.navigate(['/principal']);
     }
+  }
 
   /*horaFormato12Horas(horario){
     let meridianoInit;

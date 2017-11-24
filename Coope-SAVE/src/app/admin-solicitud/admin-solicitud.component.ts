@@ -20,7 +20,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 })
 export class AdminSolicitudComponent implements OnInit {
 
-  private sala = true;// Boolean para controlar que tabla de solicitudes se muestras
+  private sala = true;// Boolean para controlar que tabla de solicitudes se muestre
   private token;
    identity;
 
@@ -216,7 +216,7 @@ export class AdminSolicitudComponent implements OnInit {
     let k = [];
     for (let i = 1; i < array.length; i++) {
       for (var j = 0; j < (array.length - i); j++) {
-        if ((array[j].fecha.year + (array[j].fecha.month*30) + array[j].fecha.day) <(array[j+1].fecha.year + (array[j+1].fecha.month*30) + array[j+1].fecha.day) ) {
+        if (((array[j].fecha.year*365) + (array[j].fecha.month*30) + array[j].fecha.day) <((array[j+1].fecha.year*365) + (array[j+1].fecha.month*30) + array[j+1].fecha.day) ) {
           k = array[j + 1];
           array[j + 1] = array[j];
           array[j] = k;

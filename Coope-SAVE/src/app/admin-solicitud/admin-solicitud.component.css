@@ -25,15 +25,17 @@
 }
 .th-color{
     color:#0082c8;
-    }
-	table{
-		font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; 
-		font-size: 1.2rem; 
-	  }
+	}
+	td{
+		background: #e9ecef;
+		color:#0082c8;
+		font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"bold"; 
+		font-size: 1rem; 
+	}
 	  
 	  tr{
 		font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; 
-		font-size: 1.2rem; 
+		font-size: 1rem; 
 	  }
 	  a{
 		font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; 
