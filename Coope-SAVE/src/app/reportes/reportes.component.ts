@@ -11,6 +11,7 @@ import { ServicioVehiculo } from '../servicios/vehiculo';
 import { NgbDateStruct, NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SolicitudSala } from '../modelos/solicitudSala';
 import { PdfmakeService } from 'ng-pdf-make/pdfmake/pdfmake.service';
+import {PDFReportes} from './pdfReportes';
 @Component({
   selector: 'app-reportes',
   templateUrl: './reportes.component.html',
@@ -28,6 +29,7 @@ export class ReportesComponent implements OnInit {
   @ViewChild('modalSalas') modalSalas: TemplateRef<any>;
   @ViewChild('modalVehiculos') modalVehiculos: TemplateRef<any>;
 
+ 
   usuarios = [];
   departamentos = [];
   salas = [];
@@ -54,6 +56,8 @@ export class ReportesComponent implements OnInit {
   modelFechaInicioVehiculo: NgbDateStruct;
   modelFechaFinalVehiculo: NgbDateStruct;
 
+  crearPDF: PDFReportes;
+
 
   reporteFiltros = [];//{sala:any,fechaInicio:any,fechaFin:any,solicitante:any,departamento:any,usuarioGenerador:any};
 
@@ -68,7 +72,7 @@ export class ReportesComponent implements OnInit {
     private modal: NgbModal,
     private pdfmake: PdfmakeService
   ) {
-    //this.reporteFiltros.solicitante="";
+    this.crearPDF = new PDFReportes(this.pdfmake);
   }
 
   abrir(modal) {
@@ -79,8 +83,13 @@ export class ReportesComponent implements OnInit {
 
   }
   openPdf() {
-    // this.pdfmake.download();
-    this.pdfmake.open();
+    console.log('llama el metodo en reportes');
+    var solicitudes=[];
+    solicitudes= this.solicitudesSalasFiltradas;
+    for (var index = 0; index < this.solicitudesSalasFiltradas.length; index++) {
+      solicitudes[index].usuario= this.getNombreUsuario(this.solicitudesSalasFiltradas[index].usuario);
+    }
+      this.crearPDF.generarPDF(solicitudes);
   }
 
   printPdf() {
