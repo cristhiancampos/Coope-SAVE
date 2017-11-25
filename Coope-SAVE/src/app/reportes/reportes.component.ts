@@ -1,3 +1,5 @@
+
+/* Importación de clases y modulos necesasarios */
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import * as $ from 'jquery';
 import swal from 'sweetalert2';
@@ -14,6 +16,8 @@ import { PdfmakeService } from 'ng-pdf-make/pdfmake/pdfmake.service';
 import {PDFReportes} from './pdfReportes';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Usuario } from '../modelos/usuario';
+
+//Se definen las propiedades del componente
 @Component({
   selector: 'app-reportes',
   templateUrl: './reportes.component.html',
@@ -27,10 +31,12 @@ import { Usuario } from '../modelos/usuario';
     ServicioSolicitudVehiculo
     , PdfmakeService]
 })
+//Exportación de la clase para poder ser usada en otros modulos
 export class ReportesComponent implements OnInit {
   @ViewChild('modalSalas') modalSalas: TemplateRef<any>;
   @ViewChild('modalVehiculos') modalVehiculos: TemplateRef<any>;
  
+  //Definición de variables necesarias
   usuarios = [];
   departamentos = [];
   salas = [];
@@ -52,7 +58,6 @@ export class ReportesComponent implements OnInit {
   solicitudesVehiculosFiltradas = [];
   public mr: NgbModalRef;
   solicitudSala: SolicitudSala;
-
   modelFechaInicio: NgbDateStruct;
   modelFechaFinal: NgbDateStruct;
   modelFechaInicioVehiculo: NgbDateStruct;
@@ -60,7 +65,7 @@ export class ReportesComponent implements OnInit {
   crearPDF: PDFReportes;
   reporteFiltros = [];
   
-
+//Método constructor de la clase
   constructor(
     private _servUsuario: ServicioUsuario,
     private _servDepartamento: ServicioDepartamento,
@@ -76,13 +81,17 @@ export class ReportesComponent implements OnInit {
     this.crearPDF = new PDFReportes(this.pdfmake);
   }
 
+  //Método encargado de abrir los modales, recibe el nombre del modal por parámetros
   abrir(modal) {
     this.mr = this.modal.open(modal);
   }
+
+  //Método encargado de cerrar el modal activo 
   cerrar() {
     this.mr.close();
-
   }
+
+  //Método encargado de abrir generar el pdf de los  reportes generados en las búsquedas y mostrarlo al usuario
   openPdf() {
     console.log('llama el metodo en reportes');
     var solicitudes=[];
@@ -93,17 +102,22 @@ export class ReportesComponent implements OnInit {
       this.crearPDF.generarPDF(solicitudes);
   }
 
+  //Método encargado de mostrar opciones de impresión de los reportes generados en las búsquedas
   printPdf() {
     this.pdfmake.print();
   }
 
+  //Método encargado de descargar en pdf los reportes generados en las búsquedas
   downloadPDF() {
     this.pdfmake.download();
   }
 
+  //Método encargado de descargar en pdf los reportes generados en las búsquedas, permite que se le asigne un nombre al archivo pdf
   downloadPdfWithName(customName: string) {
     this.pdfmake.download(customName);
   }
+  
+  //Método de la interface OnInit, se ejecuta cuando se ha cargado por completo el componente
   ngOnInit() {
     this.verificarCredenciales();
     this.obtenerUsuarios();
@@ -115,12 +129,17 @@ export class ReportesComponent implements OnInit {
     
   }
 
+ //Método encargado de asignar un valor al filtro de sala
   setSalaSeleccionda(nombreSala: string) {
     this.salaFiltro = nombreSala;
   }
+
+  //Método encargado de asignar un valor al filtro de vehículo
   setVehiculoSelecciondo(vehiculoPlaca: string) {
     this.vehiculoFiltro = vehiculoPlaca;
   }
+
+  //Método obtener todas las solicitudes de las registradas 
   obtenerSalas() {
     this._servSala.obtenerSalasHabilitadas().subscribe(
       response => {
@@ -138,6 +157,7 @@ export class ReportesComponent implements OnInit {
     );
   }
 
+  //Método obtener todas los registrados en el sistema
   obtenerDepartamentos() {
     this._servDepartamento.obtenerDepartamentos().subscribe(
       response => {
@@ -155,6 +175,7 @@ export class ReportesComponent implements OnInit {
 
   }
 
+ //Método obtener todas los usuarios en el sistema
   obtenerUsuarios() {
     let identity = localStorage.getItem('identity');
     let user = JSON.parse(identity);
@@ -178,6 +199,8 @@ export class ReportesComponent implements OnInit {
       }
     );
   }
+
+  //Método obtener todas los vehículos en el sistema
   obtenerVehiculos() {
     this._servVehiculo.obtenerVehiculos().subscribe(
       response => {
@@ -193,6 +216,8 @@ export class ReportesComponent implements OnInit {
       }
     );
   }
+
+  //Método que obtiene el nombre de usuario según id
   getNombreUsuario(id: any) {
     for (var i = 0; i < this.usuarios.length; i++) {
       if (this.usuarios[i]._id === id) {
@@ -202,6 +227,7 @@ export class ReportesComponent implements OnInit {
     }
   }
 
+  //Método que obtiene el id de usuario según nombre completo
   getIdUsuario(nombre) {
     let usuarioSelected = "";
     for (let i = 0; i < nombre.length; i++) {
@@ -227,6 +253,7 @@ export class ReportesComponent implements OnInit {
     }
   }
 
+  //Método que obtiene el nombre de departamento según id
   getDepartamento(id) {
     let departamento;
     for (var j = 0; j < this.usuarios.length; j++) {
@@ -243,6 +270,7 @@ export class ReportesComponent implements OnInit {
     }
   }
 
+ //Método que obtiene la marca del vehículo  según placa
   obternerMarcaAutomovil(placa: any) {
     for (var i = 0; i < this.vehiculos.length; i++) {
       if (this.vehiculos[i].placa == placa) {
@@ -252,6 +280,7 @@ export class ReportesComponent implements OnInit {
     }
   }
 
+  //Método que obtiene el tipo del vehículo  según placa
   obternerTipoAutomovil(placa: any) {
     for (var i = 0; i < this.vehiculos.length; i++) {
       if (this.vehiculos[i].placa == placa) {
@@ -261,6 +290,7 @@ export class ReportesComponent implements OnInit {
     }
   }
 
+  //Método que limpiar los fitros en los reportes de salas
   limpiarFiltros() {
     this.solicitanteFiltro = "";
     this.salaFiltro = "";
@@ -271,6 +301,7 @@ export class ReportesComponent implements OnInit {
     this.mensajeBusqueda=" Para realizar búsquedas que permitan generar reportes, debe seleccionar entre los distintos filtros ubicados en el menú superior ";    
   }
 
+ //Método que limpiar los fitros en los reportes de vehículos
   limpiarFiltrosVehiculo() {
     this.solicitanteFiltroVehiculo = "";
     this.vehiculoFiltro = "";
@@ -1283,6 +1314,7 @@ export class ReportesComponent implements OnInit {
     }
   }
 
+  //oderna las solicitudes de salas según el filtro escogido
   ordenarSolicitudesSala(filtro: string) {
     if (filtro === 'Horario') {
       this.ordenarPorHorario(this.solicitudesSalasFiltradas);
@@ -1300,7 +1332,7 @@ export class ReportesComponent implements OnInit {
     }
 
   }
-
+ //oderna las solicitudes de vehículos según el filtro escogido
   ordenarSolicitudesVehiculo(filtro: string) {
     if (filtro === 'Horario') {
      // this.ordenarPorHorarioVehiculo(this.solicitudesVehiculosFiltradas);
@@ -1324,7 +1356,7 @@ export class ReportesComponent implements OnInit {
       // NO
     }
   }
-
+ //ordena solicitudes por horario
   ordenarPorHorario(array: any) {
     let k = [];
     for (let i = 1; i < array.length; i++) {
@@ -1338,6 +1370,7 @@ export class ReportesComponent implements OnInit {
     }
     return array;
   }
+  //ordena solicitudes por nombre de sala
   ordenarPorSala(array: any) {
     array.sort(function (a, b) {
       var keyA = a.sala,
@@ -1349,6 +1382,7 @@ export class ReportesComponent implements OnInit {
     return array;
   }
 
+  //ordena solicitude por usuario
   ordenarPorUsuario(array: any) {
     array.sort(function (a, b) {
       var keyA = a.usuario,
@@ -1360,6 +1394,7 @@ export class ReportesComponent implements OnInit {
     return array;
   }
 
+  //ordena solicitudes 
   ordenarPorMotivo(array: any) {
     array.sort(function (a, b) {
       var keyA = a.descripcion,
@@ -1371,6 +1406,7 @@ export class ReportesComponent implements OnInit {
     return array;
   }
 
+  //ordena solicitudes por fecha
   ordenarPorFecha(array:any){
     let k = [];
     for (let i = 1; i < array.length; i++) {
@@ -1384,6 +1420,8 @@ export class ReportesComponent implements OnInit {
     }
     return array;
   }
+  
+  //ordena solicitudes por placa
   ordenarPorPlaca(array: any) {
     array.sort(function (a, b) {
       var keyA = a.vehiculo,
@@ -1394,6 +1432,7 @@ export class ReportesComponent implements OnInit {
     });
     return array;
   }
+  //ordena solicitudes por vehículo
   ordenarPorHorarioVehiculo(array:any){
     let k = [];
     for (let i = 1; i < array.length; i++) {
@@ -1407,6 +1446,8 @@ export class ReportesComponent implements OnInit {
     }
     return array;
   }
+
+  //ordena solicitudes por destino
   ordenarPorDestino(array:any){
     array.sort(function(a, b){
       var keyA = a.destino,
@@ -1417,6 +1458,8 @@ export class ReportesComponent implements OnInit {
       });
       return array;
   }
+
+  //verifica las credenciales de usuario
   verificarCredenciales() {
     this.identity = this._servUsuario.getIndentity();
     this.token = this._servUsuario.getToken();
@@ -1474,41 +1517,4 @@ export class ReportesComponent implements OnInit {
       this._router.navigate(['/principal']);
     }
   }
-
-  /*horaFormato12Horas(horario){
-    let meridianoInit;
-    let meridianoFin;
-    let meridNumIni;
-    let meridNumFin;
-
-    var p=horario.minute;
-    var g=p.toString();
-    console.log(g.length);
-    if(g<2){
-        horario.minute= '0'+horario.minute;
-    }
-
-    if (parseInt(horario.hour) < 12) {
-      meridianoInit = "AM";
-      meridNumIni = parseInt(horario.hour);
-    } else if (parseInt(horario.hour) >= 12) {
-      meridianoInit = "PM";
-      meridNumIni = (parseInt(horario.hour) - 12);
-    }
-    if (parseInt(horario.hour) == 24) {
-      meridianoFin = "AM";
-      meridNumFin = (parseInt(horario.hour) - 12);
-    }
-    if (parseInt(horario.hour) > 12 && parseInt(horario.hour) < 24) {
-      meridianoFin = "PM";
-      meridNumFin = (parseInt(horario.hour) - 12);
-    } else if (parseInt(horario.hour) < 12) {
-      meridianoFin = "AM";
-      meridNumFin = parseInt(horario.hour);
-    }
-    if (meridNumIni == 0) {
-      meridNumIni = meridNumIni + 12;
-    }
-    return meridNumIni+':'+horario.minute+' '+ meridianoInit;
-  }*/
 }

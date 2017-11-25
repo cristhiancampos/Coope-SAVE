@@ -111,11 +111,7 @@ export class AdminVehiculoComponent implements OnInit {
         this.disabledDom=!this.disabledDom;
       }
     }
-    console.log(this.tempHorario);
   }
-
-
-
 
   verificarCredenciales() {
     this.identity = this._servUsuario.getIndentity();
@@ -174,9 +170,9 @@ export class AdminVehiculoComponent implements OnInit {
     } else {
       $('#nav-user').text(' ');
       this._router.navigate(['/principal']);
-      //this.abrirModal('#loginModal');
     }
   }
+
   cambiarEstado() {
     this.estado = !this.estado;
     if (this.estado) {
@@ -371,14 +367,13 @@ export class AdminVehiculoComponent implements OnInit {
   }
 
   modificarHorario() {
-    console.log(this.tempHorarios);
     this.vehiculoEdit.estado = this.estadoMensajEdit;
     this.vehiculoEdit.horario= this.tempHorarios;
     this._servVehiculo.modificarHorario(this.vehiculoEdit).subscribe(
       response => {
 
         if (!response.message._id) {
-          this.msjError("El horario de la ala no pudo ser Modificado");
+          this.msjError("El horario de la ala no pudo ser modificado");
         } else {
           this.vehiculoEdit = new Vehiculo('', '', '', '', '', '-','', '', this.tempHorarios,'','');
           this.obtenerVehiculos();
@@ -389,7 +384,7 @@ export class AdminVehiculoComponent implements OnInit {
         var alertMessage = <any>error;
         if (alertMessage != null) {
           var body = JSON.parse(error._body);
-          this.msjError("El horario de la ala no pudo ser Modificado");
+          this.msjError("El horario de la ala no pudo ser modificado");
 
         }
       }
