@@ -97,12 +97,13 @@ export class SolicitudVehiculoComponent implements OnInit {
 
   //*********************************************AGREGADOS***************************** */
   ngOnInit() {
-    this.estiloBotones();
-    this.obtenerVehiculos();
+    // this.estiloBotones();
+    // this.obtenerVehiculos();
 
-    this.obtenerUsuarios();
-    this.obtenerSolicitudVehiculos();
+    // this.obtenerUsuarios();
+    // this.obtenerSolicitudVehiculos();
     console.log('cargó el calendario de vehiculo');
+    this.verificarCredenciales();
 
     // this.pdfmake.configureStyles({ header: { fontSize: 18, bold: true } });
     // this.pdfmake.addImage('../assets/img/logo.png');
@@ -144,6 +145,8 @@ export class SolicitudVehiculoComponent implements OnInit {
   tempPlacaVehiculo = "";
   dateUpdate = { day: null, month: null, year: null };
   crearPDF: GenerarPDF;
+  identity;
+  token;
 
 
 
@@ -2217,5 +2220,66 @@ export class SolicitudVehiculoComponent implements OnInit {
       this.solicitudVehiculo.horaRegreso.hour
     );
     this.onChangeCallback(newDate);
+  }
+
+  verificarCredenciales() {
+    this.identity = this._servUsuario.getIndentity();
+    this.token = this._servUsuario.getToken();
+    let identity = localStorage.getItem('identity');
+    let user = JSON.parse(identity);
+    let recordar = localStorage.getItem('remember');
+    let recordarValue = JSON.parse(recordar);
+    if (user != null) {
+      let usuarioTemp = new Usuario('', '', '', '', '', '', '', '', '', '');
+      usuarioTemp.correo = user.correo;
+      usuarioTemp.contrasena = user.contrasena;
+      // obtener datos de usuario identificado
+      this._servUsuario.verificarCredenciales(usuarioTemp).subscribe(response => {
+        let identity = response.user;
+        this.identity = identity;
+        if (!this.identity._id) {
+          $('#nav-user').text(' ');
+          this._router.navigate(['/principal']);
+        } else {
+          //conseguir el token para enviarselo a cada petición
+          this._servUsuario.verificarCredenciales(usuarioTemp, 'true').subscribe(
+            response => {
+              let token = response.token;
+              this.token = token;
+              if (this.token <= 0) {
+                $('#nav-user').text(' ');
+                this._router.navigate(['/principal']);
+              } else {
+                // crear elemento en el localstorage para tener el token disponible
+                localStorage.setItem('token', token);
+                let identity = localStorage.getItem('identity');
+                let user = JSON.parse(identity);
+                if (user != null) {
+                  $('#nav-user').text(user.nombre + ' ' + user.apellidos);
+                  this.estiloBotones();
+                  this.obtenerVehiculos();
+                  this.obtenerUsuarios();
+                  this.obtenerSolicitudVehiculos();
+                } else {
+                  $('#nav-user').text('');
+                  this._router.navigate(['/principal']);
+                }
+              }
+            }, error => {
+              $('#nav-user').text(' ');
+              this._router.navigate(['/principal']);
+            }
+          );
+        }
+      }, error => {
+        $('#nav-user').text(' ');
+        this._router.navigate(['/principal']);
+      }
+      );
+    } else {
+      $('#nav-user').text(' ');
+      this._router.navigate(['/principal']);
+      //this.abrirModal('#loginModal');
+    }
   }
 }
