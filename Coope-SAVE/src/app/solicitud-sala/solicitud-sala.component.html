@@ -2,7 +2,7 @@
   <div class="modal-header" style="background: #0069d9;color:#fff">
     <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;{{tempTitleModal}} Solicitud</h5>
     <!-- {{ modalData?.action }}-->
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal" (click)="close()"> 
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal" (click)="close()"style="font-size: 2rem; cursor: pointer" > 
         <small aria-hidden="true">&times;</small>
       </button>
   </div>
@@ -32,7 +32,7 @@
             <div class="col-md-4" style="top: 2em;">
               <div class="form-group">
                 <div class="input-group">
-                  <select class="btn btn-outline-primary" #salE="ngModel" name="salE" [(ngModel)]="solicitudSalaEdit.sala" (change)="setCupoMaximoSala(solicitudSalaEdit.sala)"
+                  <select class="btn btn-outline-primary" #salE="ngModel" name="salE" [(ngModel)]="solicitudSalaEdit.sala" (change)="setCupoMaximoSalaEdit(solicitudSalaEdit.sala)"
                     class="selectpicker" style="width: 100%;font-size: 1.2rem;min-width: 10em;" required [disabled]="tempEvent.length<=0">  
                       <option value="" selected disabled >Seleccione Sala</option>
                           <option *ngFor="let sala of salas;" >{{sala.nombre}}</option>
@@ -49,7 +49,7 @@
               <div class="form-group">
                 <div class="input-group">
                   <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker" [disabled]="true"
-                    [minDate]="minDate" required>
+                    [minDate]="minDate" (change)="verificarRecursosModificar()" required>
                   <!--[disabled]="tempEvent.length<=0" -->
                   <button class="input-group-addon" (click)="d.toggle()" type="button" [disabled]="tempEvent.length<=0">
                             <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -67,7 +67,7 @@
             <div class="col-md-4">
               <div class="form-group">
                 <ngb-timepicker #timeUpdate="ngModel" name="timeUpdate" [(ngModel)]="timeI" [meridian]="true" [disabled]="tempEvent.length<=0"
-                  required>
+                (change)="verificarRecursosModificar()" required>
                 </ngb-timepicker>
 
                 <div class="small form-text text-danger" *ngIf="!timeUpdate.valid &&!timeUpdate.disabled">
@@ -84,7 +84,7 @@
 
               <div class="form-group">
                 <ngb-timepicker #timeUpdateF="ngModel" name="timeUpdateF" [(ngModel)]="timeF" [meridian]="true" [disabled]="tempEvent.length<=0"
-                  required></ngb-timepicker>
+                (change)="verificarRecursosModificar()" required></ngb-timepicker>
 
                 <div class="small form-text text-danger" *ngIf="!timeUpdateF.valid  &&!timeUpdateF.disabled">
                   <div> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar valores Numericos</div>
@@ -172,7 +172,7 @@
                     <div class="row col-md-12" style="overflow-y: scroll; height: 100px">
                       <div class="col-md-6" *ngFor="let recurso of recursos;let i =index;" style="text-align: left">
                         <label class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" [checked]="tempArrayChecked[i]" (change)="changeRecursos($event,recurso._id)" >
+                            <input type="checkbox" class="custom-control-input" [checked]="tempArrayCheckedEdit[i]" (change)="changeRecursosEdit($event,recurso._id,i)" >
                             <span class="custom-control-indicator"></span>
                             <span class="custom-control-description">{{recurso.nombre}}</span>
                           </label>
@@ -348,9 +348,8 @@
                       </div>
                     </div>
                     <div class="col-md-6">
-                      <div class="form-group" style="margin-top: 3.3em; font-size: 1rem">
-
-                        <label for="">Termina</label>
+                      <div class="form-group" style="margin-top: 3.5em; font-size: 1rem">
+                        <label style="margin-top: 10px">Termina</label>
                         <ngb-timepicker [(ngModel)]="solicitudSala.horaFin" (ngModelChange)="updateTime()" [meridian]="true" (input)="updateFinishDateOnInput()"
                           #ctrlFinishDate="ngModel" name="ctrlFinishDate" required>
                         </ngb-timepicker>
