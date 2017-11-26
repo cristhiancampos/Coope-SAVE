@@ -262,7 +262,8 @@ function modificarUsuario(req, res) {
             nombre: params.nombre,
             apellidos: params.apellidos,
             departamento: params.departamento,
-            updated_at: params.updated_at
+            updated_at: params.updated_at,
+            estado:params.estado
           }, (err, modificarUsuario) => {
             if (err) {
 

@@ -83,9 +83,9 @@
     <ng-template  #modalModificarUsuario let-c="close" let-d="dismiss">
     <div class="modal-header" style="background: #0069d9;color:#fff">
       <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-user-circle-o"></i>&nbsp;&nbsp;Modificar Usuario</h5>
-      <button type="button" class="close"  aria-label="Close" (click)="c('Close click')"> 
-          <small aria-hidden="true">&times;</small>
-        </button>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="c('Close click')"> 
+        <span aria-hidden="true">&times;</span>
+      </button>
     </div>
     <div class="modal-body">
       <div class="row">
@@ -193,14 +193,14 @@
     </div>
   </ng-template>
 
-<!-- Modal Agragar Usuario -->
+<!-- Modal Agregar Usuario -->
 
   <ng-template #modalAgregarUsuario let-c="close" let-d="dismiss">
     <div class="modal-header" style="background: #0069d9;color:#fff">
       <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-user-circle-o"></i>&nbsp;&nbsp;Registrarse</h5>
-      <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="salir()"> 
+       <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="c('Close click')"> 
           <span aria-hidden="true">&times;</span>
-        </button>-->
+        </button>
     </div>
     <div class="modal-body">
       <div class="row">
@@ -298,9 +298,11 @@
                      </ul>
                    </div>
                  </div>
-          
-              <button id="btnRegister" type="submit" style="float:right" [disabled]="!correo.valid || !nombre.valid || !apellidos.valid  ||  !departamento.valid || userExist "
-                class="btn btn-success">Continuar</button>
+                 <!-- <div style="float: right">
+                  <button type="button" class="btn btn-default btn-modal-can" (click)="c('Close click')" >Salir</button>                                
+                  <button id="btnRegister" type="submit" [disabled]="!correo.valid || !nombre.valid || !apellidos.valid  ||  !departamento.valid || userExist "
+                    class="btn btn-success">Continuar</button>
+              </div> -->
             </form>
 
           </div>
@@ -309,8 +311,10 @@
     </div>
     <div class="modal-footer">
 
-      <!-- <button type="button" class="btn btn-secondary"  style="background: #f00a0a;" (click)="salir()">Salir</button>         -->
-    </div>
+      <button type="button" class="btn btn-default btn-modal-can" (click)="c('Close click')" >Salir</button>                                
+      <button id="btnRegister" type="submit" [disabled]="!correo.valid || !nombre.valid || !apellidos.valid  ||  !departamento.valid || userExist "
+        class="btn btn-success">Continuar</button>
+          </div>
 </ng-template>
 
    
