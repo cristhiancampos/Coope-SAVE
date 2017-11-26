@@ -510,8 +510,10 @@ export class AdminSolicitudComponent implements OnInit {
   // tslint:disable-next-line:one-line
   solicitud(num: any) {
     if (num === 1) {
+      this.obtenerSolicitudSalas();
       this.sala = true;
     } else {
+      this.obtenerSolicitudVehiculo();
       this.sala = false;
     }
   }
