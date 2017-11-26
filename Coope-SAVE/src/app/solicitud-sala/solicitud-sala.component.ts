@@ -255,24 +255,12 @@ export class SolicitudSalaComponent implements OnInit {
                                 this.actions = [];
                               }
                               let userSumDate=((listaSolicitudes[index].fecha.year*365)+ (listaSolicitudes[index].fecha.month*30)+listaSolicitudes[index].fecha.day);
-                              let serverSumDate=((serverDate.getFullYear()*365)+ (serverDate.getMonth()*30)+serverDate.getDate());
+                              let serverSumDate=((serverDate.getFullYear()*365)+ ((serverDate.getMonth()+1)*30)+serverDate.getDate());
 
                               if (userSumDate < serverSumDate) {
                                 this.tempEvent = [];
                                 this.actions = [];
-                              //   this.tempEnable = false;
-                              // } else if (listaSolicitudes[index].fecha.month < (serverDate.getMonth() + 1)) {
-                              //   this.tempEvent = [];
-                              //   this.actions = [];
-                              //   this.tempEnable = false;
-                              // } else if (listaSolicitudes[index].fecha.month == (serverDate.getMonth() + 1)) {
-                              //   if (listaSolicitudes[index].fecha.day < serverDate.getDate()) {
-                              //     this.tempEvent = [];
-                              //     this.actions = [];
-                              //     this.tempEnable = false;
-                              //   } else {
-                              //     // this.tempEnable = true;
-                              //   }
+
                               } else {
                                 // alert('entra aqui 2');
                               }
@@ -426,41 +414,6 @@ export class SolicitudSalaComponent implements OnInit {
       }
     );
   }
-  //este método verifica que la fecha seleccionada sea mayor o igual a la fecha del servidor, para poder realizar la solicitud correctamente.
-  verificarFechaSeleccionada(userDate: Date) {
-    this._servSolicitud.fechaActual().subscribe(
-      response => {
-        if (response.currentDate) {
-          this.currentDate = response.currentDate;
-          var momentDate = moment(this.currentDate, 'YYYY-MM-DD HH:mm:ss');
-          let serverDate = momentDate.toDate();
-
-          if (userDate.getFullYear() < serverDate.getFullYear()) {
-            this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
-          } else if (((userDate.getMonth() + 1) < (serverDate.getMonth() + 1))) {
-            this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
-          } else if (((userDate.getMonth() + 1) == (serverDate.getMonth() + 1))) {
-            if (userDate.getDate() < serverDate.getDate()) {
-              this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
-            } else {
-              this.writeValue(userDate);
-              this.obtenerSolicitudes(userDate, true);
-            }
-          } else {
-            this.writeValue(userDate);
-            this.obtenerSolicitudes(userDate, true);
-          }
-        } else {
-        }
-      }, error => {
-        var errorMensaje = <any>error;
-        if (errorMensaje != null) {
-          var body = JSON.parse(error._body);
-        }
-      }
-    );
-
-  }
   ///obtiene el nombre departamento, partiendo de su _id
   obtenerNombreDep(id_Dep: any) {
     for (var index = 0; index < this.departamentos.length; index++) {
@@ -514,7 +467,6 @@ export class SolicitudSalaComponent implements OnInit {
                 if (response.message) {
                   let solicit = response.message;
                   this.solicitudSalaEdit = solicit;
-                  //  this.model = { year: solicit.fecha.year, month: solicit.fecha.month, day: solicit.fecha.day };
 
                   this.solicitudSalaEdit.fecha.year = this.model.year;
                   this.solicitudSalaEdit.fecha.month = this.model.month;
@@ -532,26 +484,18 @@ export class SolicitudSalaComponent implements OnInit {
                   this.solicitudSalaEdit.horaFin = this.timeF;
 
                   this.solicitudSalaEdit.recursos = solicit.recursos;
-                    //console.log(this.recursos);
-                  //console.log(solicit.recursos);
 
-
-                  // console.log(solicit.recursos[i]);
                   for (var index = 0; index < this.recursos.length; index++) {
                     this.tempArrayCheckedEdit[index] = false;
 
                     for (var i = 0; i < solicit.recursos.length; i++) {
                       if (this.recursos[index]._id == solicit.recursos[i]) {
                         this.tempArrayCheckedEdit[index] = true;
-                        // console.log(this.recursos[index].nombre);
                       }
                       else {
 
-                        //console.log(this.recursos[index].nombre);
                       }
                     }
-
-
                   }
 
                   this.setCupoMaximoSalaEdit(this.solicitudSalaEdit.sala);
@@ -583,18 +527,7 @@ export class SolicitudSalaComponent implements OnInit {
 
                         if (userSumDate < serverSumDate) {
                           this.tempEvent = [];
-                        // } else if (((date.getMonth() + 1) < (serverDate.getMonth() + 1))) {
-                        //   this.tempEvent = [];
-                        // } else if (((date.getMonth() + 1) == (serverDate.getMonth() + 1))) {
-                        //   if (date.getDate() < serverDate.getDate() || this.minDate.day < serverDate.getDate()) {
-                        //     this.tempEvent = [];
-                        //   } else {
-                        //     // alert('entra aqui 1');
-                        //     //    this.tempEvent = event.actions;
-                        //   }
                         } else {
-                          // alert('entra aqui 2');
-                          // this.tempEvent = event.actions;
                         }
                       } else {
                       }
@@ -605,8 +538,6 @@ export class SolicitudSalaComponent implements OnInit {
                       //ocurrió un error
                     }
                   );
-                  //   this.modalData = { event, action };
-                  // this.mr=  this.modal.open(this.modalContent, { size: 'lg' });
                 } else {//No se ha encontrado la Sala
                 }
               }, error => {
@@ -887,8 +818,7 @@ export class SolicitudSalaComponent implements OnInit {
   }
 
   modificarSolicitud() {
-    //console.log(this.tempArrayCheckedEdit);
-    //console.log(this.tempRecursosEdit);
+
     this.solicitudSalaEdit.fecha = { year: null, month: null, day: null };
     this.solicitudSalaEdit.horaInicio = this.timeI;
     this.solicitudSalaEdit.horaFin = this.timeF;
@@ -1647,7 +1577,6 @@ export class SolicitudSalaComponent implements OnInit {
   );
 
  }
-
 
 }
 
