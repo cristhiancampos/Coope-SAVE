@@ -1,5 +1,3 @@
-
-
 <ng-template #modalContent2 let-close="close" id="modalContent2">
   <div class="modal-header" style="background: #0069d9;color:#fff">
     <!-- <h5 class="modal-title">Event action occurred</h5>
@@ -33,7 +31,7 @@
 
           <div class="row">
 
-            <div class="control-group from-group"  >
+            <div class="control-group from-group">
               <div class="control">
 
                 <ul style="list-style:none;" *ngFor="let vehiculo of vehiculos  | paginate: {itemsPerPage:1, currentPage: nuevoVehiculo} let i = index">
@@ -127,7 +125,7 @@
               <div class="control-group form-group">
                 <div class="controls">
                   <input id="inputCupE" type="text" class="form-control" #cupE="ngModel" name="cupE" [(ngModel)]="solicitudVehiculoEdit.destino"
-                    placeholder="Motivo de la gira" required min="1"  [disabled]="tempEvent.length<=0">
+                    placeholder="Motivo de la gira" required min="1" [disabled]="tempEvent.length<=0">
                   <!-- <div *ngIf="cup.valid && cup.value<=cupoMaximo && cup.value>0 " class="small form-text text-success" style="font-size:0.9rem">Correcto<i class="fa fa-check" aria-hidden="true"></i></div> -->
                   <div class="small form-text text-danger" *ngIf="cupE.invalid && (cupE.dirty || cupE.touched)" style="font-size:0.9rem">
                     <div *ngIf="cupE.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> El destino de la gira es obligatoria</div>
@@ -141,8 +139,8 @@
             <div class="col-md-5">
               <div class="control-group form-group">
                 <div class="controls">
-                  <textarea id="areaText" class="form-control" #descpE="ngModel" name="descpE" [(ngModel)]="solicitudVehiculoEdit.descripcion" placeholder="Motivo por el cuál solicita la sala."
-                    rows="2" required maxlength="50" [disabled]="tempEvent.length<=0"></textarea>
+                  <textarea id="areaText" class="form-control" #descpE="ngModel" name="descpE" [(ngModel)]="solicitudVehiculoEdit.descripcion"
+                    placeholder="Motivo por el cuál solicita la sala." rows="2" required maxlength="50" [disabled]="tempEvent.length<=0"></textarea>
                   <!-- <div *ngIf="descp.valid" class="small form-text text-success" style="font-size:0.9rem">Correcto <i class="fa fa-check" aria-hidden="true"></i></div> -->
                   <div class="small form-text text-danger" *ngIf="descpE.invalid && (descpE.dirty || descpE.touched)" style="font-size:0.9rem">
                     <div *ngIf="descpE.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> El motivo de la giraes obligatorio</div>
@@ -157,102 +155,67 @@
 
           <!-- //////////////////////////////////////////////////Acompañantes/////////////////////////////////////////////////////////////// -->
           <div class="container-fluid" *ngIf="tempEvent.length>0">
-              <hr>
-              <h4 style="color:#0069d9">Acompañantes</h4> <br>
-              <div class="container">
-                <div class="row">
-                  <div class="col-sm-12 col-sm-offset-3" style="margin-bottom: 30px;">
-                    <div id="imaginary_container">
-                      <div class="input-group stylish-input-group">
-                        <input type="text" class="form-control" #filtro="ngModel" [(ngModel)]="filtroUsuario" name="filtro" placeholder="Buscar Usuario"
-                          (input)="getItems($event)" id="filtroUsuario" [value]="filtroUsuario" [disabled]="tempEvent.length<=0">
-                        <span class="input-group-addon">
-                                      <button type="submit">
-                                          <span class="fa fa-search" aria-hidden="true"></span>
-                        </button>
-                        </span>
-                      </div>
+            <hr>
+            <h4 style="color:#0069d9">Acompañantes</h4> <br>
+            <div class="container">
+              <div class="row">
+                <div class="col-sm-12 col-sm-offset-3" style="margin-bottom: 30px;">
+                  <div id="imaginary_container">
+                    <div class="input-group stylish-input-group">
+                      <input type="text" class="form-control" #filtro="ngModel" [(ngModel)]="filtroUsuario" name="filtro" placeholder="Buscar Usuario"
+                        (input)="getItems($event)" id="filtroUsuario" [value]="filtroUsuario" [disabled]="tempEvent.length<=0">
+                      <span class="input-group-addon">
+                      <button type="submit">
+                      <span class="fa fa-search" aria-hidden="true"></span>
+                      </button>
+                      </span>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="row">
-                <div class="row"></div>
-                <div class="col-6" style="margin-left: 20px;">
-                  <div class="list-group" id="list-tab" role="tablist">
-                    <div class="row col-md-12" style="overflow-y: scroll; height: 150px">
-  
-                      <div class="col-md-12" *ngFor="let usuario of listaUsuarios | filter: filtroUsuario">
-                        <label class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="home" (click)="agregarAcompanates(usuario)" >
+            </div>
+            <div class="row">
+              <div class="row"></div>
+              <div class="col-6" style="margin-left: 20px;">
+                <div class="list-group" id="list-tab" role="tablist">
+                  <div class="row col-md-12" style="overflow-y: scroll; height: 150px">
+
+                    <div class="col-md-12" *ngFor="let usuario of listaUsuarios | filter: filtroUsuario">
+                      <label class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="home" (click)="agregarAcompanates(usuario)">
                         <span class="custom-control-description">{{usuario.nombre}} {{usuario.apellidos}} </span>
                         <span class="fa fa-plus" aria-hidden="true" style="float: right"></span>
                     </label>
-                      </div>
                     </div>
                   </div>
                 </div>
-                <div class="col-6">
-                  <div class="list-group" id="list-tab" role="tablist">
-                    <div class="row col-md-12" style="overflow-y: scroll; height: 150px">
-                      <div class="col-md-12" *ngFor="let usuarioAgregado of usuariosAgregados; let e = index">
-                        <label class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="home" (click)="eliminarAcompanante(usuarioAgregado)">                      
+              </div>
+              <div class="col-6">
+                <div class="list-group" id="list-tab" role="tablist">
+                  <div class="row col-md-12" style="overflow-y: scroll; height: 150px">
+                    <div class="col-md-12" *ngFor="let usuarioAgregado of usuariosAgregados; let e = index">
+                      <label class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="home" (click)="eliminarAcompanante(usuarioAgregado)">                      
                           <span class="custom-control-description" >{{usuarioAgregado.nombre}}{{usuarioAgregado.apellidos}}</span>
-                          <span class="fa fa-minus" aria-hidden="true" style="float: right"></span> 
-                          
+                          <span class="fa fa-minus" aria-hidden="true" style="float: right"></span>   
                       </label>
-                      </div>
                     </div>
                   </div>
                 </div>
-  
               </div>
             </div>
-
-
-          </div >
-
-
+          </div>
+        </div>
       </div>
     </form>
-
-
-    <!-- <div>
-        Evento:
-        <pre>{{ modalData?.event | json }}</pre>
-      </div>  -->
-
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-secondary" (click)="cancelarAccion()">OK</button>
-    <button *ngIf="tempEvent.length>0" type="button" class="btn btn-outline-secondary" (click)="modificarSolicitud(solicitudVehiculoEdit)" [disabled]="!timeUpdateF.valid || !timeUpdate.valid || cupE.value<='0'  || cupE.value>cupoMaximoEdit || eliminar">Modificar
+    <button *ngIf="tempEvent.length>0" type="button" class="btn btn-outline-secondary" (click)="modificarSolicitud(solicitudVehiculoEdit)"
+      [disabled]="!timeUpdateF.valid || !timeUpdate.valid || cupE.value<='0'  || cupE.value>cupoMaximoEdit || eliminar">Modificar
         </button>
     <button *ngIf="tempEvent.length>0" type="button" class="btn btn-outline-secondary" (click)="eliminarSolicitud()">Eliminar
            </button>
   </div>
 </ng-template>
-
-
-<!-- <ng-template #modalContent2 let-close="close">
-  <div class="modal-header" style="background: #0069d9;color:#fff">
-    
-    <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;{{ modalData?.action }} Solicitud</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal"> 
-        <small aria-hidden="true">&times;</small>
-      </button>
-  </div>
-  <div class="modal-body">
-    <div>
-      <pre> <a><img src="assets/img/logo.png" ></a> </pre>
-    </div>
-    <div>
-      Evento:
-      <pre>{{ modalData?.event | json }}</pre>
-    </div>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-secondary">OK</button>
-  </div>
-</ng-template> -->
 
 <div class="row text-center" style="margin-top: 8%">
 
@@ -305,7 +268,7 @@
 <section class="guiColors">
   <!-- <h3> &nbsp;&nbsp;Guía de Colores</h3> -->
   <ul>
-    <li *ngFor="let departamento of departamentos"  > <span class="span-g" [style.background]="departamento.color"></span> &nbsp; {{departamento.nombre}}</li>
+    <li *ngFor="let departamento of departamentos"> <span class="span-g" [style.background]="departamento.color"></span> &nbsp; {{departamento.nombre}}</li>
   </ul>
   <br>
 </section>
@@ -316,292 +279,290 @@
 <!-- Modal  agregar nueva solicitud-->
 
 <ng-template #modalAgregarSolicitudVehiculo let-c="close" let-d="dismiss">
-      <div class="modal-header" style="color: #FFF;background: #0069d9">
-        <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar-plus-o" aria-hidden="true"></i> Solicitar Vehiculo</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cerrar()">
+  <div class="modal-header" style="color: #FFF;background: #0069d9">
+    <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar-plus-o" aria-hidden="true"></i> Solicitar Vehiculo</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cerrar()">
           <small aria-hidden="true" style="font-size: 2rem; cursor: pointer">&times;</small>
         </button>
-      </div>
-      <div class="modal-body" style="text-align: center">
+  </div>
+  <div class="modal-body" style="text-align: center">
 
+
+    <div class="row">
+      <div class="col-md-2">
+      </div>
+      <div class="col-md-8">
+        <div class="panel with-nav-tabs panel-primary">
+          <div class="panel-heading">
+            <ul class="nav nav-pills nav-fill nav-tabs">
+              <li class="nav-item">
+                <a id="btn-solicitud" class="nav-link active" href="#tab1primary" data-toggle="tab" (click)="solicitud(1)">Solicitar Vehículo</a>
+              </li>
+              <li class="nav-item">
+                <a id="btn-lista" class="nav-link" href="#tab2primary" data-toggle="tab" (click)="solicitud(2)">Solicitudes del día</a>
+              </li>
+            </ul>
+          </div>
+          <div class="panel-body">
+            <div class="tab-content">
+              <div class="tab-pane fade in active" id="tab1primary">
+              </div>
+              <div class="tab-pane fade" id="tab2primary"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!--sección agregar solicitud-->
+    <section *ngIf="solicSala">
+      <br>
+      <table class="table table-bordered table-responsive">
+        <thead>
+          <tr>
+            <th class="th-color">Horario</th>
+
+            <th class="th-color">Vehiculo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="row">
+                <div class="col-md-6">
+                  <form class="form-inline">
+                    <div class="form-group">
+                      <div class="input-group">
+                        <input id="dataPickerAdd" readonly class="form-control" [placeholder]="placeholder" name="date" [(ngModel)]="dateStruct"
+                          (ngModelChange)="updateDate()" ngbDatepicker #datePicker="ngbDatepicker" [minDate]="minDate">
+                        <div class="input-group-addon" (click)="datePicker.toggle()">
+                          <i class="fa fa-calendar"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <div style="font-size: 1rem">
+                    <br>
+                    <label for="">Inicia</label>
+                    <div class="form-group">
+                      <ngb-timepicker [(ngModel)]="solicitudVehiculo.horaSalida" (ngModelChange)="updateTime()" [meridian]="true" (input)="updateInitDateOnInput()"
+                        #ctrlInitDate="ngModel" name="ctrlInitDate" required>
+                      </ngb-timepicker>
+                      <!-- <div *ngIf="ctrlInitDate.valid" class="small form-text text-success">Correcto <i class="fa fa-check" aria-hidden="true"></i> </div> -->
+                      <div class="small form-text text-danger" *ngIf="!ctrlInitDate.valid">
+                        <div *ngIf="ctrlInitDate.errors['required']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar valores Numericos</div>
+                        <div *ngIf="ctrlInitDate.errors['tooLate']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en las
+                          horas</div>
+                        <div *ngIf="ctrlInitDate.errors['tooEarly']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en los
+                          minutos
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 3.8em; font-size: 1rem; margin-left: -7px;">
+
+                  <label for="">Termina</label>
+                  <ngb-timepicker [(ngModel)]="solicitudVehiculo.horaRegreso" (ngModelChange)="updateTime()" [meridian]="true" (input)="updateFinishDateOnInput()"
+                    #ctrlFinishDate="ngModel" name="ctrlFinishDate" required>
+                  </ngb-timepicker>
+                  <!-- <div *ngIf="ctrlFinishDate.valid" class="small form-text text-success">Correcto <i class="fa fa-check" aria-hidden="true"></i> </div> -->
+                  <div class="small form-text text-danger" *ngIf="!ctrlFinishDate.valid">
+                    <div *ngIf="ctrlFinishDate.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar valores Numericos</div>
+                    <div *ngIf="ctrlFinishDate.errors['tooLate']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en las horas
+                    </div>
+                    <div *ngIf="ctrlFinishDate.errors['tooEarly']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en los minutos
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="small form-text text-danger" style="font-size:0.9rem; margin-top: -10px; margin-bottom: 10px; margin-right: 3px;">
+                  <div>&nbsp; &nbsp;&nbsp; &nbsp;
+                    <i *ngIf='mensajeSolicitudInvalida!=""' class="fa fa-exclamation-circle" aria-hidden="true"></i>{{mensajeSolicitudInvalida}}</div>
+
+                </div>
+                <!-- <div *ngIf="ctrlFinishDate.valid" class="small form-text text-success">Debe eligir un horario correcto <i class="fa fa-check" aria-hidden="true"></i> </div> -->
+
+
+              </div>
+
+              <div class="col-md-6" style="width: 100%; margin-top: -5px;">
+                <div class="control-group form-group">
+                  <div class="controls">
+                    <textarea class="form-control" #descp="ngModel" name="descp" [(ngModel)]="solicitudVehiculo.descripcion" placeholder="Motivo de la gira."
+                      rows="3" required maxlength="150" style="width:215%;"></textarea>
+                    <!-- <div *ngIf="descp.valid" class="small form-text text-success" style="font-size:0.9rem">Correcto <i class="fa fa-check" aria-hidden="true"></i></div> -->
+                    <div class="small form-text text-danger" *ngIf="descp.invalid && (descp.dirty || descp.touched)" style="font-size:0.9rem">
+                      <div *ngIf="descp.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> El motivo de la gira</div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="control-group from-group">
+                <div class="control">
+                  <ul style="list-style:none;" *ngFor="let vehiculo of vehiculos  | paginate: {itemsPerPage:1, currentPage: p} let i = index">
+                    <li>
+                      <div class="row">
+                        <div class="col-sm-4">
+                          <div class="card" id="carVehiculo">
+                            <div class="card-block" style="margin-top:10px;">
+                              <p>Placa: {{vehiculo.placa}}</p>
+                              <p>Tipo: {{vehiculo.tipo}}</p>
+                              <p>Marca: {{vehiculo.marca}}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                  <!-- paginador-->
+                  <div id="pagionadorVehiculos">
+                    <pagination-controls (pageChange)="vehiculoSeleccionado($event)"></pagination-controls>
+                  </div>
+                </div>
+              </div>
+              <div class="control-group form-group" style="margin-top: 38px;">
+                <div class="controls">
+                  <textarea id="inputCup" type="text" class="form-control" #destino="ngModel" name="destino" [(ngModel)]="solicitudVehiculo.destino"
+                    placeholder="Destino" rows="3" required maxlength="50"></textarea>
+                  <!-- <div *ngIf="cup.valid && cup.value<=cupoMaximo && cup.value>0 " class="small form-text text-success" style="font-size:0.9rem">Correcto<i class="fa fa-check" aria-hidden="true"></i></div> -->
+                  <div class="small form-text text-danger" *ngIf="destino.invalid && (destino.dirty || destino.touched)" style="font-size:0.9rem">
+                    <div *ngIf="destino.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> El destino es obligatorio</div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="container-fluid">
 
         <div class="row">
-            <div class="col-md-2">
-              </div>
-          <div class="col-md-8">
-            <div class="panel with-nav-tabs panel-primary">
-              <div class="panel-heading">
-                <ul class="nav nav-pills nav-fill nav-tabs" >
-                    <li class="nav-item">
-                        <a  id="btn-solicitud" class="nav-link active" href="#tab1primary" data-toggle="tab" (click)="solicitud(1)" >Solicitar Vehículo</a>
-                      </li>
-                      <li class="nav-item">
-                        <a id="btn-lista" class="nav-link" href="#tab2primary" data-toggle="tab" (click)="solicitud(2)">Solicitudes del día</a>
-                      </li>
-                </ul>
-              </div>
-              <div class="panel-body">
-                <div class="tab-content">
-                  <div class="tab-pane fade in active" id="tab1primary">
+          <div class="col-sm-6">
+            <h4 style="color:#0069d9">Acompañantes</h4> <br>
+          </div>
+          <div class="col-sm-6">
+            <div class="row">
+              <div class="" style="margin-bottom: 30px;">
+                <div id="imaginary_container">
+                  <div class="input-group stylish-input-group">
+                    <input type="text" class="form-control" #filtro="ngModel" [(ngModel)]="filtroUsuario" name="filtro" placeholder="Buscar Usuario"
+                      (input)="getItems($event)" id="filtroUsuario" [value]="filtroUsuario">
+                    <span class="input-group-addon">
+                                        <button type="submit">
+                                            <span class="fa fa-search" aria-hidden="true"></span>
+                    </button>
+                    </span>
                   </div>
-                  <div class="tab-pane fade" id="tab2primary"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="container" style="margin-bottom: 2px;color:#0069d9;">
+          <div class="row">
+            <div class="col-6">
+              <h6>Usuarios Disponibles</h6>
+            </div>
+            <div class="col-6">
+              <h6>Usuarios Agregados</h6>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="row"></div>
+          <div class="col-6" style="margin-left: 20px;">
+            <div class="list-group" id="list-tab" role="tablist">
+              <div class="row col-md-12" style="overflow-y: scroll; height: 150px">
+
+                <div class="col-md-12" *ngFor="let usuario of listaUsuarios | filter: filtroUsuario">
+                  <label class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="home" (click)="agregarAcompanates(usuario)">
+                      <span class="custom-control-description "  >{{usuario.nombre}} {{usuario.apellidos}} </span>
+                      <span class="fa fa-plus" aria-hidden="true" style="float: right"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="list-group" id="list-tab" role="tablist">
+              <div class="row col-md-12" style="overflow-y: scroll; height: 150px">
+                <div class="col-md-12" *ngFor="let usuarioAgregado of usuariosAgregados; let e = index">
+                  <label class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="home" (click)="eliminarAcompanante(usuarioAgregado)">                      
+                        <span class="custom-control-description" >{{usuarioAgregado.nombre}}{{usuarioAgregado.apellidos}}</span>
+                        <span class="fa fa-minus" aria-hidden="true" style="float: right"></span> 
+                        
+                    </label>
                 </div>
               </div>
             </div>
           </div>
 
         </div>
-
-        <!--sección agregar solicitud-->
-        <section *ngIf="solicSala">
-          <br>
-          <table class="table table-bordered table-responsive">
-            <thead>
-              <tr>
-                <th class="th-color">Horario</th>
-
-                <th class="th-color">Vehiculo</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <div class="row">
-                    <div class="col-md-6">
-                      <form class="form-inline">
-                        <div class="form-group">
-                          <div class="input-group">
-                            <input id="dataPickerAdd" readonly class="form-control" [placeholder]="placeholder" name="date" [(ngModel)]="dateStruct"
-                              (ngModelChange)="updateDate()" ngbDatepicker #datePicker="ngbDatepicker" [minDate]="minDate">
-                            <div class="input-group-addon" (click)="datePicker.toggle()">
-                              <i class="fa fa-calendar"></i>
-                            </div>
-                          </div>
-                        </div>
-                      </form>
-                      <div style="font-size: 1rem">
-                        <br>
-                        <label for="">Inicia</label>
-                        <div class="form-group">
-                          <ngb-timepicker [(ngModel)]="solicitudVehiculo.horaSalida" (ngModelChange)="updateTime()" [meridian]="true" (input)="updateInitDateOnInput()"
-                            #ctrlInitDate="ngModel" name="ctrlInitDate" required>
-                          </ngb-timepicker>
-                          <!-- <div *ngIf="ctrlInitDate.valid" class="small form-text text-success">Correcto <i class="fa fa-check" aria-hidden="true"></i> </div> -->
-                          <div class="small form-text text-danger" *ngIf="!ctrlInitDate.valid">
-                            <div *ngIf="ctrlInitDate.errors['required']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar valores Numericos</div>
-                            <div *ngIf="ctrlInitDate.errors['tooLate']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en
-                              las horas</div>
-                            <div *ngIf="ctrlInitDate.errors['tooEarly']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en
-                              los minutos
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                      <div class="form-group" style="margin-top: 3.8em; font-size: 1rem; margin-left: -7px;">
-
-                        <label for="">Termina</label>
-                        <ngb-timepicker [(ngModel)]="solicitudVehiculo.horaRegreso" (ngModelChange)="updateTime()" [meridian]="true" (input)="updateFinishDateOnInput()"
-                          #ctrlFinishDate="ngModel" name="ctrlFinishDate" required>
-                        </ngb-timepicker>
-                        <!-- <div *ngIf="ctrlFinishDate.valid" class="small form-text text-success">Correcto <i class="fa fa-check" aria-hidden="true"></i> </div> -->
-                        <div class="small form-text text-danger" *ngIf="!ctrlFinishDate.valid">
-                          <div *ngIf="ctrlFinishDate.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar valores Numericos</div>
-                          <div *ngIf="ctrlFinishDate.errors['tooLate']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en las
-                            horas
-                          </div>
-                          <div *ngIf="ctrlFinishDate.errors['tooEarly']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en los
-                            minutos
-                          </div>
-                        </div>
-                      </div>
-                    
-
-                    <div class="small form-text text-danger" style="font-size:0.9rem; margin-top: -10px; margin-bottom: 10px; margin-right: 3px;">
-                      <div>&nbsp; &nbsp;&nbsp; &nbsp;
-                        <i *ngIf='mensajeSolicitudInvalida!=""' class="fa fa-exclamation-circle" aria-hidden="true"></i>{{mensajeSolicitudInvalida}}</div>
-
-                    </div>
-                    <!-- <div *ngIf="ctrlFinishDate.valid" class="small form-text text-success">Debe eligir un horario correcto <i class="fa fa-check" aria-hidden="true"></i> </div> -->
-                    
-
-                  </div>
-
-                  <div class="col-md-6" style="width: 100%; margin-top: -5px;">
-                      <div class="control-group form-group">
-                          <div class="controls">
-                            <textarea class="form-control" #descp="ngModel" name="descp" [(ngModel)]="solicitudVehiculo.descripcion" placeholder="Motivo de la gira."
-                              rows="3" required maxlength="150" style="width:215%;"></textarea>
-                            <!-- <div *ngIf="descp.valid" class="small form-text text-success" style="font-size:0.9rem">Correcto <i class="fa fa-check" aria-hidden="true"></i></div> -->
-                            <div class="small form-text text-danger" *ngIf="descp.invalid && (descp.dirty || descp.touched)" style="font-size:0.9rem">
-                              <div *ngIf="descp.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> El motivo de la gira</div>
-      
-                            </div>
-                          </div>
-                      </div>
-                    </div>
-                </td>
-                <td>
-                  <div class="control-group from-group">
-                    <div class="control">
-                      <ul style="list-style:none;" *ngFor="let vehiculo of vehiculos  | paginate: {itemsPerPage:1, currentPage: p} let i = index">
-                        <li>
-                          <div class="row">
-                            <div class="col-sm-4">
-                              <div class="card" id="carVehiculo">
-                                <div class="card-block" style="margin-top:10px;">
-                                  <p>Placa: {{vehiculo.placa}}</p>
-                                  <p>Tipo: {{vehiculo.tipo}}</p>
-                                  <p>Marca: {{vehiculo.marca}}</p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </li>
-                      </ul>
-                      <!-- paginador-->
-                      <div id="pagionadorVehiculos">
-                        <pagination-controls (pageChange)="vehiculoSeleccionado($event)"  ></pagination-controls>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="control-group form-group" style="margin-top: 38px;">
-                    <div class="controls">
-                      <textarea id="inputCup" type="text" class="form-control" #destino="ngModel" name="destino" [(ngModel)]="solicitudVehiculo.destino"
-                        placeholder="Destino" rows="3" required maxlength="50"></textarea>
-                      <!-- <div *ngIf="cup.valid && cup.value<=cupoMaximo && cup.value>0 " class="small form-text text-success" style="font-size:0.9rem">Correcto<i class="fa fa-check" aria-hidden="true"></i></div> -->
-                      <div class="small form-text text-danger" *ngIf="destino.invalid && (destino.dirty || destino.touched)" style="font-size:0.9rem">
-                        <div *ngIf="destino.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> El destino es obligatorio</div>
-                      </div>
-                    </div>
-                  </div>                  
-                </td>
-              </tr>
-            </tbody>
-          </table>
-
-          <div class="container-fluid">
-            
-            <div class="row">
-              <div class="col-sm-6">
-                <h4 style="color:#0069d9">Acompañantes</h4> <br>
-              </div>
-                <div class="col-sm-6">
-                  <div class="row">
-                    <div class="" style="margin-bottom: 30px;">
-                      <div id="imaginary_container">
-                        <div class="input-group stylish-input-group">
-                          <input type="text" class="form-control" #filtro="ngModel" [(ngModel)]="filtroUsuario" name="filtro" placeholder="Buscar Usuario"
-                            (input)="getItems($event)" id="filtroUsuario" [value]="filtroUsuario">
-                          <span class="input-group-addon">
-                                        <button type="submit">
-                                            <span class="fa fa-search" aria-hidden="true"></span>
-                          </button>
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-            </div>
-
-            <div class="container" style="margin-bottom: 2px;color:#0069d9;">
-              <div class="row">
-                <div class="col-6">
-                    <h6>Usuarios Disponibles</h6>
-                </div>
-                <div class="col-6">
-                    <h6>Usuarios Agregados</h6>
-                </div>              
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="row"></div>
-              <div class="col-6" style="margin-left: 20px;">
-                <div class="list-group" id="list-tab" role="tablist">
-                  <div class="row col-md-12" style="overflow-y: scroll; height: 150px">
-
-                    <div class="col-md-12" *ngFor="let usuario of listaUsuarios | filter: filtroUsuario">
-                      <label class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="home" (click)="agregarAcompanates(usuario)">
-                      <span class="custom-control-description "  >{{usuario.nombre}} {{usuario.apellidos}} </span>
-                      <span class="fa fa-plus" aria-hidden="true" style="float: right"></span>
-                  </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="list-group" id="list-tab" role="tablist">
-                  <div class="row col-md-12" style="overflow-y: scroll; height: 150px">
-                    <div class="col-md-12" *ngFor="let usuarioAgregado of usuariosAgregados; let e = index">
-                      <label class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="home" (click)="eliminarAcompanante(usuarioAgregado)">                      
-                        <span class="custom-control-description" >{{usuarioAgregado.nombre}}{{usuarioAgregado.apellidos}}</span>
-                        <span class="fa fa-minus" aria-hidden="true" style="float: right"></span> 
-                        
-                    </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-          <hr>
-          <button type="button" class="btn btn-danger" (click)="cerrar()">Cancelar</button>
-          <button id="btn-add-solid" type="submit" class="btn btn-success" (click)="agregarSolicitud()" [disabled]="!descp.valid || !destino.valid">Confirmar</button>
-
-        </section>
-
-        <!-- sección lista-->
-        <section *ngIf="!solicSala">
-          <br>
-          <h5>Fecha: {{dateStruct.day}}/{{dateStruct.month}}/{{dateStruct.year}}</h5>
-          <table class="table table-hover" style="font-size:1rem">
-            <thead>
-              <tr>
-                <th scope="col"><i class="fa fa-list-ol" aria-hidden="true"></i></th>
-                <th scope="col">Sala</th>
-                <th scope="col">Horario</th>
-                <th scope="col">Motivo</th>
-                <th scope="col">Encargado</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let solicitud of solicitudesdia; let i = index">
-                <th scope="row">{{i+1}}</th>
-                <th>{{solicitud.vehiculo}}</th>
-                <th>{{solicitud.horaSalida.hour}}:{{solicitud.horaSalida.minute}} - {{solicitud.horaRegreso.hour}}:{{solicitud.horaRegreso.minute}}
-                </th>
-                <th>{{solicitud.descripcion}}</th>
-                <th>{{getUsuario(solicitud.usuario)}}</th>
-              </tr>
-            </tbody>
-          </table>
-          <h6 *ngIf='solicitudesdia ==undefined || solicitudesdia.length==0'>No hay solicitudes realizadas para el día seleccionado.<br></h6>
-          <hr>
-          <button type="button" class="btn btn-danger" (click)="cerrar()">Cancelar</button>
-        </section>
       </div>
-   
+      <hr>
+      <button type="button" class="btn btn-danger" (click)="cerrar()">Cancelar</button>
+      <button id="btn-add-solid" type="submit" class="btn btn-success" (click)="agregarSolicitud()" [disabled]="!descp.valid || !destino.valid">Confirmar</button>
+
+    </section>
+
+    <!-- sección lista-->
+    <section *ngIf="!solicSala">
+      <br>
+      <h5>Fecha: {{dateStruct.day}}/{{dateStruct.month}}/{{dateStruct.year}}</h5>
+      <table class="table table-hover" style="font-size:1rem">
+        <thead>
+          <tr>
+            <th scope="col"><i class="fa fa-list-ol" aria-hidden="true"></i></th>
+            <th scope="col">Sala</th>
+            <th scope="col">Horario</th>
+            <th scope="col">Motivo</th>
+            <th scope="col">Encargado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let solicitud of solicitudesdia; let i = index">
+            <th scope="row">{{i+1}}</th>
+            <th>{{solicitud.vehiculo}}</th>
+            <th>{{solicitud.horaSalida.hour}}:{{solicitud.horaSalida.minute}} - {{solicitud.horaRegreso.hour}}:{{solicitud.horaRegreso.minute}}
+            </th>
+            <th>{{solicitud.descripcion}}</th>
+            <th>{{getUsuario(solicitud.usuario)}}</th>
+          </tr>
+        </tbody>
+      </table>
+      <h6 *ngIf='solicitudesdia ==undefined || solicitudesdia.length==0'>No hay solicitudes realizadas para el día seleccionado.<br></h6>
+      <hr>
+      <button type="button" class="btn btn-danger" (click)="cerrar()">Cancelar</button>
+    </section>
+  </div>
+
 </ng-template>
-  <!-- Modal  eliminar solicitud-->
-  <ng-template #modalDeleteSolicitudVehiculo>
-      <div class="modal-header" style="color: #FFF;background: #0069d9">
-        <h5 class="modal-title" id="exampleModalLabel">Eliminar Solicitud</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<!-- Modal  eliminar solicitud-->
+<ng-template #modalDeleteSolicitudVehiculo>
+  <div class="modal-header" style="color: #FFF;background: #0069d9">
+    <h5 class="modal-title" id="exampleModalLabel">Eliminar Solicitud</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-      </div>
-      <div class="modal-body" style="text-align: center">
-        <span>
+  </div>
+  <div class="modal-body" style="text-align: center">
+    <span>
         <i class="fa fa-trash fa-5x" aria-hidden="true" style="color:red"></i> 
       </span>
-        <br><br>
-        <h5>¿Está seguro que desea eliminar la solicitud? </h5>
-        <br>
-        <button type="button" class="btn btn-default btn-modal-can" (click)="cancelarAccion()">Cancelar</button>
-        <button type="button" class="btn btn-default btn-modal-suc" (click)="confirmEliminar()">Confirmar</button>
-      </div>
-    </ng-template>
+    <br><br>
+    <h5>¿Está seguro que desea eliminar la solicitud? </h5>
+    <br>
+    <button type="button" class="btn btn-default btn-modal-can" (click)="cancelarAccion()">Cancelar</button>
+    <button type="button" class="btn btn-default btn-modal-suc" (click)="confirmEliminar()">Confirmar</button>
+  </div>
+</ng-template>

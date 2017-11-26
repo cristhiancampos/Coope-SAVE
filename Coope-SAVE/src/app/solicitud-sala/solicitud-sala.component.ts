@@ -254,8 +254,8 @@ export class SolicitudSalaComponent implements OnInit {
                                 this.tempEnable = false;
                                 this.actions = [];
                               }
-                              let userSumDate=((listaSolicitudes[index].fecha.year*365)+ (listaSolicitudes[index].fecha.month*30)+listaSolicitudes[index].fecha.day);
-                              let serverSumDate=((serverDate.getFullYear()*365)+ ((serverDate.getMonth()+1)*30)+serverDate.getDate());
+                              let userSumDate = ((listaSolicitudes[index].fecha.year * 365) + (listaSolicitudes[index].fecha.month * 30) + listaSolicitudes[index].fecha.day);
+                              let serverSumDate = ((serverDate.getFullYear() * 365) + ((serverDate.getMonth() + 1) * 30) + serverDate.getDate());
 
                               if (userSumDate < serverSumDate) {
                                 this.tempEvent = [];
@@ -372,16 +372,16 @@ export class SolicitudSalaComponent implements OnInit {
           this.minDate.month = (serverDate.getMonth() + 1);
           this.minDate.day = serverDate.getDate();
 
-          let userSumDate=((date.getFullYear()*365)+ (date.getMonth()*30)+date.getDate());
-          let serverSumDate=((serverDate.getFullYear()*365)+ (serverDate.getMonth()*30)+serverDate.getDate());
+          let userSumDate = ((date.getFullYear() * 365) + (date.getMonth() * 30) + date.getDate());
+          let serverSumDate = ((serverDate.getFullYear() * 365) + (serverDate.getMonth() * 30) + serverDate.getDate());
 
-          if(userSumDate<serverSumDate){
+          if (userSumDate < serverSumDate) {
             this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
           }
           else {
-              this.obtenerSolicitudes(date, true);
-              this.writeValue(date);
-            }
+            this.obtenerSolicitudes(date, true);
+            this.writeValue(date);
+          }
         } else {
         }
       }, error => {
@@ -400,7 +400,7 @@ export class SolicitudSalaComponent implements OnInit {
         if (!response.message) {//no hay registros
         } else {//no hay Salas registradas
           array = response.message;
-         // console.log(userDate);
+          // console.log(userDate);
           //console.log(array);
 
           let tempRecurSolici = [];
@@ -522,8 +522,8 @@ export class SolicitudSalaComponent implements OnInit {
                         this.minDate.month = (serverDate.getMonth() + 1);
                         this.minDate.day = serverDate.getDate();
 
-                        let userSumDate=((date.getFullYear()*365)+ (date.getMonth()*30)+date.getDate());
-                        let serverSumDate=((serverDate.getFullYear()*365)+ (serverDate.getMonth()*30)+serverDate.getDate());
+                        let userSumDate = ((date.getFullYear() * 365) + (date.getMonth() * 30) + date.getDate());
+                        let serverSumDate = ((serverDate.getFullYear() * 365) + (serverDate.getMonth() * 30) + serverDate.getDate());
 
                         if (userSumDate < serverSumDate) {
                           this.tempEvent = [];
@@ -679,7 +679,7 @@ export class SolicitudSalaComponent implements OnInit {
             let agregar = false;
             let horaEntradaDigit = (parseInt(this.solicitudSala.horaInicio.hour) + ((parseInt(this.solicitudSala.horaInicio.minute) / 60)));
             let horaSalidaDigit = (parseInt(this.solicitudSala.horaFin.hour) + ((parseInt(this.solicitudSala.horaFin.minute) / 60)));
-          
+
             if (horaEntradaDigit < parseInt(horarioDiaSala.desde) ||
               (horaSalidaDigit > parseInt(horarioDiaSala.hasta))) {
               let meridianoInit;
@@ -1008,15 +1008,15 @@ export class SolicitudSalaComponent implements OnInit {
                       this.dateUpdate.month = this.solicitudSalaEdit.fecha.month;
                       this.dateUpdate.day = this.solicitudSalaEdit.fecha.day;
                       this.solicitudSalaEdit.fecha = this.dateUpdate;
-                      
-                     this.tempRecursosEdit=[];
-                    // console.log(this.recursos.length);
-                     // console.log(this.tempArrayCheckedEdit.length);
+
+                      this.tempRecursosEdit = [];
+                      // console.log(this.recursos.length);
+                      // console.log(this.tempArrayCheckedEdit.length);
                       for (var j = 0; j < this.recursos.length; j++) {
-                        if(this.tempArrayCheckedEdit[j]){
+                        if (this.tempArrayCheckedEdit[j]) {
                           this.tempRecursosEdit.push(this.recursos[j]._id);
                         }
-                        
+
                       }
                       this.solicitudSalaEdit.recursos = this.tempRecursosEdit;
                       console.log("ssssssssssss");
@@ -1028,7 +1028,7 @@ export class SolicitudSalaComponent implements OnInit {
                           } else {
                             let solicitud = response.message;
                             this.msjExitoso("Solicitud de sala modificada exitosamente");
-                          //  this.tempArrayCheckedEdit=[];
+                            //  this.tempArrayCheckedEdit=[];
                             //this.tempRecursosEdit=[];
                             console.log(solicitud);
                             // this.enviarEmail(solicitud);
@@ -1037,7 +1037,7 @@ export class SolicitudSalaComponent implements OnInit {
                             this.mr.close();
                             this.obtenerSolicitudes(new Date(), false);
                             this.obtenerSolicitudSalas();
-                           
+
                           }
                         }, error => {
                           var alertMessage = <any>error;
@@ -1202,17 +1202,17 @@ export class SolicitudSalaComponent implements OnInit {
     }
   }
 
-    //cambia el valor de los check de recursos
-    changeRecursosEdit(event: any, _id: any,i:any) {
-     // console.log(event.target.checked)
-      if (event.target.checked) {
-        this.tempRecursosEdit.push(_id);
-        this.tempArrayCheckedEdit[i]=true;
-      } else {
-        this.tempRecursosEdit = this.tempRecursosEdit.filter(item => item !== _id);
-        this.tempArrayCheckedEdit[i]=false;
-      }
+  //cambia el valor de los check de recursos
+  changeRecursosEdit(event: any, _id: any, i: any) {
+    // console.log(event.target.checked)
+    if (event.target.checked) {
+      this.tempRecursosEdit.push(_id);
+      this.tempArrayCheckedEdit[i] = true;
+    } else {
+      this.tempRecursosEdit = this.tempRecursosEdit.filter(item => item !== _id);
+      this.tempArrayCheckedEdit[i] = false;
     }
+  }
   //sobreescribe el valor dela fecha selecionada
   writeValue(date: Date): void {
     this.date = date;
@@ -1395,188 +1395,188 @@ export class SolicitudSalaComponent implements OnInit {
     }
   }
 
- verificarRecursosAgregar(){
-  let fecha = new Date();
-  fecha.setFullYear(this.dateStruct.year);
-  fecha.setMonth(this.dateStruct.month - 1);
-  fecha.setDate(this.dateStruct.day);
-  this.solicitudSala.fecha = fecha;
-  let array;
-  this._servRecurso.obtenerRecursosHabilitados().subscribe(
-    response => {
-      if (response.message) {
-        this.recursos = response.message;
-        this._servSolicitud.obtenerSolicitudes(this.solicitudSala).subscribe(
-          response => {
-            if (!response.message) {//no hay registros
-            } else {//no hay Salas registradas
-              array = response.message;
-              let tempRecurSolici = [];
-              this.solicitudesdia = array;
-              let horaEntradaDigit = (parseInt(this.solicitudSala.horaInicio.hour) + ((parseInt(this.solicitudSala.horaInicio.minute) / 60)));
-              let horaSalidaDigit = (parseInt(this.solicitudSala.horaFin.hour) + ((parseInt(this.solicitudSala.horaFin.minute) / 60)));
+  verificarRecursosAgregar() {
+    let fecha = new Date();
+    fecha.setFullYear(this.dateStruct.year);
+    fecha.setMonth(this.dateStruct.month - 1);
+    fecha.setDate(this.dateStruct.day);
+    this.solicitudSala.fecha = fecha;
+    let array;
+    this._servRecurso.obtenerRecursosHabilitados().subscribe(
+      response => {
+        if (response.message) {
+          this.recursos = response.message;
+          this._servSolicitud.obtenerSolicitudes(this.solicitudSala).subscribe(
+            response => {
+              if (!response.message) {//no hay registros
+              } else {//no hay Salas registradas
+                array = response.message;
+                let tempRecurSolici = [];
+                this.solicitudesdia = array;
+                let horaEntradaDigit = (parseInt(this.solicitudSala.horaInicio.hour) + ((parseInt(this.solicitudSala.horaInicio.minute) / 60)));
+                let horaSalidaDigit = (parseInt(this.solicitudSala.horaFin.hour) + ((parseInt(this.solicitudSala.horaFin.minute) / 60)));
 
-              //extraer el horario de la solicitudes de la sala seleccionda 
-              let tempRecurSoli = [];
-              let tempRecursos = this.recursos;
-              for (let indice = 0; indice < this.solicitudesdia.length; indice++) {
-                let sumatoriaFinal = ((this.solicitudesdia[indice].horaFin.hour * 60) + (this.solicitudesdia[indice].horaFin.minute));
-                let sumatoriaInicial = ((this.solicitudesdia[indice].horaInicio.hour * 60) + (this.solicitudesdia[indice].horaInicio.minute));
-                tempRecurSoli = this.solicitudesdia[indice].recursos;
+                //extraer el horario de la solicitudes de la sala seleccionda 
+                let tempRecurSoli = [];
+                let tempRecursos = this.recursos;
+                for (let indice = 0; indice < this.solicitudesdia.length; indice++) {
+                  let sumatoriaFinal = ((this.solicitudesdia[indice].horaFin.hour * 60) + (this.solicitudesdia[indice].horaFin.minute));
+                  let sumatoriaInicial = ((this.solicitudesdia[indice].horaInicio.hour * 60) + (this.solicitudesdia[indice].horaInicio.minute));
+                  tempRecurSoli = this.solicitudesdia[indice].recursos;
 
-                if (sumatoriaInicial <= (horaEntradaDigit * 60) && (horaEntradaDigit * 60) < sumatoriaFinal) {
+                  if (sumatoriaInicial <= (horaEntradaDigit * 60) && (horaEntradaDigit * 60) < sumatoriaFinal) {
 
-                  for (let j = 0; j < tempRecurSoli.length; j++) {
+                    for (let j = 0; j < tempRecurSoli.length; j++) {
 
-                    for (let i = 0; i < tempRecursos.length; i++) {
-                      if (tempRecurSoli[j] == tempRecursos[i]._id) {
-                        console.log(tempRecursos[i].nombre);
-                        this.recursos.splice(i, 1);
-                      }
+                      for (let i = 0; i < tempRecursos.length; i++) {
+                        if (tempRecurSoli[j] == tempRecursos[i]._id) {
+                          console.log(tempRecursos[i].nombre);
+                          this.recursos.splice(i, 1);
+                        }
 
-                    }
-                  }
-
-                }
-                if (sumatoriaFinal > (horaEntradaDigit * 60) && (horaSalidaDigit * 60) > sumatoriaInicial) {
-                  for (let j = 0; j < tempRecurSoli.length; j++) {
-
-                    for (let i = 0; i < tempRecursos.length; i++) {
-                      if (tempRecurSoli[j] == tempRecursos[i]._id) {
-                        console.log(tempRecursos[i].nombre);
-                        this.recursos.splice(i, 1);
-                      }
-
-                    }
-                  }
-                }
-              }
-            }
-          }, error => {
-            // alert('erro');
-          }
-        );
-
-      } else {//no hay recursos registrados
-      }
-    }, error => {
-      var errorMensaje = <any>error;
-      if (errorMensaje != null) {
-        var body = JSON.parse(error._body);
-      }
-    }
-  );
-
- }
- verificarRecursosModificar(){
-  let fecha = new Date();
-  fecha.setFullYear(this.model.year);
-  fecha.setMonth(this.model.month - 1);
-  fecha.setDate(this.model.day);
-  let solicitud = new  SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
-  solicitud.fecha=fecha;
-  this.solicitudSala.fecha = fecha;
-  let array;
-  this._servRecurso.obtenerRecursosHabilitados().subscribe(
-    response => {
-      if (response.message) {
-        this.recursos = response.message;
-       // console.log(this.solicitudSalaEdit);
-        this._servSolicitud.obtenerSolicitudes(solicitud).subscribe(
-          response => {
-            if (!response.message) {//no hay registros
-            } else {//no hay Salas registradas
-              array = response.message;
-              let tempRecurSolici = [];
-              this.solicitudesdia = array;
-              let horaEntradaDigit = (parseInt(this.solicitudSalaEdit.horaInicio.hour) + ((parseInt(this.solicitudSalaEdit.horaInicio.minute) / 60)));
-              let horaSalidaDigit = (parseInt(this.solicitudSalaEdit.horaFin.hour) + ((parseInt(this.solicitudSalaEdit.horaFin.minute) / 60)));
-
-              //extraer el horario de la solicitudes de la sala seleccionda 
-              let tempRecurSoli = [];
-              let t=[];
-              let tempRecursos = this.recursos;
-              //console.log('sss');
-              //console.log(this.solicitudesdia);
-              for (let indice = 0; indice < this.solicitudesdia.length; indice++) {
-               // console.log(this.solicitudesdia[indice]._id +' cur '+this.solicitudSalaEdit._id);
-                if(this.solicitudesdia[indice]._id===this.solicitudSalaEdit._id){
-                 
-                  let recur=this.solicitudesdia[indice].recursos;
-                //  console.log(recur);
-                  for (var index = 0; index < this.recursos.length; index++) {
-                    this.tempArrayCheckedEdit[index] = false;
-                    for (var i = 0; i < recur.length; i++) {
-                      if (this.recursos[index]._id == recur[i]) {
-                        this.tempArrayCheckedEdit[index] = true;
-                        // console.log(this.recursos[index].nombre);
-                      }
-                      else {
-
-                        //console.log(this.recursos[index].nombre);
                       }
                     }
 
-
                   }
+                  if (sumatoriaFinal > (horaEntradaDigit * 60) && (horaSalidaDigit * 60) > sumatoriaInicial) {
+                    for (let j = 0; j < tempRecurSoli.length; j++) {
 
+                      for (let i = 0; i < tempRecursos.length; i++) {
+                        if (tempRecurSoli[j] == tempRecursos[i]._id) {
+                          console.log(tempRecursos[i].nombre);
+                          this.recursos.splice(i, 1);
+                        }
 
-                }
-                else{
-                  t.push(this.solicitudesdia[indice]);
-                let sumatoriaFinal = ((this.solicitudesdia[indice].horaFin.hour * 60) + (this.solicitudesdia[indice].horaFin.minute));
-                let sumatoriaInicial = ((this.solicitudesdia[indice].horaInicio.hour * 60) + (this.solicitudesdia[indice].horaInicio.minute));
-                tempRecurSoli = this.solicitudesdia[indice].recursos;
-
-                if (sumatoriaInicial <= (horaEntradaDigit * 60) && (horaEntradaDigit * 60) < sumatoriaFinal) {
-
-                  for (let j = 0; j < tempRecurSoli.length; j++) {
-
-                    for (let i = 0; i < tempRecursos.length; i++) {
-                      if (tempRecurSoli[j] == tempRecursos[i]._id) {
-                      //  console.log(tempRecursos[i].nombre);
-                        this.recursos.splice(i, 1);
                       }
-
-                    }
-                  }
-
-                }
-                if (sumatoriaFinal > (horaEntradaDigit * 60) && (horaSalidaDigit * 60) > sumatoriaInicial) {
-                  for (let j = 0; j < tempRecurSoli.length; j++) {
-
-                    for (let i = 0; i < tempRecursos.length; i++) {
-                      if (tempRecurSoli[j] == tempRecursos[i]._id) {
-                       // console.log(tempRecursos[i].nombre);
-                        this.recursos.splice(i, 1);
-                      }
-
                     }
                   }
                 }
               }
-
+            }, error => {
+              // alert('erro');
             }
-          //  console.log('evaluar');
-           // console.log(t);
+          );
 
+        } else {//no hay recursos registrados
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+        }
+      }
+    );
+
+  }
+  verificarRecursosModificar() {
+    let fecha = new Date();
+    fecha.setFullYear(this.model.year);
+    fecha.setMonth(this.model.month - 1);
+    fecha.setDate(this.model.day);
+    let solicitud = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
+    solicitud.fecha = fecha;
+    this.solicitudSala.fecha = fecha;
+    let array;
+    this._servRecurso.obtenerRecursosHabilitados().subscribe(
+      response => {
+        if (response.message) {
+          this.recursos = response.message;
+          // console.log(this.solicitudSalaEdit);
+          this._servSolicitud.obtenerSolicitudes(solicitud).subscribe(
+            response => {
+              if (!response.message) {//no hay registros
+              } else {//no hay Salas registradas
+                array = response.message;
+                let tempRecurSolici = [];
+                this.solicitudesdia = array;
+                let horaEntradaDigit = (parseInt(this.solicitudSalaEdit.horaInicio.hour) + ((parseInt(this.solicitudSalaEdit.horaInicio.minute) / 60)));
+                let horaSalidaDigit = (parseInt(this.solicitudSalaEdit.horaFin.hour) + ((parseInt(this.solicitudSalaEdit.horaFin.minute) / 60)));
+
+                //extraer el horario de la solicitudes de la sala seleccionda 
+                let tempRecurSoli = [];
+                let t = [];
+                let tempRecursos = this.recursos;
+                //console.log('sss');
+                //console.log(this.solicitudesdia);
+                for (let indice = 0; indice < this.solicitudesdia.length; indice++) {
+                  // console.log(this.solicitudesdia[indice]._id +' cur '+this.solicitudSalaEdit._id);
+                  if (this.solicitudesdia[indice]._id === this.solicitudSalaEdit._id) {
+
+                    let recur = this.solicitudesdia[indice].recursos;
+                    //  console.log(recur);
+                    for (var index = 0; index < this.recursos.length; index++) {
+                      this.tempArrayCheckedEdit[index] = false;
+                      for (var i = 0; i < recur.length; i++) {
+                        if (this.recursos[index]._id == recur[i]) {
+                          this.tempArrayCheckedEdit[index] = true;
+                          // console.log(this.recursos[index].nombre);
+                        }
+                        else {
+
+                          //console.log(this.recursos[index].nombre);
+                        }
+                      }
+
+
+                    }
+
+
+                  }
+                  else {
+                    t.push(this.solicitudesdia[indice]);
+                    let sumatoriaFinal = ((this.solicitudesdia[indice].horaFin.hour * 60) + (this.solicitudesdia[indice].horaFin.minute));
+                    let sumatoriaInicial = ((this.solicitudesdia[indice].horaInicio.hour * 60) + (this.solicitudesdia[indice].horaInicio.minute));
+                    tempRecurSoli = this.solicitudesdia[indice].recursos;
+
+                    if (sumatoriaInicial <= (horaEntradaDigit * 60) && (horaEntradaDigit * 60) < sumatoriaFinal) {
+
+                      for (let j = 0; j < tempRecurSoli.length; j++) {
+
+                        for (let i = 0; i < tempRecursos.length; i++) {
+                          if (tempRecurSoli[j] == tempRecursos[i]._id) {
+                            //  console.log(tempRecursos[i].nombre);
+                            this.recursos.splice(i, 1);
+                          }
+
+                        }
+                      }
+
+                    }
+                    if (sumatoriaFinal > (horaEntradaDigit * 60) && (horaSalidaDigit * 60) > sumatoriaInicial) {
+                      for (let j = 0; j < tempRecurSoli.length; j++) {
+
+                        for (let i = 0; i < tempRecursos.length; i++) {
+                          if (tempRecurSoli[j] == tempRecursos[i]._id) {
+                            // console.log(tempRecursos[i].nombre);
+                            this.recursos.splice(i, 1);
+                          }
+
+                        }
+                      }
+                    }
+                  }
+
+                }
+                //  console.log('evaluar');
+                // console.log(t);
+
+              }
+            }, error => {
+              // alert('erro');
             }
-          }, error => {
-            // alert('erro');
-          }
-        );
+          );
 
-      } else {//no hay recursos registrados
+        } else {//no hay recursos registrados
+        }
+      }, error => {
+        var errorMensaje = <any>error;
+        if (errorMensaje != null) {
+          var body = JSON.parse(error._body);
+        }
       }
-    }, error => {
-      var errorMensaje = <any>error;
-      if (errorMensaje != null) {
-        var body = JSON.parse(error._body);
-      }
-    }
-  );
+    );
 
- }
+  }
 
 }
 
