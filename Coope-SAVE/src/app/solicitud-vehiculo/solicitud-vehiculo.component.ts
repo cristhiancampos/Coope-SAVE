@@ -1888,8 +1888,9 @@ export class SolicitudVehiculoComponent implements OnInit {
     }
     return "";
   }
+  contador=0;
   handleEvent(action: string, event: CalendarEvent): void {
-
+this.contador=0;
     this.obtenerUsuarios();
     this.tempColor = event.color;
     this.solicitudVehiculoEdit._id = this.tempColor.id;
@@ -2006,9 +2007,13 @@ export class SolicitudVehiculoComponent implements OnInit {
 
                       } else {
                       }
-
-                      this.modalData = { event, action };
+                      this.contador++;
+                      if(this.contador==2){
                       this.mr = this.modal.open(this.modalContent2, { size: 'lg', backdrop: 'static', keyboard: false });
+
+                      }
+                      //this.modalData = { event, action };
+                      //this.mr = this.modal.open(this.modalContent2, { size: 'lg', backdrop: 'static', keyboard: false });
                     }, error => {
                       //ocurrió un error
                     }

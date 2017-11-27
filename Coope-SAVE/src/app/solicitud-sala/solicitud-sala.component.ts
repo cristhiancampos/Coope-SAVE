@@ -438,7 +438,9 @@ export class SolicitudSalaComponent implements OnInit {
   }
 
   //manejador de eventos
+  contador=0;
   handleEvent(action: string, event: CalendarEvent): void {
+    this.contador=0;
     //console.log(this.solicitudSalaEdit.recursos);
     this.tempColor = event.color;
     this.solicitudSalaEdit._id = this.tempColor.id;
@@ -529,11 +531,19 @@ export class SolicitudSalaComponent implements OnInit {
                           this.tempEvent = [];
                         } else {
                         }
+                        
+                        
+                       // this.mr = this.modal.open(this.modalContent, { size: 'lg', backdrop: 'static', keyboard: false });
                       } else {
                       }
-
-                      this.modalData = { event, action };
+                      this.contador++;
+                      if(this.contador==2){
                       this.mr = this.modal.open(this.modalContent, { size: 'lg', backdrop: 'static', keyboard: false });
+
+                      }
+
+                     /// this.modalData = { event, action };
+                      //this.mr = this.modal.open(this.modalContent, { size: 'lg', backdrop: 'static', keyboard: false });
                     }, error => {
                       //ocurrió un error
                     }
@@ -840,7 +850,7 @@ export class SolicitudSalaComponent implements OnInit {
       response => {
         if (!response.message) {//no hay registros
         } else {//no hay Salas registradas
-          //console.log('solicitudes salas');
+
           array = response.message;
           this.solicitudesdia = array;
           var minInicial = ((this.solicitudSalaEdit.horaInicio.hour * 60) + this.solicitudSalaEdit.horaInicio.minute);
@@ -1019,8 +1029,6 @@ export class SolicitudSalaComponent implements OnInit {
 
                       }
                       this.solicitudSalaEdit.recursos = this.tempRecursosEdit;
-                      console.log("ssssssssssss");
-                      console.log(this.solicitudSalaEdit.recursos);
                       this._servSolicitud.modificarSolicitudSala(this.solicitudSalaEdit).subscribe(
                         response => {
                           if (!response.message) {
