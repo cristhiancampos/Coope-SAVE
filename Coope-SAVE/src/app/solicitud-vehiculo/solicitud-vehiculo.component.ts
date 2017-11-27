@@ -48,10 +48,6 @@ const colors: any = {
   styleUrls: ['./solicitud-vehiculo.component.css'],
   providers: [ServicioSolicitudVehiculo, ServicioVehiculo, ServicioUsuario, filtrarUsuario, ServicioDepartamento, PdfmakeService],
 
-
-
-
-
 })
 export class SolicitudVehiculoComponent implements OnInit {
 
@@ -112,8 +108,8 @@ export class SolicitudVehiculoComponent implements OnInit {
 
 
   }
-  private departamentos = [];
-  private usuarios = [];
+   departamentos = [];
+  usuarios = [];
   solicitudVehiculo: SolicitudVehiculo;
   solicitudVehiculoEdit: SolicitudVehiculo;
   filtroUsuario;
@@ -129,15 +125,15 @@ export class SolicitudVehiculoComponent implements OnInit {
   idUsuarios = [];
   usuariosAgregados = [];
   currentDate;
-  private solicSala = true;
-  public solicitudesdia = [];
+  solicSala = true;
+  solicitudesdia = [];
   minDate: NgbDateStruct;
   mensajeSolicitudInvalida = "";
   mensajeSolicitudInvalidaEdit = "";
   tempHorarioVehiculo = [];
   tempNombreVehiculo = "";
   listaSolicitudes = [];
-  public p = 1;
+  p = 1;
   nuevoVehiculo = "";
   tempEvent: any;
   timeI = { hour: null, minute: null, second: 0 };

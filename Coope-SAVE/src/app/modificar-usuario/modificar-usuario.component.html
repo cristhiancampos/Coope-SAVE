@@ -21,7 +21,7 @@
           <div class="control-group form-group">
             <div class="controls">
               <input id="input-correo-admin-edit" type="text" #correoModificar="ngModel" name="correoModificar" class="form-control" [(ngModel)]="usuarioEdit.correo"
-                placeholder="usuario" autofocus required (input)="validarModificacion()" (onfocus)="!usuarioExistEdit" [disabled]="true">
+                placeholder="usuario" autofocus required (input)="validarModificacion()" [disabled]="true">
 
               <small *ngIf="correoModificar.touched && correoModificar.value==''"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El correo es obligatorio. </small>
               <small *ngIf="userExistEdit"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe una cuenta con ese correo</small>

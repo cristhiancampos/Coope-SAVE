@@ -20,9 +20,10 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 })
 export class AdminSolicitudComponent implements OnInit {
 
-  private sala = true;// Boolean para controlar que tabla de solicitudes se muestre
-  private token;
+  sala = true;// Boolean para controlar que tabla de solicitudes se muestre
+   token;
    identity;
+   p:any;
 
   //Variables para solicitudes
   public solicitudSala: SolicitudSala;

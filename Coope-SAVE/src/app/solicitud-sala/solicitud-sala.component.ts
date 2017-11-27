@@ -88,15 +88,15 @@ export class SolicitudSalaComponent implements OnInit {
 
   solicitudSala: SolicitudSala;
   solicitudSalaEdit: SolicitudSala;
-  private departamentos = [];
-  private usuarios = [];
+  departamentos = [];
+  usuarios = [];
   salas = [];
   recursos = [];
   tempRecursos = [];
   tempRecursosEdit = [];
   currentDate;
-  private solicSala = true;
-  public solicitudesdia = [];
+  solicSala = true;
+  solicitudesdia = [];
   cupoMaximo;
   cupoMaximoEdit;
   horarioValido = true;//cambiar a false
@@ -110,8 +110,8 @@ export class SolicitudSalaComponent implements OnInit {
   timeI = { hour: null, minute: null, second: 0 };
   timeF = { hour: null, minute: null, second: 0 };
   dateUpdate = { day: null, month: null, year: null };
-  public token;
-  public identity;
+  token;
+  identity;
   tempArrayChecked = [];
   tempArrayCheckedEdit = [];
   esMayor = false;

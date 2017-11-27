@@ -14,16 +14,13 @@ import { CalendarModule } from 'angular-calendar';
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
-import {CalendarHeaderComponent} from './demo-utils/calendar-header.component';
+//import {CalendarHeaderComponent} from './demo-utils/calendar-header.component';
 import * as moment from 'moment';
 import 'moment/locale/es';
 moment.locale('es');
 // import { RegistoUsuarioComponent } from './registo-usuario/registo-usuario.component';
 import { PrincipalComponent } from './principal/principal.component';
-
 import { PdfmakeModule } from 'ng-pdf-make';
-
-
 import { RouterModule, Routes } from '@angular/router';
 import { ModificarUsuarioComponent } from './modificar-usuario/modificar-usuario.component';
 import { AdministradorComponent } from './administrador/administrador.component';
@@ -38,13 +35,16 @@ import {filtrarUsuario} from './solicitud-vehiculo/filtroUsuarios';
 import {NgxPaginationModule} from 'ngx-pagination';
 import { ReportesComponent } from './reportes/reportes.component';
 import { ChartsModule } from 'ng2-charts';
+//import{PDFReportesModule} from './reportes/pdfReportes.module';
+//import { ImgBases64 } from './solicitud-vehiculo/imgBase64';
+//import{SolicitudSalaComponent} from './SolicitudSalaComponent';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     SolicitudSalaComponent,
-    CalendarHeaderComponent,
+   // CalendarHeaderComponent,
     PrincipalComponent,
     ModificarUsuarioComponent,
     AdministradorComponent,
@@ -56,9 +56,8 @@ import { ChartsModule } from 'ng2-charts';
     AdminSolicitudComponent,
     SolicitudVehiculoComponent,
     filtrarUsuario,
-    ReportesComponent
-    
-
+    ReportesComponent,
+   
   ],
   imports: [
     BrowserModule,
@@ -70,9 +69,7 @@ import { ChartsModule } from 'ng2-charts';
     NgbModule.forRoot(),
     NgxPaginationModule,
     ChartsModule,
-    PdfmakeModule
-    
-    
+    PdfmakeModule,
   ],
   providers: [appRoutingProviders],
 bootstrap: [AppComponent]

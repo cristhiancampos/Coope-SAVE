@@ -40,6 +40,7 @@ export class AdminVehiculoComponent implements OnInit {
   disabledVie=true;
   disabledSab=true;
   disabledDom=true;
+  p:any;
   tempHorarios=[
     {dia:'Lunes',desde:'',hasta:''},
     {dia:'Martes',desde:'',hasta:''},

@@ -10,13 +10,10 @@ componenteVehiculi: SolicitudVehiculoComponent;
     
     transform(value, args) {
        
-        if (!args[0]) {
-            console.log('no sirve');  
+        if (!args[0]) {  
             return value;    
          } else if (value) {
             value = value.filter((item) => {
-                console.log(item.nombre);
-                console.log(item.nombre.toLowerCase().indexOf(args.toLowerCase()));
                 return (item.nombre.toLowerCase().trim().indexOf(args.toLowerCase()) > -1);
               })
             

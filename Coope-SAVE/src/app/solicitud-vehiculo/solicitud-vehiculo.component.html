@@ -45,7 +45,7 @@
                   </li>
                 </ul>
                 <!-- paginador-->
-                <div id="pagionadorVehiculos" style="margin-left: -17%" *ngIf="!tempEvent.length<=0">
+                <div id="pagionadorVehiculos" style="margin-left: -17%" *ngIf="tempEvent.length<=0">
                   <pagination-controls (pageChange)="vehiculoSeleccionadoEditar($event)"></pagination-controls>
                 </div>
               </div>

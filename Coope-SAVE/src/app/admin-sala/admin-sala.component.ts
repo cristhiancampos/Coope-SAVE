@@ -42,6 +42,7 @@ export class AdminSalaComponent implements OnInit {
   disabledVie=true;
   disabledSab=true;
   disabledDom=true;
+  p:any;
 
   tempHorarios=[
     {dia:'Lunes',desde:'',hasta:''},
@@ -323,6 +324,7 @@ export class AdminSalaComponent implements OnInit {
 
   modificarSala() {
     this.salaEdit.estado = this.estadoMensajEdit;
+    console.log(this.salaEdit);
     this._servSala.modificarSala(this.salaEdit).subscribe(
       response => {
 

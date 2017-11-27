@@ -4,11 +4,6 @@ import { ReportesComponent } from './reportes.component';
 import { PdfmakeService } from 'ng-pdf-make/pdfmake/pdfmake.service';
 import {ImgBases64} from '../solicitud-vehiculo/imgBase64';
 
-
-
-@Component({
-  providers: [PdfmakeService],
-})
 export class PDFReportes {
 
 getLogo: ImgBases64 = new ImgBases64;

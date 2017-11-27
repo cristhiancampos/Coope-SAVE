@@ -28,6 +28,7 @@ export class AdminRecursoComponent implements OnInit {
   public estadoEdicion: boolean;
   public estadoMensaje = 'Habilitado';
   public estadoMensajEdit = '';
+  p:any;
 
   constructor(
     private _route: ActivatedRoute,

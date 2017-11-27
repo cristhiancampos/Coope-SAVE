@@ -20,7 +20,6 @@ export class PrincipalComponent implements OnInit {
   @ViewChild('modalRegistro') modalRegistro: TemplateRef<any>;
   @ViewChild('modalRecuperarContrasena') modalRecuperarContrasena: TemplateRef<any>;
   public mr: NgbModalRef;
-  //identity = true;
   mmostrar = false;
   public usuario: Usuario;
   public usuarioRegistrado: Usuario;
@@ -63,20 +62,7 @@ export class PrincipalComponent implements OnInit {
   rememberChangeValue() {
     this.recordarme = !this.recordarme;
   }
-  //cerrar modal
-  // cerrarModal(modalId: any) {
-  //   $(".modal-backdrop").remove();
-  //   $('body').removeClass('modal-open');
-  //   $(modalId).removeClass('show');
-  //   $(modalId).css('display', 'none');
-  // }
-  // //abrir modal
-  // abrirModal(modalId: any) {
-  //   $('body').append('<div class="modal-backdrop fade show" ></div>');
-  //   $('body').addClass('modal-open');
-  //   $(modalId).addClass('show');
-  //   $(modalId).css('display', 'block');
-  // }
+
   //al cargarse la pagina verifica si la sesión de usuario se guardó previamente
   ngOnInit() {
     //this._router.navigate['/principal'];

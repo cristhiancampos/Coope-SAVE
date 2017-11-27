@@ -25,12 +25,12 @@ export class AdminDepartamentoComponent implements OnInit {
   public departamento: Departamento;
   public departamentoEdit: Departamento;
   public departamentos = [];
-  nombreExist: boolean;
-  nombreExistEdit: boolean;
-  mostralModal: boolean;
+  public nombreExist: boolean;
+  public nombreExistEdit: boolean;
+  public mostralModal: boolean;
   public token;
   public identity;
-  
+  p:any;
 
   public estado = true;
   public estadoEdicion: boolean;
@@ -53,16 +53,6 @@ export class AdminDepartamentoComponent implements OnInit {
   this.mr = this.modal.open(modal);
 
 }
-
-// private getDismissReason(reason: any): string {
-//   if (reason === ModalDismissReasons.ESC) {
-//     return 'by pressing ESC';
-//   } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-//     return 'by clicking on a backdrop';
-//   } else {
-//     return  `with: ${reason}`;
-//   }
-// }
 
    cerrar(){
      this.mr.close();
@@ -93,8 +83,8 @@ export class AdminDepartamentoComponent implements OnInit {
         } else {
           if (this.identity.rol == "ADMINISTRADOR" || this.identity.rol == "SUPERADMIN") {
             //conseguir el token para enviarselo a cada petición
-            console.log("identidad");
-            console.log(this.identity.rol);
+            // console.log("identidad");
+            // console.log(this.identity.rol);
             
           this._servUsuario.verificarCredenciales(usuarioTemp, 'true').subscribe(
             response => {

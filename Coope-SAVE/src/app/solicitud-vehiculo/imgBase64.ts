@@ -3,10 +3,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SolicitudVehiculoComponent } from './solicitud-vehiculo.component';
 import { PdfmakeService } from 'ng-pdf-make/pdfmake/pdfmake.service';
 
-
-@Component({
-    providers: [PdfmakeService],
-})
 export class ImgBases64 {
 
     componenteVehiculi: SolicitudVehiculoComponent;

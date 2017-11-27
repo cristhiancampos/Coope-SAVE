@@ -8,7 +8,7 @@ describe('SolicitudVehiculoComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SolicitudVehiculoComponent ]
+      declarations: [ SolicitudVehiculoComponent]
     })
     .compileComponents();
   }));

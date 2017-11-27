@@ -41,6 +41,7 @@ export class AdminUsuarioComponent implements OnInit {
   public tempUserRol;
   public departamentos = [];
   public userExist: boolean;
+  p:any;
 
   constructor(
     private _route: ActivatedRoute,
