@@ -164,9 +164,16 @@
         <h3> Reportes - Solicitudes de Vehículos</h3>
       </div>
       <div class="col-md-4">
-        <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px" [disabled]="solicitudesVehiculosFiltradas ==undefined || solicitudesVehiculosFiltradas.length==0" data-toggle="tooltip" data-placement="top" title="Ver reporte en PDF"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
-        <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px" [disabled]="solicitudesVehiculosFiltradas ==undefined || solicitudesVehiculosFiltradas.length==0" data-toggle="tooltip" data-placement="top" title="Imprimir reporte"><i class="fa fa-print" aria-hidden="true"></i></button>
-        <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px" [disabled]="solicitudesVehiculosFiltradas ==undefined || solicitudesVehiculosFiltradas.length==0" data-toggle="tooltip" data-placement="top" title="Descargar reporte"><i class="fa fa-download" aria-hidden="true"></i></button>
+        <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px" (click)="openPdfVehiculo()" 
+        [disabled]="solicitudesVehiculosFiltradas ==undefined || solicitudesVehiculosFiltradas.length==0" data-toggle="tooltip" data-placement="top" title="Ver reporte en PDF">
+        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+        </button>
+        <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px" (click)="printPdf()" 
+        [disabled]="solicitudesVehiculosFiltradas ==undefined || solicitudesVehiculosFiltradas.length==0" data-toggle="tooltip" data-placement="top" title="Imprimir reporte">
+        <i class="fa fa-print" aria-hidden="true"></i></button>
+        <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px" (click)="downloadPDF()"
+         [disabled]="solicitudesVehiculosFiltradas ==undefined || solicitudesVehiculosFiltradas.length==0" data-toggle="tooltip" data-placement="top" title="Descargar reporte">
+         <i class="fa fa-download" aria-hidden="true"></i></button>
       </div>
     </div>
     <div class="row">

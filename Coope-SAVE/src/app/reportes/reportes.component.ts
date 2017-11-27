@@ -101,6 +101,16 @@ export class ReportesComponent implements OnInit {
       this.crearPDF.generarPDF(solicitudes);
   }
 
+  openPdfVehiculo() {
+    console.log('llama el metodo en reportes de vheiculos');
+    var solicitudesVehiculos=[];
+    solicitudesVehiculos= this.solicitudesVehiculosFiltradas;
+    for (var index = 0; index < this.solicitudesSalasFiltradas.length; index++) {
+      solicitudesVehiculos[index].usuario= this.getNombreUsuario(this.solicitudesSalasFiltradas[index].usuario);
+    }
+      this.crearPDF.generarPDFVehiculo(solicitudesVehiculos);
+  }
+
   //Método encargado de mostrar opciones de impresión de los reportes generados en las búsquedas
   printPdf() {
     this.pdfmake.print();

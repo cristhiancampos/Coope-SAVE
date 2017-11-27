@@ -82,6 +82,19 @@ hoy;
     };
   }
 
+  tableVehiculo(data, columns) {
+    return {
+      
+      table: {
+        widths: [10,50,30,80,50,50,'*'],
+        headerRows: 1,
+        body: this.buildTableBodyVehiculo(data, columns),
+        layout: 'lightHorizontalLines',
+      },
+      layout: 'lightHorizontalLines'
+    };
+  }
+
 
 
 
@@ -106,6 +119,30 @@ hoy;
     return tempArr;
 
   }
+
+  generateRowsVehiculo(listaSolicitudes) {
+    
+        console.log(listaSolicitudes);
+        var tempObj = {}
+        var tempArr = [];
+        for (var i = 0; i < listaSolicitudes.length; i++) {
+    
+          tempArr.push(
+            {
+              placa: listaSolicitudes[i].placa,
+              tipo: listaSolicitudes[i].tipo,
+              marca: listaSolicitudes[i].marca,
+              usuario: listaSolicitudes[i].usuario,
+              fecha: listaSolicitudes[i].fecha.day + '-' + listaSolicitudes[i].fecha.month + '-' + listaSolicitudes[i].fecha.year,
+              destino: listaSolicitudes[i].destino
+
+            }
+          );
+        }
+    
+        return tempArr;
+    
+      }
 
   buildTableBody(data, columns) {
     var body = [];
@@ -158,10 +195,62 @@ hoy;
     return body;
   }
 
+  buildTableBodyVehiculo(data, columns) {
+    var body = [];
+    var i = 0;
+    var numLinea=0;
+    body.push(columns);
 
 
+    data.forEach(function (row) {
+      var linea= true;
+      var dataRow = [];
+      i = 0;
+      numLinea++;
+      columns.forEach(function (column) {
 
-  //   Reporte de '+ filtrosAplicados[0]+' para "Inserte Usuario" en las fechas "Inserte Fecha
+      if(linea){
+        dataRow.push(numLinea)
+        linea=false;
+      }else{
+        if (i < 1) {
+          dataRow.push(row.placa);
+          i++
+        } else {
+          if (i < 2) {
+            dataRow.push(row.tipo);
+            i++;
+          } else {
+            if (i < 3) {
+              dataRow.push(row.marca);
+              i++;
+            } else {
+              if (i < 4) {
+                dataRow.push(row.usuario);
+                i++;
+              } else {
+                if(i<5){
+                  dataRow.push(row.fecha);
+                  i++;
+                }else {
+                  dataRow.push(row.destino);
+                  i++;
+                }
+                
+              }
+            }
+          }
+
+        }
+      }
+    }
+    )
+
+      body.push(dataRow);
+    });
+
+    return body;
+  }
 
   generarPDF(solicitudesSalasFiltradas) {
 
@@ -249,7 +338,95 @@ hoy;
     this.pdfmake.open();
   }//Final del metodo generarPDF()
 
+  generarPDFVehiculo(solicitudesSalasFiltradas) {
+    
+    
+    
+        this.pdfmake.docDefinition = {
+    
+          content: [
+    
+    
+            {
+              columns: [
+                {
+                    image: ''+ this.getLogo.getImgLogo()+'',
+                    width: 50,
+                    height: 50,
+                  
+                },
+                {
+                    
+                   text: 'COOPESPARTA R.L', style: 'header',
+            
+                }
+              ]
+            },
+          
+    
+            { text: 'Reporte de solicitud de Vehículos', style: 'subheader' },
+    
+    
+        
+                { text:  'Fecha: '+this.hoy.getDate()+'/'+(this.hoy.getMonth()+1)+'/'+ this.hoy.getFullYear(), style: 'textos' },
+                { text: 'Generado por: '+this.user.nombre+' '+ this.user.apellidos, style: 'textos' },
+            
+            
+            //Tabla de solicitudes filtradas
+            
+              this.tableVehiculo(this.generateRowsVehiculo(solicitudesSalasFiltradas), ['#','PLACA', 'TIPO', ' MARCA', 'SOLICITANTE', 'FECHA', 'DESTINO']),
+            
+            
+    
+            {text: 'Sistema de control de Salas y Vehículos', style: 'footer'},
+    
+    
+    
+    
+    
+          ], styles: {
+            header: {
+              fontSize: 18,
+              bold: true,
+              margin: [120, 0, 0, 20]
+            },
+            subheader: {
+              fontSize: 16,
+              bold: true,
+              margin: [150, 0, 0, 20]
+            },
+            tabla: {
+              margin: [0, 5, 0, 15]
+            },
+            textos: {
+              bold: true,
+              alignment: 'right',
+              fontSize: 14,
+              margin: [0,0,0,10]
+            },
+            footer:{
+              width: '100%',
+              height: '100%',
+              alignment: 'center',
+              margin: [0, 30, 0,0],
+              fontSize: 16,
+              bold: true
+    
+            } 
+    
+          }
+    
+    
+    
+    
+        }//Final de definicion de PDF
+    
+        this.pdfmake.open();
+      }//Final del metodo generarPDF()
+
 }// Final de la Clase
+
+
 
 
 
