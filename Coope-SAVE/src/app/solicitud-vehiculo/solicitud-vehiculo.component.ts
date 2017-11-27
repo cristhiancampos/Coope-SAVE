@@ -108,7 +108,7 @@ export class SolicitudVehiculoComponent implements OnInit {
 
 
   }
-   departamentos = [];
+  departamentos = [];
   usuarios = [];
   solicitudVehiculo: SolicitudVehiculo;
   solicitudVehiculoEdit: SolicitudVehiculo;
@@ -1075,7 +1075,7 @@ export class SolicitudVehiculoComponent implements OnInit {
   }
 
   cancelarAccion() {
-   
+
     this.obtenerSolicitudes(new Date(), false);
     this.obtenerSolicitudVehiculos();
     this.mr.close();
@@ -1105,16 +1105,16 @@ export class SolicitudVehiculoComponent implements OnInit {
           this.minDate.month = (serverDate.getMonth() + 1);
           this.minDate.day = serverDate.getDate();
 
-          let userSumDate=((date.getFullYear()*365)+ (date.getMonth()*30)+date.getDate());
-          let serverSumDate=((serverDate.getFullYear()*365)+ (serverDate.getMonth()*30)+serverDate.getDate());
+          let userSumDate = ((date.getFullYear() * 365) + (date.getMonth() * 30) + date.getDate());
+          let serverSumDate = ((serverDate.getFullYear() * 365) + (serverDate.getMonth() * 30) + serverDate.getDate());
 
-          if(userSumDate<serverSumDate){
+          if (userSumDate < serverSumDate) {
             this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
           }
           else {
-              this.obtenerSolicitudes(date, true);
-              this.writeValue(date);
-            }
+            this.obtenerSolicitudes(date, true);
+            this.writeValue(date);
+          }
         } else {
         }
       }, error => {
@@ -1278,8 +1278,8 @@ export class SolicitudVehiculoComponent implements OnInit {
                       }
                     }
                   }
-                 // console.log('vector. solicitud del dia');
-                 // console.log(this.solicitudesdia);
+                  // console.log('vector. solicitud del dia');
+                  // console.log(this.solicitudesdia);
                   //extraer el horario de la solicitudes del vehiculo seleccionado
                   let tempArrayHoraInicio = [];
                   let tempArrayHoraFinal = [];
@@ -1302,8 +1302,8 @@ export class SolicitudVehiculoComponent implements OnInit {
                     }
                     if (sumatoriaFinal > (horaSalidaDigit * 60) && (horaSalidaDigit * 60) > sumatoriaInicial) {
                       tempArrayVerificacion.push(minFinal);
-                     // console.log('Array de verificacion');
-                     // console.log(tempArrayVerificacion);
+                      // console.log('Array de verificacion');
+                      // console.log(tempArrayVerificacion);
                       break;
                     }
                   }
@@ -1343,7 +1343,7 @@ export class SolicitudVehiculoComponent implements OnInit {
                         this.msjExitoso("Solicitud agregada exitosamente");
                         console.log(solicitud);
                         this.enviarEmail(solicitud);
-                       // console.log('antes del crear pdf');
+                        // console.log('antes del crear pdf');
                         //this.crearPdf(solicitud);
                         this.crearPDF.generarPDF(solicitud);
                         this.solicitudVehiculo = new SolicitudVehiculo('', '', '', null, null, null, '', '', '', null, '', '');
@@ -1421,7 +1421,7 @@ export class SolicitudVehiculoComponent implements OnInit {
 
           array = response.message;
           this.solicitudesdia = array;
-        //  console.log(this.solicitudesdia);
+          //  console.log(this.solicitudesdia);
           var minInicial = ((this.solicitudVehiculoEdit.horaSalida.hour * 60) + this.solicitudVehiculoEdit.horaSalida.minute);
           var minFinal = ((this.solicitudVehiculoEdit.horaRegreso.hour * 60) + this.solicitudVehiculoEdit.horaRegreso.minute);
           if (minFinal - minInicial <= 0) {
@@ -1518,9 +1518,9 @@ export class SolicitudVehiculoComponent implements OnInit {
                         //buscar la solicitud seleccionada y eleminarla dela lista de solicitudes del día,
                         // para poder realizar su respectiva modificación en caso de ser el mismos día y se pretenda camibiar solo las horas
                         for (let conta = 0; conta < this.solicitudesdia.length; conta++) {
-                         // console.log('dentro del for que va a aleliminar el evento de hoy');
+                          // console.log('dentro del for que va a aleliminar el evento de hoy');
                           if (this.solicitudesdia[conta]._id === this.solicitudVehiculoEdit._id) {
-                          //  console.log('la econtró');
+                            //  console.log('la econtró');
                             this.solicitudesdia.splice(conta, 1);
                             break;
                           }
@@ -1566,7 +1566,7 @@ export class SolicitudVehiculoComponent implements OnInit {
                         // verificar si se encontraron
                         if (tempArrayVerificacion.length > 0) {
                           agregar = false;
-                        //  console.log('agregar en false');
+                          //  console.log('agregar en false');
                         } else {
                           agregar = true;
                         }
@@ -1680,7 +1680,7 @@ export class SolicitudVehiculoComponent implements OnInit {
                                 }
                               }
                               if (user._id === listaSolicitudes[index].usuario) {
-                               // console.log("User "+user._id +"    solicitud user"+ listaSolicitudes[index].usuario);
+                                // console.log("User "+user._id +"    solicitud user"+ listaSolicitudes[index].usuario);
                                 this.tempEnable = true;
                                 this.actions = [
                                   {
@@ -1701,8 +1701,8 @@ export class SolicitudVehiculoComponent implements OnInit {
                                 this.tempEnable = false;
                                 this.actions = [];
                               }
-                              let userSumDate=((listaSolicitudes[index].fecha.year*365)+ (listaSolicitudes[index].fecha.month*30)+listaSolicitudes[index].fecha.day);
-                              let serverSumDate=((serverDate.getFullYear()*365)+ ((serverDate.getMonth()+1)*30)+serverDate.getDate());
+                              let userSumDate = ((listaSolicitudes[index].fecha.year * 365) + (listaSolicitudes[index].fecha.month * 30) + listaSolicitudes[index].fecha.day);
+                              let serverSumDate = ((serverDate.getFullYear() * 365) + ((serverDate.getMonth() + 1) * 30) + serverDate.getDate());
 
                               if (userSumDate < serverSumDate) {
                                 this.tempEvent = [];
@@ -1840,7 +1840,7 @@ export class SolicitudVehiculoComponent implements OnInit {
   eliminarUsuarioActual() {// Eliminar el usuario actual de la lista de usuarios disponibles, para el la seccion de acompanantes
     let identity = localStorage.getItem('identity');
     let user = JSON.parse(identity);
-   // console.log(user);
+    // console.log(user);
     if (!user) {
       this._router.navigate(['/principal']);
     } else {
@@ -1983,17 +1983,17 @@ export class SolicitudVehiculoComponent implements OnInit {
                         this.minDate.year = serverDate.getFullYear();
                         this.minDate.month = (serverDate.getMonth() + 1);
                         this.minDate.day = serverDate.getDate();
-                        
-                        let userSumDate=((date.getFullYear()*365)+ (date.getMonth()*30)+date.getDate());
-                        let serverSumDate=((serverDate.getFullYear()*365)+ (serverDate.getMonth()*30)+serverDate.getDate());
+
+                        let userSumDate = ((date.getFullYear() * 365) + (date.getMonth() * 30) + date.getDate());
+                        let serverSumDate = ((serverDate.getFullYear() * 365) + (serverDate.getMonth() * 30) + serverDate.getDate());
 
                         if (userSumDate < serverSumDate) {
                           this.tempEvent = [];
-                          } else {
+                        } else {
 
-                           // this.tempEvent = event.actions;
-                          }
-                        
+                          // this.tempEvent = event.actions;
+                        }
+
                       } else {
                       }
 
@@ -2252,6 +2252,17 @@ export class SolicitudVehiculoComponent implements OnInit {
                 let user = JSON.parse(identity);
                 if (user != null) {
                   $('#nav-user').text(user.nombre + ' ' + user.apellidos);
+                  if (user.rol == "SUPERADMIN" || user.rol == "ADMINISTRADOR") {
+                    $('#menuAdmin').css('display', 'block');
+                    $('#menuReport').css('display', 'block');
+                  } else {
+                    $('#menuAdmin').css('display', 'none');
+                    if (user.rol == "REPORTES") {
+
+                    } else {
+                      $('#menuReport').css('display', 'none');
+                    }
+                  }
                   this.estiloBotones();
                   this.obtenerVehiculos();
                   this.obtenerUsuarios();

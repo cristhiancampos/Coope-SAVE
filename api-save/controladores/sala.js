@@ -115,10 +115,15 @@ function modificarSala(req, res) {
   var params = req.body;
   var salaId = params._id;
   params.updated_at = new Date();
-  console.log('--------------------------------');
-console.log(params.horario);
 
-  Sala.findByIdAndUpdate(salaId,{cupo:params.cupo,reporte:params.reporte,descripcion:params.descripcion} , (err, modificaSala) => {
+  Sala.findByIdAndUpdate(salaId,
+    {cupo:params.cupo,
+      reporte:params.reporte,
+      descripcion:params.descripcion,
+      estado:params.estado,
+      updated_at:params.updated_at
+    } 
+    , (err, modificaSala) => {
     if (err) {
 
       res.status(500).send({ message: 'Error al actualizar la sala' });
