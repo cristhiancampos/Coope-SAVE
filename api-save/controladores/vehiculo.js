@@ -118,7 +118,14 @@ function modificarVehiculo(req, res) {
     var vehiculoId = params._id;
     params.updated_at= new Date();
   
-    Vehiculo.findByIdAndUpdate(vehiculoId, params, (err, modificarVehiculo) => {
+    Vehiculo.findByIdAndUpdate(vehiculoId, {
+      tipo:params.tipo,marca:params.marca,
+      descripcion:params.descripcion,
+      kilometraje:params.kilometraje,
+      reporte:params.reporte,
+      estado:params.estado,
+      updated_at:params.updated_at
+    }, (err, modificarVehiculo) => {
       if (err) {
         
         res.status(500).send({ message: 'Error al actualizar la sala' });
