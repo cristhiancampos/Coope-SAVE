@@ -152,7 +152,6 @@ export class PrincipalComponent implements OnInit {
       }
       
     }
-    console.log(use.departamento);
     this._servUsuario.registrarUsuario(use).subscribe(
       response => {
         let user = response.user;
@@ -328,22 +327,15 @@ export class PrincipalComponent implements OnInit {
 
   mostrarRecuperarContrasena() {
     this.forgotPass="";
-   // this.usuario = new Usuario('','','','','','','','','','');
-    //this.cerrarModal('#loginModal');
     this.cerrar();
    this.abrir( this.modalRecuperarContrasena);
-    //this.abrirModal('#forgotModal');
     this.mmostrar = false;
-    //this._router.navigate['/principal'];
   }
   regresar() {
     this.forgotPass="";
     this.cerrar();
     this.abrir(this.modalLogin);
-    //this.cerrarModal('#forgotModal');
-  //  this.abrirModal('#loginModal');
     this.mmostrar = false;
-    //this._router.navigate['/principal'];
   }
   //regresar al formulario del login
   loginBack() {
@@ -389,15 +381,11 @@ obtenerDepartamentos() {
     this._servDepa.obtenerDepartamentos().subscribe(
       response => {
         if (response.message) {
-          console.log(response.message);
         this.departamentos =response.message;
         } else {
-          console.log('ho hay departamentos registrados');
-          console.log(response.message);
         }
       }, error => {
         var errorMensaje = <any>error;
-        console.log('Error al tratar de obtener los departamentos');
         if (errorMensaje != null) {
           var body = JSON.parse(error._body);
         }
@@ -429,8 +417,6 @@ obtenerDepartamentos() {
           $('#input-correoF').css("border-left", "5px solid #a94442");
           user.contrasena=this.generatePassword();
           user._id=response.message._id
-          alert(user.contrasena);
-
           this.recuperarContrasena(user);
         } else {//no existe el corrreo
           $('#input-correoF').css("border-left", "5px solid #42A948");
@@ -459,8 +445,6 @@ obtenerDepartamentos() {
 }
 
   recuperarContrasena(user:any) {
-    console.log(user);
-
     this._servUsuario.modificarUsuarioCompleto(user).subscribe(
       response => {
 
@@ -468,15 +452,11 @@ obtenerDepartamentos() {
           this.msjError("El Usuario no pudo ser Modificado");
         } else {
           this.enviarContrasena(user);
-         // this.msInfo('Su nueva contraseña ha sido enviada via correo electrónico a '+user.correo);          
-         // this._router.navigate(['/principal']);
+         this.msInfo('Su nueva contraseña ha sido enviada via correo electrónico a '+user.correo);         
         }
       }, error => {
         var alertMessage = <any>error;
         if (alertMessage != null) {
-         // var body = JSON.parse(error._body);
-          //alert('El Usuario no se pudo modificar');
-
         }
       }
     );
@@ -498,86 +478,5 @@ obtenerDepartamentos() {
       }
     );
   }//Fin del metodo EnviarEmail
-
-  
- /* validarcontra(event: any) {
-    if (this.usuario.contrasena) {
-      if (this.usuario.contrasena.length < 8) {
-        //alert('la contraseña debe ser mayor a 7 c');
-        this.isValidPass = false;
-      } else if (this.usuario.contrasena.length > 16) {
-        // alert('la contraseña debe ser menor a 17 c');
-        this.isValidPass = false;
-      } else if (!this.tieneNumero(this.usuario.contrasena)) {
-        this.isValidPass = false;
-        //alert('la contraseña debe tener numeros');
-      } else if (!this.tieneMayuscula(this.usuario.contrasena)) {
-        this.isValidPass = false;
-        //alert('la contraseña debe tener mayusculas');
-      } else if (!this.tieneMinuscula(this.usuario.contrasena)) {
-        this.isValidPass = false;
-        //alert('la contraseña debe tener mi');
-      }
-      //else if (!this.tieneCaracEspecial(this.usuario.contrasena)) {
-      //   this.isValidPass= false;
-      //   //alert('la contraseña debe tener caracteres especiales');
-      // }
-      else {
-        this.isValidPass = true;
-        alert('contraseña correcta');
-      }
-    }
-  }
-
-  /*
-  tieneMayuscula(texto) {
-    var patron = /[A-Z]/g;
-    if (this.usuario.contrasena.match(patron)) {
-      return true;
-    }
-    return false;
-  }
-
-  tieneMinuscula(texto) {
-    var patron = /[a-z]/g;
-    if (this.usuario.contrasena.match(patron)) {
-      return true;
-    }
-    return false;
-  }
-  tieneCaracEspecial(texto) {
-    var patron = /^[.-_?@*+{}|$&#/()=¿,]/;
-    if (this.usuario.contrasena.match(patron)) {
-      return true;
-    }
-    return true;
-  }
-
-  tieneNumero(texto) {
-    let numeros = "0123456789";
-    for (let i = 0; i < texto.length; i++) {
-      if (numeros.indexOf(texto.charAt(i), 0) != -1) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  validarContrasena() {
-    if (this.usuario.contrasena && this.confirmaContra) {
-
-      if (this.usuario.contrasena == this.confirmaContra) {
-        alert('son iguales' + this.usuario.contrasena.length);
-      } else {
-        alert('no');
-      }
-    }
-  }*/
-
-  // localStorage.setItem('token',token);
-  // localStorage.removeItem('identity');//remover item del localStorage
-  // localStorage.removeItem('token');
-  // localStorage.clear();
-
 }
 

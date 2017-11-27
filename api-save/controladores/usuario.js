@@ -120,7 +120,7 @@ function verificarCredenciales(req, res) {
   var email = params.correo;
   // console.log(params.correo+'.....'+params.contrasena);
   var password = params.contrasena;
-  console.log(params);
+ // console.log(params);
   Usuario.findOne({ correo: email, estado: { $ne: "Eliminado" } }, (err, user) => {
     if (err) {
       res.status(500).send({ message: 'Error en la petición' });
