@@ -340,7 +340,8 @@ export class AdminUsuarioComponent implements OnInit {
   
 
   modificarUsuario() {
-    this.usuarioEdit.estado = this.estadoMensajEdit;
+    console.log(this.usuarioEdit);
+   this.usuarioEdit.estado = this.estadoMensajEdit;
     this.usuarioEdit.departamento = this.obtenerId_Dep(this.usuarioEdit.departamento)
     if (this.usuarioEdit.departamento == "") {
       this.msjError('No es posible modificar la infomación del usuario');
@@ -426,7 +427,7 @@ export class AdminUsuarioComponent implements OnInit {
 
   generatePassword() {
     var length = 8,
-        charset = "!@#DEF34qrst56GHI$%^cdefg&*()_+|}{[TUV0op1278WXYZ]\:;?><,./-=abhijklmnuvwxyzABCJKLMNOPQRS9",
+        charset = "!@#DEF34qrst56GHI$cdefg&*()_+}{[TUV0op1278WXYZ]\:;?><,./-=abhijklmnuvwxyzABCJKLMNOPQRS9",
         retVal = "";
     for (var i = 0, n = charset.length; i < length; ++i) {
         retVal += charset.charAt(Math.floor(Math.random() * n));
@@ -435,6 +436,7 @@ export class AdminUsuarioComponent implements OnInit {
 }
 
 enviarContrasena(user:any) {
+ // console.log(user);
   this._servUsuario.enviarContrasena(user).subscribe(
     response => {
      
@@ -483,6 +485,7 @@ enviarContrasena(user:any) {
           this.enviarContrasena(user);
           this.cerrar();
           this.obtenerUsuarios();
+          this.usuarioAgregar=new Usuario('','','','','','','','','','');
           
         }
       }, error => {

@@ -1,3 +1,5 @@
+
+/* Importación de clases y modulos necesasarios */
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import * as $ from 'jquery';
 import swal from 'sweetalert2';
@@ -12,6 +14,10 @@ import { NgbDateStruct, NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap
 import { SolicitudSala } from '../modelos/solicitudSala';
 import { PdfmakeService } from 'ng-pdf-make/pdfmake/pdfmake.service';
 import {PDFReportes} from './pdfReportes';
+import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Usuario } from '../modelos/usuario';
+
+//Se definen las propiedades del componente
 @Component({
   selector: 'app-reportes',
   templateUrl: './reportes.component.html',
@@ -25,16 +31,17 @@ import {PDFReportes} from './pdfReportes';
     ServicioSolicitudVehiculo
     , PdfmakeService]
 })
+//Exportación de la clase para poder ser usada en otros modulos
 export class ReportesComponent implements OnInit {
   @ViewChild('modalSalas') modalSalas: TemplateRef<any>;
   @ViewChild('modalVehiculos') modalVehiculos: TemplateRef<any>;
 
-  filtrosAplicados=[];
   usuarios = [];
   departamentos = [];
   salas = [];
   vehiculos = [];
   identity;
+  token;
   currentUser;
   vehiculoFiltro = "";
   salaFiltro = "";
@@ -50,18 +57,14 @@ export class ReportesComponent implements OnInit {
   solicitudesVehiculosFiltradas = [];
   public mr: NgbModalRef;
   solicitudSala: SolicitudSala;
-
   modelFechaInicio: NgbDateStruct;
   modelFechaFinal: NgbDateStruct;
   modelFechaInicioVehiculo: NgbDateStruct;
   modelFechaFinalVehiculo: NgbDateStruct;
-
   crearPDF: PDFReportes;
-
-
-  reporteFiltros = [];//{sala:any,fechaInicio:any,fechaFin:any,solicitante:any,departamento:any,usuarioGenerador:any};
-
-
+  reporteFiltros = [];
+  
+//Método constructor de la clase
   constructor(
     private _servUsuario: ServicioUsuario,
     private _servDepartamento: ServicioDepartamento,
@@ -70,18 +73,24 @@ export class ReportesComponent implements OnInit {
     private _servSolicitudVehiculo: ServicioSolicitudVehiculo,
     private _servVehiculo: ServicioVehiculo,
     private modal: NgbModal,
-    private pdfmake: PdfmakeService
+    private pdfmake: PdfmakeService,
+    private _route: ActivatedRoute,
+    private _router: Router,
   ) {
     this.crearPDF = new PDFReportes(this.pdfmake);
   }
 
+  //Método encargado de abrir los modales, recibe el nombre del modal por parámetros
   abrir(modal) {
     this.mr = this.modal.open(modal);
   }
+
+  //Método encargado de cerrar el modal activo 
   cerrar() {
     this.mr.close();
-
   }
+
+  //Método encargado de abrir generar el pdf de los  reportes generados en las búsquedas y mostrarlo al usuario
   openPdf() {
     console.log('llama el metodo en reportes');
     var solicitudes=[];
@@ -89,21 +98,27 @@ export class ReportesComponent implements OnInit {
     for (var index = 0; index < this.solicitudesSalasFiltradas.length; index++) {
       solicitudes[index].usuario= this.getNombreUsuario(this.solicitudesSalasFiltradas[index].usuario);
     }
-      this.crearPDF.generarPDF(solicitudes, this.filtrosAplicados);
+      this.crearPDF.generarPDF(solicitudes);
   }
 
+  //Método encargado de mostrar opciones de impresión de los reportes generados en las búsquedas
   printPdf() {
     this.pdfmake.print();
   }
 
+  //Método encargado de descargar en pdf los reportes generados en las búsquedas
   downloadPDF() {
     this.pdfmake.download();
   }
 
+  //Método encargado de descargar en pdf los reportes generados en las búsquedas, permite que se le asigne un nombre al archivo pdf
   downloadPdfWithName(customName: string) {
     this.pdfmake.download(customName);
   }
+  
+  //Método de la interface OnInit, se ejecuta cuando se ha cargado por completo el componente
   ngOnInit() {
+    this.verificarCredenciales();
     this.obtenerUsuarios();
     this.obtenerDepartamentos();
     this.obtenerSalas();
@@ -113,12 +128,17 @@ export class ReportesComponent implements OnInit {
     
   }
 
+ //Método encargado de asignar un valor al filtro de sala
   setSalaSeleccionda(nombreSala: string) {
     this.salaFiltro = nombreSala;
   }
+
+  //Método encargado de asignar un valor al filtro de vehículo
   setVehiculoSelecciondo(vehiculoPlaca: string) {
     this.vehiculoFiltro = vehiculoPlaca;
   }
+
+  //Método obtener todas las solicitudes de las registradas 
   obtenerSalas() {
     this._servSala.obtenerSalasHabilitadas().subscribe(
       response => {
@@ -136,6 +156,7 @@ export class ReportesComponent implements OnInit {
     );
   }
 
+  //Método obtener todas los registrados en el sistema
   obtenerDepartamentos() {
     this._servDepartamento.obtenerDepartamentos().subscribe(
       response => {
@@ -153,6 +174,7 @@ export class ReportesComponent implements OnInit {
 
   }
 
+ //Método obtener todas los usuarios en el sistema
   obtenerUsuarios() {
     let identity = localStorage.getItem('identity');
     let user = JSON.parse(identity);
@@ -176,6 +198,8 @@ export class ReportesComponent implements OnInit {
       }
     );
   }
+
+  //Método obtener todas los vehículos en el sistema
   obtenerVehiculos() {
     this._servVehiculo.obtenerVehiculos().subscribe(
       response => {
@@ -191,8 +215,9 @@ export class ReportesComponent implements OnInit {
       }
     );
   }
-  getNombreUsuario(id: any) {
 
+  //Método que obtiene el nombre de usuario según id
+  getNombreUsuario(id: any) {
     for (var i = 0; i < this.usuarios.length; i++) {
       if (this.usuarios[i]._id === id) {
         return this.usuarios[i].nombre + " " + this.usuarios[i].apellidos;
@@ -201,8 +226,8 @@ export class ReportesComponent implements OnInit {
     }
   }
 
+  //Método que obtiene el id de usuario según nombre completo
   getIdUsuario(nombre) {
-
     let usuarioSelected = "";
     for (let i = 0; i < nombre.length; i++) {
       if (nombre.charAt(i) === " ") {
@@ -227,6 +252,7 @@ export class ReportesComponent implements OnInit {
     }
   }
 
+  //Método que obtiene el nombre de departamento según id
   getDepartamento(id) {
     let departamento;
     for (var j = 0; j < this.usuarios.length; j++) {
@@ -243,6 +269,7 @@ export class ReportesComponent implements OnInit {
     }
   }
 
+ //Método que obtiene la marca del vehículo  según placa
   obternerMarcaAutomovil(placa: any) {
     for (var i = 0; i < this.vehiculos.length; i++) {
       if (this.vehiculos[i].placa == placa) {
@@ -252,6 +279,7 @@ export class ReportesComponent implements OnInit {
     }
   }
 
+  //Método que obtiene el tipo del vehículo  según placa
   obternerTipoAutomovil(placa: any) {
     for (var i = 0; i < this.vehiculos.length; i++) {
       if (this.vehiculos[i].placa == placa) {
@@ -261,6 +289,7 @@ export class ReportesComponent implements OnInit {
     }
   }
 
+  //Método que limpiar los fitros en los reportes de salas
   limpiarFiltros() {
     this.solicitanteFiltro = "";
     this.salaFiltro = "";
@@ -271,6 +300,7 @@ export class ReportesComponent implements OnInit {
     this.mensajeBusqueda=" Para realizar búsquedas que permitan generar reportes, debe seleccionar entre los distintos filtros ubicados en el menú superior ";    
   }
 
+ //Método que limpiar los fitros en los reportes de vehículos
   limpiarFiltrosVehiculo() {
     this.solicitanteFiltroVehiculo = "";
     this.vehiculoFiltro = "";
@@ -324,7 +354,7 @@ export class ReportesComponent implements OnInit {
             let arrayTemporal6 = [];
 
             if (this.salaFiltro != "") {// filtro de sala
-              this.filtrosAplicados[0]= this.salaFiltro;
+             
               for (let index = 0; index < array.length; index++) {
                 if (array[index].sala === this.salaFiltro) {
                   arrayTemporal2.push(array[index]);
@@ -334,7 +364,7 @@ export class ReportesComponent implements OnInit {
             }
 
             if (this.modelFechaInicio != null) {// filtro de fecha inicio
-              this.filtrosAplicados[1]= this.modelFechaInicio;
+             
               if (arrayTemporal2.length > 0) {
                 if (this.modelFechaFinal != null) {
                   for (let index = 0; index < arrayTemporal2.length; index++) {
@@ -386,7 +416,7 @@ export class ReportesComponent implements OnInit {
             }
 
             if (this.modelFechaFinal != null) {// filtro de fecha final
-              this.filtrosAplicados[2]= this.modelFechaFinal;
+             
               if (arrayTemporal3.length > 0) {
                 if (this.modelFechaInicio != null) {
                   console.log("selccionó sala y fecha de incio también");
@@ -457,7 +487,7 @@ export class ReportesComponent implements OnInit {
             }
 
             if (this.solicitanteFiltro != "") {// filtro de solicitante
-              this.filtrosAplicados[3]= this.solicitanteFiltro;
+              
               if (arrayTemporal4.length > 0 && arrayTemporal2.length > 0 && arrayTemporal3.length == 0) {
                 let solicitante = this.getIdUsuario(this.solicitanteFiltro);
                 for (let index = 0; index < arrayTemporal4.length; index++) {
@@ -526,7 +556,7 @@ export class ReportesComponent implements OnInit {
               }
             }
             if (this.departamentoFiltro != "") {// filtro de departamento
-              this.filtrosAplicados[4]= this.departamentoFiltro;
+            
               if (arrayTemporal2.length == 0 && arrayTemporal3.length == 0 && arrayTemporal4.length == 0 && arrayTemporal5.length == 0) {
                 for (let index = 0; index < array.length; index++) {
                   let departamento = this.getDepartamento(array[index].usuario);
@@ -1286,6 +1316,7 @@ export class ReportesComponent implements OnInit {
     }
   }
 
+  //oderna las solicitudes de salas según el filtro escogido
   ordenarSolicitudesSala(filtro: string) {
     if (filtro === 'Horario') {
       this.ordenarPorHorario(this.solicitudesSalasFiltradas);
@@ -1303,7 +1334,7 @@ export class ReportesComponent implements OnInit {
     }
 
   }
-
+ //oderna las solicitudes de vehículos según el filtro escogido
   ordenarSolicitudesVehiculo(filtro: string) {
     if (filtro === 'Horario') {
      // this.ordenarPorHorarioVehiculo(this.solicitudesVehiculosFiltradas);
@@ -1327,7 +1358,7 @@ export class ReportesComponent implements OnInit {
       // NO
     }
   }
-
+ //ordena solicitudes por horario
   ordenarPorHorario(array: any) {
     let k = [];
     for (let i = 1; i < array.length; i++) {
@@ -1341,6 +1372,7 @@ export class ReportesComponent implements OnInit {
     }
     return array;
   }
+  //ordena solicitudes por nombre de sala
   ordenarPorSala(array: any) {
     array.sort(function (a, b) {
       var keyA = a.sala,
@@ -1352,6 +1384,7 @@ export class ReportesComponent implements OnInit {
     return array;
   }
 
+  //ordena solicitude por usuario
   ordenarPorUsuario(array: any) {
     array.sort(function (a, b) {
       var keyA = a.usuario,
@@ -1363,6 +1396,7 @@ export class ReportesComponent implements OnInit {
     return array;
   }
 
+  //ordena solicitudes 
   ordenarPorMotivo(array: any) {
     array.sort(function (a, b) {
       var keyA = a.descripcion,
@@ -1374,11 +1408,12 @@ export class ReportesComponent implements OnInit {
     return array;
   }
 
-  ordenarPorFecha(array: any) {
+  //ordena solicitudes por fecha
+  ordenarPorFecha(array:any){
     let k = [];
     for (let i = 1; i < array.length; i++) {
       for (var j = 0; j < (array.length - i); j++) {
-        if ((array[j].fecha.year + (array[j].fecha.month * 30) + array[j].fecha.day) < (array[j + 1].fecha.year + (array[j + 1].fecha.month * 30) + array[j + 1].fecha.day)) {
+        if (((array[j].fecha.year*365) + (array[j].fecha.month*30) + array[j].fecha.day) <((array[j+1].fecha.year*365) + (array[j+1].fecha.month*30) + array[j+1].fecha.day) ) {
           k = array[j + 1];
           array[j + 1] = array[j];
           array[j] = k;
@@ -1387,6 +1422,8 @@ export class ReportesComponent implements OnInit {
     }
     return array;
   }
+  
+  //ordena solicitudes por placa
   ordenarPorPlaca(array: any) {
     array.sort(function (a, b) {
       var keyA = a.vehiculo,
@@ -1397,6 +1434,7 @@ export class ReportesComponent implements OnInit {
     });
     return array;
   }
+  //ordena solicitudes por vehículo
   ordenarPorHorarioVehiculo(array:any){
     let k = [];
     for (let i = 1; i < array.length; i++) {
@@ -1410,6 +1448,8 @@ export class ReportesComponent implements OnInit {
     }
     return array;
   }
+
+  //ordena solicitudes por destino
   ordenarPorDestino(array:any){
     array.sort(function(a, b){
       var keyA = a.destino,
@@ -1419,42 +1459,64 @@ export class ReportesComponent implements OnInit {
       return 0;
       });
       return array;
-    }
+  }
 
-  /*horaFormato12Horas(horario){
-    let meridianoInit;
-    let meridianoFin;
-    let meridNumIni;
-    let meridNumFin;
-
-    var p=horario.minute;
-    var g=p.toString();
-    console.log(g.length);
-    if(g<2){
-        horario.minute= '0'+horario.minute;
+  //verifica las credenciales de usuario
+  verificarCredenciales() {
+    this.identity = this._servUsuario.getIndentity();
+    this.token = this._servUsuario.getToken();
+    let identity = localStorage.getItem('identity');
+    let user = JSON.parse(identity);
+    let recordar = localStorage.getItem('remember');
+    let recordarValue = JSON.parse(recordar);
+    if (user != null) {
+      let usuarioTemp = new Usuario('', '', '', '', '', '', '', '', '', '');
+      usuarioTemp.correo = user.correo;
+      usuarioTemp.contrasena = user.contrasena;
+      // obtener datos de usuario identificado
+      this._servUsuario.verificarCredenciales(usuarioTemp).subscribe(response => {
+        let identity = response.user;
+        this.identity = identity;
+        if (!this.identity._id) {
+          $('#nav-user').text(' ');
+          this._router.navigate(['/principal']);
+        } else {
+          if (this.identity.rol == "ADMINISTRADOR" || this.identity.rol == "SUPERADMIN" || this.identity.rol == "REPORTES") {            
+          this._servUsuario.verificarCredenciales(usuarioTemp, 'true').subscribe(
+            response => {
+              let token = response.token;
+              this.token = token;
+              if (this.token <= 0) {
+                $('#nav-user').text(' ');
+                this._router.navigate(['/principal']);
+              } else {
+                // crear elemento en el localstorage para tener el token disponible
+                localStorage.setItem('token', token);
+                let identity = localStorage.getItem('identity');
+                let user = JSON.parse(identity);
+                if (user != null) {
+                  $('#nav-user').text(user.nombre + ' ' + user.apellidos);
+                  this.obtenerDepartamentos();
+                } else {
+                  $('#nav-user').text('');
+                }
+              }
+            }, error => {
+              $('#nav-user').text(' ');
+              this._router.navigate(['/principal']);
+            }
+          );
+        } else {
+          this._router.navigate(['/principal']);
+        }
+        }
+      }, error => {
+        $('#nav-user').text(' ');
+        this._router.navigate(['/principal']);
+      }
+      );
+    } else {
+      this._router.navigate(['/principal']);
     }
-
-    if (parseInt(horario.hour) < 12) {
-      meridianoInit = "AM";
-      meridNumIni = parseInt(horario.hour);
-    } else if (parseInt(horario.hour) >= 12) {
-      meridianoInit = "PM";
-      meridNumIni = (parseInt(horario.hour) - 12);
-    }
-    if (parseInt(horario.hour) == 24) {
-      meridianoFin = "AM";
-      meridNumFin = (parseInt(horario.hour) - 12);
-    }
-    if (parseInt(horario.hour) > 12 && parseInt(horario.hour) < 24) {
-      meridianoFin = "PM";
-      meridNumFin = (parseInt(horario.hour) - 12);
-    } else if (parseInt(horario.hour) < 12) {
-      meridianoFin = "AM";
-      meridNumFin = parseInt(horario.hour);
-    }
-    if (meridNumIni == 0) {
-      meridNumIni = meridNumIni + 12;
-    }
-    return meridNumIni+':'+horario.minute+' '+ meridianoInit;
-  }*/
+  }
 }

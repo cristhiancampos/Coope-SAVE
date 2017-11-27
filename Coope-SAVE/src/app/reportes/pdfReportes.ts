@@ -153,7 +153,7 @@ user;
 
   //   Reporte de '+ filtrosAplicados[0]+' para "Inserte Usuario" en las fechas "Inserte Fecha
 
-  generarPDF(solicitudesSalasFiltradas, filtrosAplicados) {
+  generarPDF(solicitudesSalasFiltradas) {
 
 
 
@@ -213,7 +213,8 @@ user;
         textos: {
           bold: true,
           alignment: 'right',
-          fontSize: 14
+          fontSize: 14,
+          margin: [0,0,0,10]
         },
         footer:{
           width: '100%',

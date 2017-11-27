@@ -163,12 +163,12 @@ export class AdminDepartamentoComponent implements OnInit {
     this._servDepartamento.registrarDepartamento(this.departamento).subscribe(
       response => {
         if (!response.message._id) {
-          alert('Error al registrar la departamento');
+          this.msjError('Error al registrar la departamento');
         } else {
          //alert('Departamento registrado exitosamente');
          this.cerrar();
           //this.cerrarModal('#modalAdminDepa');
-          this.msjExitoso("Departamento Agregado Exitosamente");
+          this.msjExitoso("Departamento agregado exitosamente");
           this.departamento = new Departamento('', '', '', this.estadoMensaje,'','');
           this.obtenerDepartamentos();
         }
@@ -260,13 +260,13 @@ export class AdminDepartamentoComponent implements OnInit {
           this.departamentoEdit = new Departamento('', '', '', '', '', '');
           this.obtenerDepartamentos();
           this.mr.close();
-          this.msjExitoso("Departamento modificado Exitosamente");
+          this.msjExitoso("Departamento modificado exitosamente");
         }
       }, error => {
         var alertMessage = <any>error;
         if (alertMessage != null) {
           var body = JSON.parse(error._body);
-          this.msjError("El departamento no pudo ser Modificado");
+          this.msjError("El departamento no pudo ser odificado");
         }
       }
     );
@@ -303,10 +303,10 @@ export class AdminDepartamentoComponent implements OnInit {
       response => {
 
         if (!response.message._id) {
-          alert('Error al elimar el departamento');
+          this.msjError('Error al elimar el departamento');
         } else {
          
-          this.msjExitoso("Departamento Eliminado Exitosamente");
+          this.msjExitoso("Departamento eliminado exitosamente");
           this.departamentoEdit = new Departamento('', '', '', '','','');
           this.obtenerDepartamentos();
         }
@@ -314,7 +314,7 @@ export class AdminDepartamentoComponent implements OnInit {
         var alertMessage = <any>error;
         if (alertMessage != null) {
           var body = JSON.parse(error._body);
-          this.msjError("El departamento no pudo ser Eliminado");
+          this.msjError("El departamento no pudo ser eliminado");
         }
       }
     );

@@ -97,12 +97,13 @@ export class SolicitudVehiculoComponent implements OnInit {
 
   //*********************************************AGREGADOS***************************** */
   ngOnInit() {
-    this.estiloBotones();
-    this.obtenerVehiculos();
+    // this.estiloBotones();
+    // this.obtenerVehiculos();
 
-    this.obtenerUsuarios();
-    this.obtenerSolicitudVehiculos();
+    // this.obtenerUsuarios();
+    // this.obtenerSolicitudVehiculos();
     console.log('cargó el calendario de vehiculo');
+    this.verificarCredenciales();
 
     // this.pdfmake.configureStyles({ header: { fontSize: 18, bold: true } });
     // this.pdfmake.addImage('../assets/img/logo.png');
@@ -144,6 +145,8 @@ export class SolicitudVehiculoComponent implements OnInit {
   tempPlacaVehiculo = "";
   dateUpdate = { day: null, month: null, year: null };
   crearPDF: GenerarPDF;
+  identity;
+  token;
 
 
 
@@ -1076,12 +1079,13 @@ export class SolicitudVehiculoComponent implements OnInit {
   }
 
   cancelarAccion() {
-    //this.crearPdf();
-    
+   
     this.obtenerSolicitudes(new Date(), false);
     this.obtenerSolicitudVehiculos();
     this.mr.close();
     this.activeDayIsOpen = true;
+    this.solicitudVehiculo = new SolicitudVehiculo('', '', '', null, null, null, '', '', '', null, '', '');
+    this.solicitudVehiculoEdit = new SolicitudVehiculo('', '', '', null, null, null, '', '', '', null, '', '');
   }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }) {
@@ -1089,7 +1093,7 @@ export class SolicitudVehiculoComponent implements OnInit {
     this.obtenerUsuarios();
     this.usuariosAgregados = [];
     this.solicitudVehiculo.fecha = date;
-    this.solicitudVehiculo.horaSalida = { hour: 7, minute: 0 };
+    this.solicitudVehiculo.horaSalida = { hour: 8, minute: 0 };
     this.solicitudVehiculo.horaRegreso = { hour: 11, minute: 0 };
     this.activeDayIsOpen = false;
 
@@ -1105,25 +1109,16 @@ export class SolicitudVehiculoComponent implements OnInit {
           this.minDate.month = (serverDate.getMonth() + 1);
           this.minDate.day = serverDate.getDate();
 
-          if (date.getFullYear() < serverDate.getFullYear()) {
+          let userSumDate=((date.getFullYear()*365)+ (date.getMonth()*30)+date.getDate());
+          let serverSumDate=((serverDate.getFullYear()*365)+ (serverDate.getMonth()*30)+serverDate.getDate());
+
+          if(userSumDate<serverSumDate){
             this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
-          } else if (((date.getMonth() + 1) < (serverDate.getMonth() + 1))) {
-            this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
-          } else if (((date.getMonth() + 1) == (serverDate.getMonth() + 1))) {
-            if (date.getDate() < serverDate.getDate()) {
-              this.msInfo('La fecha de solicitud debe ser igual o mayor a la fecha actual');
-            } else {
-              // alert('entra aqui 1');
+          }
+          else {
               this.obtenerSolicitudes(date, true);
-              this.eliminarUsuarioActual();
               this.writeValue(date);
             }
-          } else {
-            // alert('entra aqui 2');
-            this.obtenerSolicitudes(date, true);
-            this.eliminarUsuarioActual();
-            this.writeValue(date);
-          }
         } else {
         }
       }, error => {
@@ -1173,8 +1168,6 @@ export class SolicitudVehiculoComponent implements OnInit {
   }
 
   agregarSolicitud() {
-
-
     var minInicial = ((this.solicitudVehiculo.horaSalida.hour * 60) + this.solicitudVehiculo.horaSalida.minute);
     var minFinal = ((this.solicitudVehiculo.horaRegreso.hour * 60) + this.solicitudVehiculo.horaRegreso.minute);
     if (minFinal - minInicial <= 0) {
@@ -1289,8 +1282,8 @@ export class SolicitudVehiculoComponent implements OnInit {
                       }
                     }
                   }
-                  console.log('vector. solicitud del dia');
-                  console.log(this.solicitudesdia);
+                 // console.log('vector. solicitud del dia');
+                 // console.log(this.solicitudesdia);
                   //extraer el horario de la solicitudes del vehiculo seleccionado
                   let tempArrayHoraInicio = [];
                   let tempArrayHoraFinal = [];
@@ -1313,8 +1306,8 @@ export class SolicitudVehiculoComponent implements OnInit {
                     }
                     if (sumatoriaFinal > (horaSalidaDigit * 60) && (horaSalidaDigit * 60) > sumatoriaInicial) {
                       tempArrayVerificacion.push(minFinal);
-                      console.log('Array de verificacion');
-                      console.log(tempArrayVerificacion);
+                     // console.log('Array de verificacion');
+                     // console.log(tempArrayVerificacion);
                       break;
                     }
                   }
@@ -1354,7 +1347,7 @@ export class SolicitudVehiculoComponent implements OnInit {
                         this.msjExitoso("Solicitud agregada exitosamente");
                         console.log(solicitud);
                         this.enviarEmail(solicitud);
-                        console.log('antes del crear pdf');
+                       // console.log('antes del crear pdf');
                         //this.crearPdf(solicitud);
                         this.crearPDF.generarPDF(solicitud);
                         this.solicitudVehiculo = new SolicitudVehiculo('', '', '', null, null, null, '', '', '', null, '', '');
@@ -1408,8 +1401,7 @@ export class SolicitudVehiculoComponent implements OnInit {
   }
 
   modificarSolicitud(solicitudparaEditar: any) {
-    console.log('probando datos');
-    console.log(solicitudparaEditar);
+
     this.tempPlacaVehiculo = solicitudparaEditar.placa;
     this.solicitudVehiculoEdit.fecha = { year: null, month: null, day: null };
     this.solicitudVehiculoEdit.horaSalida = this.timeI;
@@ -1423,15 +1415,9 @@ export class SolicitudVehiculoComponent implements OnInit {
     this.solicitudVehiculoEdit.fecha.year = dat.getFullYear();
     this.solicitudVehiculoEdit.fecha.month = dat.getMonth() + 1;
     this.solicitudVehiculoEdit.fecha.day = dat.getDate();
-
     let array;
-    //console.log('fecha enviada');
-    //console.log(this.solicitudSalaEdit.fecha );
-    //  this.solicitudSala.fecha.year = dat;
-
 
     this.solicitudVehiculo.fecha = dat;
-    console.log(this.solicitudVehiculo);
     this._servSolicitud.obtenerSolicitudes(this.solicitudVehiculo).subscribe(
       response => {
         if (!response.message) {//no hay registros
@@ -1439,18 +1425,18 @@ export class SolicitudVehiculoComponent implements OnInit {
 
           array = response.message;
           this.solicitudesdia = array;
-          console.log(this.solicitudesdia);
+        //  console.log(this.solicitudesdia);
           var minInicial = ((this.solicitudVehiculoEdit.horaSalida.hour * 60) + this.solicitudVehiculoEdit.horaSalida.minute);
           var minFinal = ((this.solicitudVehiculoEdit.horaRegreso.hour * 60) + this.solicitudVehiculoEdit.horaRegreso.minute);
           if (minFinal - minInicial <= 0) {
             this.mensajeSolicitudInvalidaEdit = "La hora final no debe ser igual o menor a la hora de inicio";
           } else {
             if (minFinal - minInicial > 0 && minFinal - minInicial < 30) {
-              this.mensajeSolicitudInvalidaEdit = "El tiempo mínimo que se puede pedir una sala es de 30 minutos";
+              this.mensajeSolicitudInvalidaEdit = "El tiempo mínimo que se puede pedir un vehículo es de 30 minutos";
             }
             else {// validar el horario de la sala
               if (dat == null) {
-                this.mensajeSolicitudInvalidaEdit = 'Favor seleccione una fecha';
+                this.mensajeSolicitudInvalidaEdit = 'Favor seleccione un vehículo';
               } else {
                 let dia;
                 if (dat.getDay() == 0) {
@@ -1484,7 +1470,7 @@ export class SolicitudVehiculoComponent implements OnInit {
                 }
 
                 if (horarioDiaVehiculo.desde == null || horarioDiaVehiculo.desde == undefined || horarioDiaVehiculo.desde == "" || horarioDiaVehiculo.desde == "null") {
-                  this.mensajeSolicitudInvalidaEdit = "El día " + dia + " para la sala seleccinada no cuenta con un horario establecido , favor comuniquese con el administrador.";
+                  this.mensajeSolicitudInvalidaEdit = "El día " + dia + " para el vehículo seleccinado no cuenta con un horario establecido , favor comuniquese con el administrador.";
                 } else { // validar el horario del dia selecciona con respecto al horario de la sala
                   this.mensajeSolicitudInvalidaEdit = "";
                   let agregarValid = false;
@@ -1522,36 +1508,29 @@ export class SolicitudVehiculoComponent implements OnInit {
                       meridNumIni = meridNumIni + 12;
                     }
                     agregarValid = false;
-                    this.mensajeSolicitudInvalidaEdit = "El horario habilitado el día " + dia + " para la sala selecionada, es desde  " + meridNumIni + " " + meridianoInit + " hasta " + meridNumFin + " " + meridianoFin;
-                    //alert('horamal');
+                    this.mensajeSolicitudInvalidaEdit = "El horario habilitado el día " + dia + " para el vehículo selecionado, es desde  " + meridNumIni + " " + meridianoInit + " hasta " + meridNumFin + " " + meridianoFin;
                   }
                   else {// validar la disponibilidad de horario
 
-                    //   alert('horabien'+this.solicitudesdia.length);
                     if (this.solicitudesdia.length == 0) {//no hay solicitudes del día y el hora escogido es válido
                       agregarValid = true;
                     } else {
-                      // alert('entró aqui  valid' +agregarValid);
-                      console.log('AgregarValidEn false');
                       agregarValid = false;
                       if (this.tempPlacaVehiculo == "") {
-                        this.mensajeSolicitudInvalidaEdit = "Seleccione una Sala";
+                        this.mensajeSolicitudInvalidaEdit = "Seleccione un vehículo";
                       } else {
-                        //     console.log('solicitudes dia');
-                        //   console.log(this.solicitudesdia);
                         //buscar la solicitud seleccionada y eleminarla dela lista de solicitudes del día,
                         // para poder realizar su respectiva modificación en caso de ser el mismos día y se pretenda camibiar solo las horas
                         for (let conta = 0; conta < this.solicitudesdia.length; conta++) {
-                          console.log('dentro del for que va a aleliminar el evento de hoy');
+                         // console.log('dentro del for que va a aleliminar el evento de hoy');
                           if (this.solicitudesdia[conta]._id === this.solicitudVehiculoEdit._id) {
-                            console.log('la econtró');
+                          //  console.log('la econtró');
                             this.solicitudesdia.splice(conta, 1);
                             break;
                           }
                         }
                         //método burbuja para ordenar las solicitudes de menor a mayor
-                        // console.log(this.solicitudSalaEdit._id);
-                        //console.log(this.solicitudesdia);
+
                         let k = [];
                         for (let i = 1; i < this.solicitudesdia.length; i++) {
                           for (var j = 0; j < (this.solicitudesdia.length - i); j++) {
@@ -1591,7 +1570,7 @@ export class SolicitudVehiculoComponent implements OnInit {
                         // verificar si se encontraron
                         if (tempArrayVerificacion.length > 0) {
                           agregar = false;
-                          console.log('agregar en false');
+                        //  console.log('agregar en false');
                         } else {
                           agregar = true;
                         }
@@ -1599,7 +1578,7 @@ export class SolicitudVehiculoComponent implements OnInit {
 
                     }
                     if (!agregar && !agregarValid) {
-                      this.mensajeSolicitudInvalidaEdit = "Ya existe una solicitud para esta sala, con el mismo horario ingresado";
+                      this.mensajeSolicitudInvalidaEdit = "Ya existe una solicitud para este vehículo, con el mismo horario ingresado";
                     }
 
                     if (agregar || agregarValid) {// todo correcto , puede agregar la solicitud
@@ -1609,18 +1588,15 @@ export class SolicitudVehiculoComponent implements OnInit {
                       this.dateUpdate.day = this.solicitudVehiculoEdit.fecha.day;
                       this.solicitudVehiculoEdit.fecha = this.dateUpdate;
                       this.solicitudVehiculoEdit.acompanantes = this.usuariosAgregados;
-                      console.log(this.solicitudVehiculoEdit);
+
                       this._servSolicitud.modificarSolicitudVehiculo(this.solicitudVehiculoEdit).subscribe(
                         response => {
                           if (!response.message) {
                             this.msjError(response.message);
                           } else {
                             let solicitud = response.message;
-                            this.msjExitoso("Solicitud de sala modificada exitosamente");
-                            console.log(solicitud);
-                            // this.enviarEmail(solicitud);
+                            this.msjExitoso("Solicitud de vehículo modificada exitosamente");
                             this.solicitudVehiculoEdit = new SolicitudVehiculo('', '', '', null, null, null, '', '', '', null, '', '');
-                            // this.cupoMaximo="";
                             this.obtenerSolicitudes(new Date(), false);
                             this.obtenerSolicitudVehiculos();
                             this.mr.close();
@@ -1648,10 +1624,6 @@ export class SolicitudVehiculoComponent implements OnInit {
     );
 
   }
-
-
-
-
 
   tempColor: any = {
     color: {
@@ -1711,7 +1683,8 @@ export class SolicitudVehiculoComponent implements OnInit {
                                   }
                                 }
                               }
-                              if (user._id == listaSolicitudes[index].usuario) {
+                              if (user._id === listaSolicitudes[index].usuario) {
+                               // console.log("User "+user._id +"    solicitud user"+ listaSolicitudes[index].usuario);
                                 this.tempEnable = true;
                                 this.actions = [
                                   {
@@ -1723,7 +1696,6 @@ export class SolicitudVehiculoComponent implements OnInit {
                                   {
                                     label: '<i class="fa fa-fw fa-times"></i>',
                                     onClick: ({ event }: { event: CalendarEvent }): void => {
-                                      this.events = this.events.filter(iEvent => iEvent !== event);
                                       this.handleEvent('Eliminar', event);
                                     }
                                   }
@@ -1733,25 +1705,13 @@ export class SolicitudVehiculoComponent implements OnInit {
                                 this.tempEnable = false;
                                 this.actions = [];
                               }
-                              if (listaSolicitudes[index].fecha.year < serverDate.getFullYear()) {
-                                console.log('primer control');
+                              let userSumDate=((listaSolicitudes[index].fecha.year*365)+ (listaSolicitudes[index].fecha.month*30)+listaSolicitudes[index].fecha.day);
+                              let serverSumDate=((serverDate.getFullYear()*365)+ ((serverDate.getMonth()+1)*30)+serverDate.getDate());
+
+                              if (userSumDate < serverSumDate) {
                                 this.tempEvent = [];
                                 this.actions = [];
-                                this.tempEnable = false;
-                              } else if (listaSolicitudes[index].fecha.month < (serverDate.getMonth() + 1)) {
-                                console.log('Segundo control');
-                                this.tempEvent = [];
-                                this.actions = [];
-                                this.tempEnable = false;
-                              } else if (listaSolicitudes[index].fecha.month == (serverDate.getMonth() + 1)) {
-                                if (listaSolicitudes[index].fecha.day < serverDate.getDate()) {
-                                  console.log('Tercer control');
-                                  this.tempEvent = [];
-                                  this.actions = [];
-                                  this.tempEnable = false;
-                                } else {
-                                  // this.tempEnable = true;
-                                }
+
                               } else {
                                 // alert('entra aqui 2');
                               }
@@ -1798,7 +1758,6 @@ export class SolicitudVehiculoComponent implements OnInit {
   }
 
   setHorarioVehiculo(placa) {
-
     this.mensajeSolicitudInvalida = "";
     this.tempHorarioVehiculo = []
     for (let index = 0; index < this.vehiculos.length; index++) {
@@ -1827,7 +1786,7 @@ export class SolicitudVehiculoComponent implements OnInit {
   obtenerSolicitudes(userDate, abrirMod: boolean) {
     let array;
     this.solicitudVehiculo.fecha = userDate;
-    console.log(this.solicitudVehiculo);
+    //console.log(this.solicitudVehiculo);
     this._servSolicitud.obtenerSolicitudes(this.solicitudVehiculo).subscribe(
       response => {
         if (!response.message) {//no hay registros
@@ -1845,8 +1804,6 @@ export class SolicitudVehiculoComponent implements OnInit {
     );
   }
   obtenerUsuarios() {
-
-
     this._servUsuario.obtenerUsuarios().subscribe(
       response => {
         if (response.message) {
@@ -1885,10 +1842,9 @@ export class SolicitudVehiculoComponent implements OnInit {
   }
 
   eliminarUsuarioActual() {// Eliminar el usuario actual de la lista de usuarios disponibles, para el la seccion de acompanantes
-
     let identity = localStorage.getItem('identity');
     let user = JSON.parse(identity);
-    console.log(user);
+   // console.log(user);
     if (!user) {
       this._router.navigate(['/principal']);
     } else {
@@ -1907,7 +1863,7 @@ export class SolicitudVehiculoComponent implements OnInit {
     newStart,
     newEnd
 
-  }: CalendarEventTimesChangedEvent): void {
+    }: CalendarEventTimesChangedEvent): void {
     event.start = newStart;
     event.end = newEnd;
     this.handleEvent('Dropped or resized', event);
@@ -1982,8 +1938,6 @@ export class SolicitudVehiculoComponent implements OnInit {
               }
             }
 
-
-
             this.eliminarUsuarioActual();
             this._servSolicitud.obtenerSolicitudVehiculo(this.tempColor.id).subscribe(
               response => {
@@ -2009,6 +1963,14 @@ export class SolicitudVehiculoComponent implements OnInit {
 
                   this.solicitudVehiculoEdit.acompanantes = solicit.acompanantes;
 
+                  this.setHorarioVehiculo(this.solicitudVehiculoEdit.vehiculo);
+                  this.tempEvent = event.actions;
+                  if (this.tempEvent.length > 0) {
+                    this.tempTitleModal = "Editar";
+                  } else {
+                    this.tempTitleModal = "Detalles de la ";
+                  }
+
                   let date = new Date();
                   date.setFullYear(solicit.fecha.year);
                   date.setMonth(solicit.fecha.month - 1);
@@ -2025,37 +1987,26 @@ export class SolicitudVehiculoComponent implements OnInit {
                         this.minDate.year = serverDate.getFullYear();
                         this.minDate.month = (serverDate.getMonth() + 1);
                         this.minDate.day = serverDate.getDate();
-                        // console.log('cliente');
-                        // console.log(date);
-                        // console.log('servidor')
-                        // console.log(serverDate);
-                        if (date.getFullYear() < serverDate.getFullYear()) {
+                        
+                        let userSumDate=((date.getFullYear()*365)+ (date.getMonth()*30)+date.getDate());
+                        let serverSumDate=((serverDate.getFullYear()*365)+ (serverDate.getMonth()*30)+serverDate.getDate());
+
+                        if (userSumDate < serverSumDate) {
                           this.tempEvent = [];
-                        } else if (((date.getMonth() + 1) < (serverDate.getMonth() + 1))) {
-                          this.tempEvent = [];
-                        } else if (((date.getMonth() + 1) == (serverDate.getMonth() + 1))) {
-                          if (date.getDate() < serverDate.getDate() || this.minDate.day < serverDate.getDate()) {
-                            this.tempEvent = [];
                           } else {
 
-                            this.tempEvent = event.actions;
+                           // this.tempEvent = event.actions;
                           }
-                        } else {
-
-                          this.tempEvent = event.actions;
-
-                        }
+                        
                       } else {
                       }
 
                       this.modalData = { event, action };
-                      this.mr = this.modal.open(this.modalContent2, { size: 'lg' });
+                      this.mr = this.modal.open(this.modalContent2, { size: 'lg', backdrop: 'static', keyboard: false });
                     }, error => {
                       //ocurrió un error
                     }
                   );
-                  //   this.modalData = { event, action };
-                  // this.mr=  this.modal.open(this.modalContent, { size: 'lg' });
                 } else {//No se ha encontrado la Sala
                 }
               }, error => {
@@ -2158,24 +2109,6 @@ export class SolicitudVehiculoComponent implements OnInit {
     this.mr = this.modal.open(modal, { backdrop: 'static', keyboard: false, size: 'lg' });
   }
 
-
-  ///***************************************************METODOS AGREGADOS***********************************
-
-  // cerrarModal(modalId: any) {
-  //   $(".modal-backdrop").remove();
-  //   $('body').removeClass('modal-open');
-  //   $(modalId).removeClass('show');
-  //   $(modalId).css('display', 'none');
-  //   this.solicSala = true;
-  // }
-
-  // abrirModal(modalId: any) {
-  //   $('body').append('<div class="modal-backdrop fade show" ></div>');
-  //   $('body').addClass('modal-open');
-  //   $(modalId).addClass('show');
-  //   $(modalId).css('display', 'block');
-  // }
-
   msjExitoso(texto: string) {
     swal({
       position: 'top',
@@ -2224,8 +2157,6 @@ export class SolicitudVehiculoComponent implements OnInit {
   }
   registerOnTouched(fn: any): void { }
 
-
-
   // validar el dataPicker de hora de inicio en el modal de agregar solicitudes
   ctrlInitDate = new FormControl('', (control: FormControl) => {
     const value = control.value;
@@ -2260,7 +2191,6 @@ export class SolicitudVehiculoComponent implements OnInit {
     return null;
   });
 
-
   //actualiza la hora de inicio al escribir
   updateInitDateOnInput(): void {
   }
@@ -2289,7 +2219,67 @@ export class SolicitudVehiculoComponent implements OnInit {
       ),
       this.solicitudVehiculo.horaRegreso.hour
     );
-    console.log(newDate);
     this.onChangeCallback(newDate);
+  }
+
+  verificarCredenciales() {
+    this.identity = this._servUsuario.getIndentity();
+    this.token = this._servUsuario.getToken();
+    let identity = localStorage.getItem('identity');
+    let user = JSON.parse(identity);
+    let recordar = localStorage.getItem('remember');
+    let recordarValue = JSON.parse(recordar);
+    if (user != null) {
+      let usuarioTemp = new Usuario('', '', '', '', '', '', '', '', '', '');
+      usuarioTemp.correo = user.correo;
+      usuarioTemp.contrasena = user.contrasena;
+      // obtener datos de usuario identificado
+      this._servUsuario.verificarCredenciales(usuarioTemp).subscribe(response => {
+        let identity = response.user;
+        this.identity = identity;
+        if (!this.identity._id) {
+          $('#nav-user').text(' ');
+          this._router.navigate(['/principal']);
+        } else {
+          //conseguir el token para enviarselo a cada petición
+          this._servUsuario.verificarCredenciales(usuarioTemp, 'true').subscribe(
+            response => {
+              let token = response.token;
+              this.token = token;
+              if (this.token <= 0) {
+                $('#nav-user').text(' ');
+                this._router.navigate(['/principal']);
+              } else {
+                // crear elemento en el localstorage para tener el token disponible
+                localStorage.setItem('token', token);
+                let identity = localStorage.getItem('identity');
+                let user = JSON.parse(identity);
+                if (user != null) {
+                  $('#nav-user').text(user.nombre + ' ' + user.apellidos);
+                  this.estiloBotones();
+                  this.obtenerVehiculos();
+                  this.obtenerUsuarios();
+                  this.obtenerSolicitudVehiculos();
+                } else {
+                  $('#nav-user').text('');
+                  this._router.navigate(['/principal']);
+                }
+              }
+            }, error => {
+              $('#nav-user').text(' ');
+              this._router.navigate(['/principal']);
+            }
+          );
+        }
+      }, error => {
+        $('#nav-user').text(' ');
+        this._router.navigate(['/principal']);
+      }
+      );
+    } else {
+      $('#nav-user').text(' ');
+      this._router.navigate(['/principal']);
+      //this.abrirModal('#loginModal');
+    }
   }
 }
