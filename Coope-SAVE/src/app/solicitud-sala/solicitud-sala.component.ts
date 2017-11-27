@@ -1354,6 +1354,7 @@ export class SolicitudSalaComponent implements OnInit {
           this._router.navigate(['/principal']);
         } else {
           //conseguir el token para enviarselo a cada petición
+          
           this._servUsuario.verificarCredenciales(usuarioTemp, 'true').subscribe(
             response => {
               let token = response.token;
