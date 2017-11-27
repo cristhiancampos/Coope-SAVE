@@ -1368,6 +1368,16 @@ export class SolicitudSalaComponent implements OnInit {
                 let user = JSON.parse(identity);
                 if (user != null) {
                   $('#nav-user').text(user.nombre + ' ' + user.apellidos);
+                  if (user.rol == "SUPERADMIN" || user.rol == "ADMINISTRADOR") {
+
+                  } else {
+                    $('#menuAdmin').css('display', 'none');
+                    if (user.rol == "REPORTES") {
+
+                    } else {
+                      $('#menuReport').css('display', 'none');
+                    }
+                  }
                   this.obtenerSalas();
                   this.estiloBotones();
                   this.obtenerSolicitudSalas();
