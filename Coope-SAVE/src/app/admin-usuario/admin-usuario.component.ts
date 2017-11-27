@@ -149,17 +149,17 @@ export class AdminUsuarioComponent implements OnInit {
     //alert(event.target.checked);
 
     this.estadoEdicionAgregar = !this.estadoEdicionAgregar;
-    console.log(this.estadoEdicionAgregar);
+    //console.log(this.estadoEdicionAgregar);
     if (this.estadoEdicionAgregar) {
       this.estadoMensajAgregar = 'Habilitado';
       this.usuarioAgregar.estado = this.estadoMensajAgregar;
-      console.log('88888888888888888888888888888888888888');
-      console.log(this.usuarioAgregar.estado);
+      //console.log('88888888888888888888888888888888888888');
+     // console.log(this.usuarioAgregar.estado);
     } else {
       this.estadoMensajAgregar = 'Deshabilitado';
       this.usuarioAgregar.estado = this.estadoMensajAgregar;
-      console.log('333333333333333333333333333333333333333');
-      console.log(this.usuarioAgregar.estado)
+    //  console.log('333333333333333333333333333333333333333');
+     // console.log(this.usuarioAgregar.estado)
     }
   }
   obtenerNombreDep(id_Dep: any) {
@@ -179,6 +179,7 @@ export class AdminUsuarioComponent implements OnInit {
     }
     return "";
   }
+  currentRol="";
   obtenerUsuarios() {
     let identity = localStorage.getItem('identity');
     let user = JSON.parse(identity);
@@ -186,6 +187,7 @@ export class AdminUsuarioComponent implements OnInit {
       this.identity = user;
 
       this.currentUser = user.correo.trim();
+      this.currentRol=user.rol;
     } else { this.currentUser = "" }
 
     this._servUsuario.obtenerUsuarios().subscribe(
@@ -340,7 +342,7 @@ export class AdminUsuarioComponent implements OnInit {
   
 
   modificarUsuario() {
-    console.log(this.usuarioEdit);
+   // console.log(this.usuarioEdit);
    this.usuarioEdit.estado = this.estadoMensajEdit;
     this.usuarioEdit.departamento = this.obtenerId_Dep(this.usuarioEdit.departamento)
     if (this.usuarioEdit.departamento == "") {
@@ -443,7 +445,7 @@ enviarContrasena(user:any) {
       if (!response) {
         console.log('Fallo el envio de correo');
       } else {
-        console.log('correo de contrase;a enviada');
+        this.msjExitoso('La contraseña fue enviada al correo '+user.correo);
         //this.cerrar();
        // this.msInfo('Su nueva contraseña ha sido enviada via correo electrónico a '+user.correo);          
         //this._router.navigate(['/principal']);
@@ -458,7 +460,6 @@ enviarContrasena(user:any) {
 
   registrarUsuario() {
     let use = new Usuario('','','','','','','','','','');
-    console.log(this.usuarioAgregar.estado);
     use = this.usuarioAgregar;
     use.correo+= this.dominio;
     use.contrasena= this.generatePassword();
@@ -470,10 +471,8 @@ enviarContrasena(user:any) {
       }
       
     }
-    console.log(use.estado);
     this._servUsuario.registrarUsuario(use).subscribe(
       response => {
-        console.log(response);
         let user = response.user;
         if (!response.user._id) {
           
