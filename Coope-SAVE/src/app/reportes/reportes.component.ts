@@ -36,7 +36,7 @@ export class ReportesComponent implements OnInit {
   @ViewChild('modalSalas') modalSalas: TemplateRef<any>;
   @ViewChild('modalVehiculos') modalVehiculos: TemplateRef<any>;
 
- 
+  solicitudes=[];
   listavehiculosFiltradosPDF= [];
   usuarios = [];
   departamentos = [];
@@ -93,19 +93,35 @@ export class ReportesComponent implements OnInit {
   }
 
   //Método encargado de abrir generar el pdf de los  reportes generados en las búsquedas y mostrarlo al usuario
-  openPdf() {
-    console.log('llama el metodo en reportes');
-    var solicitudes=[];
-    solicitudes= this.solicitudesSalasFiltradas;
+  nombreUsuariosPdf(){
+    
+    this.fitlroReporteSalas();
+    this.solicitudes= this.solicitudesSalasFiltradas;
     for (var index = 0; index < this.solicitudesSalasFiltradas.length; index++) {
-      solicitudes[index].usuario= this.getNombreUsuario(this.solicitudesSalasFiltradas[index].usuario);
+      this.solicitudes[index].usuario= this.getNombreUsuario(this.solicitudesSalasFiltradas[index].usuario);
     }
-      this.crearPDF.generarPDF(solicitudes);
+    
   }
 
-  openPdfVehiculo() {
-    
-    
+  openPdf() {
+      this.nombreUsuariosPdf();
+      this.crearPDF.generarPDF(this.solicitudes,2);
+  }
+  printPdf() {
+      this.nombreUsuariosPdf();
+      this.crearPDF.generarPDF(this.solicitudes,1);
+  }
+  downloadPDF() {
+    this.nombreUsuariosPdf();
+    this.crearPDF.generarPDF(this.solicitudes,0);
+  }
+
+
+
+
+  crearListaReporteVehiculo(){
+
+  
     for (var index = 0; index < this.solicitudesVehiculosFiltradas.length; index++) {
       let solicitudesVehiculos= {placa: "",tipo:"",marca:"", usuario:"", fecha:"",destino:""};
       console.log(this.solicitudesVehiculosFiltradas[index]);
@@ -135,28 +151,23 @@ export class ReportesComponent implements OnInit {
       this.listavehiculosFiltradosPDF[index]= solicitudesVehiculos;
     }
 
-
-
-
-
-    // placa: listaSolicitudes[i].placa,
-    // tipo: listaSolicitudes[i].tipo,
-    // marca: listaSolicitudes[i].marca,
-    // usuario: listaSolicitudes[i].usuario,
-    // fecha: listaSolicitudes[i].fecha.day + '-' + listaSolicitudes[i].fecha.month + '-' + listaSolicitudes[i].fecha.year,
-    // destino: listaSolicitudes[i].destino
-      console.log(this.listavehiculosFiltradosPDF);
-     this.crearPDF.generarPDFVehiculo(this.listavehiculosFiltradosPDF);
+  }
+  openPdfVehiculo() {
+    
+     this.crearListaReporteVehiculo();
+     this.crearPDF.generarPDFVehiculo(this.listavehiculosFiltradosPDF,2);
   }
 
   //Método encargado de mostrar opciones de impresión de los reportes generados en las búsquedas
-  printPdf() {
-    this.pdfmake.print();
+  printPdfVehiculo() {
+    this.crearListaReporteVehiculo();
+    this.crearPDF.generarPDFVehiculo(this.listavehiculosFiltradosPDF,1);
   }
 
   //Método encargado de descargar en pdf los reportes generados en las búsquedas
-  downloadPDF() {
-    this.pdfmake.download();
+  downloadPDFVehiculo() {
+    this.crearListaReporteVehiculo();
+    this.crearPDF.generarPDFVehiculo(this.listavehiculosFiltradosPDF,0);
   }
 
   //Método encargado de descargar en pdf los reportes generados en las búsquedas, permite que se le asigne un nombre al archivo pdf

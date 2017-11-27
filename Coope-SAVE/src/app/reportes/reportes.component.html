@@ -168,10 +168,10 @@
         [disabled]="solicitudesVehiculosFiltradas ==undefined || solicitudesVehiculosFiltradas.length==0" data-toggle="tooltip" data-placement="top" title="Ver reporte en PDF">
         <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
         </button>
-        <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px" (click)="printPdf()" 
+        <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px" (click)="printPdfVehiculo()" 
         [disabled]="solicitudesVehiculosFiltradas ==undefined || solicitudesVehiculosFiltradas.length==0" data-toggle="tooltip" data-placement="top" title="Imprimir reporte">
         <i class="fa fa-print" aria-hidden="true"></i></button>
-        <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px" (click)="downloadPDF()"
+        <button type="button" class="btn btn-secundary" style="float:right;margin-right:5px" (click)="downloadPDFVehiculo()"
          [disabled]="solicitudesVehiculosFiltradas ==undefined || solicitudesVehiculosFiltradas.length==0" data-toggle="tooltip" data-placement="top" title="Descargar reporte">
          <i class="fa fa-download" aria-hidden="true"></i></button>
       </div>
