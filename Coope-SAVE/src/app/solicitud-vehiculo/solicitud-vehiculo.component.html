@@ -1,11 +1,6 @@
 <ng-template #modalContent2 let-close="close" id="modalContent2">
   <div class="modal-header" style="background: #0069d9;color:#fff">
-    <!-- <h5 class="modal-title">Event action occurred</h5>
-        <button type="button" class="close" (click)="close()">
-          <span aria-hidden="true">&times;</span>
-        </button> -->
     <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;{{tempTitleModal}} Solicitud</h5>
-    <!-- {{ modalData?.action }}-->
     <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal" (click)="cancelarAccion()"> 
           <small aria-hidden="true">&times;</small>
         </button>
@@ -243,9 +238,9 @@
       <div class="btn btn-primary" (click)="view = 'week'" [class.active]="view === 'week'">
         Semana
       </div>
-      <div class="btn btn-primary" (click)="view = 'day'" [class.active]="view === 'day'">
+      <!-- <div class="btn btn-primary" (click)="view = 'day'" [class.active]="view === 'day'">
         Día
-      </div>
+      </div> -->
     </div>
   </div>
 </div>

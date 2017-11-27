@@ -34,8 +34,12 @@
             <th>{{usuario.rol}}</th>
             <th>{{usuario.estado}}</th>
             <th style="text-align: center">
-              <button class="btn btn-primary btn-accion" (click)="obtenerUsuario(usuario._id,1)"><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete" [disabled]='usuario.correo==currentUser || usuario.rol=="ADMINISTRADOR"'
+              <button class="btn btn-primary btn-accion" (click)="obtenerUsuario(usuario._id,1)"
+              [disabled]='((currentRol=="ADMINISTRADOR" && usuario.rol=="ADMINISTRADOR") && (currentUser!=usuario.correo)) ||(usuario.rol=="SUPERADMIN" && currentRol=="ADMINISTRADOR")'>
+                <i class="fa fa-pencil" aria-hidden="true"></i> 
+              </button><!--currentRol!="SUPERADMIN" ||(usuario.correo==currentUser || usuario.rol=="ADMINISTRADOR") -->
+              <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete"
+               [disabled]='(currentRol=="ADMINISTRADOR" && usuario.rol=="SUPERADMIN") ||  (currentRol=="ADMINISTRADOR" && usuario.rol=="ADMINISTRADOR") ||(currentRol=="SUPERADMIN" && usuario.rol=="SUPERADMIN")' 
                 (click)="obtenerUsuario(usuario._id,2)"><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
             </th>
           </tr>
@@ -215,7 +219,7 @@
         <div class="row">
           <div class="col-md-12">
 
-            <form #registerForm="ngForm" (ngSubmit)="registrarUsuario()">
+            <form #registerFormA="ngForm" (ngSubmit)="registrarUsuario()">
               <div class="control-group form-group">
                 <div class="controls">
                   <div class="row" style="margin-left:0em;margin-right:0em">
@@ -235,7 +239,7 @@
                 <div class="controls">
                   <input type="text" class="form-control" #nombre="ngModel" name="nombre" [(ngModel)]="usuarioAgregar.nombre" placeholder="Nombre"
                     required>
-                  <small [hidden]="nombre.valid || (nombre.pristine && !registerForm.submitted)">
+                  <small [hidden]="nombre.valid || (nombre.pristine && !registerFormA.submitted)">
                         <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El nombre es obligatorio
                     </small>
                 </div>
@@ -246,7 +250,7 @@
 
                   <input type="text" class="form-control" #apellidos="ngModel" name="apellidos" [(ngModel)]="usuarioAgregar.apellidos" placeholder="Apellidos"
                     required maxlength="60">
-                  <small [hidden]="apellidos.valid || (apellidos.pristine && !registerForm.submitted)">
+                  <small [hidden]="apellidos.valid || (apellidos.pristine && !registerFormA.submitted)">
                         <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Los apellidos son obligatorios
                     </small>
                 </div>
@@ -259,7 +263,7 @@
                     <option value="" selected disabled >Departamento</option>
                         <option *ngFor="let depa of departamentos;">{{depa.nombre}}</option>
                       </select>
-                  <small [hidden]="departamento.valid || (departamento.pristine && !registerForm.submitted)">
+                  <small [hidden]="departamento.valid || (departamento.pristine && !registerFormA.submitted)">
                           <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El departamento es  obligatorio
                       </small>
                 </div>
@@ -276,7 +280,7 @@
                         <option [disabled]='tempUserRol=="ADMINISTRADOR"'>USUARIO</option>
                         <option [disabled]='tempUserRol=="ADMINISTRADOR"'>REPORTES</option>
                       </select>
-                  <small *ngIf='tempUserRol!="ADMINISTRADOR"' [hidden]="rol.valid || (rol.pristine && !registerForm.submitted)">
+                  <small *ngIf='tempUserRol!="ADMINISTRADOR"' [hidden]="rol.valid || (rol.pristine && !registerFormA.submitted)">
                           <i class="fa fa-exclamation-circle" aria-hidden="true"></i> El rol de usario es  obligatorio
                       </small>
                 </div>
@@ -296,23 +300,23 @@
                   </ul>
                 </div>
               </div>
-              <!-- <div style="float: right">
-                  <button type="button" class="btn btn-default btn-modal-can" (click)="c('Close click')" >Salir</button>                                
-                  <button id="btnRegister" type="submit" [disabled]="!correo.valid || !nombre.valid || !apellidos.valid  ||  !departamento.valid || userExist "
-                    class="btn btn-success">Continuar</button>
-              </div> -->
+              <div class="modal-footer">
+              <button type="button" class="btn btn-default btn-modal-can" (click)="c('Close click')">Salir</button>
+              <button id="btnRegister" type="submit" [disabled]="!correo.valid || !nombre.valid || !apellidos.valid  ||  !departamento.valid || userExist "
+                class="btn btn-success">Continuar</button>  </div> 
+
             </form>
 
           </div>
         </div>
       </div>
     </div>
-    <div class="modal-footer">
+    <!-- <div class="modal-footer">
 
       <button type="button" class="btn btn-default btn-modal-can" (click)="c('Close click')">Salir</button>
       <button id="btnRegister" type="submit" [disabled]="!correo.valid || !nombre.valid || !apellidos.valid  ||  !departamento.valid || userExist "
         class="btn btn-success">Continuar</button>
-    </div>
+    </div> -->
   </ng-template>
 
 </div>
