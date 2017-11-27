@@ -14,7 +14,7 @@ export class PDFReportes {
 getLogo: ImgBases64 = new ImgBases64;
 identity;
 user;
-
+hoy;
 
   constructor(
     private pdfmake: PdfmakeService,
@@ -23,18 +23,20 @@ user;
  
       this.identity = localStorage.getItem('identity');
      this.user = JSON.parse(this.identity);
+      this.hoy= new Date();
   }
 
 
   horaFormato12Horas(horario) {
     let meridianoInit;
     let meridianoFin;
-    let meridNumIni;
-    let meridNumFin;
+    let meridNumIni=0;
+    let meridNumFin=0;
 
     console.log(horario);
 
     if (parseInt(horario.minute) < 10) {
+      
       horario.minute = '0' + horario.minute;
     }
 
@@ -69,7 +71,9 @@ user;
 
   table(data, columns) {
     return {
+      
       table: {
+        widths: [10,80,90,50,60,'*'],
         headerRows: 1,
         body: this.buildTableBody(data, columns),
         layout: 'lightHorizontalLines',
@@ -93,7 +97,7 @@ user;
           sala: listaSolicitudes[i].sala,
           usuario: listaSolicitudes[i].usuario,
           fecha: listaSolicitudes[i].fecha.day + '-' + listaSolicitudes[i].fecha.month + '-' + listaSolicitudes[i].fecha.year,
-          horario: this.horaFormato12Horas(listaSolicitudes[0].horaInicio) + ' - ' + this.horaFormato12Horas(listaSolicitudes[0].horaFin),
+          horario: this.horaFormato12Horas(listaSolicitudes[i].horaInicio) + ' - ' + this.horaFormato12Horas(listaSolicitudes[i].horaFin),
           motivo: listaSolicitudes[i].descripcion
         }
       );
@@ -106,17 +110,21 @@ user;
   buildTableBody(data, columns) {
     var body = [];
     var i = 0;
-
+    var numLinea=0;
     body.push(columns);
 
 
     data.forEach(function (row) {
-
+      var linea= true;
       var dataRow = [];
       i = 0;
+      numLinea++;
       columns.forEach(function (column) {
 
-
+      if(linea){
+        dataRow.push(numLinea)
+        linea=false;
+      }else{
         if (i < 1) {
           dataRow.push(row.sala);
           i++
@@ -140,7 +148,9 @@ user;
           }
 
         }
-      })
+      }
+    }
+    )
 
       body.push(dataRow);
     });
@@ -183,12 +193,15 @@ user;
 
 
     
-            { text:  'Fecha: 26/11/2017', style: 'textos' },
+            { text:  'Fecha: '+this.hoy.getDate()+'/'+(this.hoy.getMonth()+1)+'/'+ this.hoy.getFullYear(), style: 'textos' },
             { text: 'Generado por: '+this.user.nombre+' '+ this.user.apellidos, style: 'textos' },
         
         
         //Tabla de solicitudes filtradas
-        this.table(this.generateRows(solicitudesSalasFiltradas), ['SALA', 'SOLICITANTE', ' FECHA', 'HORARIO', 'MOTIVO']),
+        
+          this.table(this.generateRows(solicitudesSalasFiltradas), ['#','SALA', 'SOLICITANTE', ' FECHA', 'HORARIO', 'MOTIVO']),
+        
+        
 
         {text: 'Sistema de control de Salas y Vehículos', style: 'footer'},
 
@@ -220,7 +233,9 @@ user;
           width: '100%',
           height: '100%',
           alignment: 'center',
-          margin: [0, 30, 0,0]
+          margin: [0, 30, 0,0],
+          fontSize: 16,
+          bold: true
 
         } 
 
