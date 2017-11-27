@@ -1369,7 +1369,8 @@ export class SolicitudSalaComponent implements OnInit {
                 if (user != null) {
                   $('#nav-user').text(user.nombre + ' ' + user.apellidos);
                   if (user.rol == "SUPERADMIN" || user.rol == "ADMINISTRADOR") {
-
+                    $('#menuAdmin').css('display', 'block');
+                    $('#menuReport').css('display', 'block');
                   } else {
                     $('#menuAdmin').css('display', 'none');
                     if (user.rol == "REPORTES") {
