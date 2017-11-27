@@ -1558,6 +1558,17 @@ export class ReportesComponent implements OnInit {
                 let user = JSON.parse(identity);
                 if (user != null) {
                   $('#nav-user').text(user.nombre + ' ' + user.apellidos);
+                  if (user.rol == "SUPERADMIN" || user.rol == "ADMINISTRADOR") {
+                    $('#menuAdmin').css('display', 'block');
+                    $('#menuReport').css('display', 'block');
+                  } else {
+                    $('#menuAdmin').css('display', 'none');
+                    if (user.rol == "REPORTES") {
+
+                    } else {
+                      $('#menuReport').css('display', 'none');
+                    }
+                  }
                   this.obtenerDepartamentos();
                 } else {
                   $('#nav-user').text('');
