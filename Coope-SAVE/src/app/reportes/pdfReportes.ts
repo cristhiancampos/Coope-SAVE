@@ -294,8 +294,8 @@ hoy;
         
         
 
-        {text: 'Sistema de control de Salas y Vehículos', style: 'footer'},
-        {text: 'SAVE', style: 'footer'},
+        {text: 'Sistema de control de Salas y Vehículos  SAVE', style: 'footer'},
+        
 
 
 
@@ -380,8 +380,8 @@ hoy;
             
             
     
-            {text: 'Sistema de control de Salas y Vehículos', style: 'footer'},
-            {text: 'SAVE', style: 'footer'},
+            {text: 'Sistema de control de Salas y Vehículos SAVE', style: 'footer'},
+           
     
     
     
