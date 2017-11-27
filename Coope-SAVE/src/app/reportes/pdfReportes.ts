@@ -97,7 +97,7 @@ hoy;
 
   generateRows(listaSolicitudes) {
 
-    console.log(listaSolicitudes[0].horaInicio);
+    console.log(listaSolicitudes);
     var tempObj = {}
     var tempArr = [];
     for (var i = 0; i < listaSolicitudes.length; i++) {
@@ -249,7 +249,7 @@ hoy;
     return body;
   }
 
-  generarPDF(solicitudesSalasFiltradas) {
+  generarPDF(solicitudesSalasFiltradas, accion) {
 
 
 
@@ -332,10 +332,21 @@ hoy;
 
     }//Final de definicion de PDF
 
-    this.pdfmake.open();
+    if(accion<1){
+      this.pdfmake.download();
+    }else{
+      if(accion<2){
+        this.pdfmake.print();
+      }
+      else{
+          if(accion<3){
+            this.pdfmake.open();
+          }
+      }
+    }
   }//Final del metodo generarPDF()
 
-  generarPDFVehiculo(solicitudesSalasFiltradas) {
+  generarPDFVehiculo(solicitudesSalasFiltradas, accion) {
     
     console.log(solicitudesSalasFiltradas);
     
@@ -418,7 +429,18 @@ hoy;
     
         }//Final de definicion de PDF
     
-        this.pdfmake.open();
+        if(accion<1){
+          this.pdfmake.download();
+        }else{
+          if(accion<2){
+            this.pdfmake.print();
+          }
+          else{
+              if(accion<3){
+                this.pdfmake.open();
+              }
+          }
+        }
       }//Final del metodo generarPDF()
 
 }// Final de la Clase
