@@ -1592,6 +1592,7 @@ export class SolicitudVehiculoComponent implements OnInit {
                           } else {
                             let solicitud = response.message;
                             this.msjExitoso("Solicitud de vehículo modificada exitosamente");
+                            this.enviarEmail(solicitud);
                             this.solicitudVehiculoEdit = new SolicitudVehiculo('', '', '', null, null, null, '', '', '', null, '', '');
                             this.obtenerSolicitudes(new Date(), false);
                             this.obtenerSolicitudVehiculos();

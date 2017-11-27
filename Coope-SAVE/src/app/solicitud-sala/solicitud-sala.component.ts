@@ -1031,7 +1031,7 @@ export class SolicitudSalaComponent implements OnInit {
                             //  this.tempArrayCheckedEdit=[];
                             //this.tempRecursosEdit=[];
                             console.log(solicitud);
-                            // this.enviarEmail(solicitud);
+                             this.enviarEmail(solicitud);
                             this.solicitudSalaEdit = new SolicitudSala('', '', '', null, null, null, '', '', '', null, '', '');
                             // this.cupoMaximo="";
                             this.mr.close();
@@ -1354,7 +1354,7 @@ export class SolicitudSalaComponent implements OnInit {
           this._router.navigate(['/principal']);
         } else {
           //conseguir el token para enviarselo a cada petición
-          
+
           this._servUsuario.verificarCredenciales(usuarioTemp, 'true').subscribe(
             response => {
               let token = response.token;
