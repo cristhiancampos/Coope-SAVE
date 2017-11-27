@@ -44,6 +44,7 @@ export class AppComponent implements OnInit {
 
     this.token = this._servUsuario.getToken();
     this.SESSION = this._servUsuario.getIndentity();
+    console.log("constructor");
   }
 
   getUsuario() {
@@ -137,7 +138,8 @@ export class AppComponent implements OnInit {
   }
   // método que realiza una acción después de haberse cargado el componente
   ngOnInit() {
-    //this.verificarCredenciales();
+   // this.verificarCredenciales();
+   this.SESSION = this._servUsuario.getIndentity();
   }
   verificarCredenciales() {
     this.indentityy = this._servUsuario.getIndentity();
@@ -154,8 +156,8 @@ export class AppComponent implements OnInit {
       this._servUsuario.verificarCredenciales(usuarioTemp).subscribe(response => {
         let identity = response.user;
         this.indentityy = identity;
-        // console.log('---------------------------------');
-        // console.log(this.indentityy.rol);
+         console.log('---------------------------------w');
+         console.log(this.indentityy);
         if (!this.indentityy._id) {
           this.SESSION.rol = "";
 
