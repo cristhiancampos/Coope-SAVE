@@ -29,7 +29,7 @@ export class ReportesComponent implements OnInit {
   @ViewChild('modalSalas') modalSalas: TemplateRef<any>;
   @ViewChild('modalVehiculos') modalVehiculos: TemplateRef<any>;
 
- 
+  filtrosAplicados=[];
   usuarios = [];
   departamentos = [];
   salas = [];
@@ -89,7 +89,7 @@ export class ReportesComponent implements OnInit {
     for (var index = 0; index < this.solicitudesSalasFiltradas.length; index++) {
       solicitudes[index].usuario= this.getNombreUsuario(this.solicitudesSalasFiltradas[index].usuario);
     }
-      this.crearPDF.generarPDF(solicitudes);
+      this.crearPDF.generarPDF(solicitudes, this.filtrosAplicados);
   }
 
   printPdf() {
@@ -324,6 +324,7 @@ export class ReportesComponent implements OnInit {
             let arrayTemporal6 = [];
 
             if (this.salaFiltro != "") {// filtro de sala
+              this.filtrosAplicados[0]= this.salaFiltro;
               for (let index = 0; index < array.length; index++) {
                 if (array[index].sala === this.salaFiltro) {
                   arrayTemporal2.push(array[index]);
@@ -333,7 +334,7 @@ export class ReportesComponent implements OnInit {
             }
 
             if (this.modelFechaInicio != null) {// filtro de fecha inicio
-
+              this.filtrosAplicados[1]= this.modelFechaInicio;
               if (arrayTemporal2.length > 0) {
                 if (this.modelFechaFinal != null) {
                   for (let index = 0; index < arrayTemporal2.length; index++) {
@@ -385,6 +386,7 @@ export class ReportesComponent implements OnInit {
             }
 
             if (this.modelFechaFinal != null) {// filtro de fecha final
+              this.filtrosAplicados[2]= this.modelFechaFinal;
               if (arrayTemporal3.length > 0) {
                 if (this.modelFechaInicio != null) {
                   console.log("selccionó sala y fecha de incio también");
@@ -455,7 +457,7 @@ export class ReportesComponent implements OnInit {
             }
 
             if (this.solicitanteFiltro != "") {// filtro de solicitante
-
+              this.filtrosAplicados[3]= this.solicitanteFiltro;
               if (arrayTemporal4.length > 0 && arrayTemporal2.length > 0 && arrayTemporal3.length == 0) {
                 let solicitante = this.getIdUsuario(this.solicitanteFiltro);
                 for (let index = 0; index < arrayTemporal4.length; index++) {
@@ -524,6 +526,7 @@ export class ReportesComponent implements OnInit {
               }
             }
             if (this.departamentoFiltro != "") {// filtro de departamento
+              this.filtrosAplicados[4]= this.departamentoFiltro;
               if (arrayTemporal2.length == 0 && arrayTemporal3.length == 0 && arrayTemporal4.length == 0 && arrayTemporal5.length == 0) {
                 for (let index = 0; index < array.length; index++) {
                   let departamento = this.getDepartamento(array[index].usuario);
