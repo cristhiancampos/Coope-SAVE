@@ -1878,6 +1878,15 @@ export class SolicitudVehiculoComponent implements OnInit {
   tempSolicitud = { usuario: null, departamento: null, fecha: null, motivo: null, inicio: null, fin: null, vehiculo: { placa: null, tipo: null, marca: null } }
   eliminar = false;
 
+  obtenerNombreDep(id_Dep: any) {
+    for (var index = 0; index < this.departamentos.length; index++) {
+      if (this.departamentos[index]._id == id_Dep) {
+        return this.departamentos[index].nombre;
+      }
+
+    }
+    return "";
+  }
   handleEvent(action: string, event: CalendarEvent): void {
 
     this.obtenerUsuarios();
