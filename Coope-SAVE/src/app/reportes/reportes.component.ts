@@ -36,6 +36,8 @@ export class ReportesComponent implements OnInit {
   @ViewChild('modalSalas') modalSalas: TemplateRef<any>;
   @ViewChild('modalVehiculos') modalVehiculos: TemplateRef<any>;
 
+ 
+  listavehiculosFiltradosPDF= [];
   usuarios = [];
   departamentos = [];
   salas = [];
@@ -102,13 +104,49 @@ export class ReportesComponent implements OnInit {
   }
 
   openPdfVehiculo() {
-    console.log('llama el metodo en reportes de vheiculos');
-    var solicitudesVehiculos=[];
-    solicitudesVehiculos= this.solicitudesVehiculosFiltradas;
-    for (var index = 0; index < this.solicitudesSalasFiltradas.length; index++) {
-      solicitudesVehiculos[index].usuario= this.getNombreUsuario(this.solicitudesSalasFiltradas[index].usuario);
+    
+    
+    for (var index = 0; index < this.solicitudesVehiculosFiltradas.length; index++) {
+      let solicitudesVehiculos= {placa: "",tipo:"",marca:"", usuario:"", fecha:"",destino:""};
+      console.log(this.solicitudesVehiculosFiltradas[index]);
+      solicitudesVehiculos.placa= this.solicitudesVehiculosFiltradas[index].vehiculo;
+      solicitudesVehiculos.usuario= this.getNombreUsuario(this.solicitudesVehiculosFiltradas[index].usuario);
+      solicitudesVehiculos.tipo= this.obternerTipoAutomovil(this.solicitudesVehiculosFiltradas[index].vehiculo);
+      solicitudesVehiculos.marca= this.obternerMarcaAutomovil(this.solicitudesVehiculosFiltradas[index].vehiculo);
+      if(this.solicitudesVehiculosFiltradas[index].fecha.day <10){
+        solicitudesVehiculos.fecha= '0'+this.solicitudesVehiculosFiltradas[index].fecha.day;
+        if(this.solicitudesVehiculosFiltradas[index].fecha.month< 10){
+          solicitudesVehiculos.fecha+='/0'+this.solicitudesVehiculosFiltradas[index].fecha.month+'/'+this.solicitudesVehiculosFiltradas[index].fecha.year;  
+        }
+        else{
+          solicitudesVehiculos.fecha+='/'+this.solicitudesVehiculosFiltradas[index].fecha.month+'/'+this.solicitudesVehiculosFiltradas[index].fecha.year;  
+        }
+      }else{
+        solicitudesVehiculos.fecha= this.solicitudesVehiculosFiltradas[index].fecha.day;
+        if(this.solicitudesVehiculosFiltradas[index].fecha.month< 10){
+          solicitudesVehiculos.fecha+='/0'+this.solicitudesVehiculosFiltradas[index].fecha.month+'/'+this.solicitudesVehiculosFiltradas[index].fecha.year;  
+        }
+        else{
+          solicitudesVehiculos.fecha+='/'+this.solicitudesVehiculosFiltradas[index].fecha.month+'/'+this.solicitudesVehiculosFiltradas[index].fecha.year;  
+        }
+      }
+    
+      solicitudesVehiculos.destino= this.solicitudesVehiculosFiltradas[index].destino;
+      this.listavehiculosFiltradosPDF[index]= solicitudesVehiculos;
     }
-      this.crearPDF.generarPDFVehiculo(solicitudesVehiculos);
+
+
+
+
+
+    // placa: listaSolicitudes[i].placa,
+    // tipo: listaSolicitudes[i].tipo,
+    // marca: listaSolicitudes[i].marca,
+    // usuario: listaSolicitudes[i].usuario,
+    // fecha: listaSolicitudes[i].fecha.day + '-' + listaSolicitudes[i].fecha.month + '-' + listaSolicitudes[i].fecha.year,
+    // destino: listaSolicitudes[i].destino
+      console.log(this.listavehiculosFiltradosPDF);
+     this.crearPDF.generarPDFVehiculo(this.listavehiculosFiltradosPDF);
   }
 
   //Método encargado de mostrar opciones de impresión de los reportes generados en las búsquedas
@@ -1303,6 +1341,9 @@ export class ReportesComponent implements OnInit {
               }
             }
             this.solicitudesVehiculosFiltradas = arrayTemporal;
+            console.log('terminando de filtrar');
+            console.log(this.solicitudesVehiculosFiltradas);
+            
             this.mensajeBusquedaVehiculo=" La búsqueda no generó resultados o coincidencias ";
 
           }

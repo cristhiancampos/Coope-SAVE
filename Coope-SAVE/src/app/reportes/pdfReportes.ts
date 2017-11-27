@@ -68,7 +68,8 @@ hoy;
     return {
       
       table: {
-        widths: [10,80,90,50,60,'*'],
+
+        widths: [15,80,90,50,60,'*'],
         headerRows: 1,
         body: this.buildTableBody(data, columns),
         layout: 'lightHorizontalLines',
@@ -81,7 +82,8 @@ hoy;
     return {
       
       table: {
-        widths: [10,50,30,80,50,50,'*'],
+        alignment: 'center',
+        widths: [15,55,45,60,75,70,'*'],
         headerRows: 1,
         body: this.buildTableBodyVehiculo(data, columns),
         layout: 'lightHorizontalLines',
@@ -128,7 +130,7 @@ hoy;
               tipo: listaSolicitudes[i].tipo,
               marca: listaSolicitudes[i].marca,
               usuario: listaSolicitudes[i].usuario,
-              fecha: listaSolicitudes[i].fecha.day + '-' + listaSolicitudes[i].fecha.month + '-' + listaSolicitudes[i].fecha.year,
+              fecha: listaSolicitudes[i].fecha,
               destino: listaSolicitudes[i].destino
 
             }
@@ -287,8 +289,8 @@ hoy;
         
         
 
-        {text: 'Sistema de control de Salas y Vehículos', style: 'footer'},
-
+        {text: 'Sistema de control de Salas y Vehículos  SAVE', style: 'footer'},
+        
 
 
 
@@ -311,7 +313,7 @@ hoy;
           bold: true,
           alignment: 'right',
           fontSize: 14,
-          margin: [0,0,0,10]
+          margin: [0,0,15,0]
         },
         footer:{
           width: '100%',
@@ -335,7 +337,7 @@ hoy;
 
   generarPDFVehiculo(solicitudesSalasFiltradas) {
     
-    
+    console.log(solicitudesSalasFiltradas);
     
         this.pdfmake.docDefinition = {
     
@@ -373,8 +375,8 @@ hoy;
             
             
     
-            {text: 'Sistema de control de Salas y Vehículos', style: 'footer'},
-    
+            {text: 'Sistema de control de Salas y Vehículos SAVE', style: 'footer'},
+           
     
     
     
@@ -397,7 +399,7 @@ hoy;
               bold: true,
               alignment: 'right',
               fontSize: 14,
-              margin: [0,0,0,10]
+              margin: [0,0,0,15]
             },
             footer:{
               width: '100%',
