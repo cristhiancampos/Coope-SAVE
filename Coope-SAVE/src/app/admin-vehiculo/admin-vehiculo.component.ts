@@ -47,7 +47,7 @@ export class AdminVehiculoComponent implements OnInit {
     {dia:'Jueves',desde:'',hasta:''},
     {dia:'Viernes',desde:'',hasta:''},
     {dia:'Sabado',desde:'',hasta:''},
-    {dia:'Domingo',desde:'',hasta:''}
+    {dia:'Domingo',desde:'null',hasta:'null'}
   ];
   // tempHorario= {dia:'',desde:'',hasta:''};
 
@@ -218,9 +218,9 @@ export class AdminVehiculoComponent implements OnInit {
         let vehiculo = response.vehiculo;
 
         if (!response.vehiculo.placa) {
-          this.msjError("El Vehiculo no pudo ser agregado");
+          this.msjError("El Vehículo no pudo ser agregado");
         } else {
-          this.msjExitoso("Vehiculo agregado exitosamente");
+          this.msjExitoso("Vehículo agregado exitosamente");
           this.vehiculo = new Vehiculo('', '', '', '', '', '', this.estadoMensaje, '-',[],'','');
          this.cerrar();
           this.obtenerVehiculos();
@@ -230,7 +230,7 @@ export class AdminVehiculoComponent implements OnInit {
         if (alertMessage != null) {
           var body = JSON.parse(error._body);
          
-          this.msjError("El Vehiculo no pudo ser agregado");
+          this.msjError("El Vehículo no pudo ser agregado");
           
         }
       }
@@ -366,9 +366,9 @@ export class AdminVehiculoComponent implements OnInit {
       response => {
 
         if (!response.message._id) {
-          this.msjError("El Vehiculo no pudo ser Eliminado");
+          this.msjError("El Vehículo no pudo ser eliminado");
         } else {
-          this.msjExitoso("Vehiculo Eliminado Exitosamente");
+          this.msjExitoso("Vehículo eliminado exitosamente");
           this.vehiculoEdit = new Vehiculo('', '', '', '', '', '', '', '','','','');
           this.obtenerVehiculos();
         }
@@ -376,7 +376,7 @@ export class AdminVehiculoComponent implements OnInit {
         var alertMessage = <any>error;
         if (alertMessage != null) {
           var body = JSON.parse(error._body);
-          this.msjError("El Vehiculo no pudo ser Eliminado");
+          this.msjError("El Vehículo no pudo ser eliminado");
         }
       }
     );
