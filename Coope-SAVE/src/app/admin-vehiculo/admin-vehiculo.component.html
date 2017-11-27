@@ -4,7 +4,7 @@
     <div class="col-md-12">
       <h2> Admistración de Vehiculos</h2>
       <hr>
-      <button class="btn btn-primary" data-toggle="modal" data-target="#modalAdminVehiculo" style="float: left;margin-bottom: 6px"
+      <button class="btn btn-primary" data-toggle="modal" (click)="abrir(modalgregarVehiculo)" style="float: left;margin-bottom: 6px"
       [disabled]='(identity.rol != "SUPERADMIN" && identity.rol != "ADMINISTRADOR")  || (identity.rol != "ADMINISTRADOR" && identity.rol != "SUPERADMIN")'> 
         <i class="fa fa-plus" aria-hidden="true"></i></button>
     </div>
@@ -45,9 +45,9 @@
             <th>{{vehiculo.estado}}</th>
             <th>{{vehiculo.reporte}}</th>
             <th style="text-align: center">
-              <button class="btn btn-primary btn-accion" data-toggle="modal" data-target="#modalEditVehiculo" (click)="obtenerVehiculo(vehiculo._id)"
+              <button class="btn btn-primary btn-accion"   (click)="obtenerVehiculo(vehiculo._id,1)"
               [disabled]='(identity.rol != "SUPERADMIN" && identity.rol != "ADMINISTRADOR")  || (identity.rol != "ADMINISTRADOR" && identity.rol != "SUPERADMIN")'><i class="fa fa-pencil" aria-hidden="true"></i> </button>
-              <button class="btn btn-success btn-accion" data-toggle="modal" data-target="#modal-AddHorario" (click)="obtenerVehiculo(vehiculo._id)"
+              <button class="btn btn-success btn-accion" data-toggle="modal"  (click)="obtenerVehiculo(vehiculo._id,3)"
               [disabled]='(identity.rol != "SUPERADMIN" && identity.rol != "ADMINISTRADOR")  || (identity.rol != "ADMINISTRADOR" && identity.rol != "SUPERADMIN")'><i class="fa fa-calendar" aria-hidden="true"></i> </button>
               <button class="btn btn-danger btn-accion" data-toggle="modal" data-target="#modal-delete" (click)="obtenerVehiculo(vehiculo._id)"
               [disabled]='(identity.rol != "SUPERADMIN" && identity.rol != "ADMINISTRADOR")  || (identity.rol != "ADMINISTRADOR" && identity.rol != "SUPERADMIN")'><i class="fa fa-trash-o" aria-hidden="true"></i> </button>
@@ -68,15 +68,12 @@
 </div>
 
 <!-- Seccion del Modal: Agregar nueva Sala -->
-<div class="modal fade bd-example-modal-sm " id="modalAdminVehiculo" tabindex="-1" role="dialog" aria-labelledby="modalAdminVehiculo"
-  aria-hidden="true">
-  <div class="modal-dialog bd-example-modal-sm " role="document">
-    <div class="modal-content">
+  <ng-template  #modalgregarVehiculo let-c="close" let-d="dismiss">
       <div class="modal-header" style="background: #0069d9;color:#fff">
         <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-car" aria-hidden="true"></i>&nbsp;&nbsp;Agregar Vehículo</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="salir()"> 
-        <small aria-hidden="true">&times;</small>
-      </button>
+        <button type="button" class="close" aria-label="Close" (click)="c('Close click')"> 
+            <small aria-hidden="true">&times;</small>
+          </button>
       </div>
       <div class="modal-body">
         <div class="row">
@@ -152,7 +149,7 @@
                 </div>
                 <div id="success"></div>
                 <div style="float: right">
-                  <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal">Salir</button>
+                  <button type="button" class="btn btn-default btn-modal-can" (click)="c('Close click')">Salir</button>
                   <button id="btn-add" type="submit" [disabled]="!adminVehiculo.form.valid || placaExist" class="btn btn-success">Confirmar</button>
                 </div>
               </form>
@@ -163,21 +160,15 @@
       <div class="modal-footer">
 
       </div>
-    </div>
-  </div>
-</div>
-
+    </ng-template>
 
 <!-- Seccion del Modal: Modificar Vehiculo -->
-<div class="modal fade bd-example-modal-sm" id="modalEditVehiculo" tabindex="-1" role="dialog" aria-labelledby="modalEditVehiculo"
-  aria-hidden="true">
-  <div class="modal-dialog bd-example-modal-sm " role="document">
-    <div class="modal-content">
+  <ng-template  #modalMofificarVehiculo let-c="close" let-d="dismiss">
       <div class="modal-header" style="background: #0069d9;color:#fff">
         <h5 class="modal-title" id="modalEditVehiculo"><i class="fa fa-car" aria-hidden="true"></i>&nbsp;&nbsp;Editar Vehículo</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cerrarModal('#modalEditVehiculo')"> 
-        <small aria-hidden="true">&times;</small>
-      </button>
+        <button type="button" class="close" aria-label="Close" (click)="c('Close click')"> 
+            <small aria-hidden="true">&times;</small>
+          </button>
       </div>
       <div class="modal-body">
         <div class="row">
@@ -196,43 +187,43 @@
               <form #adminVehiculoEdit="ngForm" (ngSubmit)="modificarVehiculo()">
                 <div class="control-group form-group">
                   <div class="controls">
-                    <input id="input-placa-edit" type="text" class="form-control" #placa="ngModel" name="placa" [(ngModel)]="vehiculoEdit.placa"
+                    <input id="input-placa-edit" type="text" class="form-control" #placaE="ngModel" name="placaE" [(ngModel)]="vehiculoEdit.placa"
                       placeholder="Placa de Vehiculo" required (input)="validarModificacion()" [disabled]="true">
-                    <small *ngIf="placa.invalid && (placa.dirty || placa.touched)">
+                    <small *ngIf="placaE.invalid && (placaE.dirty || placaE.touched)">
                         <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La placa es obligatoria</small>
                     <small *ngIf="placaExistEdit"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Ya existe un Vehiculo con esa placa</small>
                   </div>
                 </div>
                 <div class="control-group form-group">
                   <div class="controls">
-                    <input type="text" class="form-control" #tipo="ngModel" name="tipo" [(ngModel)]="vehiculoEdit.tipo" placeholder="Tipo de Vehiculo"
+                    <input type="text" class="form-control" #tipoE="ngModel" name="tipoE" [(ngModel)]="vehiculoEdit.tipo" placeholder="Tipo de Vehiculo"
                       required>
-                    <small *ngIf="tipo.invalid && (tipo.dirty || tipo.touched)">
+                    <small *ngIf="tipoE.invalid && (tipoE.dirty || tipoE.touched)">
                     <i class="fa fa-exclamation-circle" aria-hidden="true"></i>   El tipo es obligatorio</small>
                   </div>
                 </div>
                 <div class="control-group form-group">
                   <div class="controls">
-                    <input type="text" class="form-control" #marca="ngModel" name="marca" [(ngModel)]="vehiculoEdit.marca" placeholder="Marca del Vehiculo"
+                    <input type="text" class="form-control" #marcaE="ngModel" name="marcaE" [(ngModel)]="vehiculoEdit.marca" placeholder="Marca del Vehiculo"
                       required>
-                    <small *ngIf="marca.invalid && (marca.dirty || marca.touched)">
+                    <small *ngIf="marcaE.invalid && (marcaE.dirty || marcaE.touched)">
                     <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La marca es obligatoria</small>
                   </div>
                 </div>
 
                 <div class="control-group form-group">
                   <div class="controls">
-                    <textarea class="form-control" #descripcion="ngModel" name="descripcion" [(ngModel)]="vehiculoEdit.descripcion" placeholder="Descripción"
+                    <textarea class="form-control" #descripcionE="ngModel" name="descripcionE" [(ngModel)]="vehiculoEdit.descripcion" placeholder="Descripción"
                       rows="3" required></textarea>
-                    <small *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)">
+                    <small *ngIf="descripcionE.invalid && (descripcionE.dirty || descripcionE.touched)">
                     <i class="fa fa-exclamation-circle" aria-hidden="true"></i> La descripción obligatoria</small>
                   </div>
                 </div>
                 <div class="control-group form-group">
                   <div class="controls">
-                    <input type="number" class="form-control" #kilometraje="ngModel" name="kilometraje" [(ngModel)]="vehiculoEdit.kilometraje"
+                    <input type="number" class="form-control" #kilometrajeE="ngModel" name="kilometrajeE" [(ngModel)]="vehiculoEdit.kilometraje"
                       placeholder="Kilometraje" required>
-                    <small *ngIf="kilometraje.invalid && (kilometraje.dirty || kilometraje.touched)"> <i class="fa fa-exclamation-circle" aria-hidden="true">
+                    <small *ngIf="kilometrajeE.invalid && (kilometrajeE.dirty || kilometrajeE.touched)"> <i class="fa fa-exclamation-circle" aria-hidden="true">
                     </i> El Kilometraje es obligatorio</small>
                   </div>
                 </div>
@@ -253,7 +244,7 @@
                 <div class="control-group form-group">
                   <div class="controls">
                     <div class="controls">
-                      <textarea class="form-control" #reporte="ngModel" name="reporte" [(ngModel)]="vehiculoEdit.reporte" placeholder="Reporte algún problema de la sala"
+                      <textarea class="form-control" #reporteE="ngModel" name="reporteE" [(ngModel)]="vehiculoEdit.reporte" placeholder="Reporte algún problema de la sala"
                         rows="3"></textarea>
                     </div>
                   </div>
@@ -261,7 +252,7 @@
                 <div id="success"></div>
                 <div style="float: right">
                   <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal">Salir</button>
-                  <button id="btn-add" type="submit" [disabled]="!adminVehiculoEdit.form.valid || placaExistEdit" class="btn btn-success">Confirmar</button>
+                  <button id="btn-edit" type="submit" [disabled]="!adminVehiculoEdit.form.valid || placaExistEdit" class="btn btn-success">Confirmar</button>
                 </div>
               </form>
             </div>
@@ -271,9 +262,8 @@
       <div class="modal-footer">
 
       </div>
-    </div>
-  </div>
-</div>
+    </ng-template>
+
 <!-- Modal  eliminar vehiculo-->
 <div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -298,16 +288,12 @@
   </div>
 </div>
 
-<!-- Seccion del Modal: agregar horario -->
-<div class="modal fade bd-example-modal-sm " id="modal-AddHorario" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog bd-example-modal-sm " role="document">
-    <div class="modal-content">
+  <ng-template  #modalHorarioVehiculo let-c="close" let-d="dismiss">
       <div class="modal-header" style="background: #0069d9;color:#fff">
         <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;Horario de Sala</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-dimiss="modal"> 
-        <small aria-hidden="true">&times;</small>
-      </button>
+        <button type="button" class="close" aria-label="Close" (click)="cerrar()"> 
+            <small aria-hidden="true">&times;</small>
+          </button>
       </div>
       <div class="modal-body">
         <div class="row">
@@ -319,7 +305,7 @@
             </ol>
           </div>
         </div>
-        <!-- END BREADCRUMB-->
+
         <div class="col-md-12">
           <div class="row">
             <div class="col-md-12">
@@ -510,17 +496,19 @@
                 <hr>
 
                 <div style="float: right">
-                  <button type="button" class="btn btn-default btn-modal-can" data-dismiss="modal">Salir</button>
-                  <button id="btn-Edit" type="submit" [disabled]="!adminVehiculoched.form.valid || nombreExistEdit" class="btn btn-success">Confirmar</button>
+                  <button type="button" class="btn btn-default btn-modal-can" (click)="cerrar()">Salir</button>
+                  <button id="btn-Edit" type="submit" [disabled]="!adminVehiculoched.form.valid " class="btn btn-success">Confirmar</button>
                 </div>
               </form>
             </div>
           </div>
         </div>
       </div>
-    </div>
+  </ng-template>
+    <!-- </div>
   </div>
-</div><br><br><br>
+</div> -->
+<br><br><br>
 
 <section>
   <footer >

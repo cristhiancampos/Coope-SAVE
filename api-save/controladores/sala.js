@@ -18,7 +18,7 @@ function agregarSala(req, res) {
               {dia:'Jueves',desde:'8',hasta:'21'},
               {dia:'Viernes',desde:'8',hasta:'21'},
               {dia:'Sabado',desde:'8',hasta:'21'},
-              {dia:'Domingo',desde:'null',hasta:'null'}
+              {dia:'Domingo',desde:'',hasta:''}
             ];
   sala.estado = params.estado;
   sala.created_at = new Date();
