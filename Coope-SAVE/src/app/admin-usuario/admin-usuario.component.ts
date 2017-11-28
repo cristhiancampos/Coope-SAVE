@@ -147,20 +147,14 @@ export class AdminUsuarioComponent implements OnInit {
   }
 
   cambiarEstadoAgregar(event: any) {
-    //alert(event.target.checked);
 
     this.estadoEdicionAgregar = !this.estadoEdicionAgregar;
-    //console.log(this.estadoEdicionAgregar);
     if (this.estadoEdicionAgregar) {
       this.estadoMensajAgregar = 'Habilitado';
       this.usuarioAgregar.estado = this.estadoMensajAgregar;
-      //console.log('88888888888888888888888888888888888888');
-     // console.log(this.usuarioAgregar.estado);
     } else {
       this.estadoMensajAgregar = 'Deshabilitado';
       this.usuarioAgregar.estado = this.estadoMensajAgregar;
-    //  console.log('333333333333333333333333333333333333333');
-     // console.log(this.usuarioAgregar.estado)
     }
   }
   obtenerNombreDep(id_Dep: any) {
@@ -323,7 +317,6 @@ export class AdminUsuarioComponent implements OnInit {
     this._servUsuario.validarModificacion(this.usuarioEdit).subscribe(
       response => {
         if (response.message) {
-          console.log(response.message);
           let sala = response.message;
           this.usuarioExist = true;
           $('#input-correo-admin-edit').css("border-left", "5px solid #a94442");
@@ -343,7 +336,6 @@ export class AdminUsuarioComponent implements OnInit {
   
 
   modificarUsuario() {
-   // console.log(this.usuarioEdit);
    this.usuarioEdit.estado = this.estadoMensajEdit;
     this.usuarioEdit.departamento = this.obtenerId_Dep(this.usuarioEdit.departamento)
     if (this.usuarioEdit.departamento == "") {
@@ -406,7 +398,6 @@ export class AdminUsuarioComponent implements OnInit {
   validarCorreoAgregar() {
     let user = new Usuario('','','','','','','','','','');;
     user.correo = this.usuarioAgregar.correo+''+this.dominio;
-    console.log(user.correo);
     this._servUsuario.getCorreo(user).subscribe(
       response => {
         if (response.message) {
@@ -439,7 +430,6 @@ export class AdminUsuarioComponent implements OnInit {
 }
 
 enviarContrasena(user:any) {
- // console.log(user);
   this._servUsuario.enviarContrasena(user).subscribe(
     response => {
      
@@ -447,12 +437,11 @@ enviarContrasena(user:any) {
         console.log('Fallo el envio de correo');
       } else {
         this.msjExitoso('La contraseña fue enviada al correo '+user.correo);
-        //this.cerrar();
-       // this.msInfo('Su nueva contraseña ha sido enviada via correo electrónico a '+user.correo);          
+        this.cerrar();
         //this._router.navigate(['/principal']);
       }
     }, error => {
-      console.log('Fallo el envio de correo');
+      console.log('Error al enviar correo');
     }
   );
 }//Fin del metodo EnviarEmail

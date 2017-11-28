@@ -139,9 +139,7 @@ function modificarSala(req, res) {
   });
 }
 
-
 function modificarHorario(req, res) {
-
     var params = req.body;
     var salaId = params._id;
     var horario = params.horario;
@@ -161,9 +159,8 @@ function modificarHorario(req, res) {
         }
       }
     });
-  }
+}
   
-
 function validarModificacion(req, res) {
   var params = req.body;
   var nombre = params.nombre;

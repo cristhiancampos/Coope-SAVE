@@ -35,14 +35,13 @@ function agregarRecurso(req, res) {
           } else {
             res.status(200).send({ message: 'Debe rellenar todos los campos ' });
           }
-    }
+}
 
-function validarRecurso(req, res)
-{
+function validarRecurso(req, res){
   var params = req.body;
   var codigoActivo = params.codigoActivo;
 
- Recurso.findOne({ codigoActivo: codigoActivo,estado: { $ne: "Eliminado" } }, (err, recurso) => {
+  Recurso.findOne({ codigoActivo: codigoActivo,estado: { $ne: "Eliminado" } }, (err, recurso) => {
     if (err) {
       res.status(200).send({ message: null });
     } else {
@@ -122,9 +121,9 @@ function modificarRecurso(req, res) {
         }
       }
     });
-  }
+}
 
-  function validarModificacion(req, res) {
+function validarModificacion(req, res) {
     var params = req.body;
     var codigoActivo = params.codigoActivo;
     var id = params._id;
@@ -152,9 +151,9 @@ function modificarRecurso(req, res) {
         }
       }
     });
-  }
+}
 
-  function obtenerRecursosHabilitados(req, res){
+function obtenerRecursosHabilitados(req, res){
     Recurso.find({ estado: 'Habilitado'},(err,recursos)=>{
       if(err){
         res.status(500).send({message:'Error en la petición'});
@@ -166,9 +165,9 @@ function modificarRecurso(req, res) {
           }
       }
     }).sort('number'); 
-  }
+}
 
-    module.exports = {
+module.exports = {
         
         agregarRecurso,
         validarRecurso,
@@ -178,4 +177,4 @@ function modificarRecurso(req, res) {
         validarModificacion,
         modificarRecurso,
         obtenerRecursosHabilitados
-      };
+};

@@ -344,7 +344,6 @@ export class AdminVehiculoComponent implements OnInit {
     this._servVehiculo.validarModificacion(this.vehiculoEdit).subscribe(
       response => {
         if (response.message) {
-          console.log(response.message);
           let sala = response.message;
           this.placaExistEdit = true;
           $('#input-placa-edit').css("border-left", "5px solid #a94442");

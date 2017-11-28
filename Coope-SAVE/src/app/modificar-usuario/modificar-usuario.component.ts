@@ -62,9 +62,6 @@ export class ModificarUsuarioComponent implements OnInit {
     this.obtenerUsuario();
     this.obtenerDepartamentos();
     
-    console.log('modificar usuario.ts cargado ...FECHA' + this.date + '.....año' + this.year);
-
-
   }
   nombreDepartamento(){
    
@@ -94,48 +91,45 @@ export class ModificarUsuarioComponent implements OnInit {
 
   modificarPerfil() {
 
+      this.usuarioEdit.departamento = this.obtenerId_Dep(this.departamentoUsuarioModificiar);
+      let identity = localStorage.getItem('identity');
+      let user = JSON.parse(identity);
+      this._servUsuario.modificarPerfil(this.usuarioEdit).subscribe(
+        response => {
+          
+          if (!response.message[0]._id) {
+            this.msjError("El Usuario no pudo ser modificado");
+          } else {
+            this.msjExitoso("Usuario modificado exitosamente");
+            console.log(response.message);
+            //this._router.navigate(['/principal']);
+
+            // localStorage.removeItem('identity');
+            console.log('usuario que devuelve');
+            console.log(response.message);
+            localStorage.setItem('identity',JSON.stringify(response.message));
             
-            this.usuarioEdit.departamento = this.obtenerId_Dep(this.departamentoUsuarioModificiar);
-            console.log('Local Storage');
             let identity = localStorage.getItem('identity');
             let user = JSON.parse(identity);
             console.log(user);
-            this._servUsuario.modificarPerfil(this.usuarioEdit).subscribe(
-              response => {
-               
-                if (!response.message[0]._id) {
-                  this.msjError("El Usuario no pudo ser Modificado");
-                } else {
-                  this.msjExitoso("Usuario Modificado Exitosamente");
-                  console.log(response.message);
-                  //this._router.navigate(['/principal']);
-
-                  // localStorage.removeItem('identity');
-                  console.log('usuario que devuelve');
-                  console.log(response.message);
-                  localStorage.setItem('identity',JSON.stringify(response.message));
-                 
-                  let identity = localStorage.getItem('identity');
-                  let user = JSON.parse(identity);
-                  console.log(user);
-                  // if (user != null) {
-                  //   $('#nav-user').text(user[0].nombre + ' ' + user[0].apellidos);
-                    
-                  // } else {
-                  //   $('#nav-user').text('');
-                  // }
+            // if (user != null) {
+            //   $('#nav-user').text(user[0].nombre + ' ' + user[0].apellidos);
               
-                }
-              }, error => {
-                var alertMessage = <any>error;
-                if (alertMessage != null) {
-                  var body = JSON.parse(error._body);
-                  alert('El Usuario no se pudo modificar');
+            // } else {
+            //   $('#nav-user').text('');
+            // }
         
-                }
-              }
-            );
           }
+        }, error => {
+          var alertMessage = <any>error;
+          if (alertMessage != null) {
+            var body = JSON.parse(error._body);
+            alert('El Usuario no se pudo modificar');
+  
+          }
+        }
+      );
+  }
   modificarUsuario() {
 
         this._servUsuario.modificarUsuario(this.usuarioEdit).subscribe(
@@ -222,14 +216,13 @@ export class ModificarUsuarioComponent implements OnInit {
 
 
       modificarUsuarioCompleto() {
-        console.log("Llamo componente");
         this._servUsuario.modificarUsuarioCompleto(this.usuarioEdit).subscribe(
           response => {
 
             if (!response.message._id) {
-              this.msjError("El Usuario no pudo ser Modificado");
+              this.msjError("El Usuario no pudo ser modificado");
             } else {
-              this.msjExitoso("Usuario Modificado Exitosamente");
+              this.msjExitoso("Usuario Modificado exitosamente");
               //this.obtenerUsuario();
               //localStorage.setItem('identity', response.message);
               //let identity = localStorage.getItem('identity');
@@ -280,16 +273,14 @@ export class ModificarUsuarioComponent implements OnInit {
       response => {
         if (!response.message) {
           this.confirmaContraExist=false;
-          console.log("Contra;esa no es igual");
         } else {
           this.confirmaContraExist= true;
-          console.log("Contra;esa es igual");
         }
       }, error => {
         var alertMessage = <any>error;
         if (alertMessage != null) {
           var body = JSON.parse(error._body);
-          alert('El Usuario no se pudo modificar');
+          this.msjError('El usuario no se pudo modificar');
 
         }
       }
@@ -368,11 +359,9 @@ export class ModificarUsuarioComponent implements OnInit {
   validarModificacion() {
     let correo = this.usuarioEdit.correo.trim();
     this.usuarioEdit.correo = correo;
-    console.log(this.usuarioEdit.correo);
     this._servUsuario.validarModificacion(this.usuarioEdit).subscribe(
       response => {
         if (response.message) {
-          console.log(response.message);
           let sala = response.message;
           this.userExistEdit = true;
           $('#input-correo-admin-edit').css("border-left", "5px solid #a94442");

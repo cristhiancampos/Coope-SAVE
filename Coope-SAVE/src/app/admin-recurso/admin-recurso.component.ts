@@ -281,7 +281,6 @@ export class AdminRecursoComponent implements OnInit {
     this._servRecurso.validarModificacion(this.recursoEdit).subscribe(
       response => {
         if (response.message) {
-          console.log(response.message);
           let sala = response.message;
           this.codRecursosExist = true;
           $('#input-cod-edit').css("border-left", "5px solid #a94442");

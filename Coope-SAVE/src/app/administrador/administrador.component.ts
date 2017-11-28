@@ -83,19 +83,4 @@ export class AdministradorComponent implements OnInit {
     }
   }
 
-  // cerrarModal(modalId: any) {
-  //   $(".modal-backdrop").remove();
-  //   $('body').removeClass('modal-open');
-  //   $(modalId).removeClass('show');
-  //   $(modalId).css('display', 'none');
-  // }
-
-  // abrirModal(modalId: any) {
-  //   $('body').append('<div class="modal-backdrop fade show" ></div>');
-  //   $('body').addClass('modal-open');
-  //   $(modalId).addClass('show');
-  //   $(modalId).css('display', 'block');
-  // }
-
-
 }

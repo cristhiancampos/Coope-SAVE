@@ -6,8 +6,6 @@ function agregarSolicitud(req, res) {
  
   var solicitud = new SolicitudVehiculo();
   var params = req.body;
-  
-  //let hora= {minute: params.horaRegreso.minute, hour: params.horaRegreso.hour};
   solicitud.usuario= params.usuario,
   solicitud.vehiculo = params.vehiculo;
   solicitud.departamento = params.departamento;
@@ -20,7 +18,6 @@ function agregarSolicitud(req, res) {
   solicitud.created_at = new Date();
   solicitud.updated_at = params.updated_at;
   solicitud.destino = params.destino;
-  console.log(solicitud);
   if (
     solicitud.vehiculo != null  && solicitud.fecha != null
     && solicitud.horaSalida != null && solicitud.horaRegreso != null && solicitud.descripcion != null
@@ -55,7 +52,6 @@ function obtenerSolicitudesvehiculos(req, res) {
   let year = date.getFullYear();
   let month = (date.getMonth() + 1);
   let day = date.getDate();
-  console.log(date);
 
   SolicitudVehiculo.find({ fecha: { year: year, month: month, day: day } ,estado: { $ne: "Eliminado" }}, (err, solicitud) => {
     if (err) {

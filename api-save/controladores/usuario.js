@@ -80,9 +80,7 @@ function getCorreo(req, res) {
 
 function loginUsuario(req, res) {
   var params = req.body;
-  //console.log(req.body);
   var email = params.correo;
-  //console.log(params.correo+'.....'+params.contrasena);
   var password = params.contrasena;
 
   Usuario.findOne({ correo: email.toLowerCase(), estado: { $ne: "Eliminado" } }, (err, user) => {
@@ -116,11 +114,8 @@ function loginUsuario(req, res) {
 
 function verificarCredenciales(req, res) {
   var params = req.body;
-  //console.log(req.body);
   var email = params.correo;
-  // console.log(params.correo+'.....'+params.contrasena);
   var password = params.contrasena;
- // console.log(params);
   Usuario.findOne({ correo: email, estado: { $ne: "Eliminado" } }, (err, user) => {
     if (err) {
       res.status(500).send({ message: 'Error en la petición' });
@@ -130,7 +125,6 @@ function verificarCredenciales(req, res) {
       } else {
         if (user.contrasena == password) {
           if (params.gethash) {
-            //console.log(jwt.createToken(user));
             res.status(200).send({ token: jwt.createToken(user) });
           } else {
             res.status(200).send({ user });
@@ -195,7 +189,6 @@ function modificarPerfil(req, res) {
   var params = req.body;
   var usuarioId = params._id;
   params.updated_at = new Date();
-  console.log("controlador");
   params.updated_at = new Date();
   Usuario.findByIdAndUpdate(usuarioId,
     {

@@ -136,7 +136,6 @@ export class AdminSalaComponent implements OnInit {
         this.disabledDom=!this.disabledDom;
       }
     }
-    console.log(this.tempHorario);
   }
 
   verificarCredenciales() {
@@ -324,7 +323,6 @@ export class AdminSalaComponent implements OnInit {
 
   modificarSala() {
     this.salaEdit.estado = this.estadoMensajEdit;
-    console.log(this.salaEdit);
     this._servSala.modificarSala(this.salaEdit).subscribe(
       response => {
 
@@ -349,7 +347,6 @@ export class AdminSalaComponent implements OnInit {
   }
 
   modificarHorario() {
-    console.log(this.tempHorarios);
     this.salaEdit.estado = this.estadoMensajEdit;
     this.salaEdit.horario= this.tempHorarios;
     this._servSala.modificarHorario(this.salaEdit).subscribe(

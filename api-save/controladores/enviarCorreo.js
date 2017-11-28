@@ -52,7 +52,7 @@ exports.sendEmailSala = function (req, res) {
     mailOptions = {
         from: '" SAVE-COOPESPARTA RL." <notificaciones@coopesparta.fi.cr',
         to: listaCorreos,
-        subject: 'Prueba',
+        subject: 'Nueva Solicitud de Sala - SAVE COOPESPARTA R.L',
         html: `
         <html xmlns="http://www.w3.org/1999/xhtml">
         <head>
@@ -158,7 +158,7 @@ exports.sendEmailSala = function (req, res) {
                 return null;
                 console.log(info);
             } else {
-                console.log("Email sent");
+                console.log("Correo enviado exitosamente");
                 res.status(200).jsonp(req.body);
             }
         });
@@ -194,7 +194,7 @@ exports.sendEmailVehiculo = function (req, res) {
     mailOptions = {
         from: '" SAVE-COOPESPARTA RL." <notificaciones@coopesparta.fi.cr',
         to: listaCorreos,
-        subject: 'Prueba',
+        subject: 'Nueva Solicitud de Vehículo - SAVE COOPESPARTA R.L',
         html: `
                 <html xmlns="http://www.w3.org/1999/xhtml">
                 <head>
@@ -301,7 +301,7 @@ exports.sendEmailVehiculo = function (req, res) {
                 return null;
                 console.log(info);
             } else {
-                console.log("Email sent");
+                console.log("Correo enviado exitosamente");
                 res.status(200).jsonp(req.body);
             }
         });

@@ -132,7 +132,6 @@ export class PrincipalComponent implements OnInit {
     for (var index = 0; index < this.departamentos.length; index++) {
       if (use.departamento == this.departamentos[index].nombre) {
         use.departamento = this.departamentos[index]._id;
-        console.log(this.departamentos[index].nombre);
         break;
       }
 
@@ -197,7 +196,6 @@ export class PrincipalComponent implements OnInit {
               //   crear elemento en el localstorage para tener el token disponible
               localStorage.setItem('token', token);
               this.usuario = new Usuario('', '', '', '', '', '', '', '', '', '');
-              console.log(response.token);
               this.cerrar();
               this._router.navigate(['/principal']);
               // this.cerrarModal('#loginModal');
@@ -484,7 +482,6 @@ export class PrincipalComponent implements OnInit {
       response => {
         console.log('Respuesta:' + response);
         if (!response) {
-          console.log('Fallo el envio de correo');
           this.msjError('Falló la recuperación de contraseña ');
         } else {
           this.cerrar();

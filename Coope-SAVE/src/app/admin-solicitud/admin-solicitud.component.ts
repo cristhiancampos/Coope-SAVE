@@ -298,7 +298,6 @@ export class AdminSolicitudComponent implements OnInit {
     this.solicitudSalaTemp.recursos = this.codigosRecursosTemp;
     this.listaNombreRecursos.splice(index, 1);
     this.codigosRecursosTemp.splice(index, 1);
-    console.log(this.solicitudSalaTemp);
     this._servSolicitudSala.modificarSolicitudSala(this.solicitudSalaTemp).subscribe(
       response => {
 
@@ -350,14 +349,12 @@ export class AdminSolicitudComponent implements OnInit {
   //********************************************************************Sección Solicitud Vehiculo**********************************************************************//
 
   obtenerSolicitudVehiculo() {
-    console.log('obtener solicitudes de vehivulo');
     this._servSolicitudVehiculo.obtenerTodasSolicitudes().subscribe(
       response => {
 
         if (response.message) {
           this.solicitudVehiculos = response.message;
           this.solicitudVehiculos=this.ordenarPorFecha(this.solicitudVehiculos);
-          console.log(this.solicitudVehiculos);
         } else {//no hay Salas registradas
         }
       }, error => {

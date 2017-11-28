@@ -83,8 +83,6 @@ export class AdminDepartamentoComponent implements OnInit {
         } else {
           if (this.identity.rol == "ADMINISTRADOR" || this.identity.rol == "SUPERADMIN") {
             //conseguir el token para enviarselo a cada petición
-            // console.log("identidad");
-            // console.log(this.identity.rol);
             
           this._servUsuario.verificarCredenciales(usuarioTemp, 'true').subscribe(
             response => {
@@ -270,7 +268,6 @@ export class AdminDepartamentoComponent implements OnInit {
     this._servDepartamento.validarModificacion(this.departamentoEdit).subscribe(
       response => {
         if (response.message) {
-          console.log(response.message);
           let sala = response.message;
           this.nombreExistEdit = true;
           $('#input-nombre-edit-dep').css("border-left", "5px solid #a94442");

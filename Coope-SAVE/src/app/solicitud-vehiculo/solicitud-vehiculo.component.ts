@@ -93,20 +93,7 @@ export class SolicitudVehiculoComponent implements OnInit {
 
   //*********************************************AGREGADOS***************************** */
   ngOnInit() {
-    // this.estiloBotones();
-    // this.obtenerVehiculos();
-
-    // this.obtenerUsuarios();
-    // this.obtenerSolicitudVehiculos();
-    console.log('cargó el calendario de vehiculo');
     this.verificarCredenciales();
-
-    // this.pdfmake.configureStyles({ header: { fontSize: 18, bold: true } });
-    // this.pdfmake.addImage('../assets/img/logo.png');
-    // this.pdfmake.addText('Coopesparta R.L', 'header');
-
-
-
   }
   departamentos = [];
   usuarios = [];
@@ -210,12 +197,9 @@ export class SolicitudVehiculoComponent implements OnInit {
       acompanantes += solicitudAgregada.acompanantes[index].nombre + ' ' + solicitudAgregada.acompanantes[index].apellidos + '\n';
     }
 
-    console.log('En el metodo del pfd');
-    console.log(solicitudAgregada);
     let solicitud = solicitudAgregada;
     let horaSalida = solicitud.horaSalida.hour + ':' + solicitud.horaSalida.minute;
     let vehiculo = solicitudAgregada.vehiculo;
-    console.log(vehiculo);
     this.pdfmake.docDefinition = {
 
       content: [
@@ -1142,7 +1126,6 @@ export class SolicitudVehiculoComponent implements OnInit {
 
   }
   agregarAcompanates(usuario: any) {
-    console.log(usuario);
     this.usuariosAgregados.push(usuario);
     this.filtroUsuario = "";
     for (let i = 0; i < this.listaUsuarios.length; i++) {
@@ -1217,9 +1200,7 @@ export class SolicitudVehiculoComponent implements OnInit {
             let agregar = false;
             let horaSalidaDigit = (parseInt(this.solicitudVehiculo.horaSalida.hour) + ((parseInt(this.solicitudVehiculo.horaSalida.minute) / 60)));
             let horaRegresoDigit = (parseInt(this.solicitudVehiculo.horaRegreso.hour) + ((parseInt(this.solicitudVehiculo.horaRegreso.minute) / 60)));
-            // console.log('Inicio pantalla '+horaSalidaDigit+'<  Inicio Solicitud'+horarioDiaVehiculo.desde);
-            //console.log('Fin pantalla '+horaSalidaDigit +'> Hasta  Solicitud'+horarioDiaVehiculo.hasta);
-
+          
             if (horaSalidaDigit < parseInt(horarioDiaVehiculo.desde) ||
               (horaSalidaDigit > parseInt(horarioDiaVehiculo.hasta))) {
               let meridianoInit;
@@ -1278,8 +1259,6 @@ export class SolicitudVehiculoComponent implements OnInit {
                       }
                     }
                   }
-                  // console.log('vector. solicitud del dia');
-                  // console.log(this.solicitudesdia);
                   //extraer el horario de la solicitudes del vehiculo seleccionado
                   let tempArrayHoraInicio = [];
                   let tempArrayHoraFinal = [];
@@ -1302,8 +1281,6 @@ export class SolicitudVehiculoComponent implements OnInit {
                     }
                     if (sumatoriaFinal > (horaSalidaDigit * 60) && (horaSalidaDigit * 60) > sumatoriaInicial) {
                       tempArrayVerificacion.push(minFinal);
-                      // console.log('Array de verificacion');
-                      // console.log(tempArrayVerificacion);
                       break;
                     }
                   }
@@ -1341,16 +1318,12 @@ export class SolicitudVehiculoComponent implements OnInit {
                       } else {
                         let solicitud = response.message;
                         this.msjExitoso("Solicitud agregada exitosamente");
-                        console.log(solicitud);
                         this.enviarEmail(solicitud);
-                        // console.log('antes del crear pdf');
-                        //this.crearPdf(solicitud);
                         this.crearPDF.generarPDF(solicitud);
                         this.solicitudVehiculo = new SolicitudVehiculo('', '', '', null, null, null, '', '', '', null, '', '');
                         this.obtenerSolicitudes(this.date, false);
                         this.obtenerSolicitudVehiculos();
                         this.cerrar();
-                        // this.obtenerSalas();
                       }
                     }, error => {
                       var alertMessage = <any>error;
@@ -1823,7 +1796,6 @@ export class SolicitudVehiculoComponent implements OnInit {
           this.vehiculos = response.message;
           this.setHorarioVehiculo(this.vehiculos[0].placa);
           this.solicitudVehiculo.vehiculo = this.vehiculos[0].placa;
-          console.log(this.vehiculos);
         } else {//no hay Salas registradas
         }
       }, error => {
@@ -1869,7 +1841,6 @@ export class SolicitudVehiculoComponent implements OnInit {
 
   vehiculoSeleccionadoEditar(nuevoVehiculo: any) {
     this.nuevoVehiculo = nuevoVehiculo;
-    console.log(nuevoVehiculo);
   }
 
   vehiculoActual = {};
@@ -2008,10 +1979,10 @@ this.contador=0;
                       } else {
                       }
                       this.contador++;
-                      if(this.contador==2){
+                     // if(this.contador==2){
                       this.mr = this.modal.open(this.modalContent2, { size: 'lg', backdrop: 'static', keyboard: false });
 
-                      }
+                     // }
                       //this.modalData = { event, action };
                       //this.mr = this.modal.open(this.modalContent2, { size: 'lg', backdrop: 'static', keyboard: false });
                     }, error => {

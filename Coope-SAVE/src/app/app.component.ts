@@ -44,7 +44,6 @@ export class AppComponent implements OnInit {
 
     this.token = this._servUsuario.getToken();
     this.SESSION = this._servUsuario.getIndentity();
-    console.log("constructor");
   }
 
   getUsuario() {
@@ -59,7 +58,6 @@ export class AppComponent implements OnInit {
           } else {
             this.SESSION = response;
           }
-          console.log(response);
         }, error => {
           var errorMensaje = <any>error;
 
@@ -74,14 +72,12 @@ export class AppComponent implements OnInit {
   }
 
   public onSubmit() {
-    console.log(this.user);
-    //obtener datos de usuaario identificado
     //susbcribe(), para subcribirse al observable
     this._servUsuario.signup(this.user).subscribe(response => {
       let SESSION = response.user;
       this.SESSION = SESSION;
       if (!this.SESSION._id) {
-        alert('usuario no indentificado correctamente');
+      //  alert('usuario no indentificado correctamente');
       } else {
         //crear elemento en el localstorage para la session de usuario//
         localStorage.setItem('identity', JSON.stringify(SESSION));   //JSON.stringfy(), convierte un json a string
@@ -91,7 +87,6 @@ export class AppComponent implements OnInit {
             let token = response.token;
             this.token = token;
             if (this.token <= 0) {
-              alert('el token no se ha generado');
             } else {
               //crear elemento en el localstorage para tener el token disponible
               localStorage.setItem('token', token);
@@ -127,6 +122,7 @@ export class AppComponent implements OnInit {
     // this.isSolicitudSala = false;
     // localStorage.setItem('identity', JSON.stringify(true));
     // alert(localStorage.setItem('identity', JSON.stringify(true)));
+    this._router.navigate(['/principal']);
     this.identity = true;
 
   }
@@ -156,8 +152,6 @@ export class AppComponent implements OnInit {
       this._servUsuario.verificarCredenciales(usuarioTemp).subscribe(response => {
         let identity = response.user;
         this.indentityy = identity;
-         console.log('---------------------------------w');
-         console.log(this.indentityy);
         if (!this.indentityy._id) {
           this.SESSION.rol = "";
 
@@ -169,6 +163,8 @@ export class AppComponent implements OnInit {
       }
       );
     } else {
+      $('#nav-user').text(' ');
+     // this._router.navigate(['/principal']);
       this.SESSION.rol = "";
     }
   }
@@ -177,8 +173,8 @@ export class AppComponent implements OnInit {
     localStorage.removeItem('token');
     localStorage.removeItem('remember');
     localStorage.clear();
-    this._router.navigate['/principal'];
-    // this.abrirModal('#loginModal');
+    this.verificarCredenciales();
+  //  this._router.navigate['/*'];
   }
   abrirModal(modalId: any) {
     $('body').append('<div class="modal-backdrop fade show" ></div>');

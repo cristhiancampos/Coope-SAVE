@@ -112,9 +112,9 @@ function modificarDepartamento(req, res) {
         }
       }
     });
-  }
+}
 
-  function validarModificacion(req, res) {
+function validarModificacion(req, res) {
     var params = req.body;
     var nombre = params.nombre;
     var id = params._id;
@@ -141,7 +141,7 @@ function modificarDepartamento(req, res) {
         }
       }
     });
-  }
+}
 
 module.exports = {
   agregarDepartamento,
