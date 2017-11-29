@@ -5,13 +5,13 @@
           <small aria-hidden="true">&times;</small>
         </button>
   </div>
-  <div class="modal-body">
+  <div id="scroll"class="modal-body">
     <div>
       <pre> <a><img src="assets/img/logo.png" ></a> </pre>
     </div>
     <form>
       <div class="list-group">
-        <div href="javascript:void(0);" class="list-group-item  flex-column align-items-start ">
+        <div class="list-group-item  flex-column align-items-start ">
           <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1"> <i class="fa fa-user" aria-hidden="true"></i> Solicitante</h5>
           </div>
@@ -19,7 +19,7 @@
           <p class="mb-1"> <strong>Nombre</strong> {{tempSolicitud.usuario}}</p>
           <p class="mb-1"> <strong>Departamento</strong> {{obtenerNombreDep(tempSolicitud.departamento)}}</p>
         </div>
-        <div href="javascript:void(0);" class="list-group-item  flex-column align-items-start">
+        <div class="list-group-item  flex-column align-items-start">
           <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1"><i class="fa fa-asterisk" aria-hidden="true"></i> Detalles</h5>
           </div>
@@ -45,14 +45,14 @@
                   </li>
                 </ul>
                 <!-- paginador-->
-                <div id="pagionadorVehiculos" style="margin-left: -17%" *ngIf="tempEvent.length<=0">
+                <div id="pagionadorVehiculos" style="margin-left: -17%" *ngIf="tempEvent.length>0">
                   <pagination-controls (pageChange)="vehiculoSeleccionadoEditar($event)"></pagination-controls>
                 </div>
               </div>
             </div>
 
 
-            <div class="col-md-2" style="top: 2em;">
+            <div class="col-md-2 col-sm-1" style="top: 2em;">
               <strong>Fecha    </strong>
             </div>
             <div class="col-md-4" style="top: 2em;">
@@ -71,10 +71,10 @@
 
           <br><br>
           <div class="row">
-            <div class="col-md-2" style="top: 2em;">
+            <div class="col-md-2" style="top: -1.3em;">
               <strong>Hora Inicio</strong>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4" style= "top: -3.4em;">
               <div class="form-group">
                 <ngb-timepicker #timeUpdate="ngModel" name="timeUpdate" [(ngModel)]="timeI" [meridian]="true" [disabled]="tempEvent.length<=0"
                   required>
@@ -87,10 +87,10 @@
               </div>
 
             </div>
-            <div class="col-md-2" style="top: 2em;">
+            <div class="col-md-2" style="top: -1.3em;">
               <strong>Hora Final</strong>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4"  style=  "top: -3.4em;">
 
               <div class="form-group">
                 <ngb-timepicker #timeUpdateF="ngModel" name="timeUpdateF" [(ngModel)]="timeF" [meridian]="true" [disabled]="tempEvent.length<=0"
@@ -113,10 +113,10 @@
 
           <br>
           <div class="row">
-            <div class="col-md-2">
+            <div class="col-md-2" style="top: -6.5em;">
               <strong>Destino</strong>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3" style="top: -6.5em;">
               <div class="control-group form-group">
                 <div class="controls">
                   <input id="inputCupE" type="text" class="form-control" #cupE="ngModel" name="cupE" [(ngModel)]="solicitudVehiculoEdit.destino"
@@ -128,10 +128,10 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2" style="top: -6.5em;">
               <strong>Motivo</strong>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-5" style="top: -6.5em;">
               <div class="control-group form-group">
                 <div class="controls">
                   <textarea id="areaText" class="form-control" #descpE="ngModel" name="descpE" [(ngModel)]="solicitudVehiculoEdit.descripcion"
@@ -149,7 +149,7 @@
           </div>
 
           <!-- //////////////////////////////////////////////////Acompañantes/////////////////////////////////////////////////////////////// -->
-          <div class="container-fluid" *ngIf="tempEvent.length>0">
+          <div class="container-fluid" *ngIf="tempEvent.length>0" style="margin-top: -17%;">
             <hr>
             <h4 style="color:#0069d9">Acompañantes</h4> <br>
             <div class="container">
@@ -525,7 +525,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let solicitud of solicitudesdia; let i = index">
+          <tr *ngFor="let solicitud of solicitudesdia | paginate: {itemsPerPage:5, currentPage: v} let i = index">
             <th scope="row">{{i+1}}</th>
             <th>{{solicitud.vehiculo}}</th>
             <th>{{solicitud.horaSalida.hour}}:{{solicitud.horaSalida.minute}} - {{solicitud.horaRegreso.hour}}:{{solicitud.horaRegreso.minute}}
@@ -536,7 +536,8 @@
         </tbody>
       </table>
       <h6 *ngIf='solicitudesdia ==undefined || solicitudesdia.length==0'>No hay solicitudes realizadas para el día seleccionado.<br></h6>
-      <hr>
+    
+      <pagination-controls (pageChange)="v =$event"></pagination-controls>
       <button type="button" class="btn btn-danger" (click)="cerrar()">Cancelar</button>
     </section>
   </div>

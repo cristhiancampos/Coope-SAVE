@@ -79,6 +79,20 @@ function obtenerVehiculos(req, res){
   }).sort('number'); 
 }
 
+function obtenerVehiculosHabilitados(req, res){
+  Vehiculo.find({ estado: "Habilitado"},(err,vehiculos)=>{
+    if(err){
+      res.status(500).send({message:'Error en la petición'});
+    }else{
+        if(!vehiculos){
+            res.status(404).send({message:'No existen Vehiculos registrados en el sistema'});
+        }else{
+            res.status(200).send({message:vehiculos});
+        }
+    }
+  }).sort('number'); 
+}
+
 function obtenerVehiculo(req, res){
   var vehiculoId = req.params.id;
   Vehiculo.find({_id: vehiculoId},(err,vehiculo)=>{
@@ -201,5 +215,6 @@ module.exports = {
   eliminarVehiculo,
   modificarVehiculo,
   validarModificacion,
-  modificarHorario
+  modificarHorario,
+  obtenerVehiculosHabilitados
 };
