@@ -174,7 +174,7 @@ export class SolicitudSalaComponent implements OnInit {
     $('#btn-lista').css('background', '#0069d9');
     $('#btn-solicitud').css('background', '#eee');
 
-    $('#bnt-lista').click(function () {
+    $('#btn-lista').click(function () {
       $('#btn-lista').css('background', '#0069d9');
       $('#btn-solicitud').css('background', '#eee');
     });
