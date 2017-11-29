@@ -121,6 +121,7 @@ export class SolicitudVehiculoComponent implements OnInit {
   tempNombreVehiculo = "";
   listaSolicitudes = [];
   p = 1;
+  v: any;
   nuevoVehiculo = "";
   tempEvent: any;
   timeI = { hour: null, minute: null, second: 0 };
@@ -1059,10 +1060,9 @@ export class SolicitudVehiculoComponent implements OnInit {
   }
 
   cancelarAccion() {
-
+    this.mr.close();
     this.obtenerSolicitudes(new Date(), false);
     this.obtenerSolicitudVehiculos();
-    this.mr.close();
     this.activeDayIsOpen = true;
     this.solicitudVehiculo = new SolicitudVehiculo('', '', '', null, null, null, '', '', '', null, '', '');
     this.solicitudVehiculoEdit = new SolicitudVehiculo('', '', '', null, null, null, '', '', '', null, '', '');
@@ -1790,7 +1790,7 @@ export class SolicitudVehiculoComponent implements OnInit {
     );
   }
   obtenerVehiculos() {
-    this._servVehiculo.obtenerVehiculos().subscribe(
+    this._servVehiculo.obtenerVehiculosHabilitados().subscribe(
       response => {
         if (response.message) {
           this.vehiculos = response.message;

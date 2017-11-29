@@ -9,6 +9,7 @@ var md_auth = require('../middlewares/authenticated');
 api.post('/registrarVehiculo',ControladorVehiculo.agregarVehiculo);
 api.post('/validarVehiculo',ControladorVehiculo.validarVehiculo);
 api.get('/obtenerVehiculos',ControladorVehiculo.obtenerVehiculos);
+api.get('/obtenerVehiculosHabilitados',ControladorVehiculo.obtenerVehiculosHabilitados);
 api.get('/obtenerVehiculo/:id',ControladorVehiculo.obtenerVehiculo);
 api.delete('/eliminarVehiculo/:id', ControladorVehiculo.eliminarVehiculo);
 api.post('/validarModificacionVehiculo',ControladorVehiculo.validarModificacion);

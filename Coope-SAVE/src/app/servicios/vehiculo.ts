@@ -40,6 +40,13 @@ export class ServicioVehiculo{
         .map(res=>res.json());
     }
 
+    obtenerVehiculosHabilitados()
+    {
+        let headers = new Headers({'Content-Type':'application/json'});
+        return this._http.get(this.url+'obtenerVehiculosHabilitados',{headers:headers})
+        .map(res=>res.json());
+    }
+
     obtenerVehiculo(id:any){
         let headers = new Headers({
             'Content-Type':'application/json',

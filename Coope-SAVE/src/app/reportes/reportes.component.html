@@ -138,7 +138,7 @@
             </tr>
           </thead>
           <tbody style="font-family: 'Times New Roman', Times, serif">
-            <tr *ngFor="let sala of solicitudesSalasFiltradas | paginate: {itemsPerPage:4, currentPage: p} let i = index">
+            <tr *ngFor="let sala of solicitudesSalasFiltradas | paginate: {itemsPerPage:5, currentPage: p} let i = index">
               <th scope="row">{{i+1}}</th>
               <th>{{sala.sala}}</th>
               <th>{{getNombreUsuario(sala.usuario)}}</th>
@@ -264,7 +264,7 @@
             </tr>
           </thead>
           <tbody style="font-family: 'Times New Roman', Times, serif">
-            <tr *ngFor="let vehiculo of solicitudesVehiculosFiltradas | paginate: {itemsPerPage:4, currentPage: p} let i = index">
+            <tr *ngFor="let vehiculo of solicitudesVehiculosFiltradas | paginate: {itemsPerPage:5, currentPage: p} let i = index">
               <th scope="row">{{i+1}}</th>
               <th>{{vehiculo.vehiculo}}</th>
               <th>{{obternerTipoAutomovil(vehiculo.vehiculo)}}</th>
@@ -303,7 +303,7 @@
             </tr>
           </thead>
           <tbody style="font-family: 'Times New Roman', Times, serif">
-            <tr *ngFor="let sala of salas | paginate: {itemsPerPage:5, currentPage: p} let i = index">
+            <tr *ngFor="let sala of salas | paginate: {itemsPerPage:4, currentPage: p} let i = index">
               <th><input type="radio" name="radioGroup" (click)="setSalaSeleccionda(sala.nombre)" [checked]="sala.nombre===salaFiltro"></th>
               <th>{{sala.nombre}}</th>
               <th>{{sala.cupo}}</th>
