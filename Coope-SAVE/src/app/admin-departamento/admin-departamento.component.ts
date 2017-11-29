@@ -286,25 +286,60 @@ export class AdminDepartamentoComponent implements OnInit {
   }
 
   eliminarDepartamento() {
-    this._servDepartamento.eliminarDepartamento(this.departamentoEdit._id).subscribe(
+
+  
+    var control= true;
+    
+    this._servUsuario.obtenerUsuarios().subscribe(
       response => {
 
-        if (!response.message._id) {
-          this.msjError('Error al elimar el departamento');
+        if (!response.message) {
+          this.msjError('No existen Usuarios en el sistema');
         } else {
-         
-          this.msjExitoso("Departamento eliminado exitosamente");
-          this.departamentoEdit = new Departamento('', '', '', '','','');
-          this.obtenerDepartamentos();
+          let usuarios= response.message;
+          for (var index = 0; index < usuarios.length; index++) {
+            if(usuarios[index].departamento == this.departamentoEdit._id){
+              this.msjError('Existen usuarios asigandos a el depatamento, no se puede eliminar');
+              control = false;
+              break;
+            }
+            
+          }
+          if(control){
+            this._servDepartamento.eliminarDepartamento(this.departamentoEdit._id).subscribe(
+              response => {
+        
+                if (!response.message._id) {
+                  this.msjError('Error al elimar el departamento');
+                } else {
+                 
+                  this.msjExitoso("Departamento eliminado exitosamente");
+                  this.departamentoEdit = new Departamento('', '', '', '','','');
+                  this.obtenerDepartamentos();
+                }
+              }, error => {
+                var alertMessage = <any>error;
+                if (alertMessage != null) {
+                  var body = JSON.parse(error._body);
+                  this.msjError("El departamento no pudo ser eliminado");
+                }
+              }
+            );
+          } else { console.log('imposible eliminar'); }
+          
+        
         }
       }, error => {
         var alertMessage = <any>error;
         if (alertMessage != null) {
           var body = JSON.parse(error._body);
-          this.msjError("El departamento no pudo ser eliminado");
+          this.msjError("Algo salio mal");
         }
       }
     );
+
+
+   
   }
  
   msjExitoso(texto: string){

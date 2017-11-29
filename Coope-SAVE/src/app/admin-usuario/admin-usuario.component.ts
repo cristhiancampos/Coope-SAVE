@@ -4,6 +4,8 @@ import { ServicioUsuario } from '../servicios/usuario';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Usuario } from '../modelos/usuario';
 import { ServicioDepartamento } from '../servicios/departamento';
+import {ServicioSolicitudVehiculo } from '../servicios/solicitudVehiculo';
+import {ServicioSolicitudSala } from '../servicios/solicitudSala';
 import swal from 'sweetalert2';
 
 import { NgbModalRef, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -13,7 +15,7 @@ import { NgbModalRef, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-boo
   selector: 'app-admin-usuario',
   templateUrl: './admin-usuario.component.html',
   styleUrls: ['./admin-usuario.component.css'],
-  providers: [ServicioUsuario, ServicioDepartamento]
+  providers: [ServicioUsuario, ServicioDepartamento, ServicioSolicitudVehiculo, ServicioSolicitudSala]
 })
 export class AdminUsuarioComponent implements OnInit {
   @ViewChild('modalModificarUsuario') modalModificarUsuario: TemplateRef<any>;
@@ -48,6 +50,8 @@ export class AdminUsuarioComponent implements OnInit {
     private _router: Router,
     private _servUsuario: ServicioUsuario,
     private _servDepa: ServicioDepartamento,
+    private  _servVehiculo: ServicioSolicitudVehiculo,
+    private _servSala: ServicioSolicitudSala,
     private modal: NgbModal
 
   ) {
@@ -248,6 +252,24 @@ export class AdminUsuarioComponent implements OnInit {
   }
 
   eliminarUsuario() {
+
+
+
+    // this._servSala.obtenerTodasSolicitudes().subscribe(
+    //   response => {
+        
+    //   }, error => {
+    //     var alertMessage = <any>error;
+    //     if (alertMessage != null) {
+    //       var body = JSON.parse(error._body);
+    //       this.msjError("El Usuario no pudo ser Eliminado");
+    //     }
+    //   }
+    // );
+
+
+
+
     this._servUsuario.eliminarUsuario(this.usuarioEdit._id).subscribe(
       response => {
 

@@ -174,7 +174,7 @@ export class AppComponent implements OnInit {
     localStorage.removeItem('remember');
     localStorage.clear();
     this.verificarCredenciales();
-  //  this._router.navigate['/*'];
+    this._router.navigate['/principal '];
   }
   abrirModal(modalId: any) {
     $('body').append('<div class="modal-backdrop fade show" ></div>');

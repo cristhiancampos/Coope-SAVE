@@ -69,7 +69,7 @@ hoy;
       
       table: {
 
-        widths: [15,80,90,50,60,'*'],
+        widths: [15,80,78,62,60,'*'],
         headerRows: 1,
         body: this.buildTableBody(data, columns),
         layout: 'lightHorizontalLines',

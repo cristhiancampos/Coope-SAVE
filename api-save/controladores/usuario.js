@@ -3,8 +3,12 @@ var fs = require('fs');
 var path = require('path');
 var bcrypt = require('bcrypt-nodejs');
 var Usuario = require('../modelos/usuario');
+var SolicitudVehiculo = require('../modelos/solicitudVehiculo');
+var SolicitudSala = require('../modelos/solicitudSala');
 var jwt = require('../servicios/jwt');
 var nodemailer = require('nodemailer');
+
+
 
 function getUsuario(req, res) {
   res.status(200).send({ user: process.env["USERPROFILE"] });
@@ -154,6 +158,70 @@ function obtenerUsuarios(req, res) {
 function eliminarUsuario(req, res) {
   var usuarioId = req.params.id;
   var update = req.body;
+  var sala= false, vehiculo = false;
+console.log(usuarioId);
+  var query = {usuario: usuarioId};
+ var salas=[];
+ var vehiculos=[];
+
+  SolicitudSala.find({usuario:usuarioId}, (err, usuarios) => {
+    if (err) {
+     // res.status(500).send({ message: 'Error en la petición' });
+    } else {
+      if (!usuarios) {
+       // res.status(404).send({ message: 'No existen usuarios registrados en el sistema' });
+      } else {
+        //console.log(usuarios);
+        //res.status(200).send({ message: usuarios });
+        salas=usuarios;
+       // console.log(salas);
+        for (var i = 0; i < salas.length; i++) {
+          SolicitudSala.findByIdAndUpdate(salas[i]._id, { $set: { estado: 'Eliminado' } }, { new: true }, (err, salicitudDeleted) => {
+            if (err) {
+             // res.status(500).send({ message: 'Error al eliminar la sala' });
+            } else {
+              if (!salicitudDeleted) {
+               // res.status(404).send({ message: 'No se ha podido eliminar la' });
+              } else {
+               // res.status(200).send({ message: salicitudDeleted });
+              }
+            }
+          });          
+        }        
+      }
+    }
+  }).sort('number');
+
+
+
+  SolicitudVehiculo.find({usuario:usuarioId}, (err, usuarios) => {
+    if (err) {
+     // res.status(500).send({ message: 'Error en la petición' });
+    } else {
+      if (!usuarios) {
+       // res.status(404).send({ message: 'No existen usuarios registrados en el sistema' });
+      } else {
+        //console.log(usuarios);
+        //res.status(200).send({ message: usuarios });
+        vehiculos=usuarios;
+       // console.log(salas);
+        for (var i = 0; i <vehiculos.length; i++) {
+          SolicitudVehiculo.findByIdAndUpdate(vehiculos[i]._id, { $set: { estado: 'Eliminado' } }, { new: true }, (err, salicitudDeleted) => {
+            if (err) {
+             // res.status(500).send({ message: 'Error al eliminar la sala' });
+            } else {
+              if (!salicitudDeleted) {
+               // res.status(404).send({ message: 'No se ha podido eliminar la' });
+              } else {
+               // res.status(200).send({ message: salicitudDeleted });
+              }
+            }
+          });          
+        }        
+      }
+    }
+  }).sort('number');
+
   Usuario.findByIdAndUpdate(usuarioId, { $set: { estado: 'Eliminado' } }, { new: true }, (err, userDeleted) => {
     if (err) {
       res.status(500).send({ message: 'Error al eliminar el usuario' });
@@ -165,6 +233,7 @@ function eliminarUsuario(req, res) {
       }
     }
   });
+  
 }
 
 

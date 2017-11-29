@@ -606,7 +606,9 @@ constructor(
     
                 {
     
-                  text: 'IMAGEN DE LOS CARROS'
+                  image: ''+ this.imgUrl.getImgBase64()+'',
+                  width: 260,
+                  height: 250
                 },
                 [
     

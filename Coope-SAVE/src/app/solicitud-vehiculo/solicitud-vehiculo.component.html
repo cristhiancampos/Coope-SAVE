@@ -134,8 +134,8 @@
             <div class="col-md-5" style="top: -6.5em;">
               <div class="control-group form-group">
                 <div class="controls">
-                  <textarea id="areaText" class="form-control" #descpE="ngModel" name="descpE" [(ngModel)]="solicitudVehiculoEdit.descripcion"
-                    placeholder="Motivo por el cuál solicita la sala." rows="2" required maxlength="50" [disabled]="tempEvent.length<=0"></textarea>
+                  <textarea id="areaText"  class="form-control" #descpE="ngModel" name="descpE" [(ngModel)]="solicitudVehiculoEdit.descripcion"
+                    placeholder="Motivo por el cuál solicita la sala." rows="4" required maxlength="50" [disabled]="tempEvent.length<=0"></textarea>
                   <!-- <div *ngIf="descp.valid" class="small form-text text-success" style="font-size:0.9rem">Correcto <i class="fa fa-check" aria-hidden="true"></i></div> -->
                   <div class="small form-text text-danger" *ngIf="descpE.invalid && (descpE.dirty || descpE.touched)" style="font-size:0.9rem">
                     <div *ngIf="descpE.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> El motivo de la giraes obligatorio</div>
@@ -547,7 +547,7 @@
 <ng-template #modalDeleteSolicitudVehiculo>
   <div class="modal-header" style="color: #FFF;background: #0069d9">
     <h5 class="modal-title" id="exampleModalLabel">Eliminar Solicitud</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cancelarAccion()">
           <span aria-hidden="true">&times;</span>
         </button>
   </div>
