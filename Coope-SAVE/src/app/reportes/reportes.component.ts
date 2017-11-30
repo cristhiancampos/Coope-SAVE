@@ -106,6 +106,7 @@ export class ReportesComponent implements OnInit {
   openPdf() {
       this.nombreUsuariosPdf();
       this.crearPDF.generarPDF(this.solicitudes,2);
+
   }
   printPdf() {
       this.nombreUsuariosPdf();
@@ -156,6 +157,8 @@ export class ReportesComponent implements OnInit {
     
      this.crearListaReporteVehiculo();
      this.crearPDF.generarPDFVehiculo(this.listavehiculosFiltradosPDF,2);
+     this.listavehiculosFiltradosPDF=[];
+     this.limpiarFiltrosVehiculo();
   }
 
   //Método encargado de mostrar opciones de impresión de los reportes generados en las búsquedas

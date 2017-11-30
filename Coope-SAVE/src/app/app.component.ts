@@ -122,7 +122,7 @@ export class AppComponent implements OnInit {
     // this.isSolicitudSala = false;
     // localStorage.setItem('identity', JSON.stringify(true));
     // alert(localStorage.setItem('identity', JSON.stringify(true)));
-    this._router.navigate(['/principal']);
+    this._router.navigate(['']);
     this.identity = true;
 
   }
