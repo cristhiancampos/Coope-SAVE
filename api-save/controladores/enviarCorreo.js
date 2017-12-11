@@ -2,9 +2,11 @@
 var mailOptions = "";
 var Usuario = require('../modelos/usuario');
 var listaCorreos = [];
+var control= '';
 function obtenerUsuarios(req, res) {
-    
-    console.log('En obtenerUsuario');
+
+
+    console.log('punto de control');
     Usuario.find({ $or: [{ 'rol': 'NOTIFICACIONES' }, { 'rol': 'ADMINISTRADOR' }], estado: { $ne: "Eliminado" } }, (err, usuarios) => {
         if (err) {
             res.status(500).send({ message: 'Error en la petición' });
@@ -13,49 +15,91 @@ function obtenerUsuarios(req, res) {
                 res.status(404).send({ message: 'No existen usuarios registrados en el sistema' });
             } else {
                 for (let e = 0; e < usuarios.length; e++) {
-                    listaCorreos[e]=usuarios[e].correo;
+                    listaCorreos[e] = usuarios[e].correo;
                 }
-            } 1
+            }
         }
+
+
+    }).sort('number');
+
+
+}
+
+function obtenerUsuariosVehiculo(req, res) {
+
+
+    console.log('punto de control');
+    Usuario.find({ $or: [{ 'rol': 'NOTIFICACIONES' }, { 'rol': 'ADMINISTRADOR' }], estado: { $ne: "Eliminado" } }, (err, usuarios) => {
+        if (err) {
+            res.status(500).send({ message: 'Error en la petición' });
+        } else {
+            if (!usuarios) {
+                res.status(404).send({ message: 'No existen usuarios registrados en el sistema' });
+            } else {
+                for (let e = 0; e < usuarios.length; e++) {
+                    listaCorreos[e] = usuarios[e].correo;
+                }
+            }
+        }
+
+        let index = req.acompanantes.length;
+        let index2 = listaCorreos.length;
+        console.log('index:' + index)
+        console.log('tama;o lista correo: ' + index2);
+        let contador =0;
         
-    }).sort('number'); 
+        for (var z = index2; z < (index + index2); z++) {
+            if(contador == index){
+                break;
+            }else {
+                listaCorreos[z]= req.acompanantes[contador].correo;
+                contador++;
+            }
+            
+        }
+    }).sort('number');
+
+ 
+
 }
 
 
-  
-function horaFormato12Horas(horario){
+
+
+function horaFormato12Horas(horario) {
     let meridianoInit;
     let meridianoFin;
     let meridNumIni;
     let meridNumFin;
     console.log(horario);
-    if(parseInt(horario.minute) < 10){
-        horario.minute= '0'+horario.minute;
+    if (parseInt(horario.minute) < 10) {
+        horario.minute = '0' + horario.minute;
     }
 
     if (parseInt(horario.hour) < 12) {
-      meridianoInit = "AM";
-      meridNumIni = parseInt(horario.hour);
+        meridianoInit = "AM";
+        meridNumIni = parseInt(horario.hour);
     } else if (parseInt(horario.hour) >= 12) {
-      meridianoInit = "PM";
-      meridNumIni = (parseInt(horario.hour) - 12);
+        meridianoInit = "PM";
+        meridNumIni = (parseInt(horario.hour) - 12);
     }
     if (parseInt(horario.hour) == 24) {
-      meridianoFin = "AM";
-      meridNumFin = (parseInt(horario.hour) - 12);
+        meridianoFin = "AM";
+        meridNumFin = (parseInt(horario.hour) - 12);
     }
     if (parseInt(horario.hour) > 12 && parseInt(horario.hour) < 24) {
-      meridianoFin = "PM";
-      meridNumFin = (parseInt(horario.hour) - 12);
+        meridianoFin = "PM";
+        meridNumFin = (parseInt(horario.hour) - 12);
     } else if (parseInt(horario.hour) < 12) {
-      meridianoFin = "AM";
-      meridNumFin = parseInt(horario.hour);
+        meridianoFin = "AM";
+        meridNumFin = parseInt(horario.hour);
     }
     if (meridNumIni == 0) {
-      meridNumIni = meridNumIni + 12;
+        meridNumIni = meridNumIni + 12;
     }
-    return meridNumIni+':'+horario.minute+' '+ meridianoInit;
-  }
+    return meridNumIni + ':' + horario.minute + ' ' + meridianoInit;
+}
 
 
 
@@ -85,7 +129,7 @@ exports.sendEmailSala = function (req, res) {
     });
 
     // Definimos el email
-    
+
     mailOptions = {
         from: '" SAVE-COOPESPARTA RL." <notificaciones@coopesparta.fi.cr',
         to: listaCorreos,
@@ -132,7 +176,7 @@ exports.sendEmailSala = function (req, res) {
                     </tr> 
                     <tr>
                         <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#6e6e6e;;"><b>Hora Inicio</b></td>
-                        <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+ horaFormato12Horas(params.horaInicio)+ `</b></td>
+                        <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+ horaFormato12Horas(params.horaInicio) + `</b></td>
                     </tr> 
                     <tr>
                         <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#6e6e6e;;"><b>Hora Final</b></td>
@@ -182,14 +226,14 @@ exports.sendEmailSala = function (req, res) {
         
         `
     };
-    
+
     obtenerUsuarios();
-  
+
     // Enviamos el email
     if (!listaCorreos) {
         console.log("Error en la solicitud");
     } else {
-        
+
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
 
@@ -207,12 +251,15 @@ exports.sendEmailSala = function (req, res) {
 exports.sendEmailVehiculo = function (req, res) {
 
     var params = req.body;
-    var listaAcompanantes= [];
-    
+    var listaAcompanantes = [];
+    obtenerUsuariosVehiculo(params);
+
     for (var i = 0; i < params.acompanantes.length; i++) {
-        
-                listaAcompanantes += '<p style="font-size:14px;">' + params.acompanantes[i].nombre+' '+params.acompanantes[i].apellidos+'</p>';
-            }
+
+        listaAcompanantes += '<p style="font-size:14px;">' + params.acompanantes[i].nombre + ' ' + params.acompanantes[i].apellidos + '</p>';
+
+    }
+
 
     // Definimos el transporter
     var transporter = nodemailer.createTransport({
@@ -227,6 +274,8 @@ exports.sendEmailVehiculo = function (req, res) {
             ciphers: 'SSLv3'
         }
     });
+
+
 
     // Definimos el email
     mailOptions = {
@@ -260,12 +309,12 @@ exports.sendEmailVehiculo = function (req, res) {
                         </tr>
                         
                         <tr>
-                            <br>
+    
                             <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#6e6e6e;;"><b>Vehício</b></td>
-                            <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px;"><b style="color: #7E7878">`+ params.vehiculo + `</b></td>
+                            <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px;"><b style="color: #7E7878; margin-top: 30px;">`+ params.vehiculo + `</b></td>
                         </tr>
                         <tr>
-                            <br>
+                            
                             <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#6e6e6e;;"><b>Motivo</b></td>
                             <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px;"><b style="color: #7E7878">`+ params.descripcion + `</b></td>
                         </tr>
@@ -279,7 +328,7 @@ exports.sendEmailVehiculo = function (req, res) {
                         </tr> 
                         <tr>
                             <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#6e6e6e;;"><b>Hora Salida</b></td>
-                            <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+ horaFormato12Horas(params.horaSalida)+ `</b></td>
+                            <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+ horaFormato12Horas(params.horaSalida) + `</b></td>
                         </tr> 
                         <tr>
                             <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#6e6e6e;;"><b>Hora Final</b></td>
@@ -299,7 +348,7 @@ exports.sendEmailVehiculo = function (req, res) {
                                 <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; color:#6e6e6e;">
                                 <div style="font-size:22px; text-align: center;"><b> Acompañantes </b></div>
                                 <div style="font-size:14px;">
-                                  <br >`+ listaAcompanantes+`<br>
+                                  <br >`+ listaAcompanantes + `<br>
                                 </div></td>
                               </tr>
                             </table>
@@ -326,7 +375,9 @@ exports.sendEmailVehiculo = function (req, res) {
                 
                 `
     };
-    obtenerUsuarios();
+
+
+
     // Enviamos el email
     if (!listaCorreos) {
         console.log("Error en la solicitud");

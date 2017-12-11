@@ -294,13 +294,14 @@ export class PrincipalComponent implements OnInit {
                     $('#menuReport').css('display', 'block');
                   } else {
                     $('#menuAdmin').css('display', 'none');
-                    if (user.rol == "REPORTES") {
-
+                    if (user.rol == "REPORTES" || user.rol == "NOTIFICACIONES"  ) {
+                     
                     } else {
+
                       $('#menuReport').css('display', 'none');
                     }
                   }
-
+                  
                   if (this.recordarme) {
                     localStorage.setItem('remember', 'true');
                   } else {

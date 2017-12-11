@@ -118,14 +118,14 @@ export class AppComponent implements OnInit {
 
   }
 
-  principal() {
-    // this.isSolicitudSala = false;
-    // localStorage.setItem('identity', JSON.stringify(true));
-    // alert(localStorage.setItem('identity', JSON.stringify(true)));
-    this._router.navigate(['']);
-    this.identity = true;
+  // principal() {
+  //   // this.isSolicitudSala = false;
+  //   // localStorage.setItem('identity', JSON.stringify(true));
+  //   // alert(localStorage.setItem('identity', JSON.stringify(true)));
+  //   this._router.navigate(['']);
+  //   this.identity = true;
 
-  }
+  // }
   solicitarSala(solicitud: boolean) {
 
     this.isSolicitudSala = solicitud;

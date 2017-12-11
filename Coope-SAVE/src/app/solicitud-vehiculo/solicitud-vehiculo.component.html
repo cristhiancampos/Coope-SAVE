@@ -116,11 +116,11 @@
             <div class="col-md-2" style="top: -6.5em;">
               <strong>Destino</strong>
             </div>
-            <div class="col-md-3" style="top: -6.5em;">
+            <div class="col-md-3" style="top: -6.5em; left: -3em;">
               <div class="control-group form-group">
                 <div class="controls">
-                  <input id="inputCupE" type="text" class="form-control" #cupE="ngModel" name="cupE" [(ngModel)]="solicitudVehiculoEdit.destino"
-                    placeholder="Motivo de la gira" required min="1" [disabled]="tempEvent.length<=0">
+                  <textarea style="width: 245px;" type="text" class="form-control" #cupE="ngModel" name="cupE" [(ngModel)]="solicitudVehiculoEdit.destino"
+                    placeholder="Motivo de la gira" rows="4" required maxlength="50"  [disabled]="tempEvent.length<=0"> </textarea>
                   <!-- <div *ngIf="cup.valid && cup.value<=cupoMaximo && cup.value>0 " class="small form-text text-success" style="font-size:0.9rem">Correcto<i class="fa fa-check" aria-hidden="true"></i></div> -->
                   <div class="small form-text text-danger" *ngIf="cupE.invalid && (cupE.dirty || cupE.touched)" style="font-size:0.9rem">
                     <div *ngIf="cupE.errors['required']"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> El destino de la gira es obligatoria</div>
@@ -128,10 +128,10 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-2" style="top: -6.5em;">
+            <div class="col-md-2" style="top: -6.5em;right: -2em;">
               <strong>Motivo</strong>
             </div>
-            <div class="col-md-5" style="top: -6.5em;">
+            <div class="col-md-5" style="top: -6.5em; left: -1em;">
               <div class="control-group form-group">
                 <div class="controls">
                   <textarea id="areaText" class="form-control" #descpE="ngModel" name="descpE" [(ngModel)]="solicitudVehiculoEdit.descripcion"
@@ -173,26 +173,31 @@
               <div class="row"></div>
               <div class="col-6" style="margin-left: 20px;">
                 <div class="list-group" id="list-tab" role="tablist">
-                  <div class="row col-md-12" style="overflow-y: scroll; height: 150px">
-
-                    <div class="col-md-12" *ngFor="let usuario of listaUsuarios | filter: filtroUsuario">
-                      <label class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="home" (click)="agregarAcompanates(usuario)">
-                        <span class="custom-control-description">{{usuario.nombre}} {{usuario.apellidos}} </span>
-                        <span class="fa fa-plus" aria-hidden="true" style="float: right"></span>
-                    </label>
+                  <div class="row col-md-12" style="margin-left: 20px;" >
+                    <div class="scrollFirefox" >
+                        <div class="col-md-12" *ngFor="let usuario of listaUsuarios | filter: filtroUsuario">
+                            <label class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="home" (click)="agregarAcompanates(usuario)">
+                              <span class="custom-control-description">{{usuario.nombre}} {{usuario.apellidos}} </span>
+                              <span class="fa fa-plus" aria-hidden="true" style="float: right"></span>
+                          </label>
+                          </div>
                     </div>
+                   
                   </div>
                 </div>
               </div>
               <div class="col-6">
                 <div class="list-group" id="list-tab" role="tablist">
-                  <div class="row col-md-12" style="overflow-y: scroll; height: 150px">
-                    <div class="col-md-12" *ngFor="let usuarioAgregado of usuariosAgregados; let e = index">
-                      <label class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="home" (click)="eliminarAcompanante(usuarioAgregado)">                      
-                          <span class="custom-control-description" >{{usuarioAgregado.nombre}} {{usuarioAgregado.apellidos}}</span>
-                          <span class="fa fa-minus" aria-hidden="true" style="float: right"></span>   
-                      </label>
+                  <div class="row col-md-12" >
+                    <div class="scrollFirefox">
+                        <div class="col-md-12" *ngFor="let usuarioAgregado of usuariosAgregados; let e = index">
+                            <label class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="home" (click)="eliminarAcompanante(usuarioAgregado)">                      
+                                <span class="custom-control-description" >{{usuarioAgregado.nombre}} {{usuarioAgregado.apellidos}}</span>
+                                <span class="fa fa-minus" aria-hidden="true" style="float: right"></span>   
+                            </label>
+                          </div>
                     </div>
+                  
                   </div>
                 </div>
               </div>
@@ -257,12 +262,12 @@
     [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)" (eventClicked)="handleEvent('Clicked', $event.event)"
     (eventTimesChanged)="eventTimesChanged($event)">
   </mwl-calendar-month-view>
-  <mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events" [locale]="locale" [refresh]="refresh"
+  <!-- <mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events" [locale]="locale" [refresh]="refresh"
     (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
   </mwl-calendar-week-view>
   <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events" [locale]="locale" [refresh]="refresh"
     (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
-  </mwl-calendar-day-view>
+  </mwl-calendar-day-view> -->
 </div>
 
 <br>
@@ -481,35 +486,38 @@
         </div>
 
         <div class="row">
-          <div class="row"></div>
-          <div class="col-6" style="margin-left: 20px;">
-            <div class="list-group" id="list-tab" role="tablist">
-              <div class="row col-md-12" style="overflow-y: scroll; height: 150px">
-
-                <div class="col-md-12" *ngFor="let usuario of listaUsuarios | filter: filtroUsuario">
-                  <label class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="home" (click)="agregarAcompanates(usuario)">
-                      <span class="custom-control-description "  >{{usuario.nombre}} {{usuario.apellidos}} </span>
-                      <span class="fa fa-plus" aria-hidden="true" style="float: right"></span>
-                  </label>
+            <div class="row"></div>
+            <div class="col-6" style="margin-left: 20px;">
+              <div class="list-group" id="list-tab" role="tablist">
+                <div class="row col-md-12" style="margin-left: 20px;" >
+                  <div class="scrollFirefox" >
+                      <div class="col-md-12" *ngFor="let usuario of listaUsuarios | filter: filtroUsuario">
+                          <label class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="home" (click)="agregarAcompanates(usuario)">
+                            <span class="custom-control-description">{{usuario.nombre}} {{usuario.apellidos}} </span>
+                            <span class="fa fa-plus" aria-hidden="true" style="float: right"></span>
+                        </label>
+                        </div>
+                  </div>
+                 
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="list-group" id="list-tab" role="tablist">
+                <div class="row col-md-12" >
+                  <div class="scrollFirefox">
+                      <div class="col-md-12" *ngFor="let usuarioAgregado of usuariosAgregados; let e = index">
+                          <label class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="home" (click)="eliminarAcompanante(usuarioAgregado)">                      
+                              <span class="custom-control-description" >{{usuarioAgregado.nombre}} {{usuarioAgregado.apellidos}}</span>
+                              <span class="fa fa-minus" aria-hidden="true" style="float: right"></span>   
+                          </label>
+                        </div>
+                  </div>
+                
                 </div>
               </div>
             </div>
           </div>
-          <div class="col-6">
-            <div class="list-group" id="list-tab" role="tablist">
-              <div class="row col-md-12" style="overflow-y: scroll; height: 150px">
-                <div class="col-md-12" *ngFor="let usuarioAgregado of usuariosAgregados; let e = index">
-                  <label class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="home" (click)="eliminarAcompanante(usuarioAgregado)">                      
-                        <span class="custom-control-description" >{{usuarioAgregado.nombre}} {{usuarioAgregado.apellidos}}</span>
-                        <span class="fa fa-minus" aria-hidden="true" style="float: right"></span> 
-                        
-                    </label>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
       </div>
       <hr>
       <button type="button" class="btn btn-danger" (click)="cerrar()">Cancelar</button>

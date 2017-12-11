@@ -475,6 +475,7 @@ enviarContrasena(user:any) {
     use = this.usuarioAgregar;
     use.correo+= this.dominio;
     use.contrasena= this.generatePassword();
+    use.estado="Habilitado";
     let temPass= use.contrasena;
     for (var index = 0; index < this.departamentos.length; index++) {
       if(use.departamento==this.departamentos[index].nombre){

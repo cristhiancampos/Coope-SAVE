@@ -111,7 +111,8 @@ export class SolicitudVehiculoComponent implements OnInit {
   nombreUsuarios = [];
   idUsuarios = [];
   usuariosAgregados = [];
-  currentDate;
+  correoAcompanates= [];
+  currentDate= [];
   solicSala = true;
   solicitudesdia = [];
   minDate: NgbDateStruct;
@@ -213,6 +214,7 @@ export class SolicitudVehiculoComponent implements OnInit {
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }) {
 
     this.obtenerUsuarios();
+    this.obtenerVehiculos();
     this.usuariosAgregados = [];
     this.solicitudVehiculo.fecha = date;
     this.solicitudVehiculo.horaSalida = { hour: 8, minute: 0 };
@@ -269,11 +271,12 @@ export class SolicitudVehiculoComponent implements OnInit {
   }
   agregarAcompanates(usuario: any) {
     this.usuariosAgregados.push(usuario);
+    this.correoAcompanates.push(usuario);    
     this.filtroUsuario = "";
     for (let i = 0; i < this.listaUsuarios.length; i++) {
       if (this.listaUsuarios[i]._id == usuario._id) {
         this.listaUsuarios.splice(i, 1);
-        break
+        break;
       }
     }
 
@@ -332,12 +335,14 @@ export class SolicitudVehiculoComponent implements OnInit {
             }
           }
 
+         
+
 
           if (horarioDiaVehiculo.desde == null || horarioDiaVehiculo.desde == undefined || horarioDiaVehiculo.desde == "" || horarioDiaVehiculo.desde == "null") {
 
             this.mensajeSolicitudInvalida = "El día " + dia + " para el vehiculo seleccinado no cuenta con un horario establecido , favor comuniquese con el administrador.";
 
-          } else { // validar el horario del dia selecciona con respecto al horario de la sala
+          } else { // validar el horario del dia selecciona con respecto al horario del vehiculo
             let agregarValid = false;
             let agregar = false;
             let horaSalidaDigit = (parseInt(this.solicitudVehiculo.horaSalida.hour) + ((parseInt(this.solicitudVehiculo.horaSalida.minute) / 60)));
@@ -439,10 +444,18 @@ export class SolicitudVehiculoComponent implements OnInit {
 
               }
               if (!agregar && !agregarValid) {
-                this.mensajeSolicitudInvalida = "Ya existe una solicitud para esta sala, con el horario ingresado";
+                this.mensajeSolicitudInvalida = "Ya existe una solicitud para ese vehículo, con el horario ingresado";
               }
 
               if (agregar || agregarValid) {// todo correcto , puede agregar la solicitud
+
+
+                if(this.solicitudVehiculo.vehiculo == ""){
+                  console.log('llamando al vehivulo seleccionanda cunado esta null');
+                  this.p= 1;
+                  this.vehiculoSeleccionado(this.p);
+                }
+
                 let identity = localStorage.getItem('identity');
                 let user = JSON.parse(identity);
                 let recursos = JSON.parse(identity);
@@ -466,6 +479,7 @@ export class SolicitudVehiculoComponent implements OnInit {
                         this.obtenerSolicitudes(this.date, false);
                         this.obtenerSolicitudVehiculos();
                         this.cerrar();
+                        this.p =1;
                       }
                     }, error => {
                       var alertMessage = <any>error;
@@ -902,9 +916,19 @@ export class SolicitudVehiculoComponent implements OnInit {
   }
 
   vehiculoSeleccionado(p: any) {
-    this.p = p;
-    this.setHorarioVehiculo(this.vehiculos[p - 1].placa)
-    this.solicitudVehiculo.vehiculo = this.vehiculos[p - 1].placa;
+    console.log(p);
+    if(p!=null){
+      this.p = p;
+      this.setHorarioVehiculo(this.vehiculos[p - 1].placa)
+      this.solicitudVehiculo.vehiculo = this.vehiculos[p - 1].placa;
+      
+    }else {
+      
+      console.log('dentro del veh null prueba');
+      this.setHorarioVehiculo(this.vehiculos[this.p-1].placa)
+      this.solicitudVehiculo.vehiculo = this.vehiculos[this.p-1].placa;
+    }
+    
   }
 
   obtenerSolicitudes(userDate, abrirMod: boolean) {

@@ -1582,7 +1582,7 @@ export class ReportesComponent implements OnInit {
           $('#nav-user').text(' ');
           this._router.navigate(['/principal']);
         } else {
-          if (this.identity.rol == "ADMINISTRADOR" || this.identity.rol == "SUPERADMIN" || this.identity.rol == "REPORTES") {            
+          if (this.identity.rol == "ADMINISTRADOR" || this.identity.rol == "SUPERADMIN" || this.identity.rol == "REPORTES" || this.identity.rol == "NOTIFICACIONES") {            
           this._servUsuario.verificarCredenciales(usuarioTemp, 'true').subscribe(
             response => {
               let token = response.token;
@@ -1602,7 +1602,7 @@ export class ReportesComponent implements OnInit {
                     $('#menuReport').css('display', 'block');
                   } else {
                     $('#menuAdmin').css('display', 'none');
-                    if (user.rol == "REPORTES") {
+                    if (user.rol == "REPORTES" || user.rol == "NOTIFICACIONES" ) {
 
                     } else {
                       $('#menuReport').css('display', 'none');
