@@ -79,7 +79,12 @@ constructor(
     
           content: [
     
-            { text: 'COOPESPARTA R.L', style: 'header' },
+            { 
+              margin: [130,-10,0,10],
+              image: ''+ this.imgUrl.getIMGLogoCompleto()+'',
+              width: 250,
+              height: 50,
+             },
             { text: 'Traslado y uso de Vehículos', style: 'subheader' },
     
             {
@@ -530,7 +535,7 @@ constructor(
     
               ]
             },
-            { text: ' Recepción del Vehículo', style: 'header2' },
+            { text: ' Recepción del Vehículo', style: 'headerCambio' },
     
             {
               style: 'entrega',
@@ -914,26 +919,26 @@ constructor(
             subheader: {
               fontSize: 16,
               bold: true,
-              margin: [153, 0, 0, 10]
+              margin: [160, 0, 0, 5]
             },
             placa: {
               fontSize: 12,
               bold: true,
-              margin: [0, 10, 0, 10]
+              margin: [0, 10, 0, 5]
             },
             datos: {
               fontSize: 12,
-              margin: [0, 5, 0, 10]
+              margin: [0, 5, 0, 5]
             },
             header2: {
               fontSize: 18,
               bold: true,
-              margin: [180, 10, 0, 10]
+              margin: [180, 10, 0, 5]
             },
             entrega: {
               fontSize: 12,
               bold: true,
-              margin: [0, 10, 0, 10]
+              margin: [0, 10, 0, 5]
             },
             titulo3: {
               fontSize: 14,
@@ -962,7 +967,12 @@ constructor(
               fontSize: 14,
               bold: true,
               margin: [0, 40, 0, 0]
-            }
+            },
+            headerCambio: {
+              fontSize: 18,
+              bold: true,
+              margin: [180,60 , 0, 5]
+            },
           }
         };
         this.pdfmake.open();

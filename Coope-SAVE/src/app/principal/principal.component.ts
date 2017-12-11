@@ -392,12 +392,23 @@ export class PrincipalComponent implements OnInit {
     )
   }
 
+  ordenarDepartamentos(array: any) {
+    console.log(array);
+    array.sort(function (a, b) {
+      var keyA = a.nombre,
+        keyB = b.nombre;
+      if (keyA < keyB) return -1;
+      if (keyA > keyB) return 1;
+      return 0;
+    });
+    return array;
+  }
   //obtener la lista de departamentos
   obtenerDepartamentos() {
     this._servDepa.obtenerDepartamentos().subscribe(
       response => {
         if (response.message) {
-          this.departamentos = response.message;
+          this.departamentos = this.ordenarDepartamentos(response.message);
         } else {
         }
       }, error => {

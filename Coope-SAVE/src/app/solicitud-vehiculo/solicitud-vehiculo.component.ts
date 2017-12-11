@@ -932,6 +932,16 @@ export class SolicitudVehiculoComponent implements OnInit {
       response => {
         if (response.message) {
           this.listaUsuarios = response.message;
+          let identity = localStorage.getItem('identity');
+          let user = JSON.parse(identity);
+          
+          for (var i = 0; i < this.listaUsuarios.length; i++) {
+            if(this.listaUsuarios[i].rol == 'SUPERADMIN' || this.listaUsuarios[i]._id == user._id){
+              this.listaUsuarios.splice(i, 1);
+            }
+          }
+
+
           this.listaNombres();
         } else {//no hay Salas registradas
         }

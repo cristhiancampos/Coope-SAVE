@@ -251,47 +251,45 @@ exports.sendEmailVehiculo = function (req, res) {
                         <td colspan="2" align="left" valign="top" bgcolor="#2a2a2a" style="background-color:#f5f5f5; padding:10px; font-family:Georgia, 'Times New Roman', Times, serif; color:#202CE0; font-size:60px; text-align: center;"><img src="http://www.coopesparta.fi.cr/images/logo.png" alt=""></td>
                       </tr>
                       <tr>
-                        <td width="100%" align="center" valign="top" style="padding:12px; background-color:#ffffff;" bgcolor="#ffffff;" style="font-family:Verdana, Geneva, sans-serif; color:#6e6e6e;">
-                         <div  style="font-size:22px; text-align: center;"><b> Solicitud Vehículos </b></div>
-                          <table width="100%" border="0" cellspacing="0" cellpadding="4" style="margin-bottom:20px;">
-                            <tr>
-                              <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><strong>Usuario</strong></td>
-                              <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+ params.usuario + `</b></td>
-                              
-                            </tr>
-                            
-                            <tr>
-                                <br>
-                                <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#6e6e6e;;"><b>Vehículo</b></td>
-                                <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px;"><b style="color: #7E7878">`+ params.vehiculo + `</b></td>
-                            </tr>
-                            <tr>
-                                <br>
-                                <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#6e6e6e;;"><b>Motivo</b></td>
-                                <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px;"><b style="color: #7E7878">`+ params.descripcion + `</b></td>
-                            </tr>
-                            <tr>
-                            <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#6e6e6e;;"><b>Destino</b></td>
-                            <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px;"><b style="color: #7E7878">`+ params.destino + `</b></td>
-                             </tr> 
-                             
-                            <tr>
-                                <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#6e6e6e;;"><b>Fecha</b></td>
-                                <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+ params.fecha.day + '/' + params.fecha.month + '/' + params.fecha.year + `</b></td>
-                            </tr> 
-                            <tr>
-                                <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#6e6e6e;;"><b>Hora Salida</b></td>
-                                <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+ horaFormato12Horas(params.horaSalida) + `</b></td>
-                            </tr> 
-                            <tr>
-                                <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#6e6e6e;;"><b>Hora Regreso</b></td>
-                                <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+ horaFormato12Horas(params.horaRegreso) + `</b></td>
-                            </tr> 
-                           
-                            
-                          </table>
-                
-                        </td>
+                      <td width="100%" align="center" valign="top" style="padding:12px; background-color:#ffffff;" bgcolor="#ffffff;">
+                      <table width="100%" border="0" cellspacing="0" cellpadding="4" style="margin-bottom:20px;">
+                        <tr>
+                          <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><strong>Usuario</strong></td>
+                          <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+ params.usuario + `</b></td>
+                          
+                        </tr>
+                        
+                        <tr>
+                            <br>
+                            <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#6e6e6e;;"><b>Vehício</b></td>
+                            <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px;"><b style="color: #7E7878">`+ params.vehiculo + `</b></td>
+                        </tr>
+                        <tr>
+                            <br>
+                            <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#6e6e6e;;"><b>Motivo</b></td>
+                            <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px;"><b style="color: #7E7878">`+ params.descripcion + `</b></td>
+                        </tr>
+                        <tr>
+                        <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#6e6e6e;;"><b>Destino</b></td>
+                        <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px;"><b style="color: #7E7878">`+ params.destino + `</b></td>
+                    </tr> 
+                        <tr>
+                            <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#6e6e6e;;"><b>Fecha</b></td>
+                            <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+ params.fecha.day + '/' + params.fecha.month + '/' + params.fecha.year + `</b></td>
+                        </tr> 
+                        <tr>
+                            <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#6e6e6e;;"><b>Hora Salida</b></td>
+                            <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+ horaFormato12Horas(params.horaSalida)+ `</b></td>
+                        </tr> 
+                        <tr>
+                            <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#6e6e6e;;"><b>Hora Final</b></td>
+                            <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+ horaFormato12Horas(params.horaRegreso) + `</b></td>
+                        </tr> 
+                       
+                        
+                      </table>
+            
+                    </td>
                       </tr>
                       <tr>
                           <td align="left" valign="top" style="background-color:#fff; padding:10px;" bgcolor="#e4e4e4;">

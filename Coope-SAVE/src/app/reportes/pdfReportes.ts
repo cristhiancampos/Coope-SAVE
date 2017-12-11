@@ -259,19 +259,10 @@ hoy;
 
 
         {
-          columns: [
-            {
-                image: ''+ this.getLogo.getImgLogo()+'',
-                width: 50,
+                margin: [130,0,0,20],
+                image: ''+ this.getLogo.getIMGLogoCompleto()+'',
+                width: 250,
                 height: 50,
-              
-            },
-            {
-                
-               text: 'COOPESPARTA R.L', style: 'header',
-        
-            }
-          ]
         },
       
 
@@ -304,7 +295,7 @@ hoy;
         subheader: {
           fontSize: 16,
           bold: true,
-          margin: [150, 0, 0, 20]
+          margin: [160, 0, 0, 10]
         },
         tabla: {
           margin: [0, 5, 0, 15]
@@ -313,7 +304,7 @@ hoy;
           bold: true,
           alignment: 'right',
           fontSize: 14,
-          margin: [0,0,15,0]
+          margin: [0,0,15,10]
         },
         footer:{
           width: '100%',
@@ -356,19 +347,10 @@ hoy;
     
     
             {
-              columns: [
-                {
-                    image: ''+ this.getLogo.getImgLogo()+'',
-                    width: 50,
-                    height: 50,
-                  
-                },
-                {
-                    
-                   text: 'COOPESPARTA R.L', style: 'header',
-            
-                }
-              ]
+              margin: [130,0,0,20],
+              image: ''+ this.getLogo.getIMGLogoCompleto()+'',
+              width: 250,
+              height: 50,
             },
           
     
@@ -401,7 +383,7 @@ hoy;
             subheader: {
               fontSize: 16,
               bold: true,
-              margin: [150, 0, 0, 20]
+              margin: [155, 0, 0, 10]
             },
             tabla: {
               margin: [0, 5, 0, 15]
@@ -410,7 +392,7 @@ hoy;
               bold: true,
               alignment: 'right',
               fontSize: 14,
-              margin: [0,0,0,15]
+              margin: [0,0,10,15]
             },
             footer:{
               width: '100%',
