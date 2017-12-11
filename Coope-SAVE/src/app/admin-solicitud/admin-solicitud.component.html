@@ -63,7 +63,7 @@
             <tr *ngFor="let sala of solicitudSalas | paginate: {itemsPerPage:5, currentPage: p} let i = index">
               <th scope="row">{{i+1}}</th>
               <th>{{sala.fecha.day}}/{{sala.fecha.month}}/{{sala.fecha.year}}</th>
-              <th>{{sala.horaInicio.hour}}:{{sala.horaInicio.minute}} - {{sala.horaFin.hour}}: {{sala.horaFin.minute}}</th>
+              <th>{{horaFormato12Horas(sala.horaInicio)}} - {{horaFormato12Horas(sala.horaFin)}}</th>
               <th>{{sala.sala}}</th>
               <th>{{sala.descripcion}}</th>
               <th>{{sala.cantidadPersonas}}</th>
@@ -168,7 +168,7 @@
             <tr *ngFor="let vehiculo of solicitudVehiculos | paginate: {itemsPerPage:5, currentPage: p} let i = index">
               <th scope="row">{{i+1}}</th>
               <th>{{vehiculo.fecha.day}}/{{vehiculo.fecha.month}}/{{vehiculo.fecha.year}}</th>
-              <th>{{vehiculo.horaSalida.hour}}:{{vehiculo.horaSalida.minute}} - {{vehiculo.horaRegreso.hour}}:{{vehiculo.horaRegreso.minute}}</th>
+              <th>{{horaFormato12Horas(vehiculo.horaSalida)}} - {{horaFormato12Horas(vehiculo.horaRegreso)}}</th>
               <th>{{vehiculo.vehiculo}}</th>
               <th>{{vehiculo.descripcion}}</th>
               <th>{{vehiculo.destino}}</th>

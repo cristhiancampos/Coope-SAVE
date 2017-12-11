@@ -143,7 +143,7 @@
               <th>{{sala.sala}}</th>
               <th>{{getNombreUsuario(sala.usuario)}}</th>
               <th>{{sala.fecha.day}}/{{sala.fecha.month}}/{{sala.fecha.year}}</th>
-              <th>{{sala.horaInicio.hour}}:{{sala.horaInicio.minute}} - {{sala.horaFin.hour}}: {{sala.horaFin.minute}}</th>
+              <th>{{horaFormato12Horas(sala.horaInicio)}} - {{horaFormato12Horas(sala.horaFin)}}</th>
               <th>{{sala.descripcion}}</th>
             </tr>
           </tbody>

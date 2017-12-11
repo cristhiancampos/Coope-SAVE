@@ -92,6 +92,42 @@ export class ReportesComponent implements OnInit {
     this.mr.close();
   }
 
+  horaFormato12Horas(horario){
+    let meridianoInit;
+    let meridianoFin;
+    let meridNumIni;
+    let meridNumFin;
+    let minutos= horario.minute;
+    
+    if(parseInt(minutos) < 10){
+      
+       minutos= '0'+horario.minute;
+    }
+
+    if (parseInt(horario.hour) < 12) {
+      meridianoInit = "AM";
+      meridNumIni = parseInt(horario.hour);
+    } else if (parseInt(horario.hour) >= 12) {
+      meridianoInit = "PM";
+      meridNumIni = (parseInt(horario.hour) - 12);
+    }
+    if (parseInt(horario.hour) == 24) {
+      meridianoFin = "AM";
+      meridNumFin = (parseInt(horario.hour) - 12);
+    }
+    if (parseInt(horario.hour) > 12 && parseInt(horario.hour) < 24) {
+      meridianoFin = "PM";
+      meridNumFin = (parseInt(horario.hour) - 12);
+    } else if (parseInt(horario.hour) < 12) {
+      meridianoFin = "AM";
+      meridNumFin = parseInt(horario.hour);
+    }
+    if (meridNumIni == 0) {
+      meridNumIni = meridNumIni + 12;
+    }
+    return meridNumIni+':'+minutos+' '+ meridianoInit;
+  }
+
   //Método encargado de abrir generar el pdf de los  reportes generados en las búsquedas y mostrarlo al usuario
   nombreUsuariosPdf(){
     

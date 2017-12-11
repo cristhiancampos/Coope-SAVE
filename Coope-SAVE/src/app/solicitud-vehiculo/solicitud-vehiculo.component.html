@@ -5,7 +5,7 @@
           <small aria-hidden="true">&times;</small>
         </button>
   </div>
-  <div id="scroll"class="modal-body">
+  <div id="scroll" class="modal-body">
     <div>
       <pre> <a><img src="assets/img/logo.png" ></a> </pre>
     </div>
@@ -74,7 +74,7 @@
             <div class="col-md-2" style="top: -1.3em;">
               <strong>Hora Inicio</strong>
             </div>
-            <div class="col-md-4" style= "top: -3.4em;">
+            <div class="col-md-4" style="top: -3.4em;">
               <div class="form-group">
                 <ngb-timepicker #timeUpdate="ngModel" name="timeUpdate" [(ngModel)]="timeI" [meridian]="true" [disabled]="tempEvent.length<=0"
                   required>
@@ -90,7 +90,7 @@
             <div class="col-md-2" style="top: -1.3em;">
               <strong>Hora Final</strong>
             </div>
-            <div class="col-md-4"  style=  "top: -3.4em;">
+            <div class="col-md-4" style="top: -3.4em;">
 
               <div class="form-group">
                 <ngb-timepicker #timeUpdateF="ngModel" name="timeUpdateF" [(ngModel)]="timeF" [meridian]="true" [disabled]="tempEvent.length<=0"
@@ -134,7 +134,7 @@
             <div class="col-md-5" style="top: -6.5em;">
               <div class="control-group form-group">
                 <div class="controls">
-                  <textarea id="areaText"  class="form-control" #descpE="ngModel" name="descpE" [(ngModel)]="solicitudVehiculoEdit.descripcion"
+                  <textarea id="areaText" class="form-control" #descpE="ngModel" name="descpE" [(ngModel)]="solicitudVehiculoEdit.descripcion"
                     placeholder="Motivo por el cuál solicita la sala." rows="4" required maxlength="50" [disabled]="tempEvent.length<=0"></textarea>
                   <!-- <div *ngIf="descp.valid" class="small form-text text-success" style="font-size:0.9rem">Correcto <i class="fa fa-check" aria-hidden="true"></i></div> -->
                   <div class="small form-text text-danger" *ngIf="descpE.invalid && (descpE.dirty || descpE.touched)" style="font-size:0.9rem">
@@ -189,7 +189,7 @@
                   <div class="row col-md-12" style="overflow-y: scroll; height: 150px">
                     <div class="col-md-12" *ngFor="let usuarioAgregado of usuariosAgregados; let e = index">
                       <label class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="home" (click)="eliminarAcompanante(usuarioAgregado)">                      
-                          <span class="custom-control-description" >{{usuarioAgregado.nombre}}{{usuarioAgregado.apellidos}}</span>
+                          <span class="custom-control-description" >{{usuarioAgregado.nombre}} {{usuarioAgregado.apellidos}}</span>
                           <span class="fa fa-minus" aria-hidden="true" style="float: right"></span>   
                       </label>
                     </div>
@@ -203,16 +203,20 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-secondary" (click)="cancelarAccion()">OK</button>
+    <button type="button" class="btn btn-outline-secondary" (click)="cancelarAccion()">Cancelar</button>
     <button *ngIf="tempEvent.length>0" type="button" class="btn btn-outline-secondary" (click)="modificarSolicitud(solicitudVehiculoEdit)"
       [disabled]="!timeUpdateF.valid || !timeUpdate.valid || cupE.value<='0'  || cupE.value>cupoMaximoEdit || eliminar">Modificar
         </button>
     <button *ngIf="tempEvent.length>0" type="button" class="btn btn-outline-secondary" (click)="eliminarSolicitud()">Eliminar
            </button>
+    <button *ngIf="tempEvent.length>0" type="button" class="btn btn-outline-secondary" (click)="reemprimirCorreo(solicitudVehiculoEdit)">Imprimir
+          </button>
   </div>
 </ng-template>
+<div style="text-align: center; margin: auto;">
+  <h2 style="margin-top:5%; ;">Gestión de Vehículos</h2>
 
-<h2 style="margin-top:5%; margin-left: 42%;">Gestión de Vehículos</h2>
+</div>
 <div class="row text-center" style="margin-top: 2%">
 
 
@@ -350,7 +354,8 @@
                       <div class="small form-text text-danger" *ngIf="!ctrlInitDate.valid">
                         <div *ngIf="ctrlInitDate.errors['required']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar valores Numericos</div>
                         <div *ngIf="ctrlInitDate.errors['tooLate']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en las
-                          horas</div>
+                          horas
+                        </div>
                         <div *ngIf="ctrlInitDate.errors['tooEarly']"> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Debe ingresar un valor válido en los
                           minutos
                         </div>
@@ -495,7 +500,7 @@
               <div class="row col-md-12" style="overflow-y: scroll; height: 150px">
                 <div class="col-md-12" *ngFor="let usuarioAgregado of usuariosAgregados; let e = index">
                   <label class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="home" (click)="eliminarAcompanante(usuarioAgregado)">                      
-                        <span class="custom-control-description" >{{usuarioAgregado.nombre}}{{usuarioAgregado.apellidos}}</span>
+                        <span class="custom-control-description" >{{usuarioAgregado.nombre}} {{usuarioAgregado.apellidos}}</span>
                         <span class="fa fa-minus" aria-hidden="true" style="float: right"></span> 
                         
                     </label>
@@ -530,7 +535,7 @@
           <tr *ngFor="let solicitud of solicitudesdia | paginate: {itemsPerPage:5, currentPage: v} let i = index">
             <th scope="row">{{i+1}}</th>
             <th>{{solicitud.vehiculo}}</th>
-            <th>{{solicitud.horaSalida.hour}}:{{solicitud.horaSalida.minute}} - {{solicitud.horaRegreso.hour}}:{{solicitud.horaRegreso.minute}}
+            <th>{{horaFormato12Horas(solicitud.horaSalida)}} - {{horaFormato12Horas(solicitud.horaRegreso)}}
             </th>
             <th>{{solicitud.descripcion}}</th>
             <th>{{getUsuario(solicitud.usuario)}}</th>
@@ -538,7 +543,7 @@
         </tbody>
       </table>
       <h6 *ngIf='solicitudesdia ==undefined || solicitudesdia.length==0'>No hay solicitudes realizadas para el día seleccionado.<br></h6>
-    
+
       <pagination-controls (pageChange)="v =$event"></pagination-controls>
       <button type="button" class="btn btn-danger" (click)="cerrar()">Cancelar</button>
     </section>

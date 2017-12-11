@@ -181,7 +181,30 @@ constructor(
                   text: '______________________________'
                 }
               ]
-            },//Aqi se repite abajo 
+            },
+            {
+              style: 'placa',
+              alignment: 'left',
+              columns: [
+                {
+                  width: 125,
+                  text: 'Aprueba:'
+                },
+                {
+                  
+                  text: '____________________________'
+                },
+                {
+                  width: 40,
+                  text: 'Firma:'
+                },
+                {
+                  text: '______________________________'
+                }
+              ]
+            },
+            
+            //Aqi se repite abajo 
             { text: 'Entrega del Vehículo', style: 'header2' },
     
             {
@@ -229,8 +252,8 @@ constructor(
               alignment: 'left',
               columns: [
                 {
-                  width: 90,
-                  text: 'Recivido por:'
+                  width: 100,
+                  text: 'Recibido por:'
                 },
                 {
                   text: '______________________________'
@@ -272,7 +295,7 @@ constructor(
             },
             {
               style: 'titulo3',
-              text: 'Estado del Vehiculo al momento de la entrega'
+              text: 'Estado del Vehículo al momento de la entrega'
             },
     
             {
@@ -350,7 +373,7 @@ constructor(
                     columns: [
                       {
                         width: 125,
-                        text: 'Maletin:'
+                        text: 'Maletín:'
                       },
                       {
                         text: '[         ]'
@@ -507,7 +530,7 @@ constructor(
     
               ]
             },
-            { text: 'Recección del Vehículo', style: 'header2' },
+            { text: ' Recepción del Vehículo', style: 'header2' },
     
             {
               style: 'entrega',
@@ -555,7 +578,7 @@ constructor(
               columns: [
                 {
                   width: 90,
-                  text: 'Recivido por:'
+                  text: 'Recibido por:'
                 },
                 {
                   text: '______________________________'
@@ -597,7 +620,7 @@ constructor(
             },
             {
               style: 'titulo3',
-              text: 'Estado del Vehiculo al momento de la entrega'
+              text: 'Estado del Vehículo al momento de la entrega'
             },
     
             {
@@ -861,7 +884,7 @@ constructor(
             },
             {
               style: 'titulo4',
-              text: 'Nota: Es obligación de todo usuario revisar el vehículoantes de salir y al regresar, así como mantener el aseo del mismo'
+              text: 'Nota: Es obligación de todo usuario revisar el vehículoantes de salir y al regresar, así como mantener el aseo del mismo.'
             },
             {
                 style: 'tableExample',
@@ -886,12 +909,12 @@ constructor(
             header: {
               fontSize: 18,
               bold: true,
-              margin: [180, 0, 0, 20]
+              margin: [180, 0, 0, 10]
             },
             subheader: {
               fontSize: 16,
               bold: true,
-              margin: [153, 0, 0, 20]
+              margin: [153, 0, 0, 10]
             },
             placa: {
               fontSize: 12,
@@ -905,7 +928,7 @@ constructor(
             header2: {
               fontSize: 18,
               bold: true,
-              margin: [180, 20, 0, 20]
+              margin: [180, 10, 0, 10]
             },
             entrega: {
               fontSize: 12,

@@ -203,7 +203,10 @@
          </button>
   </div>
 </ng-template>
-<h2 style="margin-top:5%; margin-left: 44%;">Gestión de Salas</h2>
+<div style="text-align: center; margin: auto;">
+  <h2 style="margin-top:5%; ">Gestión de Salas</h2>
+</div>
+
 <div class="row text-center" style="margin-top: 2%">
 
   <div class="col-md-4">
@@ -467,7 +470,7 @@
               <tr *ngFor="let solicitud of solicitudesdia | paginate: {itemsPerPage:5, currentPage: p} let i = index">
                 <th scope="row">{{i+1}}</th>
                 <th>{{solicitud.sala}}</th>
-                <th>{{solicitud.horaInicio.hour}}:{{solicitud.horaInicio.minute}} - {{solicitud.horaFin.hour}}:{{solicitud.horaFin.minute}}
+                <th>{{horaFormato12Horas(solicitud.horaInicio)}} - {{horaFormato12Horas(solicitud.horaFin)}}
                 </th>
                 <th>{{solicitud.descripcion}}</th>
                 <th>{{getUsuario(solicitud.usuario)}}</th>

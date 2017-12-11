@@ -562,6 +562,41 @@ export class SolicitudSalaComponent implements OnInit {
     }
   }
 
+  horaFormato12Horas(horario){
+    let meridianoInit;
+    let meridianoFin;
+    let meridNumIni;
+    let meridNumFin;
+    let minutos= horario.minute;
+    
+    if(parseInt(minutos) < 10){
+      
+       minutos= '0'+horario.minute;
+    }
+
+    if (parseInt(horario.hour) < 12) {
+      meridianoInit = "AM";
+      meridNumIni = parseInt(horario.hour);
+    } else if (parseInt(horario.hour) >= 12) {
+      meridianoInit = "PM";
+      meridNumIni = (parseInt(horario.hour) - 12);
+    }
+    if (parseInt(horario.hour) == 24) {
+      meridianoFin = "AM";
+      meridNumFin = (parseInt(horario.hour) - 12);
+    }
+    if (parseInt(horario.hour) > 12 && parseInt(horario.hour) < 24) {
+      meridianoFin = "PM";
+      meridNumFin = (parseInt(horario.hour) - 12);
+    } else if (parseInt(horario.hour) < 12) {
+      meridianoFin = "AM";
+      meridNumFin = parseInt(horario.hour);
+    }
+    if (meridNumIni == 0) {
+      meridNumIni = meridNumIni + 12;
+    }
+    return meridNumIni+':'+minutos+' '+ meridianoInit;
+  }
   //inserta los eventos del en el calendario
   addEvent(solicitud, isDragable): void {
     ///////////////////////////////////////////////////////////////
@@ -580,7 +615,7 @@ export class SolicitudSalaComponent implements OnInit {
     fechaFin.setMinutes(solicitud.horaFin.minute);
 
     this.events.push({
-      title: solicitud.descripcion + '.       ' + solicitud.horaInicio.hour + ':' + solicitud.horaInicio.minute + ' - ' + solicitud.horaFin.hour + ':' + solicitud.horaFin.minute + '  ',
+      title: solicitud.descripcion + '.       ' + this.horaFormato12Horas(solicitud.horaInicio)+ ' - ' + this.horaFormato12Horas(solicitud.horaFin)+ '  ',
       start: startOfDay(fechaInicio),
       end: endOfDay(fechaFin),
       color: this.tempColor.color,

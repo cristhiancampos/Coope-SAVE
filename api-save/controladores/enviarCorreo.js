@@ -3,6 +3,7 @@ var mailOptions = "";
 var Usuario = require('../modelos/usuario');
 var listaCorreos = [];
 function obtenerUsuarios(req, res) {
+    
     console.log('En obtenerUsuario');
     Usuario.find({ $or: [{ 'rol': 'NOTIFICACIONES' }, { 'rol': 'ADMINISTRADOR' }], estado: { $ne: "Eliminado" } }, (err, usuarios) => {
         if (err) {
@@ -12,15 +13,50 @@ function obtenerUsuarios(req, res) {
                 res.status(404).send({ message: 'No existen usuarios registrados en el sistema' });
             } else {
                 for (let e = 0; e < usuarios.length; e++) {
-                    listaCorreos.push(usuarios[e].correo);
+                    listaCorreos[e]=usuarios[e].correo;
                 }
             } 1
         }
         
-    }).sort('number');
-
-
+    }).sort('number'); 
 }
+
+
+  
+function horaFormato12Horas(horario){
+    let meridianoInit;
+    let meridianoFin;
+    let meridNumIni;
+    let meridNumFin;
+    console.log(horario);
+    if(parseInt(horario.minute) < 10){
+        horario.minute= '0'+horario.minute;
+    }
+
+    if (parseInt(horario.hour) < 12) {
+      meridianoInit = "AM";
+      meridNumIni = parseInt(horario.hour);
+    } else if (parseInt(horario.hour) >= 12) {
+      meridianoInit = "PM";
+      meridNumIni = (parseInt(horario.hour) - 12);
+    }
+    if (parseInt(horario.hour) == 24) {
+      meridianoFin = "AM";
+      meridNumFin = (parseInt(horario.hour) - 12);
+    }
+    if (parseInt(horario.hour) > 12 && parseInt(horario.hour) < 24) {
+      meridianoFin = "PM";
+      meridNumFin = (parseInt(horario.hour) - 12);
+    } else if (parseInt(horario.hour) < 12) {
+      meridianoFin = "AM";
+      meridNumFin = parseInt(horario.hour);
+    }
+    if (meridNumIni == 0) {
+      meridNumIni = meridNumIni + 12;
+    }
+    return meridNumIni+':'+horario.minute+' '+ meridianoInit;
+  }
+
 
 
 var nodemailer = require('nodemailer');
@@ -41,7 +77,7 @@ exports.sendEmailSala = function (req, res) {
         secure: false, // false for TLS - as a boolean not string - but the default is false so just remove this completely
         auth: {
             user: 'notificaciones@coopesparta.fi.cr',
-            pass: 'sparta2011*'
+            pass: 'Sparta*1964*'
         },
         tls: {
             ciphers: 'SSLv3'
@@ -49,6 +85,7 @@ exports.sendEmailSala = function (req, res) {
     });
 
     // Definimos el email
+    
     mailOptions = {
         from: '" SAVE-COOPESPARTA RL." <notificaciones@coopesparta.fi.cr',
         to: listaCorreos,
@@ -95,11 +132,11 @@ exports.sendEmailSala = function (req, res) {
                     </tr> 
                     <tr>
                         <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#6e6e6e;;"><b>Hora Inicio</b></td>
-                        <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+ params.horaInicio.hour + ':' + params.horaInicio.minute + `</b></td>
+                        <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+ horaFormato12Horas(params.horaInicio)+ `</b></td>
                     </tr> 
                     <tr>
                         <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#6e6e6e;;"><b>Hora Final</b></td>
-                        <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+ params.horaFin.hour + ':' + params.horaFin.minute + `</b></td>
+                        <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+ horaFormato12Horas(params.horaFin) + `</b></td>
                     </tr> 
                     <tr>
                         <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#6e6e6e;;"><b>Personas</b></td>
@@ -145,13 +182,14 @@ exports.sendEmailSala = function (req, res) {
         
         `
     };
-
+    
     obtenerUsuarios();
-   
+  
     // Enviamos el email
     if (!listaCorreos) {
         console.log("Error en la solicitud");
     } else {
+        
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
 
@@ -183,7 +221,7 @@ exports.sendEmailVehiculo = function (req, res) {
         secure: false, // false for TLS - as a boolean not string - but the default is false so just remove this completely
         auth: {
             user: 'notificaciones@coopesparta.fi.cr',
-            pass: 'sparta2011*'
+            pass: 'Sparta*1964*'
         },
         tls: {
             ciphers: 'SSLv3'
@@ -243,11 +281,11 @@ exports.sendEmailVehiculo = function (req, res) {
                             </tr> 
                             <tr>
                                 <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#6e6e6e;;"><b>Hora Salida</b></td>
-                                <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+ params.horaSalida.hour + ':' + params.horaSalida.minute + `</b></td>
+                                <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+ horaFormato12Horas(params.horaSalida) + `</b></td>
                             </tr> 
                             <tr>
                                 <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#6e6e6e;;"><b>Hora Regreso</b></td>
-                                <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+ params.horaRegreso.hour + ':' + params.horaRegreso.minute + `</b></td>
+                                <td align="left" valign="top" style="font-family:Verdana, Geneva, sans-serif; font-size:14px; "><b style="color: #7E7878">`+ horaFormato12Horas(params.horaRegreso) + `</b></td>
                             </tr> 
                            
                             
